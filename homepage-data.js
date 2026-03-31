@@ -164,6 +164,7 @@
         },
         {
             label: t("Refereed Survey Articles:", "解説・総説（査読有）:"),
+            hidden: true,
             entries: []
         },
         {
@@ -194,34 +195,36 @@
                     details: [arxivPart("2407.09906")]
                 }
             ]
-        },
-        {
-            label: t("Notes:", "その他 PDF:"),
-            entries: [
-                {
-                    title: "Notes from “Atelier de Géométrie Arithmétique” – Étale homotopy theory and applications",
-                    people: ["Brieuc Lair", "Drimik Roy-Chowdhury"],
-                    suffix: seq(" ", pdfPart("https://ahgt.math.cnrs.fr/assets/pdf/AGA25-etale%20homotopy%20type%20-%20Notes.pdf"))
-                },
-                {
-                    title: "Notes from “Atelier de Géométrie Arithmétique” – Spaces and perfectoids",
-                    people: ["E. Caeiro", "A. Klughertz", "S. Philip"],
-                    suffix: seq(" ", pdfPart("https://ahgt.math.cnrs.fr/assets/pdf/AGA24%20-%20Spaces%20and%20perfectoids%20-%20Notes.pdf"))
-                },
-                {
-                    title: "遠アーベル幾何学におけるm階可解グロタンディーク予想について",
-                    suffix: seq(" ", pdfPart("https://www.math.sci.hokudai.ac.jp/~wakate/mcyr/2023/pdf/yamaguchi_naganori.pdf"))
-                }
-            ]
         }
     ];
 
-    const paperItems = paperGroups.map(({ label, entries }) =>
-        paperCategory(
-            label,
-            entries.map((entry) => paperEntry(entry))
-        )
-    );
+    const noteEntries = [
+        {
+            title: "Notes from “Atelier de Géométrie Arithmétique” – Étale homotopy theory and applications",
+            people: ["Brieuc Lair", "Drimik Roy-Chowdhury"],
+            suffix: seq(" ", pdfPart("https://ahgt.math.cnrs.fr/assets/pdf/AGA25-etale%20homotopy%20type%20-%20Notes.pdf"))
+        },
+        {
+            title: "Notes from “Atelier de Géométrie Arithmétique” – Spaces and perfectoids",
+            people: ["E. Caeiro", "A. Klughertz", "S. Philip"],
+            suffix: seq(" ", pdfPart("https://ahgt.math.cnrs.fr/assets/pdf/AGA24%20-%20Spaces%20and%20perfectoids%20-%20Notes.pdf"))
+        },
+        {
+            title: "遠アーベル幾何学におけるm階可解グロタンディーク予想について",
+            suffix: seq(" ", pdfPart("https://www.math.sci.hokudai.ac.jp/~wakate/mcyr/2023/pdf/yamaguchi_naganori.pdf"))
+        }
+    ];
+
+    const paperItems = paperGroups
+        .filter(({ hidden }) => !hidden)
+        .map(({ label, entries }) =>
+            paperCategory(
+                label,
+                entries.map((entry) => paperEntry(entry))
+            )
+        );
+
+    const noteItems = noteEntries.map((entry) => paperEntry(entry));
 
     const talkRows = [
         {
@@ -283,7 +286,7 @@
         },
         {
             date: "2024/02/15",
-            event: t("Mathsci Freshman Seminar 2024", "第7回数理新人セミナー"),
+            event: t("MathSci Freshman Seminar 2024", "第7回数理新人セミナー"),
             eventUrl: "https://sites.google.com/view/math-graduate/MATHSCI-FRESHMAN-SEMINAR/2024",
             venue: t("Nagoya University", "名古屋大学"),
             subject: "Recent developments for m-step solvable Anabelian Geometry"
@@ -339,7 +342,7 @@
         {
             date: "2020/12/02",
             event: t("Algebraic Number Theory and Related Topics 2020", "代数的整数論とその周辺2020"),
-            eventUrl: "http://ntw.sci.u-toyama.ac.jp/rimsant2020/",
+            eventUrl: "https://web.archive.org/web/20201117233036/http://ntw.sci.u-toyama.ac.jp/rimsant2020/",
             venue: t("RIMS, Kyoto University", "京都大学数理解析研究所"),
             subject: "種数0の曲線における導来商版Grothendieck予想について"
         },
@@ -492,7 +495,7 @@
             events: [
                 {
                     date: "2026/02/19-20",
-                    title: t("Anabelian Geometry in Ookayama 2026"),
+                    title: t("Anabelian Geometry in Ookayama 2026", "Anabelian Geometry in 大岡山 2026"),
                     url: t(
                         "https://sites.google.com/view/ag-in-ookayama-2026-en/home",
                         "https://sites.google.com/view/ag-in-ookayama-2026-jp/home"
@@ -501,7 +504,7 @@
                 },
                 {
                     date: "2025/09/02-03",
-                    title: t("Anabelian Geometry in Yokohama 2025"),
+                    title: t("Anabelian Geometry in Yokohama 2025", "Anabelian Geometry in 横浜 2025"),
                     url: t(
                         "https://sites.google.com/view/ag-in-yokohama-2025-en/home",
                         "https://sites.google.com/view/ag-in-yokohama-2025-jp/home"
@@ -510,7 +513,7 @@
                 },
                 {
                     date: "2024/03/11-12",
-                    title: t("Anabelian Geometry in Tokyo 2024"),
+                    title: t("Anabelian Geometry in Tokyo 2024", "Anabelian Geometry in 東京 2024"),
                     url: t(
                         "https://sites.google.com/view/ag-in-tokyo-2024-en/home",
                         "https://sites.google.com/view/ag-in-tokyo-2024-jp/home"
@@ -541,7 +544,7 @@
         },
         {
             name: t("Research Fellow, Tokyo Institute of Technology", "東京工業大学特別研究員"),
-            url: "http://www.somuka.titech.ac.jp/reiki_int/reiki_honbun/x385RG00000423.html#e000000012"
+            url: "https://www.somuka.titech.ac.jp/reiki_int/reiki_honbun/x385RG00002124.html"
         },
         {
             name: "Reviewer for MathSciNet",
@@ -619,6 +622,12 @@
                 title: t("Papers", "論文"),
                 className: "paper-list",
                 items: paperItems
+            },
+            {
+                id: "other_pdfs",
+                nav: t("Other PDFs", "その他 PDF"),
+                title: t("Other PDFs", "その他 PDF"),
+                items: noteItems
             },
             {
                 id: "achievements_presentation",
