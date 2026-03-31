@@ -38,9 +38,9 @@
     const nestedItem = (content, children = [], extra = {}) => ({ ...extra, content, children });
     const datedItem = (date, content, extra = {}) => item(seq(`${date}: `, content), extra);
 
-    const paperEntry = ({ title, people = [], details = [] }) =>
+    const paperEntry = ({ title, people = [], suffix = "", details = [] }) =>
         nestedItem(
-            seq(italic(title), people.length ? withPeople(...people) : ""),
+            seq(italic(title), people.length ? withPeople(...people) : "", suffix),
             details.map((detail) => item(detail))
         );
 
@@ -201,24 +201,16 @@
                 {
                     title: "Notes from “Atelier de Géométrie Arithmétique” – Étale homotopy theory and applications",
                     people: ["Brieuc Lair", "Drimik Roy-Chowdhury"],
-                    details: [pdfPart("https://ahgt.math.cnrs.fr/assets/pdf/AGA25-etale%20homotopy%20type%20-%20Notes.pdf")]
+                    suffix: seq(" ", pdfPart("https://ahgt.math.cnrs.fr/assets/pdf/AGA25-etale%20homotopy%20type%20-%20Notes.pdf"))
                 },
                 {
                     title: "Notes from “Atelier de Géométrie Arithmétique” – Spaces and perfectoids",
-                    details: [
-                        seq(
-                            t(
-                                withPeople("E. Caeiro", "A. Klughertz", "S. Philip").en,
-                                "（with E. Caeiro, A. Klughertz, and S. Philip, edited by S. Philip）"
-                            ),
-                            " ",
-                            pdfPart("https://ahgt.math.cnrs.fr/assets/pdf/AGA24%20-%20Spaces%20and%20perfectoids%20-%20Notes.pdf")
-                        )
-                    ]
+                    people: ["E. Caeiro", "A. Klughertz", "S. Philip"],
+                    suffix: seq(" ", pdfPart("https://ahgt.math.cnrs.fr/assets/pdf/AGA24%20-%20Spaces%20and%20perfectoids%20-%20Notes.pdf"))
                 },
                 {
                     title: "遠アーベル幾何学におけるm階可解グロタンディーク予想について",
-                    details: [pdfPart("https://www.math.sci.hokudai.ac.jp/~wakate/mcyr/2023/pdf/yamaguchi_naganori.pdf")]
+                    suffix: seq(" ", pdfPart("https://www.math.sci.hokudai.ac.jp/~wakate/mcyr/2023/pdf/yamaguchi_naganori.pdf"))
                 }
             ]
         }
@@ -298,7 +290,7 @@
         },
         {
             date: "2023/07/14",
-            event: t("22th Hiroshima-Sendai Workshop on Number Theory", "第22回広島仙台整数論集会"),
+            event: t("22nd Hiroshima-Sendai Workshop on Number Theory", "第22回広島仙台整数論集会"),
             eventUrl: "https://math0.pm.tokushima-u.ac.jp/~hiroki/hiroshima23.html",
             venue: t("Hiroshima University", "広島大学"),
             subject: "New developments in anabelian geometry by using m-step reconstruction"
@@ -313,7 +305,7 @@
         },
         {
             date: "2023/03/28",
-            event: t("Low Dimensional Topology and Number Theory XIV", "Low dimensional topology and number theory XIV"),
+            event: t("Low Dimensional Topology and Number Theory XIV"),
             eventUrl: "https://www2.math.kyushu-u.ac.jp/~morisita/",
             venue: t("Kyushu University", "九州大学"),
             venueSuffix: t(" (Invited Talk)", "（招待講演）"),
@@ -500,7 +492,7 @@
             events: [
                 {
                     date: "2026/02/19-20",
-                    title: t("Anabelian Geometry in Ookayama 2026", "Anabelian Geometry in 大岡山 2026"),
+                    title: t("Anabelian Geometry in Ookayama 2026"),
                     url: t(
                         "https://sites.google.com/view/ag-in-ookayama-2026-en/home",
                         "https://sites.google.com/view/ag-in-ookayama-2026-jp/home"
@@ -509,7 +501,7 @@
                 },
                 {
                     date: "2025/09/02-03",
-                    title: t("Anabelian Geometry in Yokohama 2025", "Anabelian Geometry in 横浜 2025"),
+                    title: t("Anabelian Geometry in Yokohama 2025"),
                     url: t(
                         "https://sites.google.com/view/ag-in-yokohama-2025-en/home",
                         "https://sites.google.com/view/ag-in-yokohama-2025-jp/home"
@@ -518,7 +510,7 @@
                 },
                 {
                     date: "2024/03/11-12",
-                    title: t("Anabelian Geometry in Tokyo 2024", "Anabelian Geometry in 東京 2024"),
+                    title: t("Anabelian Geometry in Tokyo 2024"),
                     url: t(
                         "https://sites.google.com/view/ag-in-tokyo-2024-en/home",
                         "https://sites.google.com/view/ag-in-tokyo-2024-jp/home"
