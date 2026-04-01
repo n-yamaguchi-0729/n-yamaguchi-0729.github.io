@@ -6,6 +6,40 @@
 
 (() => {
     const t = (en, ja = en) => ({ en, ja });
+    const tduDepartmentUrl = "https://www.cck.dendai.ac.jp/math/";
+    const tduFacultyListUrl = "https://ra-data.dendai.ac.jp/tduhp/KgApp/k02/syozoku/2064";
+    const compactDate = (value) => {
+        const fullRange = value.match(/^(\d{4})\/(\d{2})\/(\d{2})\s*-\s*(\d{4})\/(\d{2})\/(\d{2})$/);
+
+        if (fullRange) {
+            const [, startYear, startMonth, , endYear, endMonth] = fullRange;
+            return `${startYear}.${startMonth} - ${endYear}.${endMonth}`;
+        }
+
+        const openRange = value.match(/^(\d{4})\/(\d{2})\/(\d{2})\s*-\s*$/);
+
+        if (openRange) {
+            const [, year, month] = openRange;
+            return `${year}.${month} -`;
+        }
+
+        const sameMonthRange = value.match(/^(\d{4})\/(\d{2})\/(\d{2})-(\d{2})$/);
+
+        if (sameMonthRange) {
+            const [, year, month, startDay, endDay] = sameMonthRange;
+            return `${year}.${month}.${startDay}-${endDay}`;
+        }
+
+        const singleDate = value.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
+
+        if (singleDate) {
+            const [, year, month, day] = singleDate;
+            return `${year}.${month}.${day}`;
+        }
+
+        return value.replaceAll("/", ".");
+    };
+    const compactDateWithoutYear = (value) => compactDate(value).replace(/^\d{4}\./, "");
 
     const joinNames = (names) => {
         if (names.length <= 1) {
@@ -36,7 +70,7 @@
 
     const item = (content, extra = {}) => ({ ...extra, content });
     const nestedItem = (content, children = [], extra = {}) => ({ ...extra, content, children });
-    const datedItem = (date, content, extra = {}) => item(seq(`${date}: `, content), extra);
+    const datedItem = (date, content, extra = {}) => item(seq(`${compactDate(date)}: `, content), extra);
 
     const paperEntry = ({ title, people = [], suffix = "", details = [] }) =>
         nestedItem(
@@ -48,7 +82,7 @@
 
     const talk = ({ date, event, eventUrl, venue, subject, venueSuffix = "", venueExtras = [] }) =>
         datedItem(
-            date,
+            compactDateWithoutYear(date),
             seq(
                 bold(event),
                 eventUrl ? seq(" ", urlPart(eventUrl)) : "",
@@ -70,48 +104,44 @@
 
     const introBody = t(
         `
-            <p>Position: Institute of Science Tokyo (JSPS PD)</p>
+            <p>Position: Tokyo Denki University, School of Engineering, Department of Mathematics and Data Science, Lecturer</p>
             <p>Expertise: Arithmetic Geometry, Anabelian Geometry</p>
-            <p>Email: n.yamaguchi(at)mail.dendai.ac.jp</p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <s>yamaguchi.n.ac(at)m.titech.ac.jp</s></p>
+            <p>Degree: Ph.D. in Science, Kyoto University, March 2023</p>
+            <p>Email: n.yamaguchi(at)mail.dendai.ac.jp / <s>yamaguchi.n.ac(at)m.titech.ac.jp</s></p>
             <p>
+                researchmap:
+                <a href="https://researchmap.jp/NaganoriYamaguchi" target="_blank">R000054174</a>
+                /
                 ORCID:
                 <a href="https://orcid.org/0000-0002-0347-2746" target="_blank">0000-0002-0347-2746</a>
-            </p>
-            <p>
-                Researchmap ID:
-                <a href="https://researchmap.jp/NaganoriYamaguchi" target="_blank">R000054174</a>
-            </p>
-            <p>
-                ArXiv:
+                /
                 <a
                     href="https://arxiv.org/search/?query=Naganori+Yamaguchi&searchtype=all&abstracts=show&order=-announced_date_first&size=50"
                     target="_blank"
-                >URL</a>
+                >ArXiv</a>
+                /
+                <a href="https://booklog.jp/users/naganori1995" target="_blank">My bookshelf</a>
             </p>
-            <p>My bookshelf: <a href="https://booklog.jp/users/naganori1995" target="_blank">URL</a></p>
         `,
         `
-            <p>現職：東京科学大学（旧東京工業大学）理学院 数学系 日本学術振興会特別研究員 PD</p>
+            <p>現職：東京電機大学 工学部 数理・データサイエンス系 講師</p>
             <p>専門分野：数論幾何学、遠アーベル幾何学</p>
-            <p>メール: n.yamaguchi(at)mail.dendai.ac.jp</p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <s>yamaguchi.n.ac(at)m.titech.ac.jp</s></p>
+            <p>学位：博士（理学）、2023年3月、京都大学</p>
+            <p>メール: n.yamaguchi(at)mail.dendai.ac.jp / <s>yamaguchi.n.ac(at)m.titech.ac.jp</s></p>
             <p>
+                researchmap:
+                <a href="https://researchmap.jp/NaganoriYamaguchi" target="_blank">R000054174</a>
+                /
                 ORCID:
                 <a href="https://orcid.org/0000-0002-0347-2746" target="_blank">0000-0002-0347-2746</a>
-            </p>
-            <p>
-                Researchmap ID:
-                <a href="https://researchmap.jp/NaganoriYamaguchi" target="_blank">R000054174</a>
-            </p>
-            <p>
-                ArXiv:
+                /
                 <a
                     href="https://arxiv.org/search/?query=Naganori+Yamaguchi&searchtype=all&abstracts=show&order=-announced_date_first&size=50"
                     target="_blank"
-                >URL</a>
+                >ArXiv</a>
+                /
+                <a href="https://booklog.jp/users/naganori1995" target="_blank">本棚</a>
             </p>
-            <p>本棚: <a href="https://booklog.jp/users/naganori1995" target="_blank">URL</a></p>
         `
     );
 
@@ -370,9 +400,34 @@
         }
     ];
 
-    const talkItems = talkRows.map((row) => talk(row));
+    const talkGroups = [];
+
+    talkRows.forEach((row) => {
+        const year = row.date.slice(0, 4);
+        const currentGroup = talkGroups[talkGroups.length - 1];
+
+        if (!currentGroup || currentGroup.year !== year) {
+            talkGroups.push({ year, items: [talk(row)] });
+            return;
+        }
+
+        currentGroup.items.push(talk(row));
+    });
+
+    const talkItems = talkGroups.map(({ year, items }) => groupedSection(categoryTitle(year), items));
 
     const careerRows = [
+        {
+            date: "2026/04/01 -",
+            description: seq(
+                t(
+                    "Tokyo Denki University, School of Engineering, Department of Mathematics and Data Science, Lecturer",
+                    "東京電機大学 工学部 数理・データサイエンス系 講師"
+                ),
+                " ",
+                urlPart(tduFacultyListUrl)
+            )
+        },
         {
             date: "2024/09/05 - 2025/03/31",
             description: t(
@@ -543,8 +598,11 @@
             url: t("https://www.mathsoc.jp/en/", "https://www.mathsoc.jp/")
         },
         {
-            name: t("Research Fellow, Tokyo Institute of Technology", "東京工業大学特別研究員"),
-            url: "https://www.somuka.titech.ac.jp/reiki_int/reiki_honbun/x385RG00002124.html"
+            name: t(
+                "School of Engineering, Department of Mathematics and Data Science, Tokyo Denki University",
+                "東京電機大学 工学部 数理・データサイエンス系"
+            ),
+            url: tduDepartmentUrl
         },
         {
             name: "Reviewer for MathSciNet",
@@ -633,8 +691,7 @@
                 id: "achievements_presentation",
                 nav: t("Talks", "講演"),
                 title: t("Talks", "講演"),
-                ordered: true,
-                reversed: true,
+                className: "year-group-list",
                 items: talkItems
             },
             {
@@ -657,8 +714,8 @@
             },
             {
                 id: "membership",
-                nav: t("Memberships", "その他所属"),
-                title: t("Memberships", "その他所属"),
+                nav: t("Affiliations, Memberships", "所属・会員等"),
+                title: t("Affiliations, Memberships", "所属・会員等"),
                 items: membershipItems
             },
             {
