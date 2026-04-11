@@ -8,38 +8,59 @@
     const t = (en, ja = en) => ({ en, ja });
     const tduDepartmentUrl = "https://www.cck.dendai.ac.jp/math/";
     const tduFacultyListUrl = "https://ra-data.dendai.ac.jp/tduhp/KgApp/k02/syozoku/2064";
+    const englishMonthAbbreviations = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+    const englishMonthCompact = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const englishMonth = (month, { compact = false } = {}) =>
+        (compact ? englishMonthCompact : englishMonthAbbreviations)[Number(month) - 1] || month;
+    const dayNumber = (day) => String(Number(day));
     const compactDate = (value) => {
         const fullRange = value.match(/^(\d{4})\/(\d{2})\/(\d{2})\s*-\s*(\d{4})\/(\d{2})\/(\d{2})$/);
 
         if (fullRange) {
             const [, startYear, startMonth, , endYear, endMonth] = fullRange;
-            return `${startYear}.${startMonth} - ${endYear}.${endMonth}`;
+            return t(`${englishMonth(startMonth)} ${startYear} - ${englishMonth(endMonth)} ${endYear}`, `${startYear}.${startMonth} - ${endYear}.${endMonth}`);
         }
 
         const openRange = value.match(/^(\d{4})\/(\d{2})\/(\d{2})\s*-\s*$/);
 
         if (openRange) {
             const [, year, month] = openRange;
-            return `${year}.${month} -`;
+            return t(`${englishMonth(month)} ${year} -`, `${year}.${month} -`);
         }
 
         const sameMonthRange = value.match(/^(\d{4})\/(\d{2})\/(\d{2})-(\d{2})$/);
 
         if (sameMonthRange) {
             const [, year, month, startDay, endDay] = sameMonthRange;
-            return `${year}.${month}.${startDay}-${endDay}`;
+            return t(`${englishMonth(month)} ${startDay}-${endDay}, ${year}`, `${year}.${month}.${startDay}-${endDay}`);
         }
 
         const singleDate = value.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
 
         if (singleDate) {
             const [, year, month, day] = singleDate;
-            return `${year}.${month}.${day}`;
+            return t(`${englishMonth(month)} ${day}, ${year}`, `${year}.${month}.${day}`);
         }
 
-        return value.replaceAll("/", ".");
+        return t(value.replaceAll("/", "."));
     };
-    const compactDateWithoutYear = (value) => compactDate(value).replace(/^\d{4}\./, "");
+    const compactDateWithoutYear = (value) => {
+        const sameMonthRange = value.match(/^(\d{4})\/(\d{2})\/(\d{2})-(\d{2})$/);
+
+        if (sameMonthRange) {
+            const [, , month, startDay, endDay] = sameMonthRange;
+            return t(`${englishMonth(month)} ${startDay}-${endDay}`, `${month}.${startDay}-${endDay}`);
+        }
+
+        const singleDate = value.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
+
+        if (singleDate) {
+            const [, , month, day] = singleDate;
+            return t(`${englishMonth(month)} ${day}`, `${month}.${day}`);
+        }
+
+        return t(value.replaceAll("/", "."));
+    };
 
     const joinNames = (names) => {
         if (names.length <= 1) {
@@ -70,7 +91,32 @@
 
     const item = (content, extra = {}) => ({ ...extra, content });
     const nestedItem = (content, children = [], extra = {}) => ({ ...extra, content, children });
-    const datedItem = (date, content, extra = {}) => item(seq(`${compactDate(date)}: `, content), extra);
+    const withClassName = (extra, className) => ({
+        ...extra,
+        className: [className, extra.className].filter(Boolean).join(" ")
+    });
+    const labeledItem = (label, content, extra = {}) => item(seq(label, ": ", content), extra);
+    const labeledColumnItem = (label, content, extra = {}) =>
+        item(seq(tag("span", "dated-list-label", label), tag("span", "dated-list-body", content)), extra);
+    const datedItem = (date, content, extra = {}) =>
+        labeledColumnItem(compactDate(date), content, withClassName(extra, "dated-entry"));
+    const talkDateLabel = (value) => {
+        const sameMonthRange = value.match(/^(\d{4})\/(\d{2})\/(\d{2})-(\d{2})$/);
+
+        if (sameMonthRange) {
+            const [, , month, startDay, endDay] = sameMonthRange;
+            return t(`${englishMonth(month, { compact: true })} ${dayNumber(startDay)}-${dayNumber(endDay)}`, `${month}.${startDay}-${endDay}`);
+        }
+
+        const singleDate = value.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
+
+        if (singleDate) {
+            const [, , month, day] = singleDate;
+            return t(`${englishMonth(month, { compact: true })} ${dayNumber(day)}`, `${month}.${day}`);
+        }
+
+        return compactDateWithoutYear(value);
+    };
 
     const paperEntry = ({ title, people = [], suffix = "", details = [] }) =>
         nestedItem(
@@ -81,8 +127,8 @@
     const paperCategory = (label, entries = []) => nestedItem(categoryTitle(label), entries);
 
     const talk = ({ date, event, eventUrl, venue, subject, venueSuffix = "", venueExtras = [] }) =>
-        datedItem(
-            compactDateWithoutYear(date),
+        labeledColumnItem(
+            talkDateLabel(date),
             seq(
                 bold(event),
                 eventUrl ? seq(" ", urlPart(eventUrl)) : "",
@@ -92,7 +138,8 @@
                 venueExtras.length ? seq(" ", ...venueExtras) : "",
                 ", ",
                 italic(subject)
-            )
+            ),
+            withClassName({}, "talk-entry")
         );
 
     const organizeEvent = ({ date, title, url, venue }) =>
@@ -431,14 +478,14 @@
         {
             date: "2024/09/05 - 2025/03/31",
             description: t(
-                'Tokyo Denki University Part-time Teacher "Calculus II (1EJ・EH・ES)"',
+                'Tokyo Denki University Part-time Lecturer "Calculus II (1EJ・EH・ES)"',
                 "東京電機大学 非常勤講師 微分積分学および演習 II（1EJ・EH・ES）"
             )
         },
         {
             date: "2023/09/05 - 2024/03/31",
             description: t(
-                'Tokyo Denki University Part-time Teacher "Calculus II (1EJ・EH・ES)"',
+                'Tokyo Denki University Part-time Lecturer "Calculus II (1EJ・EH・ES)"',
                 "東京電機大学 非常勤講師 微分積分学および演習 II（1EJ・EH・ES）"
             )
         },
@@ -457,7 +504,10 @@
                 " ",
                 urlPart("https://www.jsps.go.jp/file/storage/general/j-pd/data/saiyo_ichiran/r03/dc2/r3_dc2.pdf#page=22")
             )
-        },
+        }
+    ];
+
+    const educationRows = [
         {
             date: "2020/04/01 - 2023/03/23",
             description: seq(
@@ -467,8 +517,7 @@
                 ),
                 " ",
                 bracket(link("https://repository.kulib.kyoto-u.ac.jp/dspace/handle/2433/283514", t("Doctoral thesis", "博士論文")))
-            ),
-            className: "career-divider"
+            )
         },
         {
             date: "2018/04/01 - 2020/03/23",
@@ -487,6 +536,7 @@
     ];
 
     const careerItems = careerRows.map(({ date, description, ...extra }) => datedItem(date, description, extra));
+    const educationItems = educationRows.map(({ date, description, ...extra }) => datedItem(date, description, extra));
 
     const fundingRows = [
         {
@@ -696,20 +746,30 @@
             },
             {
                 id: "background_career",
-                nav: t("Career, Education", "職歴、学歴"),
-                title: t("Career, Education", "職歴、学歴"),
+                nav: t("Career", "職歴"),
+                title: t("Career", "職歴"),
+                className: "dated-list",
                 items: careerItems
+            },
+            {
+                id: "background_education",
+                nav: t("Education", "学歴"),
+                title: t("Education", "学歴"),
+                className: "dated-list",
+                items: educationItems
             },
             {
                 id: "funding",
                 nav: t("Research funds", "研究資金"),
                 title: t("Research funds", "研究資金"),
+                className: "dated-list",
                 items: fundingItems
             },
             {
                 id: "achievements_organize",
                 nav: t("Organize", "主催"),
                 title: t("Organize", "主催"),
+                className: "grouped-dated-list",
                 items: organizeItems
             },
             {
@@ -722,6 +782,7 @@
                 id: "visits",
                 nav: t("Visits", "研究滞在"),
                 title: t("Research Visits", "研究滞在"),
+                className: "dated-list",
                 items: visitItems
             },
             {
