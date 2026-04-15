@@ -253,9 +253,9 @@
                     details: [t("In preparation", "準備中")]
                 },
                 {
-                    title: "The finite-step pro-solvable analogue of Fenchel's conjecture and anabelian geometry for stacky curves",
+                    title: "Anabelian geometry of Deligne-Mumford curves",
                     people: ["Benjamin Collas", "Séverin Philip"],
-                    details: [t("In preparation", "準備中")]
+                    details: [pdfPart("https://collas.perso.math.cnrs.fr/documents/CPY-Anabelian_geometry_for_DM_curves.pdf")]
                 },
                 {
                     title: "Étale fundamental groups of smooth arithmetic surfaces and the Grothendieck conjecture",
