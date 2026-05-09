@@ -253,9 +253,9 @@
                     details: [t("In preparation", "準備中")]
                 },
                 {
-                    title: "Anabelian geometry of Deligne-Mumford curves",
+                    title: "Anabelian geometry for Deligne-Mumford curves",
                     people: ["Benjamin Collas", "Séverin Philip"],
-                    details: [pdfPart("https://collas.perso.math.cnrs.fr/documents/CPY-Anabelian_geometry_for_DM_curves.pdf")]
+                    details: [arxivPart("2605.02577")]
                 },
                 {
                     title: "Étale fundamental groups of smooth arithmetic surfaces and the Grothendieck conjecture",
