@@ -85,7 +85,6 @@
     const doiPart = (href) => paren(link(href, t("DOI")));
     const pdfPart = (href) => paren(link(href, t("PDF")));
     const arxivPart = (id) => seq(`arXiv: ${id} `, urlPart(`https://arxiv.org/abs/${id}`));
-    const leanPart = (href) => seq("Lean4 ", urlPart(href));
     const withPeople = (...names) => t(` (with ${joinNames(names)})`, `（with ${joinNames(names)}）`);
     const categoryTitle = (label) => tag("span", "category-title", label);
 
@@ -225,7 +224,7 @@
             entries: [
                 {
                     title: "Center-freeness of finite-step solvable groups arising from anabelian geometry",
-                    details: [seq(arxivPart("2601.07112"), ", ", leanPart("https://github.com/n-yamaguchi-0729/Yama2026"))]
+                    details: [arxivPart("2601.07112")]
                 },
                 {
                     title: "A survey of known results on the m-step solvable anabelian geometry for hyperbolic curves",
