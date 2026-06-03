@@ -1,0 +1,1166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FoxDifferential.Discrete.KernelBoundary.IdentityAugmentation | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">FoxDifferential.Discrete.KernelBoundary.IdentityAugmentation</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/FoxDifferential.html">FoxDifferential</a><span class="sep">/</span><a href="../../../../library/FoxDifferential/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../library/FoxDifferential/Discrete/KernelBoundary.html">KernelBoundary</a><span class="sep">/</span><span>IdentityAugmentation</span></div>
+      <h1 class="module-title">FoxDifferential.Discrete.KernelBoundary.IdentityAugmentation</h1>
+      <div class="module-meta">31 Theorem | 10 Definition | 2 Abbreviation</div>
+      <div class="module-overview"><p>This module develops the rewriting and basis constructions behind the subgroup calculations. It tracks words and relations through the chosen transversal to obtain the required presentation or basis statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/FoxDifferential/Discrete/GroupRing.html">FoxDifferential.Discrete.GroupRing</a></li><li>Mathlib.RepresentationTheory.Homological.GroupHomology.Functoriality</li><li>Mathlib.RepresentationTheory.Homological.GroupHomology.Shapiro</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/FoxDifferential.html">FoxDifferential</a></li><li><a href="../../../../library/FoxDifferential/Discrete.html">FoxDifferential.Discrete</a></li><li><a href="../../../../library/FoxDifferential/Discrete/KernelBoundary.html">FoxDifferential.Discrete.KernelBoundary</a></li><li><a href="../../../../library/FoxDifferential/Discrete/KernelBoundary/Basic.html">FoxDifferential.Discrete.KernelBoundary.Basic</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-FoxDifferential.coinvariantsLEquivOfSubsingleton">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.coinvariantsLEquivOfSubsingleton">FoxDifferential.coinvariantsLEquivOfSubsingleton</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L38">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> coinvariantsLEquivOfSubsingleton
+    {k G V : <span class="kw">Type</span>*} [CommRing k] [Monoid G] [Subsingleton G]
+    [AddCommGroup V] [Module k V] (ρ : Representation k G V) :
+    Representation.Coinvariants ρ ≃ₗ[k] V := <span class="kw">by</span>
+  refine LinearEquiv.ofLinear
+    (Representation.Coinvariants.lift ρ LinearMap.id ?_)
+    (Representation.Coinvariants.mk ρ)
+    ?_ ?_
+  · <span class="kw">intro</span> g
+    ext x
+    <span class="kw">have</span> : g = (1 : G) := Subsingleton.elim _ _
+    subst this
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, LinearMap.id_comp, Module.End.one_apply, LinearMap.id_coe, id_eq]
+  · ext x
+    <span class="kw">simp</span> only [Coinvariants.lift_comp_mk, LinearMap.id_coe, id_eq]
+  · <span class="kw">apply</span> Representation.Coinvariants.hom_ext
+    ext x
+    <span class="kw">simp</span> only [LinearMap.coe_comp, Function.comp_apply, Coinvariants.lift_mk, LinearMap.id_coe, id_eq,
+  LinearMap.id_comp]</code></pre></section>
+    <section><div class="natural-text"><p>For a representation of a subsingleton monoid, taking coinvariants does not change the underlying module.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FoxDifferential.rightRegularRepresentation">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularRepresentation">FoxDifferential.rightRegularRepresentation</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L61">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightRegularRepresentation : Representation ℤ H (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) <span class="kw">where</span>
+  toFun g :=
+    { toFun := <span class="kw">fun</span> x =&gt; x * MonoidAlgebra.of ℤ H g⁻¹
+      map_add&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> x y
+        <span class="kw">simp</span> only [MonoidAlgebra.of_apply, add_mul]
+      map_smul&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> n x
+        simpa using smul_mul_assoc n x (MonoidAlgebra.of ℤ H g⁻¹) }
+  map_one&#x27; := <span class="kw">by</span>
+    ext x
+    <span class="kw">simp</span> only [inv_one, MonoidAlgebra.of_apply, LinearMap.coe_comp, LinearMap.coe_mk, AddHom.coe_mk,
+  Function.comp_apply, MonoidAlgebra.lsingle_apply, MonoidAlgebra.single_mul_single, mul_one, Module.End.one_apply]
+  map_mul&#x27; g₁ g₂ := <span class="kw">by</span>
+    ext x
+    <span class="kw">simp</span> only [mul_inv_rev, MonoidAlgebra.of_apply, LinearMap.coe_comp, LinearMap.coe_mk, AddHom.coe_mk,
+  Function.comp_apply, MonoidAlgebra.lsingle_apply, MonoidAlgebra.single_mul_single, mul_one, Module.End.mul_apply,
+  mul_assoc]</code></pre></section>
+    <section><div class="natural-text"><p>The right-regular \(\mathbb{Z}\)-linear representation on \(\mathbb{Z}[H]\), given by right multiplication by \(g^{-1}\). This is the representation whose low-degree group homology matches the identity-case Crowell relations.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegularRepresentation_apply_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularRepresentation_apply_single">FoxDifferential.rightRegularRepresentation_apply_single</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L82">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegularRepresentation_apply_single (g h : H) (n : ℤ) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRepresentation">rightRegularRepresentation</a> H g (Finsupp.single h n) =
+      Finsupp.single (h * g⁻¹) n</code></pre></section>
+    <section><div class="natural-text"><p>The right-regular representation sends a single group element to the corresponding basis action.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext a
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRepresentation">rightRegularRepresentation</a>, MonoidAlgebra.of_apply, MonoidHom.coe_mk, OneHom.coe_mk,
+  LinearMap.coe_mk, AddHom.coe_mk, MonoidAlgebra.single_mul_single, mul_one]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the relevant Fox differential, quotient, or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage map. The asserted formula is checked on group-ring generators or quotient classes; linearity, the crossed-derivation rule, and the defining <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>/kernel relations extend the calculation to the whole module.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegularRepresentation_apply_of">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularRepresentation_apply_of">FoxDifferential.rightRegularRepresentation_apply_of</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L91">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegularRepresentation_apply_of (g h : H) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRepresentation">rightRegularRepresentation</a> H g (MonoidAlgebra.of ℤ H h : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) =
+      MonoidAlgebra.of ℤ H (h * g⁻¹)</code></pre></section>
+    <section><div class="natural-text"><p>The right-regular representation has the displayed value on a representative.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRepresentation_apply_single">rightRegularRepresentation_apply_single</a> (H := H) g h (1 : ℤ)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the relevant Fox differential, quotient, or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage map. The asserted formula is checked on group-ring generators or quotient classes; linearity, the crossed-derivation rule, and the defining <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>/kernel relations extend the calculation to the whole module.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl abbrev" id="decl-FoxDifferential.rightRegularRep">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularRep">FoxDifferential.rightRegularRep</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L97">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> rightRegularRep : Rep ℤ H := Rep.of (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRepresentation">rightRegularRepresentation</a> H)</code></pre></section>
+    <section><div class="natural-text"><p>The right-regular representation as an object of Rep \(\mathbb{Z}\) H.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegular_d_u2082_u2081_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegular_d_u2082_u2081_single">FoxDifferential.rightRegular_d₂₁_single</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L102">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegular_d₂₁_single (g₁ g₂ : H) (r : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) :
+    groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) (Finsupp.single (g₁, g₂) r) =
+      (-r) • <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationElement">relationElement</a> (MonoidHom.id H) g₁ g₂</code></pre></section>
+    <section><div class="natural-text"><p>The Crowell identity relations are precisely the \(d_{21}\)-images of the right-regular representation, on basis elements.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [groupHomology.d₂₁_single]
+  <span class="kw">simp</span> only [of_ρ, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRepresentation">rightRegularRepresentation</a>, MonoidAlgebra.of_apply, MonoidHom.coe_mk, OneHom.coe_mk, <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>,
+  LinearMap.coe_mk, AddHom.coe_mk, sub_eq_add_neg, add_comm, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationElement">relationElement</a>, MonoidHom.id_apply, Finsupp.smul_single,
+  smul_eq_mul, mul_one, neg_add_rev, add_left_comm, smul_add, smul_neg, neg_smul, neg_neg, add_assoc]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.relationElement_eq_rightRegular_d_u2082_u2081_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.relationElement_eq_rightRegular_d_u2082_u2081_single">FoxDifferential.relationElement_eq_rightRegular_d₂₁_single</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L112">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> relationElement_eq_rightRegular_d₂₁_single (g₁ g₂ : H) (r : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) :
+    r • <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationElement">relationElement</a> (MonoidHom.id H) g₁ g₂ =
+      groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) (Finsupp.single (g₁, g₂) (-r))</code></pre></section>
+    <section><div class="natural-text"><p>Rewriting the right-regular boundary identity in the Crowell direction.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_d_u2082_u2081_single">rightRegular_d₂₁_single</a>]
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationElement_eq_crossedDifferentialRelationElement">relationElement_eq_crossedDifferentialRelationElement</a>, neg_neg]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegular_d_u2082_u2081_mem_relationSubmodule">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegular_d_u2082_u2081_mem_relationSubmodule">FoxDifferential.rightRegular_d₂₁_mem_relationSubmodule</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L120">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegular_d₂₁_mem_relationSubmodule (x : H × H →₀ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) :
+    groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) x ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a> (MonoidHom.id H)</code></pre></section>
+    <section><div class="natural-text"><p>Every right-regular 1-boundary is a Crowell relation in the identity differential module.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">induction</span> x using Finsupp.induction <span class="kw">with</span>
+  | <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> =&gt;
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule_eq_crossedDifferentialRelationSubmodule">relationSubmodule_eq_crossedDifferentialRelationSubmodule</a>, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>, zero_mem]
+  | single_add g r x hg hx ih =&gt;
+      <span class="kw">have</span> hs :
+          groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) (Finsupp.single g r) ∈
+            <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a> (MonoidHom.id H) := <span class="kw">by</span>
+        <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_d_u2082_u2081_single">rightRegular_d₂₁_single</a>]
+        <span class="kw">exact</span> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a> (MonoidHom.id H)).smul_mem _
+          (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationElement_mem">relationElement_mem</a> (MonoidHom.id H) g.1 g.2)
+      simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>] using (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a> (MonoidHom.id H)).add_mem hs ih</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegular_d_u2082_u2081_smul_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegular_d_u2082_u2081_smul_single">FoxDifferential.rightRegular_d₂₁_smul_single</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L136">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegular_d₂₁_smul_single (r : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) (g : H × H) (a : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) :
+    groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) (r • Finsupp.single g a) =
+      r • groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) (Finsupp.single g a)</code></pre></section>
+    <section><div class="natural-text"><p>The scalar-multiplication formula for \(d_{21}\) <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCTheory.holds">holds</a> on singleton generators.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">calc</span>
+    groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) (r • Finsupp.single g a)
+        = groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) (Finsupp.single g (r * a)) := <span class="kw">by</span>
+            <span class="kw">simp</span> only [Finsupp.smul_single, smul_eq_mul]
+    _ = (-(r * a)) • <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationElement">relationElement</a> (MonoidHom.id H) g.1 g.2 := <span class="kw">by</span>
+          <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_d_u2082_u2081_single">rightRegular_d₂₁_single</a>]
+    _ = r • ((-a) • <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationElement">relationElement</a> (MonoidHom.id H) g.1 g.2) := <span class="kw">by</span>
+          <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationElement_eq_crossedDifferentialRelationElement">relationElement_eq_crossedDifferentialRelationElement</a>, neg_smul, smul_neg, smul_smul]
+    _ = r • groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) (Finsupp.single g a) := <span class="kw">by</span>
+          <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_d_u2082_u2081_single">rightRegular_d₂₁_single</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegular_d_u2082_u2081_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegular_d_u2082_u2081_smul">FoxDifferential.rightRegular_d₂₁_smul</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L151">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegular_d₂₁_smul (r : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) (x : H × H →₀ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) :
+    groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) (r • x) =
+      r • groupHomology.d₂₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) x</code></pre></section>
+    <section><div class="natural-text"><p>The right-regular \(d_{21}\) map is <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with scalar multiplication.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">induction</span> x using Finsupp.induction <span class="kw">with</span>
+  | <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> =&gt;
+      <span class="kw">simp</span> only [smul_zero, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>]
+  | single_add g a x hg hx ih =&gt;
+      <span class="kw">rw</span> [smul_add, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>, ih, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_d_u2082_u2081_smul_single">rightRegular_d₂₁_smul_single</a>]
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>, smul_add]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.rightRegularBoundariesSubmodule">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularBoundariesSubmodule">FoxDifferential.rightRegularBoundariesSubmodule</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L163">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightRegularBoundariesSubmodule : Submodule (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H) <span class="kw">where</span>
+  carrier := groupHomology.boundaries₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H)
+  zero_mem&#x27; := <span class="kw">by</span>
+    <span class="kw">exact</span> ⟨0, <span class="kw">by</span> <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>]⟩
+  add_mem&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y hx hy
+    <span class="kw">exact</span> (groupHomology.boundaries₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H)).add_mem hx hy
+  smul_mem&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> r x hx
+    rcases hx <span class="kw">with</span> ⟨y, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> ⟨r • y, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_d_u2082_u2081_smul">rightRegular_d₂₁_smul</a> (H := H) r y⟩</code></pre></section>
+    <section><div class="natural-text"><p>The degree-1 boundaries for the right-regular representation, regarded as a \(\mathbb{Z}[H]\)-submodule of the free pre-module.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.mem_rightRegularBoundariesSubmodule">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.mem_rightRegularBoundariesSubmodule">FoxDifferential.mem_rightRegularBoundariesSubmodule</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L178">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_rightRegularBoundariesSubmodule {x : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H} :
+    x ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H ↔ x ∈ groupHomology.boundaries₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H)</code></pre></section>
+    <section><div class="natural-text"><p>The displayed right-regular boundary lies in the right-regular boundary submodule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Iff.rfl</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.relationElement_mem_rightRegularBoundariesSubmodule">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.relationElement_mem_rightRegularBoundariesSubmodule">FoxDifferential.relationElement_mem_rightRegularBoundariesSubmodule</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L184">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> relationElement_mem_rightRegularBoundariesSubmodule (g₁ g₂ : H) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationElement">relationElement</a> (MonoidHom.id H) g₁ g₂ ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H</code></pre></section>
+    <section><div class="natural-text"><p>Each identity-Crowell relation already lies in the right-regular boundary submodule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨Finsupp.single (g₁, g₂) (-1), ?_⟩
+  simpa using
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.relationElement_eq_rightRegular_d_u2082_u2081_single">relationElement_eq_rightRegular_d₂₁_single</a> (H := H) g₁ g₂ (1 : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)).symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.relationSubmodule_le_rightRegularBoundariesSubmodule">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.relationSubmodule_le_rightRegularBoundariesSubmodule">FoxDifferential.relationSubmodule_le_rightRegularBoundariesSubmodule</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L192">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> relationSubmodule_le_rightRegularBoundariesSubmodule :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a> (MonoidHom.id H) ≤ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H</code></pre></section>
+    <section><div class="natural-text"><p>The identity Crowell relation submodule is contained in the right-regular boundary submodule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a>]
+  refine Submodule.span_le.2 ?_
+  rintro _ ⟨⟨g₁, g₂⟩, <span class="kw">rfl</span>⟩
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.relationElement_mem_rightRegularBoundariesSubmodule">relationElement_mem_rightRegularBoundariesSubmodule</a> (H := H) g₁ g₂</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegular_boundaries_u2081_le_relationSubmodule">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegular_boundaries_u2081_le_relationSubmodule">FoxDifferential.rightRegular_boundaries₁_le_relationSubmodule</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L202">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegular_boundaries₁_le_relationSubmodule :
+    groupHomology.boundaries₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) ≤
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a> (MonoidHom.id H)).restrictScalars ℤ</code></pre></section>
+    <section><div class="natural-text"><p>The degree-1 boundaries for the right-regular representation lie in the Crowell relation submodule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x hx
+  rcases hx <span class="kw">with</span> ⟨y, <span class="kw">rfl</span>⟩
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_d_u2082_u2081_mem_relationSubmodule">rightRegular_d₂₁_mem_relationSubmodule</a> (H := H) y</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegularBoundariesSubmodule_le_relationSubmodule">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularBoundariesSubmodule_le_relationSubmodule">FoxDifferential.rightRegularBoundariesSubmodule_le_relationSubmodule</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L210">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegularBoundariesSubmodule_le_relationSubmodule :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H ≤ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a> (MonoidHom.id H)</code></pre></section>
+    <section><div class="natural-text"><p>The right-regular boundary submodule is contained in the relation submodule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x hx
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_boundaries_u2081_le_relationSubmodule">rightRegular_boundaries₁_le_relationSubmodule</a> (H := H) hx</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.relationSubmodule_eq_rightRegularBoundariesSubmodule">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.relationSubmodule_eq_rightRegularBoundariesSubmodule">FoxDifferential.relationSubmodule_eq_rightRegularBoundariesSubmodule</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L217">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> relationSubmodule_eq_rightRegularBoundariesSubmodule :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a> (MonoidHom.id H) = <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H</code></pre></section>
+    <section><div class="natural-text"><p>The identity Crowell relations are exactly the right-regular degree-1 boundaries.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> le_antisymm
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.relationSubmodule_le_rightRegularBoundariesSubmodule">relationSubmodule_le_rightRegularBoundariesSubmodule</a> (H := H))
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule_le_relationSubmodule">rightRegularBoundariesSubmodule_le_relationSubmodule</a> (H := H))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.liftLinear_groupRingBoundary_id_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.liftLinear_groupRingBoundary_id_single">FoxDifferential.liftLinear_groupRingBoundary_id_single</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L225">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> liftLinear_groupRingBoundary_id_single (g : H) (r : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a> (H := H) (G := H) (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a> (MonoidHom.id H)) (Finsupp.single g r) =
+      r * <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.augmentationGenerator">augmentationGenerator</a> H g</code></pre></section>
+    <section><div class="natural-text"><p>The lifted linear identity-boundary map has the stated value on a single group-ring generator.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a>, Finsupp.linearCombination_single, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a>, MonoidHom.id_apply,
+  MonoidAlgebra.of_apply, smul_eq_mul, mul_sub, mul_one, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.augmentationGenerator">augmentationGenerator</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the relevant Fox differential, quotient, or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage map. The asserted formula is checked on group-ring generators or quotient classes; linearity, the crossed-derivation rule, and the defining <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>/kernel relations extend the calculation to the whole module.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.liftLinear_groupRingBoundary_id_mem_augmentationIdeal">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.liftLinear_groupRingBoundary_id_mem_augmentationIdeal">FoxDifferential.liftLinear_groupRingBoundary_id_mem_augmentationIdeal</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L234">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> liftLinear_groupRingBoundary_id_mem_augmentationIdeal (x : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a> (H := H) (G := H) (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a> (MonoidHom.id H)) x ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationIdeal">augmentationIdeal</a> H</code></pre></section>
+    <section><div class="natural-text"><p>The pre-boundary map for the identity case lands in the <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a>, Finsupp.linearCombination_apply]
+  <span class="kw">exact</span> Submodule.sum_mem (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationIdeal">augmentationIdeal</a> H) <span class="kw">fun</span> g _ =&gt;
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationIdeal">augmentationIdeal</a> H).smul_mem _ &lt;|
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.groupRingBoundary_mem_augmentationIdeal">groupRingBoundary_mem_augmentationIdeal</a> (H := H) (MonoidHom.id H) g</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.augmentationGenerator_mem_range_liftLinear_groupRingBoundary_id">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.augmentationGenerator_mem_range_liftLinear_groupRingBoundary_id">FoxDifferential.augmentationGenerator_mem_range_liftLinear_groupRingBoundary_id</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L245">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> augmentationGenerator_mem_range_liftLinear_groupRingBoundary_id (h : H) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.augmentationGenerator">augmentationGenerator</a> H h ∈
+      LinearMap.range (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a> (H := H) (G := H) (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a> (MonoidHom.id H)))</code></pre></section>
+    <section><div class="natural-text"><p>The standard <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> \(h-1\) of the <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal lies in the image of the identity pre-boundary map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨Finsupp.single h 1, ?_⟩
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear_single">liftLinear_single</a>, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a>, MonoidHom.id_apply, MonoidAlgebra.of_apply, smul_eq_mul,
+  one_mul, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.augmentationGenerator">augmentationGenerator</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.augmentationIdeal_le_range_liftLinear_groupRingBoundary_id">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.augmentationIdeal_le_range_liftLinear_groupRingBoundary_id">FoxDifferential.augmentationIdeal_le_range_liftLinear_groupRingBoundary_id</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L255">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> augmentationIdeal_le_range_liftLinear_groupRingBoundary_id :
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationIdeal">augmentationIdeal</a> H : Submodule (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)) ≤
+      LinearMap.range (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a> (H := H) (G := H) (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a> (MonoidHom.id H)))</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal is generated by the image of the identity pre-boundary map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hgen :
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationGeneratorIdeal">augmentationGeneratorIdeal</a> H : Submodule (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)) ≤
+        LinearMap.range (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a> (H := H) (G := H) (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)
+          (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a> (MonoidHom.id H))) := <span class="kw">by</span>
+    refine Ideal.span_le.2 ?_
+    rintro _ ⟨h, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.augmentationGenerator_mem_range_liftLinear_groupRingBoundary_id">augmentationGenerator_mem_range_liftLinear_groupRingBoundary_id</a> (H := H) h
+  simpa [congrArg
+      (<span class="kw">fun</span> I : Ideal (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) =&gt; (I : Submodule (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)))
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationGeneratorIdeal_eq_augmentationIdeal">augmentationGeneratorIdeal_eq_augmentationIdeal</a> (H := H))] using hgen</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.liftLinear_groupRingBoundary_id_eq_d_u2081_u2080">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.liftLinear_groupRingBoundary_id_eq_d_u2081_u2080">FoxDifferential.liftLinear_groupRingBoundary_id_eq_d₁₀</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L273">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> liftLinear_groupRingBoundary_id_eq_d₁₀ :
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a> (H := H) (G := H) (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a> (MonoidHom.id H))).restrictScalars ℤ =
+      (groupHomology.d₁₀ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H)).hom</code></pre></section>
+    <section><div class="natural-text"><p>For the identity homomorphism, the lifted group-ring boundary equals the degree-<a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> differential for the right-regular representation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Finsupp.lhom_ext
+  <span class="kw">intro</span> g r
+  <span class="kw">rw</span> [groupHomology.d₁₀_single]
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a>, LinearMap.coe_restrictScalars, Finsupp.linearCombination_single, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a>,
+  MonoidHom.id_apply, MonoidAlgebra.of_apply, sub_eq_add_neg, smul_eq_mul, mul_add, mul_neg, mul_one, of_ρ,
+  <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRepresentation">rightRegularRepresentation</a>, MonoidHom.coe_mk, OneHom.coe_mk, <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>, LinearMap.coe_mk, AddHom.coe_mk]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Evaluate both linear maps on group-ring generators. The lifted boundary sends a <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to the corresponding right-regular boundary, which is exactly the degree-<a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> differential; linear extensionality gives equality of the maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.liftLinear_groupRingBoundary_id_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.liftLinear_groupRingBoundary_id_apply">FoxDifferential.liftLinear_groupRingBoundary_id_apply</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L285">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> liftLinear_groupRingBoundary_id_apply (x : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a> (H := H) (G := H) (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a> (MonoidHom.id H)) x =
+      groupHomology.d₁₀ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) x</code></pre></section>
+    <section><div class="natural-text"><p>The identity group-ring boundary lift is evaluated on canonical generators and then extended linearly.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H →ₗ[ℤ] <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H =&gt; f x)
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.liftLinear_groupRingBoundary_id_eq_d_u2081_u2080">liftLinear_groupRingBoundary_id_eq_d₁₀</a> H)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegular_d_u2081_u2080_mem_augmentationIdeal">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegular_d_u2081_u2080_mem_augmentationIdeal">FoxDifferential.rightRegular_d₁₀_mem_augmentationIdeal</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L294">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegular_d₁₀_mem_augmentationIdeal (x : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H) :
+    groupHomology.d₁₀ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) x ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationIdeal">augmentationIdeal</a> H</code></pre></section>
+    <section><div class="natural-text"><p>The right-regular degree-0 differential lands in the <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.liftLinear_groupRingBoundary_id_apply">liftLinear_groupRingBoundary_id_apply</a>] using
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.liftLinear_groupRingBoundary_id_mem_augmentationIdeal">liftLinear_groupRingBoundary_id_mem_augmentationIdeal</a> (H := H) x</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegular_d_u2081_u2080_range_eq_augmentationIdeal">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegular_d_u2081_u2080_range_eq_augmentationIdeal">FoxDifferential.rightRegular_d₁₀_range_eq_augmentationIdeal</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L301">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegular_d₁₀_range_eq_augmentationIdeal :
+    LinearMap.range (groupHomology.d₁₀ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H)).hom =
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationIdeal">augmentationIdeal</a> H).restrictScalars ℤ</code></pre></section>
+    <section><div class="natural-text"><p>The canonical <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal is the kernel of the ordinary group-ring <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext y
+  <span class="kw">constructor</span>
+  · rintro ⟨x, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_d_u2081_u2080_mem_augmentationIdeal">rightRegular_d₁₀_mem_augmentationIdeal</a> (H := H) x
+  · <span class="kw">intro</span> hy
+    rcases <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.augmentationIdeal_le_range_liftLinear_groupRingBoundary_id">augmentationIdeal_le_range_liftLinear_groupRingBoundary_id</a> (H := H) hy <span class="kw">with</span> ⟨x, hx⟩
+    refine ⟨x, ?_⟩
+    <span class="kw">rw</span> [← LinearMap.congr_fun (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.liftLinear_groupRingBoundary_id_eq_d_u2081_u2080">liftLinear_groupRingBoundary_id_eq_d₁₀</a> (H := H)) x]
+    <span class="kw">exact</span> hx</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl abbrev" id="decl-FoxDifferential.bottomTrivialRep">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-FoxDifferential.bottomTrivialRep">FoxDifferential.bottomTrivialRep</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L316">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> bottomTrivialRep : Rep ℤ (⊥ : Subgroup H) :=
+  Rep.trivial ℤ (⊥ : Subgroup H) ℤ</code></pre></section>
+    <section><div class="natural-text"><p>The trivial representation of the trivial subgroup of \(H\). Shapiro identifies its induced representation with the right-regular representation.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FoxDifferential.indBottomTrivialUnderlyingEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.indBottomTrivialUnderlyingEquiv">FoxDifferential.indBottomTrivialUnderlyingEquiv</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L320">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> indBottomTrivialUnderlyingEquiv :
+    Representation.IndV (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H).ρ ≃ₗ[ℤ] <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H := <span class="kw">by</span>
+  <span class="kw">let</span> ρt : Representation ℤ (⊥ : Subgroup H) (TensorProduct ℤ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) ℤ) :=
+    Representation.tprod
+      (((Rep.leftRegular ℤ H).ρ.comp (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a>))
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H).ρ
+  <span class="kw">let</span> e1 : Representation.Coinvariants ρt ≃ₗ[ℤ] TensorProduct ℤ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) ℤ :=
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.coinvariantsLEquivOfSubsingleton">coinvariantsLEquivOfSubsingleton</a> ρt
+  <span class="kw">exact</span> e1.trans (TensorProduct.rid ℤ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H))</code></pre></section>
+    <section><div class="natural-text"><p>The induced module from the trivial subgroup is just the group ring.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.indBottomTrivialUnderlyingEquiv_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.indBottomTrivialUnderlyingEquiv_mk">FoxDifferential.indBottomTrivialUnderlyingEquiv_mk</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L332">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> indBottomTrivialUnderlyingEquiv_mk (h : H) (n : ℤ) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.indBottomTrivialUnderlyingEquiv">indBottomTrivialUnderlyingEquiv</a> H
+      (Representation.IndV.mk (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H).ρ h n) =
+        Finsupp.single h n</code></pre></section>
+    <section><div class="natural-text"><p>The bottom-trivial induced-module equivalence sends the induced <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> with element \(h\) and coefficient \(n\) to the singleton group-ring element at \(h\) with coefficient \(n\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change (TensorProduct.rid ℤ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H))
+      ((Representation.Coinvariants.lift
+          (Representation.tprod (((Rep.leftRegular ℤ H).ρ.comp (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a>))
+            (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H).ρ)
+          LinearMap.id
+          (<span class="kw">fun</span> x =&gt; <span class="kw">by</span>
+            ext y
+            <span class="kw">have</span> : x = (1 : (⊥ : Subgroup H)) := Subsingleton.elim _ _
+            subst this
+            <span class="kw">simp</span> only [of_ρ, Function.comp_apply, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, LinearMap.id_comp, LinearMap.coe_comp,
+  Finsupp.lsingle_apply, AlgebraTensorModule.curry_apply, LinearMap.restrictScalars_self, curry_apply,
+  Module.End.one_apply, LinearMap.id_coe, id_eq]))
+        (Representation.Coinvariants.mk _ (Finsupp.single h 1 ⊗ₜ[ℤ] n))) = _
+  <span class="kw">rw</span> [Representation.Coinvariants.lift_mk]
+  <span class="kw">simp</span> only [LinearMap.id_coe, id_eq, rid_tmul, MonoidAlgebra.smul_single, Int.zsmul_eq_mul, mul_one]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.indBottomTrivialIsoRightRegular">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.indBottomTrivialIsoRightRegular">FoxDifferential.indBottomTrivialIsoRightRegular</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L354">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> indBottomTrivialIsoRightRegular :
+    Rep.ind (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H) ≅ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H :=
+  Action.mkIso (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.indBottomTrivialUnderlyingEquiv">indBottomTrivialUnderlyingEquiv</a> H).toModuleIso <span class="kw">fun</span> g =&gt; <span class="kw">by</span>
+    refine ModuleCat.hom_ext &lt;| Representation.IndV.hom_ext (φ := (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a>)
+      (ρ := (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H).ρ) ?_
+    <span class="kw">intro</span> h
+    ext n
+    change (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.indBottomTrivialUnderlyingEquiv">indBottomTrivialUnderlyingEquiv</a> H)
+        (((Rep.ind (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H)).ρ g)
+          ((Representation.IndV.mk (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H).ρ h) (1 : ℤ))) n =
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRepresentation">rightRegularRepresentation</a> H g
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.indBottomTrivialUnderlyingEquiv">indBottomTrivialUnderlyingEquiv</a> H
+          ((Representation.IndV.mk (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H).ρ h) (1 : ℤ)))) n
+    <span class="kw">have</span> hind :
+        (((Rep.ind (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H)).ρ g)
+          ((Representation.IndV.mk (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H).ρ h) (1 : ℤ))) =
+        (Representation.IndV.mk (⊥ : Subgroup H).<a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H).ρ (h * g⁻¹))
+          (1 : ℤ) := <span class="kw">by</span>
+      <span class="kw">simp</span> only [Rep.ind, of_ρ, ind_apply, LinearMap.coe_comp, Function.comp_apply, mk_apply, Coinvariants.map_mk,
+  LinearMap.rTensor_tmul, Finsupp.lmapDomain_apply, Finsupp.mapDomain_single]
+    <span class="kw">rw</span> [hind, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.indBottomTrivialUnderlyingEquiv_mk">indBottomTrivialUnderlyingEquiv_mk</a>, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.indBottomTrivialUnderlyingEquiv_mk">indBottomTrivialUnderlyingEquiv_mk</a>]
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRepresentation_apply_single">rightRegularRepresentation_apply_single</a>]</code></pre></section>
+    <section><div class="natural-text"><p>Shapiro&#x27;s lemma identifies the induced trivial representation of the trivial subgroup with the right-regular representation.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FoxDifferential.groupHomologyIsoOfRepIso">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.groupHomologyIsoOfRepIso">FoxDifferential.groupHomologyIsoOfRepIso</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L378">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> groupHomologyIsoOfRepIso {A B : Rep ℤ H} (e : A ≅ B) (n : ℕ) :
+    groupHomology A n ≅ groupHomology B n <span class="kw">where</span>
+  hom := groupHomology.map (MonoidHom.id H) e.hom n
+  inv := groupHomology.map (MonoidHom.id H) e.inv n
+  hom_inv_id := <span class="kw">by</span>
+    <span class="kw">have</span> h := groupHomology.map_id_comp (φ := e.hom) (ψ := e.inv) (n := n)
+    <span class="kw">rw</span> [e.hom_inv_id, groupHomology.map_id] at h
+    simpa using h.symm
+  inv_hom_id := <span class="kw">by</span>
+    <span class="kw">have</span> h := groupHomology.map_id_comp (φ := e.inv) (ψ := e.hom) (n := n)
+    <span class="kw">rw</span> [e.inv_hom_id, groupHomology.map_id] at h
+    simpa using h.symm</code></pre></section>
+    <section><div class="natural-text"><p>Group homology respects isomorphic representations.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FoxDifferential.rightRegularH1IsoBottom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularH1IsoBottom">FoxDifferential.rightRegularH1IsoBottom</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L393">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightRegularH1IsoBottom :
+    groupHomology (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) 1 ≅ groupHomology (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H) 1 := <span class="kw">by</span>
+  <span class="kw">exact</span> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.groupHomologyIsoOfRepIso">groupHomologyIsoOfRepIso</a> H (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.indBottomTrivialIsoRightRegular">indBottomTrivialIsoRightRegular</a> H).symm 1) ≪≫
+    groupHomology.indIso (⊥ : Subgroup H) (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H) 1</code></pre></section>
+    <section><div class="natural-text"><p>The first homology of the right-regular representation is identified with the first homology of the trivial subgroup.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegular_H1_isZero">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegular_H1_isZero">FoxDifferential.rightRegular_H1_isZero</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L400">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegular_H1_isZero : Limits.IsZero (groupHomology (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) 1)</code></pre></section>
+    <section><div class="natural-text"><p>The first homology of the right-regular representation vanishes.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">let</span> hbot : Limits.IsZero (groupHomology (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H) 1) := <span class="kw">by</span>
+    simpa using (isZero_groupHomology_succ_of_subsingleton (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.bottomTrivialRep">bottomTrivialRep</a> H) 0)
+  <span class="kw">exact</span> hbot.of_iso (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularH1IsoBottom">rightRegularH1IsoBottom</a> H)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegular_cycles_u2081_eq_boundaries_u2081">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegular_cycles_u2081_eq_boundaries_u2081">FoxDifferential.rightRegular_cycles₁_eq_boundaries₁</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L408">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegular_cycles₁_eq_boundaries₁ :
+    groupHomology.cycles₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) = groupHomology.boundaries₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H)</code></pre></section>
+    <section><div class="natural-text"><p>In degree 1, right-regular cycles are exactly right-regular boundaries.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">apply</span> le_antisymm
+  · <span class="kw">intro</span> x hx
+    <span class="kw">let</span> hzero := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_H1_isZero">rightRegular_H1_isZero</a> H
+    haveI : Subsingleton (groupHomology (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) 1) :=
+      ModuleCat.subsingleton_of_isZero hzero
+    <span class="kw">let</span> z : groupHomology.cycles₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) := ⟨x, hx⟩
+    <span class="kw">exact</span> (groupHomology.H1π_eq_zero_iff (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) z).1 (Subsingleton.elim _ _)
+  · <span class="kw">exact</span> groupHomology.boundaries₁_le_cycles₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.mem_rightRegularBoundariesSubmodule_iff_d_u2081_u2080_eq_zero">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.mem_rightRegularBoundariesSubmodule_iff_d_u2081_u2080_eq_zero">FoxDifferential.mem_rightRegularBoundariesSubmodule_iff_d₁₀_eq_zero</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L422">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_rightRegularBoundariesSubmodule_iff_d₁₀_eq_zero
+    {H : <span class="kw">Type</span>} [Group H] {x : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H} :
+    x ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H ↔ groupHomology.d₁₀ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) x = 0</code></pre></section>
+    <section><div class="natural-text"><p>For the right-regular representation, a 1-chain is a boundary exactly when its degree-0 differential vanishes.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hx
+    <span class="kw">have</span> hx&#x27; : x ∈ groupHomology.boundaries₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) := hx
+    <span class="kw">have</span> hcycle := groupHomology.mem_cycles₁_of_mem_boundaries₁ (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) x hx&#x27;
+    simpa [groupHomology.cycles₁, LinearMap.mem_ker] using hcycle
+  · <span class="kw">intro</span> hx
+    <span class="kw">have</span> hcycle : x ∈ groupHomology.cycles₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) := <span class="kw">by</span>
+      simpa [groupHomology.cycles₁, LinearMap.mem_ker] using hx
+    <span class="kw">have</span> hbound : x ∈ groupHomology.boundaries₁ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) := <span class="kw">by</span>
+      simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegular_cycles_u2081_eq_boundaries_u2081">rightRegular_cycles₁_eq_boundaries₁</a> (H := H)] using hcycle
+    <span class="kw">exact</span> hbound</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule">FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L439">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightRegularBoundariesQuotientEquivIdentityDifferentialModule :
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H ⧸ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H)) ≃ₗ[<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H]
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialModule">DifferentialModule</a> (MonoidHom.id H) :=
+  Submodule.quotEquivOfEq (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H)
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a> (MonoidHom.id H))
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.relationSubmodule_eq_rightRegularBoundariesSubmodule">relationSubmodule_eq_rightRegularBoundariesSubmodule</a> (H := H)).symm</code></pre></section>
+    <section><div class="natural-text"><p>The quotient of the free pre-module by right-regular degree-1 boundaries is the identity Crowell differential module.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule_mk">FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule_mk</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L448">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegularBoundariesQuotientEquivIdentityDifferentialModule_mk
+    (x : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule">rightRegularBoundariesQuotientEquivIdentityDifferentialModule</a> H
+      (Submodule.Quotient.mk x) =
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule">relationSubmodule</a> (MonoidHom.id H)).mkQ x</code></pre></section>
+    <section><div class="natural-text"><p>The equivalence from the quotient by right-regular boundaries to the identity differential module sends a quotient class to the corresponding relation-submodule quotient class.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule">rightRegularBoundariesQuotientEquivIdentityDifferentialModule</a>,
+    Submodule.quotEquivOfEq_mk]
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal">FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L458">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightRegularBoundariesQuotientToAugmentationIdeal :
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H ⧸ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H)) →ₗ[<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H]
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationIdeal">augmentationIdeal</a> H :=
+  { toFun := <span class="kw">fun</span> x =&gt;
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.toAugmentationIdeal">toAugmentationIdeal</a> (H := H) (MonoidHom.id H)
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule">rightRegularBoundariesQuotientEquivIdentityDifferentialModule</a> H x)
+    map_add&#x27; := <span class="kw">by</span>
+      <span class="kw">intro</span> x y
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule_eq_crossedDifferentialRelationSubmodule">relationSubmodule_eq_crossedDifferentialRelationSubmodule</a>, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>]
+    map_smul&#x27; := <span class="kw">by</span>
+      <span class="kw">intro</span> r x
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.relationSubmodule_eq_crossedDifferentialRelationSubmodule">relationSubmodule_eq_crossedDifferentialRelationSubmodule</a>, <a class="decl-ref" href="../../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.IsLinearSystem.map_smul">map_smul</a>, RingHom.id_apply]}</code></pre></section>
+    <section><div class="natural-text"><p>The quotient by right-regular boundaries maps onto the <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_mk_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_mk_single">FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_mk_single</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L473">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegularBoundariesQuotientToAugmentationIdeal_mk_single (h : H) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal">rightRegularBoundariesQuotientToAugmentationIdeal</a> H
+      (Submodule.Quotient.mk (Finsupp.single h 1)) =
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationGeneratorSubtype">augmentationGeneratorSubtype</a> (H := H) h</code></pre></section>
+    <section><div class="natural-text"><p>The quotient map from right-regular boundaries to the <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal sends a single <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to the corresponding <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> generator.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Subtype.ext
+  simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal">rightRegularBoundariesQuotientToAugmentationIdeal</a>,
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule_mk">rightRegularBoundariesQuotientEquivIdentityDifferentialModule_mk</a>,
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationGeneratorSubtype">augmentationGeneratorSubtype</a>, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.augmentationGenerator">augmentationGenerator</a>, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a>]
+    using <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.toGroupRing_d">toGroupRing_d</a> (MonoidHom.id H) h</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the relevant Fox differential, quotient, or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage map. The asserted formula is checked on group-ring generators or quotient classes; linearity, the crossed-derivation rule, and the defining <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>/kernel relations extend the calculation to the whole module.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_surjective">FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_surjective</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L485">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegularBoundariesQuotientToAugmentationIdeal_surjective :
+    Function.Surjective (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal">rightRegularBoundariesQuotientToAugmentationIdeal</a> H)</code></pre></section>
+    <section><div class="natural-text"><p>The quotient by right-regular boundaries surjects onto the <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> y
+  rcases <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.toAugmentationIdeal_surjective">toAugmentationIdeal_surjective</a> (H := H) (MonoidHom.id H) (<span class="kw">fun</span> h =&gt; ⟨h, <span class="kw">rfl</span>⟩) y <span class="kw">with</span>
+    ⟨x, hx⟩
+  refine ⟨(<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule">rightRegularBoundariesQuotientEquivIdentityDifferentialModule</a> H).symm x, ?_⟩
+  simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal">rightRegularBoundariesQuotientToAugmentationIdeal</a>] using hx</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_eq_zero_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_eq_zero_iff">FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_eq_zero_iff</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L494">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegularBoundariesQuotientToAugmentationIdeal_eq_zero_iff
+    {H : <span class="kw">Type</span>} [Group H]
+    {q : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H ⧸ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H)} :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal">rightRegularBoundariesQuotientToAugmentationIdeal</a> H q = 0 ↔ q = 0</code></pre></section>
+    <section><div class="natural-text"><p>The quotient-to-<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map has trivial kernel.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine Submodule.Quotient.induction_on _ q ?_
+  <span class="kw">intro</span> x
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hx
+    <span class="kw">have</span> hx&#x27; : groupHomology.d₁₀ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularRep">rightRegularRep</a> H) x = 0 := <span class="kw">by</span>
+      <span class="kw">have</span> hxval := congrArg Subtype.val hx
+      change <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.toGroupRing">toGroupRing</a> (MonoidHom.id H)
+          ((<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule">rightRegularBoundariesQuotientEquivIdentityDifferentialModule</a> H)
+            (Submodule.Quotient.mk x)) = 0 at hxval
+      <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientEquivIdentityDifferentialModule_mk">rightRegularBoundariesQuotientEquivIdentityDifferentialModule_mk</a>] at hxval
+      change <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.liftLinear">liftLinear</a> (H := H) (G := H) (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)
+          (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Boundary.html#decl-FoxDifferential.groupRingBoundary">groupRingBoundary</a> (MonoidHom.id H)) x = 0 at hxval
+      simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.liftLinear_groupRingBoundary_id_apply">liftLinear_groupRingBoundary_id_apply</a>] using hxval
+    <span class="kw">have</span> hmem : x ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H := <span class="kw">by</span>
+      <span class="kw">exact</span> (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.mem_rightRegularBoundariesSubmodule_iff_d_u2081_u2080_eq_zero">mem_rightRegularBoundariesSubmodule_iff_d₁₀_eq_zero</a> (H := H) (x := x)).2 hx&#x27;
+    <span class="kw">exact</span> (Submodule.Quotient.mk_eq_zero (p := <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H) (x := x)).2 hmem
+  · <span class="kw">intro</span> hq
+    <span class="kw">simp</span> only [hq, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_injective">FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_injective</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L519">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightRegularBoundariesQuotientToAugmentationIdeal_injective :
+    Function.Injective (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal">rightRegularBoundariesQuotientToAugmentationIdeal</a> H)</code></pre></section>
+    <section><div class="natural-text"><p>The map from the quotient of right-regular boundaries to the ordinary <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x y hxy
+  <span class="kw">apply</span> sub_eq_zero.mp
+  refine (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_eq_zero_iff">rightRegularBoundariesQuotientToAugmentationIdeal_eq_zero_iff</a> (H := H) (q := x - y)).1 ?_
+  simpa [LinearMap.map_sub] using sub_eq_zero.mpr hxy</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.rightRegularBoundariesQuotientEquivAugmentationIdeal">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.rightRegularBoundariesQuotientEquivAugmentationIdeal">FoxDifferential.rightRegularBoundariesQuotientEquivAugmentationIdeal</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L527">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightRegularBoundariesQuotientEquivAugmentationIdeal :
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.DifferentialPreModule">DifferentialPreModule</a> H H ⧸ (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesSubmodule">rightRegularBoundariesSubmodule</a> H)) ≃ₗ[<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H]
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationIdeal">augmentationIdeal</a> H :=
+  LinearEquiv.ofBijective (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal">rightRegularBoundariesQuotientToAugmentationIdeal</a> H)
+    ⟨<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_injective">rightRegularBoundariesQuotientToAugmentationIdeal_injective</a> (H := H),
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#decl-FoxDifferential.rightRegularBoundariesQuotientToAugmentationIdeal_surjective">rightRegularBoundariesQuotientToAugmentationIdeal_surjective</a> (H := H)⟩</code></pre></section>
+    <section><div class="natural-text"><p>The right-regular boundary quotient is exactly the <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.identityDifferentialModuleEquivAugmentationIdeal_d">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.identityDifferentialModuleEquivAugmentationIdeal_d">FoxDifferential.identityDifferentialModuleEquivAugmentationIdeal_d</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/KernelBoundary/IdentityAugmentation.html#L536">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> identityDifferentialModuleEquivAugmentationIdeal_d (h : H) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.identityDifferentialModuleEquivAugmentationIdeal">identityDifferentialModuleEquivAugmentationIdeal</a> (H := H)
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.universalDifferential">universalDifferential</a> (MonoidHom.id H) h) =
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationGeneratorSubtype">augmentationGeneratorSubtype</a> (H := H) h</code></pre></section>
+    <section><div class="natural-text"><p>Under the identity differential module equivalence, the universal differential \(d(h)\) corresponds to the <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> \(h-1\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.identityDifferentialModuleEquivAugmentationIdeal">identityDifferentialModuleEquivAugmentationIdeal</a> (H := H)).toLinearMap
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.universalDifferential">universalDifferential</a> (MonoidHom.id H) h) =
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentationGeneratorSubtype">augmentationGeneratorSubtype</a> (H := H) h
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.identityDifferentialModuleEquivAugmentationIdeal_toLinearMap">identityDifferentialModuleEquivAugmentationIdeal_toLinearMap</a>]
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.toAugmentationIdeal_d">toAugmentationIdeal_d</a>]
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FoxDifferential.Discrete.KernelBoundary.IdentityAugmentation"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

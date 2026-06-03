@@ -1,0 +1,1847 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.WreathProducts | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.WreathProducts</div>
+  <form class="search-form" action="../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><span>WreathProducts</span></div>
+      <h1 class="module-title">ProCGroups.WreathProducts</h1>
+      <div class="module-meta">39 Theorem | 17 Definition | 2 Abbreviation | 10 Instance</div>
+      <div class="module-overview"><p>This module formalizes permutational wreath products.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li>Mathlib.GroupTheory.SemidirectProduct</li><li><a href="../../library/ProCGroups/ProC/Subgroups/Products.html">ProCGroups.ProC.Subgroups.Products</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a></li><li><a href="../../library/ReidemeisterSchreier/Profinite.html">ReidemeisterSchreier.Profinite</a></li><li><a href="../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/DenseFreeModel.html">ReidemeisterSchreier.Profinite.OpenSubgroups.DenseFreeModel</a></li><li><a href="../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html">ReidemeisterSchreier.Profinite.OpenSubgroups.SchreierTransversals</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.WreathProducts.rightCosetMulAction">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.WreathProducts.rightCosetMulAction">ProCGroups.WreathProducts.rightCosetMulAction</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L30">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightCosetMulAction (H : Subgroup G) :
+    MulAction G (Quotient (QuotientGroup.rightRel H)) <span class="kw">where</span>
+  smul g :=
+    Quotient.map&#x27; (<span class="kw">fun</span> a =&gt; a * g⁻¹) <span class="kw">fun</span> a b hab =&gt; <span class="kw">by</span>
+      <span class="kw">rw</span> [QuotientGroup.rightRel_apply] at hab ⊢
+      simpa [mul_assoc] using hab
+  one_smul q := <span class="kw">by</span>
+    refine Quotient.inductionOn&#x27; q ?_
+    <span class="kw">intro</span> a
+    <span class="kw">apply</span> Quotient.sound&#x27;
+    <span class="kw">rw</span> [QuotientGroup.rightRel_apply]
+    <span class="kw">simp</span> only [inv_one, mul_one, mul_inv_cancel, one_mem]
+  mul_smul g h q := <span class="kw">by</span>
+    refine Quotient.inductionOn&#x27; q ?_
+    <span class="kw">intro</span> a
+    <span class="kw">apply</span> Quotient.sound&#x27;
+    <span class="kw">rw</span> [QuotientGroup.rightRel_apply]
+    <span class="kw">simp</span> only [mul_assoc, mul_inv_rev, <a class="decl-ref" href="../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>, inv_mul_cancel_left, mul_inv_cancel, one_mem]</code></pre></section>
+    <section><div class="natural-text"><p>Right multiplication on right cosets, expressed as the left action \(g\cdot [a]=[a g^{-1}]\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.WreathProducts.rightCosetMulAction_mk_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.WreathProducts.rightCosetMulAction_mk_smul">ProCGroups.WreathProducts.rightCosetMulAction_mk_smul</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L49">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> rightCosetMulAction_mk_smul
+    (H : Subgroup G) (g a : G) :
+    letI</code></pre></section>
+    <section><div class="natural-text"><p>The right-coset action formula sends a coset <a class="decl-ref" href="../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> to the expected multiplied representative.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>rightCosetMulAction H
+    g • (Quotient.mk&#x27;&#x27; a : Quotient (QuotientGroup.rightRel H)) =
+      Quotient.mk&#x27;&#x27; (a * g⁻¹) :=
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.WreathProducts.rightCosetMulAction_inv_mk_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.WreathProducts.rightCosetMulAction_inv_mk_smul">ProCGroups.WreathProducts.rightCosetMulAction_inv_mk_smul</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L56">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> rightCosetMulAction_inv_mk_smul
+    (H : Subgroup G) (g a : G) :
+    letI</code></pre></section>
+    <section><div class="natural-text"><p>The inverse right-coset action formula sends a coset <a class="decl-ref" href="../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> to the expected multiplied representative.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>rightCosetMulAction H
+    g⁻¹ • (Quotient.mk&#x27;&#x27; a : Quotient (QuotientGroup.rightRel H)) =
+      Quotient.mk&#x27;&#x27; (a * g) := <span class="kw">by</span>
+  <span class="kw">rw</span> [rightCosetMulAction_mk_smul (H := H) g⁻¹ a]
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.continuous_rightCosetMulAction_inv_smul_of_open">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.continuous_rightCosetMulAction_inv_smul_of_open">ProCGroups.continuous_rightCosetMulAction_inv_smul_of_open</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L71">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_rightCosetMulAction_inv_smul_of_open
+    (H : Subgroup G) (hH : IsOpen (H : Set G))
+    [TopologicalSpace (Quotient (QuotientGroup.rightRel H))]
+    [DiscreteTopology (Quotient (QuotientGroup.rightRel H))]
+    (q : Quotient (QuotientGroup.rightRel H)) :
+    letI</code></pre></section>
+    <section><div class="natural-text"><p>For an open subgroup, the orbit map to the discrete right-coset space is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>rightCosetMulAction H
+    Continuous <span class="kw">fun</span> g : G =&gt; g⁻¹ • q := <span class="kw">by</span>
+  letI := rightCosetMulAction H
+  <span class="kw">rw</span> [continuous_discrete_rng]
+  <span class="kw">intro</span> q&#x27;
+  classical
+  <span class="kw">let</span> a : G := q.out
+  <span class="kw">let</span> b : G := q&#x27;.out
+  <span class="kw">have</span> hpre :
+      (<span class="kw">fun</span> g : G =&gt; g⁻¹ • q) ⁻¹&#x27; (Set.singleton q&#x27;) =
+        (<span class="kw">fun</span> g : G =&gt; b * g⁻¹ * a⁻¹) ⁻¹&#x27; (H : Set G) := <span class="kw">by</span>
+    ext g
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hg
+      <span class="kw">have</span> hEq :
+          (Quotient.mk&#x27;&#x27; (a * g) : Quotient (QuotientGroup.rightRel H)) =
+            Quotient.mk&#x27;&#x27; b := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          (Quotient.mk&#x27;&#x27; (a * g) : Quotient (QuotientGroup.rightRel H))
+              = g⁻¹ • (Quotient.mk&#x27;&#x27; a : Quotient (QuotientGroup.rightRel H)) := <span class="kw">by</span>
+                  <span class="kw">rw</span> [rightCosetMulAction_inv_mk_smul (H := H) g a]
+          _ = g⁻¹ • q := <span class="kw">by</span> <span class="kw">rw</span> [Quotient.out_eq&#x27; q]
+          _ = q&#x27; := <span class="kw">by</span> simpa using hg
+          _ = Quotient.mk&#x27;&#x27; b := <span class="kw">by</span> <span class="kw">simp</span> only [Quotient.out_eq, b]
+      <span class="kw">have</span> hrel : QuotientGroup.rightRel H (a * g) b := Quotient.eq&#x27;&#x27;.mp hEq
+      simpa [mul_inv_rev, mul_assoc] using (QuotientGroup.rightRel_apply.mp hrel)
+    · <span class="kw">intro</span> hg
+      <span class="kw">have</span> hrel : QuotientGroup.rightRel H (a * g) b := <span class="kw">by</span>
+        <span class="kw">rw</span> [QuotientGroup.rightRel_apply]
+        simpa [mul_inv_rev, mul_assoc] using hg
+      <span class="kw">calc</span>
+        g⁻¹ • q = g⁻¹ • (Quotient.mk&#x27;&#x27; a : Quotient (QuotientGroup.rightRel H)) := <span class="kw">by</span>
+          <span class="kw">rw</span> [Quotient.out_eq&#x27; q]
+        _ = Quotient.mk&#x27;&#x27; (a * g) := <span class="kw">by</span>
+          <span class="kw">rw</span> [rightCosetMulAction_inv_mk_smul (H := H) g a]
+        _ = Quotient.mk&#x27;&#x27; b := Quotient.eq&#x27;&#x27;.mpr hrel
+        _ = q&#x27; := Quotient.out_eq&#x27; q&#x27;
+  <span class="kw">rw</span> [<span class="kw">show</span> ((<span class="kw">fun</span> g : G =&gt; g⁻¹ • q) ⁻¹&#x27; ({q&#x27;} : Set (Quotient (QuotientGroup.rightRel H)))) =
+      (<span class="kw">fun</span> g : G =&gt; b * g⁻¹ * a⁻¹) ⁻¹&#x27; (H : Set G) <span class="kw">by</span>
+        simpa using hpre]
+  <span class="kw">exact</span> hH.preimage ((continuous_const.mul continuous_inv).mul continuous_const)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl abbrev" id="decl-PermutationalWreathProduct">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-PermutationalWreathProduct">PermutationalWreathProduct</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L126">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> PermutationalWreathProduct :=
+  (S → A) ⋊[(mulAutArrow (G := G) (A := S) (M := A))] G</code></pre></section>
+    <section><div class="natural-text"><p>The permutational wreath product attached to a \(G\)-set \(\Sigma\).</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-instTopologicalSpacePermutationalWreathProduct">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-instTopologicalSpacePermutationalWreathProduct">instTopologicalSpacePermutationalWreathProduct</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L137">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instTopologicalSpacePermutationalWreathProduct :
+    TopologicalSpace (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) :=
+  TopologicalSpace.induced
+    (SemidirectProduct.equivProd :
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G ≃ (S → A) × G)
+    inferInstance</code></pre></section>
+    <section><div class="natural-text"><p>The constructed object carries the topological space structure inherited from its construction.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-permutationalWreathProductHomeomorphProd">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductHomeomorphProd">permutationalWreathProductHomeomorphProd</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L147">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> permutationalWreathProductHomeomorphProd :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G ≃ₜ (S → A) × G <span class="kw">where</span>
+  toEquiv := SemidirectProduct.equivProd
+  continuous_toFun := continuous_induced_dom
+  continuous_invFun := <span class="kw">by</span>
+    <span class="kw">rw</span> [continuous_induced_rng]
+    simpa using (continuous_id : Continuous <span class="kw">fun</span> x : (S → A) × G =&gt; x)</code></pre></section>
+    <section><div class="natural-text"><p>The topology on a permutational wreath product is the <a class="decl-ref" href="../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> transported from the product of the function factor and the right factor.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-continuous_permutationalWreathProduct_equivProd">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-continuous_permutationalWreathProduct_equivProd">continuous_permutationalWreathProduct_equivProd</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L155">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[continuity] <span class="kw">theorem</span> continuous_permutationalWreathProduct_equivProd :
+    Continuous
+      (SemidirectProduct.equivProd :
+        <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G → (S → A) × G)</code></pre></section>
+    <section><div class="natural-text"><p>The product equivalence from the permutational wreath product to the function factor times the acting group is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>continuous_induced_dom</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-continuous_permutationalWreathProduct_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-continuous_permutationalWreathProduct_left">continuous_permutationalWreathProduct_left</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L161">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[continuity] <span class="kw">theorem</span> continuous_permutationalWreathProduct_left :
+    Continuous (<span class="kw">fun</span> x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt; x.left)</code></pre></section>
+    <section><div class="natural-text"><p>The left-coordinate projection of the permutational wreath product is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>continuous_fst.comp <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-continuous_permutationalWreathProduct_equivProd">continuous_permutationalWreathProduct_equivProd</a></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-continuous_permutationalWreathProduct_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-continuous_permutationalWreathProduct_right">continuous_permutationalWreathProduct_right</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L165">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[continuity] <span class="kw">theorem</span> continuous_permutationalWreathProduct_right :
+    Continuous (<span class="kw">fun</span> x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt; x.right)</code></pre></section>
+    <section><div class="natural-text"><p>The right-coordinate projection of the permutational wreath product is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>continuous_snd.comp <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-continuous_permutationalWreathProduct_equivProd">continuous_permutationalWreathProduct_equivProd</a></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-continuous_permutationalWreathProduct_left_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-continuous_permutationalWreathProduct_left_apply">continuous_permutationalWreathProduct_left_apply</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L169">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[continuity] <span class="kw">theorem</span> continuous_permutationalWreathProduct_left_apply (s : S) :
+    Continuous (<span class="kw">fun</span> x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt; x.left s)</code></pre></section>
+    <section><div class="natural-text"><p>The wreath-product map evaluates componentwise on the base and permutation coordinates.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>(continuous_apply s).comp <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-continuous_permutationalWreathProduct_left">continuous_permutationalWreathProduct_left</a></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-instT2SpacePermutationalWreathProduct">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-instT2SpacePermutationalWreathProduct">instT2SpacePermutationalWreathProduct</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L173">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instT2SpacePermutationalWreathProduct [T2Space A] [T2Space G] :
+    T2Space (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) :=
+  (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductHomeomorphProd">permutationalWreathProductHomeomorphProd</a> (A := A) (S := S) (G := G)).symm.t2Space</code></pre></section>
+    <section><div class="natural-text"><p>The constructed object is Hausdorff, with its \(T_2\) structure inherited from the profinite construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-instCompactSpacePermutationalWreathProduct">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-instCompactSpacePermutationalWreathProduct">instCompactSpacePermutationalWreathProduct</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L177">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instCompactSpacePermutationalWreathProduct [CompactSpace A] [CompactSpace G] :
+    CompactSpace (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) :=
+  (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductHomeomorphProd">permutationalWreathProductHomeomorphProd</a> (A := A) (S := S) (G := G)).symm.compactSpace</code></pre></section>
+    <section><div class="natural-text"><p>The constructed object carries the compact space structure inherited from its profinite construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-instTotallyDisconnectedSpacePermutationalWreathProduct">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-instTotallyDisconnectedSpacePermutationalWreathProduct">instTotallyDisconnectedSpacePermutationalWreathProduct</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L181">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instTotallyDisconnectedSpacePermutationalWreathProduct
+    [TotallyDisconnectedSpace A] [TotallyDisconnectedSpace G] :
+    TotallyDisconnectedSpace (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) :=
+  Homeomorph.totallyDisconnectedSpace
+    ((<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductHomeomorphProd">permutationalWreathProductHomeomorphProd</a> (A := A) (S := S) (G := G)).symm)</code></pre></section>
+    <section><div class="natural-text"><p>The constructed object carries the totally disconnected space structure inherited from its profinite construction.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-functionPrecomp">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-functionPrecomp">functionPrecomp</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L189">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> functionPrecomp (g : G) (f : S → A) : S → A :=
+  <span class="kw">fun</span> s =&gt; f (g⁻¹ • s)</code></pre></section>
+    <section><div class="natural-text"><p>The function coordinate is precomposed by the inverse permutation induced by the \(G\)-action on \(S\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-functionPrecomp_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-functionPrecomp_apply">functionPrecomp_apply</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L193">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> functionPrecomp_apply (g : G) (f : S → A) (s : S) :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-functionPrecomp">functionPrecomp</a> g f s = f (g⁻¹ • s)</code></pre></section>
+    <section><div class="natural-text"><p>The composite map is computed pointwise by applying the constituent coordinate formulas in succession.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-mulAutArrow_apply_eq_functionPrecomp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-mulAutArrow_apply_eq_functionPrecomp">mulAutArrow_apply_eq_functionPrecomp</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L198">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> mulAutArrow_apply_eq_functionPrecomp (g : G) (f : S → A) :
+    mulAutArrow (G := G) (A := S) (M := A) g f = <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-functionPrecomp">functionPrecomp</a> g f</code></pre></section>
+    <section><div class="natural-text"><p>The function coordinate is precomposed by the inverse permutation induced by the \(G\)-action on \(S\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-continuous_eval_of_discreteIndex">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-continuous_eval_of_discreteIndex">continuous_eval_of_discreteIndex</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L210">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_eval_of_discreteIndex :
+    Continuous (<span class="kw">fun</span> p : (S → A) × S =&gt; p.1 p.2)</code></pre></section>
+    <section><div class="natural-text"><p>Evaluation is jointly continuous on the product of a function space with a discrete index space.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [continuous_iff_continuousAt]
+  <span class="kw">intro</span> p
+  <span class="kw">have</span> hs :
+      Prod.snd ⁻¹&#x27; ({p.2} : Set S) ∈ nhds p := <span class="kw">by</span>
+    refine IsOpen.mem_nhds ((isOpen_discrete ({p.2} : Set S)).preimage continuous_snd) ?_
+    <span class="kw">simp</span> only [Set.mem_preimage, Set.mem_singleton_iff]
+  <span class="kw">have</span> hEq :
+      (<span class="kw">fun</span> q : (S → A) × S =&gt; q.1 q.2) =ᶠ[nhds p] <span class="kw">fun</span> q =&gt; q.1 p.2 := <span class="kw">by</span>
+    refine Filter.eventuallyEq_iff_exists_mem.mpr ?_
+    refine ⟨Prod.snd ⁻¹&#x27; ({p.2} : Set S), hs, ?_⟩
+    <span class="kw">intro</span> q hq
+    <span class="kw">simp</span> only [Set.mem_preimage, Set.mem_singleton_iff] at hq
+    <span class="kw">simp</span> only [hq]
+  <span class="kw">exact</span> ContinuousAt.congr
+    (((continuous_apply p.2).comp continuous_fst).continuousAt) hEq.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-continuous_functionPrecomp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-continuous_functionPrecomp">continuous_functionPrecomp</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L231">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_functionPrecomp :
+    Continuous (<span class="kw">fun</span> p : G × (S → A) =&gt; <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-functionPrecomp">functionPrecomp</a> p.1 p.2)</code></pre></section>
+    <section><div class="natural-text"><p>The function coordinate is precomposed by the inverse permutation induced by the \(G\)-action on \(S\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine continuous_pi ?_
+  <span class="kw">intro</span> s
+  simpa [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-functionPrecomp">functionPrecomp</a>] using
+    (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-continuous_eval_of_discreteIndex">continuous_eval_of_discreteIndex</a> (A := A) (S := S)).comp
+      (continuous_snd.prodMk
+        (((continuous_inv.comp continuous_fst).smul continuous_const) :
+          Continuous (<span class="kw">fun</span> p : G × (S → A) =&gt; p.1⁻¹ • s)))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProduct_mul_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProduct_mul_left">permutationalWreathProduct_mul_left</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L243">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> permutationalWreathProduct_mul_left
+    (x y : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) :
+    (x * y).left = x.left * <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-functionPrecomp">functionPrecomp</a> x.right y.left</code></pre></section>
+    <section><div class="natural-text"><p>The left coordinate of multiplication in the permutational wreath product is the pointwise product twisted by the right action.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProduct_inv_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProduct_inv_left">permutationalWreathProduct_inv_left</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L250">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> permutationalWreathProduct_inv_left
+    (x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) :
+    x⁻¹.left = <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-functionPrecomp">functionPrecomp</a> x.right⁻¹ x.left⁻¹</code></pre></section>
+    <section><div class="natural-text"><p>The left coordinate of the inverse in the permutational wreath product is computed pointwise using the inverse action.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-instContinuousMulPermutationalWreathProduct">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-instContinuousMulPermutationalWreathProduct">instContinuousMulPermutationalWreathProduct</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L255">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instContinuousMulPermutationalWreathProduct
+    [ContinuousMul A] [ContinuousMul G] [ContinuousSMul G S] :
+    ContinuousMul (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) <span class="kw">where</span>
+  continuous_mul := <span class="kw">by</span>
+    refine continuous_induced_rng.2 ?_
+    change Continuous
+      (<span class="kw">fun</span> p : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G × <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt;
+        ((p.1 * p.2).left, (p.1 * p.2).right))
+    <span class="kw">have</span> hleft :
+        Continuous
+          (<span class="kw">fun</span> p : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G × <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt;
+            p.1.left * <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-functionPrecomp">functionPrecomp</a> p.1.right p.2.left) :=
+      (continuous_permutationalWreathProduct_left.comp continuous_fst).mul
+        (continuous_functionPrecomp.comp
+          ((continuous_permutationalWreathProduct_right.comp continuous_fst).prodMk
+            (continuous_permutationalWreathProduct_left.comp continuous_snd)))
+    <span class="kw">have</span> hright :
+        Continuous
+          (<span class="kw">fun</span> p : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G × <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt;
+            p.1.right * p.2.right) :=
+      (continuous_permutationalWreathProduct_right.comp continuous_fst).mul
+        (continuous_permutationalWreathProduct_right.comp continuous_snd)
+    simpa using hleft.prodMk hright</code></pre></section>
+    <section><div class="natural-text"><p>Multiplication in the permutational wreath product is continuous for the product topology transported from the function and right factors.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-instContinuousInvPermutationalWreathProduct">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-instContinuousInvPermutationalWreathProduct">instContinuousInvPermutationalWreathProduct</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L279">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instContinuousInvPermutationalWreathProduct
+    [ContinuousInv A] [ContinuousInv G] [ContinuousSMul G S] :
+    ContinuousInv (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) <span class="kw">where</span>
+  continuous_inv := <span class="kw">by</span>
+    refine continuous_induced_rng.2 ?_
+    change Continuous
+      (<span class="kw">fun</span> x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt; (x⁻¹.left, x⁻¹.right))
+    <span class="kw">have</span> hleft :
+        Continuous
+          (<span class="kw">fun</span> x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt;
+            <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-functionPrecomp">functionPrecomp</a> x.right⁻¹ x.left⁻¹) :=
+      continuous_functionPrecomp.comp
+        ((continuous_permutationalWreathProduct_right.inv).prodMk
+          (continuous_permutationalWreathProduct_left.inv))
+    <span class="kw">have</span> hright :
+        Continuous (<span class="kw">fun</span> x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt; x.right⁻¹) :=
+      continuous_permutationalWreathProduct_right.inv
+    simpa using hleft.prodMk hright</code></pre></section>
+    <section><div class="natural-text"><p>The permutational wreath product carries the topological group structure induced by its factors.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-instIsTopologicalGroupPermutationalWreathProduct">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-instIsTopologicalGroupPermutationalWreathProduct">instIsTopologicalGroupPermutationalWreathProduct</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L298">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instIsTopologicalGroupPermutationalWreathProduct
+    [IsTopologicalGroup A] [IsTopologicalGroup G] [ContinuousSMul G S] :
+    IsTopologicalGroup (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) :=
+  { }</code></pre></section>
+    <section><div class="natural-text"><p>The object is a topological group with the induced group operations and topology.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-permutationalWreathProductInlContinuousHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductInlContinuousHom">permutationalWreathProductInlContinuousHom</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L306">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> permutationalWreathProductInlContinuousHom :
+    (S → A) →ₜ* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G <span class="kw">where</span>
+  toMonoidHom := SemidirectProduct.inl
+  continuous_toFun := <span class="kw">by</span>
+    refine continuous_induced_rng.2 ?_
+    change Continuous
+      (<span class="kw">fun</span> f : S → A =&gt;
+        ((SemidirectProduct.inl f : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G).left,
+          (SemidirectProduct.inl f : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G).right))
+    simpa using (continuous_id.prodMk continuous_const)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical inclusion of the function factor is continuous.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-permutationalWreathProductInrContinuousHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductInrContinuousHom">permutationalWreathProductInrContinuousHom</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L318">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> permutationalWreathProductInrContinuousHom :
+    G →ₜ* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G <span class="kw">where</span>
+  toMonoidHom := SemidirectProduct.inr
+  continuous_toFun := <span class="kw">by</span>
+    refine continuous_induced_rng.2 ?_
+    change Continuous
+      (<span class="kw">fun</span> g : G =&gt;
+        ((SemidirectProduct.inr g : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G).left,
+          (SemidirectProduct.inr g : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G).right))
+    simpa using (continuous_const.prodMk continuous_id)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical inclusion of the right factor is continuous.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-permutationalWreathProductRightContinuousHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductRightContinuousHom">permutationalWreathProductRightContinuousHom</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L330">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> permutationalWreathProductRightContinuousHom :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G →ₜ* G <span class="kw">where</span>
+  toMonoidHom := SemidirectProduct.rightHom
+  continuous_toFun := <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-continuous_permutationalWreathProduct_right">continuous_permutationalWreathProduct_right</a></code></pre></section>
+    <section><div class="natural-text"><p>The projection to the right factor is a continuous homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-permutationalWreathProductRightKernel">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductRightKernel">permutationalWreathProductRightKernel</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L349">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> permutationalWreathProductRightKernel :
+    Subgroup (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) :=
+  (SemidirectProduct.rightHom : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G →* G).<a class="decl-ref" href="../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a></code></pre></section>
+    <section><div class="natural-text"><p>The kernel of the right projection on a permutational wreath product.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-permutationalWreathProductInlToKernelContinuousHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductInlToKernelContinuousHom">permutationalWreathProductInlToKernelContinuousHom</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L355">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> permutationalWreathProductInlToKernelContinuousHom :
+    (S → A) →ₜ* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductRightKernel">permutationalWreathProductRightKernel</a> (A := A) (S := S) (G := G) <span class="kw">where</span>
+  toMonoidHom :=
+    { toFun := <span class="kw">fun</span> f =&gt; ⟨SemidirectProduct.inl f, <span class="kw">by</span> <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductRightKernel">permutationalWreathProductRightKernel</a>, MonoidHom.mem_ker, SemidirectProduct.rightHom_inl]⟩
+      map_one&#x27; := <span class="kw">by</span>
+        <span class="kw">apply</span> Subtype.ext
+        <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, OneMemClass.coe_one]
+      map_mul&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> f g
+        <span class="kw">apply</span> Subtype.ext
+        <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, MulMemClass.mk_mul_mk]}
+  continuous_toFun :=
+    <span class="kw">by</span>
+      <span class="kw">exact</span> Continuous.subtype_mk
+        (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductInlContinuousHom">permutationalWreathProductInlContinuousHom</a> (A := A) (S := S) (G := G)).continuous_toFun
+        (<span class="kw">by</span>
+          <span class="kw">intro</span> f
+          change (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductInlContinuousHom">permutationalWreathProductInlContinuousHom</a> (A := A) (S := S) (G := G) f).right = 1
+          <span class="kw">rfl</span>)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical inclusion of the function factor, with codomain restricted to the kernel of the right projection.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProductInlToKernel_bijective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductInlToKernel_bijective">permutationalWreathProductInlToKernel_bijective</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L377">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> permutationalWreathProductInlToKernel_bijective :
+    Function.Bijective
+      ((<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductInlToKernelContinuousHom">permutationalWreathProductInlToKernelContinuousHom</a> (A := A) (S := S) (G := G)) :
+        (S → A) → <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductRightKernel">permutationalWreathProductRightKernel</a> (A := A) (S := S) (G := G))</code></pre></section>
+    <section><div class="natural-text"><p>The canonical inclusion of the function part into the kernel of the projection from the permutational wreath product is bijective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> f g hfg
+    funext s
+    <span class="kw">have</span> hs := congrArg
+      (<span class="kw">fun</span> x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductRightKernel">permutationalWreathProductRightKernel</a> (A := A) (S := S) (G := G) =&gt;
+        ((x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G).left s)) hfg
+    simpa using hs
+  · <span class="kw">intro</span> x
+    refine ⟨x.1.left, ?_⟩
+    <span class="kw">have</span> hmem :
+        (SemidirectProduct.rightHom : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G →* G)
+          x.1 = 1 := <span class="kw">by</span>
+      <span class="kw">exact</span> x.2
+    <span class="kw">have</span> hright : x.1.right = 1 := <span class="kw">by</span>
+      simpa using hmem
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">apply</span> SemidirectProduct.ext
+    · <span class="kw">rfl</span>
+    · change (SemidirectProduct.inl x.1.left : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G).right =
+          x.1.right
+      <span class="kw">simp</span> only [SemidirectProduct.right_inl, hright]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-permutationalWreathProductInlKernelContinuousMulEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductInlKernelContinuousMulEquiv">permutationalWreathProductInlKernelContinuousMulEquiv</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L404">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> permutationalWreathProductInlKernelContinuousMulEquiv
+    [CompactSpace A] [T2Space A]
+    [CompactSpace G] [T2Space G]
+    [DiscreteTopology S] :
+    (S → A) ≃ₜ* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductRightKernel">permutationalWreathProductRightKernel</a> (A := A) (S := S) (G := G) :=
+  ContinuousMulEquiv.ofBijectiveCompactToT2
+    (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductInlToKernelContinuousHom">permutationalWreathProductInlToKernelContinuousHom</a> (A := A) (S := S) (G := G))
+    (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductInlToKernelContinuousHom">permutationalWreathProductInlToKernelContinuousHom</a> (A := A) (S := S) (G := G)).continuous_toFun
+    (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductInlToKernel_bijective">permutationalWreathProductInlToKernel_bijective</a> (A := A) (S := S) (G := G))</code></pre></section>
+    <section><div class="natural-text"><p>The kernel of the right projection is topologically isomorphic to the function factor.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-isProCGroup_permutationalWreathProduct">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-isProCGroup_permutationalWreathProduct">isProCGroup_permutationalWreathProduct</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L417">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isProCGroup_permutationalWreathProduct
+    (hForm : FiniteGroupClass.Formation C)
+    (hIso : FiniteGroupClass.IsomClosed C)
+    (hExt : FiniteGroupClass.ExtensionClosed C)
+    [Finite S]
+    [DiscreteTopology S]
+    (hA : IsProCGroup C A)
+    (hG : IsProCGroup C G) :
+    IsProCGroup C (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G)</code></pre></section>
+    <section><div class="natural-text"><p>A permutational wreath product over a <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> right factor is pro-\(C\) whenever both factors are pro-\(C\) and \(C\) is closed under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> hFunc : IsProCGroup C (S → A) :=
+    IsProCGroup.pi (C := C) (α := S) (β := <span class="kw">fun</span> _ : S =&gt; A) hForm (<span class="kw">fun</span> _ =&gt; hA)
+  letI : CompactSpace A := IsProCGroup.compactSpace hA
+  letI : T2Space A := IsProCGroup.t2Space hA
+  letI : TotallyDisconnectedSpace A := IsProCGroup.totallyDisconnectedSpace hA
+  letI : CompactSpace G := IsProCGroup.compactSpace hG
+  letI : T2Space G := IsProCGroup.t2Space hG
+  letI : TotallyDisconnectedSpace G := IsProCGroup.totallyDisconnectedSpace hG
+  <span class="kw">have</span> hKernel :
+      IsProCGroup C (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductRightKernel">permutationalWreathProductRightKernel</a> (A := A) (S := S) (G := G)) := <span class="kw">by</span>
+    <span class="kw">let</span> e :=
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductInlKernelContinuousMulEquiv">permutationalWreathProductInlKernelContinuousMulEquiv</a> (A := A) (S := S) (G := G)
+    <span class="kw">exact</span> IsProCGroup.ofContinuousMulEquiv (C := C) hIso hForm.quotientClosed hFunc e
+  <span class="kw">have</span> hProf :
+      <a class="decl-ref" href="../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) := <span class="kw">by</span>
+    <span class="kw">exact</span> ⟨inferInstance, inferInstance, inferInstance, inferInstance⟩
+  <span class="kw">have</span> hQuot :
+      IsProCGroup C
+        ((<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) ⧸
+          <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductRightKernel">permutationalWreathProductRightKernel</a> (A := A) (S := S) (G := G)) := <span class="kw">by</span>
+    <span class="kw">let</span> α : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G →* G :=
+      SemidirectProduct.rightHom
+    <span class="kw">have</span> hα : Continuous α := <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-continuous_permutationalWreathProduct_right">continuous_permutationalWreathProduct_right</a>
+    <span class="kw">have</span> hαbar :
+        Continuous (QuotientGroup.kerLift α :
+          (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) ⧸ α.ker →* G) := <span class="kw">by</span>
+      simpa [QuotientGroup.kerLift, QuotientGroup.lift] using
+        hα.quotient_lift (<span class="kw">fun</span> a b hab =&gt; <span class="kw">by</span>
+          simpa [QuotientGroup.con_ker_eq_conKer α, Con.ker_rel] using hab)
+    <span class="kw">let</span> αbar : ((<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) ⧸ α.ker) →ₜ* G :=
+      { toMonoidHom := QuotientGroup.kerLift α
+        continuous_toFun := hαbar }
+    <span class="kw">have</span> hαbar_bij : Function.Bijective αbar := <span class="kw">by</span>
+      <span class="kw">constructor</span>
+      · <span class="kw">exact</span> QuotientGroup.kerLift_injective α
+      · <span class="kw">intro</span> g
+        rcases (SemidirectProduct.rightHom_surjective
+          (N := (S → A)) (G := G)
+          (φ := mulAutArrow (G := G) (A := S) (M := A)) g) <span class="kw">with</span> ⟨x, <span class="kw">rfl</span>⟩
+        refine ⟨QuotientGroup.mk&#x27; α.ker x, ?_⟩
+        change α x = x.right
+        <span class="kw">rfl</span>
+    <span class="kw">let</span> e : ((<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) ⧸ α.ker) ≃ₜ* G :=
+      ContinuousMulEquiv.ofBijectiveCompactToT2 αbar αbar.continuous_toFun hαbar_bij
+    <span class="kw">exact</span> IsProCGroup.ofContinuousMulEquiv (C := C) hIso hForm.quotientClosed hG e.symm
+  <span class="kw">exact</span> IsProCGroup.extension (C := C) hIso hForm.quotientClosed hExt hProf
+    (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductRightKernel">permutationalWreathProductRightKernel</a> (A := A) (S := S) (G := G))
+    hKernel hQuot</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProduct_mul_left_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProduct_mul_left_apply">permutationalWreathProduct_mul_left_apply</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L483">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> permutationalWreathProduct_mul_left_apply
+    (x y : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) (s : S) :
+    (x * y).left s = x.left s * y.left (x.right⁻¹ • s)</code></pre></section>
+    <section><div class="natural-text"><p>Pointwise multiplication formula in the permutational wreath product.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProduct_inv_left_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProduct_inv_left_apply">permutationalWreathProduct_inv_left_apply</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L489">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> permutationalWreathProduct_inv_left_apply
+    (x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) (s : S) :
+    x⁻¹.left s = (x.left (x.right • s))⁻¹</code></pre></section>
+    <section><div class="natural-text"><p>Pointwise inversion formula in the permutational wreath product.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change ((mulAutArrow (G := G) (A := S) (M := A) x.right⁻¹) (x.left⁻¹)) s =
+      (x.left (x.right • s))⁻¹
+  change x.left⁻¹ ((x.right⁻¹)⁻¹ • s) = (x.left (x.right • s))⁻¹
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>, Pi.inv_apply]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProduct_inl_left_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProduct_inl_left_apply">permutationalWreathProduct_inl_left_apply</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L497">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> permutationalWreathProduct_inl_left_apply
+    (f : S → A) (s : S) :
+    (SemidirectProduct.inl f : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G).left s = f s</code></pre></section>
+    <section><div class="natural-text"><p>The wreath-product map evaluates componentwise on the base and permutation coordinates.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProduct_inr_left_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProduct_inr_left_apply">permutationalWreathProduct_inr_left_apply</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L502">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> permutationalWreathProduct_inr_left_apply
+    (g : G) (s : S) :
+    (SemidirectProduct.inr g : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G).left s = 1</code></pre></section>
+    <section><div class="natural-text"><p>The wreath-product map evaluates componentwise on the base and permutation coordinates.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProduct_rightHom_comp_inr">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProduct_rightHom_comp_inr">permutationalWreathProduct_rightHom_comp_inr</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L507">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> permutationalWreathProduct_rightHom_comp_inr :
+    (SemidirectProduct.rightHom :
+        <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G →* G).comp SemidirectProduct.inr =
+      MonoidHom.id G</code></pre></section>
+    <section><div class="natural-text"><p>Composing the right projection with the right-factor inclusion of the permutational wreath product is the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext g
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-permutationalWreathProductMapFun">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductMapFun">permutationalWreathProductMapFun</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L522">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> permutationalWreathProductMapFun (α : A →* B) : (S → A) →* (S → B) <span class="kw">where</span>
+  toFun f := α ∘ f
+  map_one&#x27; := <span class="kw">by</span>
+    funext s
+    <span class="kw">simp</span> only [Function.comp_apply, Pi.one_apply, <a class="decl-ref" href="../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>]
+  map_mul&#x27; f g := <span class="kw">by</span>
+    funext s
+    <span class="kw">simp</span> only [Function.comp_apply, Pi.mul_apply, <a class="decl-ref" href="../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>]</code></pre></section>
+    <section><div class="natural-text"><p>Pointwise application of a group homomorphism to the function factor of a wreath product.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-permutationalWreathProductMapLeft">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L532">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> permutationalWreathProductMapLeft (α : A →* B) :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G →* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> B S G :=
+  SemidirectProduct.map (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapFun">permutationalWreathProductMapFun</a> (S := S) α) (MonoidHom.id G) <span class="kw">fun</span> g =&gt; <span class="kw">by</span>
+    ext f s
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>Functoriality of the permutational wreath product in the left factor.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProductMapLeft_left_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductMapLeft_left_apply">permutationalWreathProductMapLeft_left_apply</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L538">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> permutationalWreathProductMapLeft_left_apply
+    (α : A →* B) (x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) (s : S) :
+    (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α x).left s = α (x.left s)</code></pre></section>
+    <section><div class="natural-text"><p>The wreath-product map evaluates componentwise on the base and permutation coordinates.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProductMapLeft_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductMapLeft_right">permutationalWreathProductMapLeft_right</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L543">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> permutationalWreathProductMapLeft_right
+    (α : A →* B) (x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) :
+    (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α x).right = x.right</code></pre></section>
+    <section><div class="natural-text"><p>The right component of the wreath-product or quotient-section map is the expected homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProductMapLeft_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductMapLeft_injective">permutationalWreathProductMapLeft_injective</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L549">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>  <span class="kw">theorem</span> permutationalWreathProductMapLeft_injective
+    (α : A →* B) (hα : Function.Injective α) :
+    Function.Injective (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α)</code></pre></section>
+    <section><div class="natural-text"><p>Injectivity of the left-factor map is inherited by the wreath-product map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x y hxy
+  ext s
+  · <span class="kw">apply</span> hα
+    simpa using congrArg (<span class="kw">fun</span> z : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> B S G =&gt; z.left s) hxy
+  · simpa using congrArg (<span class="kw">fun</span> z : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> B S G =&gt; z.right) hxy</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-permutationalWreathProductMapLeft_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductMapLeft_surjective">permutationalWreathProductMapLeft_surjective</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L559">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> permutationalWreathProductMapLeft_surjective
+    (α : A →* B) (hα : Function.Surjective α) :
+    Function.Surjective (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α)</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the left-factor map is inherited by the wreath-product map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">intro</span> x
+  <span class="kw">let</span> f : S → A := <span class="kw">fun</span> s =&gt; Classical.choose (hα (x.left s))
+  refine ⟨⟨f, x.right⟩, ?_⟩
+  ext s
+  · <span class="kw">exact</span> Classical.choose_spec (hα (x.left s))
+  · <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-injective_of_permutationalWreathProductMapLeft_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-injective_of_permutationalWreathProductMapLeft_injective">injective_of_permutationalWreathProductMapLeft_injective</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L572">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> injective_of_permutationalWreathProductMapLeft_injective
+    (α : A →* B) (s : S)
+    (hα : Function.Injective (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α)) :
+    Function.Injective α</code></pre></section>
+    <section><div class="natural-text"><p>If the wreath-product left-factor map is injective, then the original left-factor map is injective. A chosen point of \(\Sigma\) extracts the selected coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> a b hab
+  <span class="kw">have</span> hEq :
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α
+          (SemidirectProduct.inl (<span class="kw">fun</span> _ : S =&gt; a) : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) =
+        <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α
+          (SemidirectProduct.inl (<span class="kw">fun</span> _ : S =&gt; b) : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) := <span class="kw">by</span>
+    ext t
+    · <span class="kw">exact</span> hab
+    · <span class="kw">rfl</span>
+  <span class="kw">have</span> hPre := hα hEq
+  <span class="kw">have</span> := congrArg (<span class="kw">fun</span> z : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt; z.left s) hPre
+  simpa using this</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-surjective_of_permutationalWreathProductMapLeft_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-surjective_of_permutationalWreathProductMapLeft_surjective">surjective_of_permutationalWreathProductMapLeft_surjective</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L591">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> surjective_of_permutationalWreathProductMapLeft_surjective
+    (α : A →* B) (s : S)
+    (hα : Function.Surjective (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α)) :
+    Function.Surjective α</code></pre></section>
+    <section><div class="natural-text"><p>If the wreath-product left-factor map is surjective, then the original left-factor map is surjective. A chosen point of \(\Sigma\) extracts the selected coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> b
+  obtain ⟨x, hx⟩ :=
+    hα (SemidirectProduct.inl (<span class="kw">fun</span> _ : S =&gt; b) : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> B S G)
+  refine ⟨x.left s, ?_⟩
+  <span class="kw">have</span> := congrArg (<span class="kw">fun</span> z : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> B S G =&gt; z.left s) hx
+  simpa using this</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-permutationalWreathProductMapLeftContinuous">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-permutationalWreathProductMapLeftContinuous">permutationalWreathProductMapLeftContinuous</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L612">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> permutationalWreathProductMapLeftContinuous
+    (α : A →ₜ* B) :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G →ₜ* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> B S G <span class="kw">where</span>
+  toMonoidHom := <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α.toMonoidHom
+  continuous_toFun := <span class="kw">by</span>
+    refine continuous_induced_rng.2 ?_
+    change Continuous
+      (<span class="kw">fun</span> x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt;
+        ((<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α.toMonoidHom x).left,
+          (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α.toMonoidHom x).right))
+    <span class="kw">have</span> hleft :
+        Continuous
+          (<span class="kw">fun</span> x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt;
+            (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α.toMonoidHom x).left) := <span class="kw">by</span>
+      refine continuous_pi ?_
+      <span class="kw">intro</span> s
+      simpa using α.continuous_toFun.comp
+        ((continuous_apply s).comp <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-continuous_permutationalWreathProduct_left">continuous_permutationalWreathProduct_left</a>)
+    <span class="kw">have</span> hright :
+        Continuous
+          (<span class="kw">fun</span> x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G =&gt;
+            (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a> (S := S) (G := G) α.toMonoidHom x).right) := <span class="kw">by</span>
+      simpa using <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-continuous_permutationalWreathProduct_right">continuous_permutationalWreathProduct_right</a>
+    <span class="kw">exact</span> hleft.prodMk hright</code></pre></section>
+    <section><div class="natural-text"><p>Functoriality of the permutational wreath product in the left factor, upgraded to a continuous homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-instMulActionRightCosetStandardEmbedding">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-instMulActionRightCosetStandardEmbedding">instMulActionRightCosetStandardEmbedding</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L644">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instMulActionRightCosetStandardEmbedding :
+    MulAction G (Quotient (QuotientGroup.rightRel H)) :=
+  rightCosetMulAction H</code></pre></section>
+    <section><div class="natural-text"><p>The right-coset standard embedding carries the natural multiplication action used in the wreath-product construction.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-rightTransversalSection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-rightTransversalSection">rightTransversalSection</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L649">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> rightTransversalSection {T : Set G}
+    (hT : Subgroup.IsComplement (H : Set G) T) :
+    Quotient (QuotientGroup.rightRel H) → G :=
+  <span class="kw">fun</span> q =&gt; (hT.rightQuotientEquiv q : G)</code></pre></section>
+    <section><div class="natural-text"><p>The underlying section attached to a right transversal.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-rightTransversalSection_spec">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-rightTransversalSection_spec">rightTransversalSection_spec</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L654">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> rightTransversalSection_spec {T : Set G}
+    (hT : Subgroup.IsComplement (H : Set G) T)
+    (q : Quotient (QuotientGroup.rightRel H)) :
+    Quotient.mk&#x27;&#x27; (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightTransversalSection">rightTransversalSection</a> (H := H) hT q) = q</code></pre></section>
+    <section><div class="natural-text"><p>The chosen right-transversal section represents the prescribed right coset.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>hT.mk&#x27;&#x27;_rightQuotientEquiv q</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-rightQuotientSectionCocycle">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-rightQuotientSectionCocycle">rightQuotientSectionCocycle</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L661">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> rightQuotientSectionCocycle
+    (τ : Quotient (QuotientGroup.rightRel H) → G)
+    (hτ : ∀ q, Quotient.mk&#x27;&#x27; (τ q) = q)
+    (g : G) :
+    Quotient (QuotientGroup.rightRel H) → H := <span class="kw">by</span>
+  letI := rightCosetMulAction H
+  <span class="kw">intro</span> q
+  refine ⟨τ q * g * (τ (g⁻¹ • q))⁻¹, ?_⟩
+  <span class="kw">have</span> hq :
+      Quotient.mk&#x27;&#x27; (τ q * g) = g⁻¹ • q := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      Quotient.mk&#x27;&#x27; (τ q * g)
+          = g⁻¹ • (Quotient.mk&#x27;&#x27; (τ q) : Quotient (QuotientGroup.rightRel H)) := <span class="kw">by</span>
+              symm
+              <span class="kw">rw</span> [rightCosetMulAction_inv_mk_smul (H := H) g (τ q)]
+      _ = g⁻¹ • q := <span class="kw">by</span> <span class="kw">rw</span> [hτ q]
+  <span class="kw">have</span> hEq :
+      (Quotient.mk&#x27;&#x27; (τ q * g) : Quotient (QuotientGroup.rightRel H)) =
+        Quotient.mk&#x27;&#x27; (τ (g⁻¹ • q)) := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      (Quotient.mk&#x27;&#x27; (τ q * g) : Quotient (QuotientGroup.rightRel H))
+          = g⁻¹ • q := hq
+      _ = Quotient.mk&#x27;&#x27; (τ (g⁻¹ • q)) := <span class="kw">by</span> symm; <span class="kw">exact</span> hτ (g⁻¹ • q)
+  <span class="kw">have</span> hrel : QuotientGroup.rightRel H (τ q * g) (τ (g⁻¹ • q)) := Quotient.exact&#x27; hEq
+  <span class="kw">rw</span> [QuotientGroup.rightRel_apply] at hrel
+  simpa [mul_inv_rev] using H.inv_mem hrel</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierOrientation.cocycle">cocycle</a> attached to a section of the right quotient by \(H\).</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-rightQuotientSectionEmbedding">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L689">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> rightQuotientSectionEmbedding
+    (τ : Quotient (QuotientGroup.rightRel H) → G)
+    (hτ : ∀ q, Quotient.mk&#x27;&#x27; (τ q) = q) :
+    G →* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> H (Quotient (QuotientGroup.rightRel H)) G <span class="kw">where</span>
+  toFun g := ⟨<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionCocycle">rightQuotientSectionCocycle</a> (H := H) τ hτ g, g⟩
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> SemidirectProduct.ext
+    · funext q
+      <span class="kw">apply</span> Subtype.ext
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionCocycle">rightQuotientSectionCocycle</a>, mul_one, inv_one, one_smul, mul_inv_cancel,
+  SemidirectProduct.one_left, Pi.one_apply, OneMemClass.coe_one]
+    · <span class="kw">rfl</span>
+  map_mul&#x27; g₁ g₂ := <span class="kw">by</span>
+    <span class="kw">apply</span> SemidirectProduct.ext
+    · funext q
+      <span class="kw">apply</span> Subtype.ext
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionCocycle">rightQuotientSectionCocycle</a>, mul_inv_rev, mul_smul, mul_assoc, SemidirectProduct.mk_eq_inl_mul_inr,
+  <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProduct_mul_left_apply">permutationalWreathProduct_mul_left_apply</a>, <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProduct_inl_left_apply">permutationalWreathProduct_inl_left_apply</a>, SemidirectProduct.right_inl,
+  inv_one, one_smul, <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProduct_inr_left_apply">permutationalWreathProduct_inr_left_apply</a>, SemidirectProduct.right_inr, mul_one, one_mul,
+  MulMemClass.mk_mul_mk, inv_mul_cancel_left]
+    · <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The standard wreath-product embedding attached to a section of the right quotient by \(H\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-rightQuotientSectionEmbedding_left_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-rightQuotientSectionEmbedding_left_apply">rightQuotientSectionEmbedding_left_apply</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L713">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> rightQuotientSectionEmbedding_left_apply
+    (τ : Quotient (QuotientGroup.rightRel H) → G)
+    (hτ : ∀ q, Quotient.mk&#x27;&#x27; (τ q) = q)
+    (g : G) (q : Quotient (QuotientGroup.rightRel H)) :
+    (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a> (H := H) τ hτ g).left q =
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionCocycle">rightQuotientSectionCocycle</a> (H := H) τ hτ g q</code></pre></section>
+    <section><div class="natural-text"><p>Pointwise formula for the standard wreath-product embedding attached to a right-quotient section.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-rightQuotientSectionEmbedding_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-rightQuotientSectionEmbedding_right">rightQuotientSectionEmbedding_right</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L721">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> rightQuotientSectionEmbedding_right
+    (τ : Quotient (QuotientGroup.rightRel H) → G)
+    (hτ : ∀ q, Quotient.mk&#x27;&#x27; (τ q) = q)
+    (g : G) :
+    (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a> (H := H) τ hτ g).right = g</code></pre></section>
+    <section><div class="natural-text"><p>The right quotient section embedding lands in the right quotient component.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-rightQuotientSectionEmbedding_rightHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-rightQuotientSectionEmbedding_rightHom">rightQuotientSectionEmbedding_rightHom</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L728">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> rightQuotientSectionEmbedding_rightHom
+    (τ : Quotient (QuotientGroup.rightRel H) → G)
+    (hτ : ∀ q, Quotient.mk&#x27;&#x27; (τ q) = q) :
+    (SemidirectProduct.rightHom :
+        <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> H (Quotient (QuotientGroup.rightRel H)) G →* G).comp
+        (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a> (H := H) τ hτ) = MonoidHom.id G</code></pre></section>
+    <section><div class="natural-text"><p>The right component of the wreath-product or quotient-section map is the expected homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext g
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-rightQuotientSectionEmbedding_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-rightQuotientSectionEmbedding_injective">rightQuotientSectionEmbedding_injective</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L738">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightQuotientSectionEmbedding_injective
+    (τ : Quotient (QuotientGroup.rightRel H) → G)
+    (hτ : ∀ q, Quotient.mk&#x27;&#x27; (τ q) = q) :
+    Function.Injective (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a> (H := H) τ hτ)</code></pre></section>
+    <section><div class="natural-text"><p>The standard embedding attached to a right-quotient section is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> g₁ g₂ hEq
+  simpa using congrArg
+    (<span class="kw">fun</span> z :
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> H (Quotient (QuotientGroup.rightRel H)) G =&gt; z.right) hEq</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-instMulActionRightCosetStandardEmbeddingTopological">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-instMulActionRightCosetStandardEmbeddingTopological">instMulActionRightCosetStandardEmbeddingTopological</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L754">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instMulActionRightCosetStandardEmbeddingTopological :
+    MulAction G (Quotient (QuotientGroup.rightRel H)) :=
+  rightCosetMulAction H</code></pre></section>
+    <section><div class="natural-text"><p>The topological right-coset standard embedding carries the natural multiplication action used in the wreath-product construction.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-continuous_rightQuotientSectionEmbedding">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-continuous_rightQuotientSectionEmbedding">continuous_rightQuotientSectionEmbedding</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L758">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_rightQuotientSectionEmbedding
+    [TopologicalSpace (Quotient (QuotientGroup.rightRel H))]
+    [DiscreteTopology (Quotient (QuotientGroup.rightRel H))]
+    (hH : IsOpen (H : Set G))
+    (τ : Quotient (QuotientGroup.rightRel H) → G)
+    (hτ : ∀ q, Quotient.mk&#x27;&#x27; (τ q) = q)
+    (hτcont : Continuous τ) :
+    Continuous
+      (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a> (H := H) τ hτ :
+        G → <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> H (Quotient (QuotientGroup.rightRel H)) G)</code></pre></section>
+    <section><div class="natural-text"><p>The right-quotient section embedding is continuous for the profinite quotient topology.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine continuous_induced_rng.2 ?_
+  change Continuous <span class="kw">fun</span> g : G =&gt;
+    ((<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a> (H := H) τ hτ g).left,
+      (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a> (H := H) τ hτ g).right)
+  <span class="kw">have</span> hleft :
+      Continuous <span class="kw">fun</span> g : G =&gt;
+        (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a> (H := H) τ hτ g).left := <span class="kw">by</span>
+    refine continuous_pi ?_
+    <span class="kw">intro</span> q
+    refine Continuous.subtype_mk ?_ ?_
+    <span class="kw">have</span> hqcont :
+        Continuous <span class="kw">fun</span> g : G =&gt; (g⁻¹ • q : Quotient (QuotientGroup.rightRel H)) :=
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-ProCGroups.continuous_rightCosetMulAction_inv_smul_of_open">continuous_rightCosetMulAction_inv_smul_of_open</a> (G := G) H hH q
+    <span class="kw">have</span> hcont :
+        Continuous <span class="kw">fun</span> g : G =&gt; τ q * g * (τ (g⁻¹ • q))⁻¹ := <span class="kw">by</span>
+      <span class="kw">exact</span> (continuous_const.mul continuous_id).mul ((hτcont.comp hqcont).inv)
+    simpa [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a>, <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionCocycle">rightQuotientSectionCocycle</a>, mul_assoc] using hcont
+  <span class="kw">have</span> hright :
+      Continuous <span class="kw">fun</span> g : G =&gt;
+        (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a> (H := H) τ hτ g).right := <span class="kw">by</span>
+    simpa using (continuous_id : Continuous <span class="kw">fun</span> g : G =&gt; g)
+  <span class="kw">exact</span> hleft.prodMk hright</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-wreathLeftCoordinate">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-wreathLeftCoordinate">wreathLeftCoordinate</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L800">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> wreathLeftCoordinate
+    (ψ : G →* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G) (s : S) : G → A :=
+  <span class="kw">fun</span> g =&gt; (ψ g).left s</code></pre></section>
+    <section><div class="natural-text"><p>The left coordinate of an element of a wreath product is viewed as a function of the group element on the source.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-wreathLeftCoordinate_mul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-wreathLeftCoordinate_mul">wreathLeftCoordinate_mul</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L806">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> wreathLeftCoordinate_mul
+    (ψ : G →* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G)
+    (hψ :
+      (SemidirectProduct.rightHom : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G →* G).comp ψ =
+        MonoidHom.id G)
+    (s : S) (g₁ g₂ : G) :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ s (g₁ * g₂) =
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ s g₁ *
+        <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ (g₁⁻¹ • s) g₂</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierOrientation.cocycle">cocycle</a> formula for the left coordinates of a homomorphism into a wreath product whose right factor is the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hright : (ψ g₁).right = g₁ := <span class="kw">by</span>
+    simpa using congrArg (<span class="kw">fun</span> f : G →* G =&gt; f g₁) hψ
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a>, <a class="decl-ref" href="../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProduct_mul_left_apply">permutationalWreathProduct_mul_left_apply</a>, hright]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-wreathLeftCoordinate_inv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-wreathLeftCoordinate_inv">wreathLeftCoordinate_inv</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L821">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> wreathLeftCoordinate_inv
+    (ψ : G →* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G)
+    (hψ :
+      (SemidirectProduct.rightHom : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S G →* G).comp ψ =
+        MonoidHom.id G)
+    (s : S) (g : G) :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ s g⁻¹ =
+      (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ (g • s) g)⁻¹</code></pre></section>
+    <section><div class="natural-text"><p>Inversion formula for the left coordinates of a homomorphism into a wreath product whose right factor is the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hright : (ψ g).right = g := <span class="kw">by</span>
+    simpa using congrArg (<span class="kw">fun</span> f : G →* G =&gt; f g) hψ
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a>, map_inv, <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProduct_inv_left_apply">permutationalWreathProduct_inv_left_apply</a>, hright]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-instMulActionRightCosetCoordinateRecovery">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-instMulActionRightCosetCoordinateRecovery">instMulActionRightCosetCoordinateRecovery</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L841">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instMulActionRightCosetCoordinateRecovery :
+    MulAction G (Quotient (QuotientGroup.rightRel H)) :=
+  rightCosetMulAction H</code></pre></section>
+    <section><div class="natural-text"><p>The coordinate-recovery map for the right-coset standard embedding is <a class="decl-ref" href="../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with the natural multiplication action.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-wreathLeftCoordinate_eq_basepoint_of_rightQuotientSection">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-wreathLeftCoordinate_eq_basepoint_of_rightQuotientSection">wreathLeftCoordinate_eq_basepoint_of_rightQuotientSection</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L848">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> wreathLeftCoordinate_eq_basepoint_of_rightQuotientSection
+    (τ : Quotient (QuotientGroup.rightRel H) → G)
+    (hτ : ∀ q, Quotient.mk&#x27;&#x27; (τ q) = q)
+    (ψ : G →* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A (Quotient (QuotientGroup.rightRel H)) G)
+    (hψ :
+      (SemidirectProduct.rightHom :
+          <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A (Quotient (QuotientGroup.rightRel H)) G →* G).comp ψ =
+        MonoidHom.id G)
+    (hτpure :
+      ∀ q : Quotient (QuotientGroup.rightRel H),
+        <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ
+            (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) (τ q) = 1)
+    (g : G) (q : Quotient (QuotientGroup.rightRel H)) :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ
+        (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H))
+        (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionCocycle">rightQuotientSectionCocycle</a> (H := H) τ hτ g q) =
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ q g</code></pre></section>
+    <section><div class="natural-text"><p>Basepoint form: if a homomorphism into the wreath product has identity right factor and sends the chosen section to elements whose basepoint coordinate is trivial, then the basepoint coordinate of the induced subgroup <a class="decl-ref" href="../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierOrientation.cocycle">cocycle</a> recovers the original left coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> q&#x27; : Quotient (QuotientGroup.rightRel H) := g⁻¹ • q
+  <span class="kw">have</span> hτq :
+      (τ q)⁻¹ • (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) = q := <span class="kw">by</span>
+    <span class="kw">rw</span> [rightCosetMulAction_inv_mk_smul (H := H) (τ q) 1]
+    simpa using hτ q
+  <span class="kw">have</span> hτq&#x27; :
+      τ q&#x27; • q&#x27; = (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      τ q&#x27; • q&#x27; = τ q&#x27; • (Quotient.mk&#x27;&#x27; (τ q&#x27;) : Quotient (QuotientGroup.rightRel H)) := <span class="kw">by</span>
+        <span class="kw">rw</span> [hτ q&#x27;]
+      _ = Quotient.mk&#x27;&#x27; (1 : G) := <span class="kw">by</span>
+        <span class="kw">rw</span> [rightCosetMulAction_mk_smul (H := H) (τ q&#x27;) (τ q&#x27;)]
+        <span class="kw">simp</span> only [mul_inv_cancel]
+  <span class="kw">have</span> hinv :
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ q&#x27; (τ q&#x27;)⁻¹ = 1 := <span class="kw">by</span>
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate_inv">wreathLeftCoordinate_inv</a> (ψ := ψ) hψ q&#x27; (τ q&#x27;)]
+    simpa [hτq&#x27;] using hτpure q&#x27;
+  <span class="kw">have</span> hq&#x27; :
+      (Quotient.mk&#x27;&#x27; (τ q * g) : Quotient (QuotientGroup.rightRel H)) = q&#x27; := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      (Quotient.mk&#x27;&#x27; (τ q * g) : Quotient (QuotientGroup.rightRel H))
+          = (τ q * g)⁻¹ • (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) := <span class="kw">by</span>
+              <span class="kw">simp</span> only [mul_inv_rev, rightCosetMulAction_mk_smul, <a class="decl-ref" href="../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>, one_mul]
+      _ = g⁻¹ • ((τ q)⁻¹ • (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H))) := <span class="kw">by</span>
+            <span class="kw">simp</span> only [mul_inv_rev, mul_smul, rightCosetMulAction_mk_smul, <a class="decl-ref" href="../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>, one_mul]
+      _ = g⁻¹ • q := <span class="kw">by</span> <span class="kw">rw</span> [hτq]
+      _ = q&#x27; := <span class="kw">rfl</span>
+  change
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ
+          (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H))
+          ((τ q * g) * (τ q&#x27;)⁻¹) =
+        <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ q g
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate_mul">wreathLeftCoordinate_mul</a> (ψ := ψ) hψ
+      (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H))
+      (τ q * g) (τ q&#x27;)⁻¹]
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate_mul">wreathLeftCoordinate_mul</a> (ψ := ψ) hψ
+      (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H))
+      (τ q) g]
+  <span class="kw">simp</span> only [hτpure, hτq, one_mul, mul_inv_rev, rightCosetMulAction_mk_smul, <a class="decl-ref" href="../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>, hq&#x27;, hinv, mul_one, q&#x27;]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-rightQuotientBasepointProjectionHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-rightQuotientBasepointProjectionHom">rightQuotientBasepointProjectionHom</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L907">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightQuotientBasepointProjectionHom
+    (ψ : G →* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A (Quotient (QuotientGroup.rightRel H)) G)
+    (hψ :
+      (SemidirectProduct.rightHom :
+          <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A (Quotient (QuotientGroup.rightRel H)) G →* G).comp ψ =
+        MonoidHom.id G) :
+    H →* A <span class="kw">where</span>
+  toFun h :=
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ
+      (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) h.1
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a>, OneMemClass.coe_one, <a class="decl-ref" href="../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, SemidirectProduct.one_left, Pi.one_apply]
+  map_mul&#x27; a b := <span class="kw">by</span>
+    change
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ
+          (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H))
+          (a.1 * b.1) =
+        <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ
+            (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) a.1 *
+          <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ
+            (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) b.1
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate_mul">wreathLeftCoordinate_mul</a> (ψ := ψ) hψ
+      (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) a.1 b.1]
+    <span class="kw">have</span> ha :
+        a.1⁻¹ • (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) =
+          (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) := <span class="kw">by</span>
+      <span class="kw">rw</span> [rightCosetMulAction_inv_mk_smul (H := H) a.1 1]
+      <span class="kw">apply</span> Quotient.sound&#x27;
+      <span class="kw">rw</span> [QuotientGroup.rightRel_apply]
+      <span class="kw">simp</span> only [one_mul, H.inv_mem a.2]
+    <span class="kw">simp</span> only [ha]</code></pre></section>
+    <section><div class="natural-text"><p>Basepoint evaluation on the stabilizer subgroup of the trivial right coset, expressed for a homomorphism into the wreath product whose right factor is the identity.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-rightQuotientBasepointProjectionHom_apply_cocycle">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-rightQuotientBasepointProjectionHom_apply_cocycle">rightQuotientBasepointProjectionHom_apply_cocycle</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L941">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightQuotientBasepointProjectionHom_apply_cocycle
+    (τ : Quotient (QuotientGroup.rightRel H) → G)
+    (hτ : ∀ q, Quotient.mk&#x27;&#x27; (τ q) = q)
+    (ψ : G →* <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A (Quotient (QuotientGroup.rightRel H)) G)
+    (hψ :
+      (SemidirectProduct.rightHom :
+          <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A (Quotient (QuotientGroup.rightRel H)) G →* G).comp ψ =
+        MonoidHom.id G)
+    (hτpure :
+      ∀ q : Quotient (QuotientGroup.rightRel H),
+        <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ
+            (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) (τ q) = 1)
+    (g : G) (q : Quotient (QuotientGroup.rightRel H)) :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientBasepointProjectionHom">rightQuotientBasepointProjectionHom</a> (H := H) ψ hψ
+        (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionCocycle">rightQuotientSectionCocycle</a> (H := H) τ hτ g q) =
+      <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate">wreathLeftCoordinate</a> ψ q g</code></pre></section>
+    <section><div class="natural-text"><p>The basepoint projection on H evaluates the section <a class="decl-ref" href="../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierOrientation.cocycle">cocycle</a> by the corresponding left coordinate, provided the chosen section has trivial basepoint coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathLeftCoordinate_eq_basepoint_of_rightQuotientSection">wreathLeftCoordinate_eq_basepoint_of_rightQuotientSection</a>
+    (H := H) τ hτ ψ hψ hτpure g q</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-wreathStabilizerProjection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-wreathStabilizerProjection">wreathStabilizerProjection</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L969">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> wreathStabilizerProjection (s : S) :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S (MulAction.stabilizer G s) →* A <span class="kw">where</span>
+  toFun x := x.left s
+  map_one&#x27; := <span class="kw">rfl</span>
+  map_mul&#x27; x y := <span class="kw">by</span>
+    <span class="kw">have</span> hx : x.right⁻¹ • s = s := <span class="kw">by</span>
+      <span class="kw">exact</span> MulAction.mem_stabilizer_iff.mp x.right⁻¹.2
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProduct_mul_left_apply">permutationalWreathProduct_mul_left_apply</a>, hx]</code></pre></section>
+    <section><div class="natural-text"><p>Evaluation at a fixed point is a homomorphism on the wreath product over the stabilizer of that point.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-wreathStabilizerProjection_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-wreathStabilizerProjection_apply">wreathStabilizerProjection_apply</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L978">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> wreathStabilizerProjection_apply
+    (s : S) (x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S (MulAction.stabilizer G s)) :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathStabilizerProjection">wreathStabilizerProjection</a> (A := A) (G := G) s x = x.left s</code></pre></section>
+    <section><div class="natural-text"><p>The stabilizer projection evaluates the wreath-product function coordinate at the chosen fixed point.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-wreathStabilizerProjection_mapLeft">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-wreathStabilizerProjection_mapLeft">wreathStabilizerProjection_mapLeft</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L984">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> wreathStabilizerProjection_mapLeft
+    {B : <span class="kw">Type</span>*} [Group B]
+    (α : A →* B) (s : S)
+    (x : <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-PermutationalWreathProduct">PermutationalWreathProduct</a> A S (MulAction.stabilizer G s)) :
+    <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathStabilizerProjection">wreathStabilizerProjection</a> (A := B) (G := G) s
+        (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProductMapLeft">permutationalWreathProductMapLeft</a>
+          (S := S) (G := MulAction.stabilizer G s) α x) =
+      α (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-wreathStabilizerProjection">wreathStabilizerProjection</a> (A := A) (G := G) s x)</code></pre></section>
+    <section><div class="natural-text"><p>The stabilizer projection is natural in the left factor.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-rightQuotientSectionEmbedding_left_basepoint_of_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-rightQuotientSectionEmbedding_left_basepoint_of_mem">rightQuotientSectionEmbedding_left_basepoint_of_mem</a>
+    <a class="source-link" href="../../library/src/ProCGroups/WreathProducts.html#L1001">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> rightQuotientSectionEmbedding_left_basepoint_of_mem
+    (τ : Quotient (QuotientGroup.rightRel H) → G)
+    (hτ : ∀ q, Quotient.mk&#x27;&#x27; (τ q) = q)
+    (hτ1 : τ (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) = 1)
+    {g : G} (hg : g ∈ H) :
+    (<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a> (H := H) τ hτ g).left
+        (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) =
+      ⟨g, hg⟩</code></pre></section>
+    <section><div class="natural-text"><p>Basepoint form: on the subgroup \(H\), the left coordinate of the standard embedding at the trivial right coset is the given element, provided the section is normalized at the basepoint.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI := rightCosetMulAction H
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">have</span> hq :
+      (g⁻¹ •
+          (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H))) =
+        (Quotient.mk&#x27;&#x27; (1 : G) : Quotient (QuotientGroup.rightRel H)) := <span class="kw">by</span>
+    <span class="kw">rw</span> [rightCosetMulAction_mk_smul (H := H) g⁻¹ 1]
+    <span class="kw">apply</span> Quotient.sound&#x27;
+    <span class="kw">rw</span> [QuotientGroup.rightRel_apply]
+    simpa using hg
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionEmbedding">rightQuotientSectionEmbedding</a>, SemidirectProduct.mk_eq_inl_mul_inr, MonoidHom.coe_mk,
+  OneHom.coe_mk, <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProduct_mul_left_apply">permutationalWreathProduct_mul_left_apply</a>, <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProduct_inl_left_apply">permutationalWreathProduct_inl_left_apply</a>,
+  <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-rightQuotientSectionCocycle">rightQuotientSectionCocycle</a>, hτ1, one_mul, hq, inv_one, mul_one, SemidirectProduct.right_inl, one_smul,
+  <a class="decl-ref" href="../../library/ProCGroups/WreathProducts.html#decl-permutationalWreathProduct_inr_left_apply">permutationalWreathProduct_inr_left_apply</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the permutational wreath product as the function factor with the right factor acting by coordinate permutation. Multiplication, inversion, inclusions, projections, and functorial maps are computed on the function coordinate and the right coordinate separately. Continuity and compactness follow from <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, evaluation maps on a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> index set, and the continuous action; pro-\(C\) membership follows from closure under <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products and extensions.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.WreathProducts"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../assets/site.js" data-root="../../"></script>
+</body>
+</html>

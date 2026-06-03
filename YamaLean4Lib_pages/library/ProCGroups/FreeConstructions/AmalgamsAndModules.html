@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.FreeConstructions.AmalgamsAndModules | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.FreeConstructions.AmalgamsAndModules</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/FreeConstructions.html">FreeConstructions</a><span class="sep">/</span><span>AmalgamsAndModules</span></div>
+      <h1 class="module-title">ProCGroups.FreeConstructions.AmalgamsAndModules</h1>
+      <div class="module-meta">2 Theorem</div>
+      <div class="module-overview"><p>This module studies amalgams and modules for pro cgroups. A <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> nontrivial \(p\)-group has a nontrivial central element. This is the group-theoretic core used for <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> normal subgroups in pro-\(p\) amalgam arguments.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li>Mathlib.GroupTheory.PGroup</li><li>Mathlib.GroupTheory.Solvable</li><li><a href="../../../library/ProCGroups/FreeConstructions/Framework.html">ProCGroups.FreeConstructions.Framework</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/FreeConstructions.html">ProCGroups.FreeConstructions</a></li><li><a href="../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a></li><li><a href="../../../library/ReidemeisterSchreier/Profinite.html">ReidemeisterSchreier.Profinite</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ProCGroups.FreeConstructions.finite_normal_subgroup_pro_p_has_central_element">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeConstructions.finite_normal_subgroup_pro_p_has_central_element">ProCGroups.FreeConstructions.finite_normal_subgroup_pro_p_has_central_element</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/FreeConstructions/AmalgamsAndModules.html#L32">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> finite_normal_subgroup_pro_p_has_central_element
+    (p : ℕ) [Fact p.Prime] (N : Subgroup G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/FreeConstructions/Framework.html#decl-ProCGroups.FreeConstructions.IsFiniteSubgroup">IsFiniteSubgroup</a> N → Nontrivial N → IsPGroup p N →
+        ∃ z : N, z ≠ 1 ∧ z ∈ Subgroup.center N</code></pre></section>
+    <section><div class="natural-text"><p>A <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> nontrivial \(p\)-group has a nontrivial central element. This is the group-theoretic core used for <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> normal subgroups in pro-\(p\) amalgam arguments.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> hfinite hnontrivial hpN
+  letI : Finite N := hfinite
+  letI : Nontrivial N := hnontrivial
+  <span class="kw">have</span> hcenter : Nontrivial (Subgroup.center N) := IsPGroup.center_nontrivial hpN
+  obtain ⟨z, hz⟩ := exists_ne (1 : Subgroup.center N)
+  <span class="kw">exact</span> ⟨z.1, <span class="kw">fun</span> hz1 =&gt; hz (Subtype.ext hz1), z.2⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Closed-subgroup and subgroup-permanence claims use ambient open-normal approximation: an open normal subgroup of the closed subgroup is refined by the intersection with an ambient open normal subgroup of \(G\). For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.FreeConstructions.solvable_amalgam_criterion">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeConstructions.solvable_amalgam_criterion">ProCGroups.FreeConstructions.solvable_amalgam_criterion</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/FreeConstructions/AmalgamsAndModules.html#L46">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> solvable_amalgam_criterion
+    (C : ProCGroups.FiniteGroupClass.{u}) :
+    <a class="decl-ref" href="../../../library/ProCGroups/FreeConstructions/Framework.html#decl-ProCGroups.FreeConstructions.AmalgamatedFreeProCProductData">AmalgamatedFreeProCProductData</a> C G A B H →
+      IsSolvable G → IsSolvable A ∧ IsSolvable B</code></pre></section>
+    <section><div class="natural-text"><p>If an amalgamated free pro-\(C\) product embeds both factors into a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.solvable">solvable</a> group \(G\), then the factors are solvable.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> hprod hG
+  rcases hprod <span class="kw">with</span>
+    ⟨_, _, _, _, left, right, inl, inr, _hleft, _hright, hinl, hinr, _hcompat, _huniv⟩
+  letI : IsSolvable G := hG
+  <span class="kw">exact</span>
+    ⟨solvable_of_solvable_injective (f := inl.toMonoidHom) hinl,
+      solvable_of_solvable_injective (f := inr.toMonoidHom) hinr⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For pro-\(C\) claims, the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient obtained from the construction remains in \(C\) by the relevant closure axiom, such as closure under subgroups, quotients, <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. The universal or lifting <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is then checked on the prescribed generators, and uniqueness follows because the generators are dense or topologically generating. Consequently the two expressions have the same determining coordinates, and the defining extensionality principle for the inverse-limit, quotient, or presentation construction gives the claim in the statement.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.FreeConstructions.AmalgamsAndModules"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

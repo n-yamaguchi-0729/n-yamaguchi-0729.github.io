@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FenchelNielsenZomorrodian.Discrete.FiniteIndex.Smooth | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">FenchelNielsenZomorrodian.Discrete.FiniteIndex.Smooth</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/FenchelNielsenZomorrodian.html">FenchelNielsenZomorrodian</a><span class="sep">/</span><a href="../../../../library/FenchelNielsenZomorrodian/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex.html">FiniteIndex</a><span class="sep">/</span><span>Smooth</span></div>
+      <h1 class="module-title">FenchelNielsenZomorrodian.Discrete.FiniteIndex.Smooth</h1>
+      <div class="module-meta">4 Theorem | 1 Definition | 1 Structure</div>
+      <div class="module-overview"><p>This module sets up the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage and inverse-limit description of the construction. It records the stage maps, projections, and <a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> lemmas used to pass back to the completed object.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex/NormalCore.html">FenchelNielsenZomorrodian.Discrete.FiniteIndex.NormalCore</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete.html">FenchelNielsenZomorrodian.Discrete</a></li><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex.html">FenchelNielsenZomorrodian.Discrete.FiniteIndex</a></li><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex/SmoothQuotientData.html">FenchelNielsenZomorrodian.Discrete.FiniteIndex.SmoothQuotientData</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl structure" id="decl-FenchelNielsen.SmoothQuotientData">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.SmoothQuotientData">FenchelNielsen.SmoothQuotientData</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#L19">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> SmoothQuotientData
+    (G : <span class="kw">Type</span>*) [Group G]
+    (ι : <span class="kw">Type</span>*) (periods : ι → ℕ) (elliptic : ι → G)
+    (m : ℕ) <span class="kw">where</span>
+  Q : <span class="kw">Type</span>
+  [group : Group Q]
+  [<a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> : Finite Q]
+  φ : G →* Q
+  derived_length : derivedSeries Q m = ⊥
+  elliptic_exact : ∀ i : ι, orderOf (φ (elliptic i)) = periods i</code></pre></section>
+    <section><div class="natural-text"><p>Data for a smooth quotient of a Fenchel--Nielsen--Zomorrodian group.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.SmoothQuotientData.kernel">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.SmoothQuotientData.kernel">FenchelNielsen.SmoothQuotientData.kernel</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#L32">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> kernel {G : <span class="kw">Type</span>*} [Group G] {ι : <span class="kw">Type</span>*} {periods : ι → ℕ}
+    {elliptic : ι → G} {m : ℕ}
+    (D : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#decl-FenchelNielsen.SmoothQuotientData">SmoothQuotientData</a> G ι periods elliptic m) : Subgroup G := <span class="kw">by</span>
+  letI : Group D.Q := D.group
+  <span class="kw">exact</span> D.φ.ker</code></pre></section>
+    <section><div class="natural-text"><p>The kernel subgroup of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> smooth quotient map.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.SmoothQuotientData.kernel_quotient_has_derivedLengthAtMost">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.SmoothQuotientData.kernel_quotient_has_derivedLengthAtMost">FenchelNielsen.SmoothQuotientData.kernel_quotient_has_derivedLengthAtMost</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#L38">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> kernel_quotient_has_derivedLengthAtMost
+    {G : <span class="kw">Type</span>*} [Group G] {ι : <span class="kw">Type</span>*} {periods : ι → ℕ}
+    {elliptic : ι → G} {m : ℕ}
+    (D : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#decl-FenchelNielsen.SmoothQuotientData">SmoothQuotientData</a> G ι periods elliptic m) :
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Definitions.html#decl-FenchelNielsen.SubgroupQuotientHasDerivedLengthAtMost">SubgroupQuotientHasDerivedLengthAtMost</a> D.kernel m</code></pre></section>
+    <section><div class="natural-text"><p>The quotient by the kernel has derived length at most the quotient datum bound.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> g hg
+  letI : Group D.Q := D.group
+  change g ∈ D.φ.ker
+  <span class="kw">rw</span> [MonoidHom.mem_ker]
+  <span class="kw">have</span> hmap : D.φ g ∈ (derivedSeries G m).map D.φ := <span class="kw">by</span>
+    <span class="kw">exact</span> ⟨g, hg, <span class="kw">rfl</span>⟩
+  <span class="kw">have</span> hle : (derivedSeries G m).map D.φ ≤ derivedSeries D.Q m :=
+    map_derivedSeries_le_derivedSeries D.φ m
+  <span class="kw">have</span> hderived : D.φ g ∈ derivedSeries D.Q m := hle hmap
+  <span class="kw">rw</span> [D.derived_length] at hderived
+  simpa using hderived</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Kernel and normal-closure claims are proved by showing that each rewritten relator lies in the generated normal subgroup and that the quotient map kills exactly those relations required by the presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. For the Fenchel--Nielsen--Zomorrodian relations, the period calculation checks that each elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has image of the prescribed order, and the product relation is verified by multiplying the images in the stated order. Divisibility, lcm, or gcd hypotheses are used precisely to make the period <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish in the target quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.SmoothQuotientData.source_element_eq_one_of_kernel_conjugate_elliptic_zpow">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.SmoothQuotientData.source_element_eq_one_of_kernel_conjugate_elliptic_zpow">FenchelNielsen.SmoothQuotientData.source_element_eq_one_of_kernel_conjugate_elliptic_zpow</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#L55">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> source_element_eq_one_of_kernel_conjugate_elliptic_zpow
+    {G : <span class="kw">Type</span>*} [Group G] {ι : <span class="kw">Type</span>*} {periods : ι → ℕ}
+    {elliptic : ι → G} {m : ℕ}
+    (D : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#decl-FenchelNielsen.SmoothQuotientData">SmoothQuotientData</a> G ι periods elliptic m)
+    (hEllipticZPow :
+      ∀ i : ι, ∀ n : ℤ, (periods i : ℤ) ∣ n → elliptic i ^ n = 1)
+    (g : G)
+    (hgKernel : g ∈ D.kernel)
+    (hConj : ∃ i : ι, ∃ n : ℤ, IsConj g (elliptic i ^ n)) :
+    g = 1</code></pre></section>
+    <section><div class="natural-text"><p>A kernel element conjugate to an elliptic power is trivial when the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient detects the elliptic order and elliptic powers vanish exactly at multiples of the period.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : Group D.Q := D.group
+  <span class="kw">have</span> hgKernel_eq : D.φ g = 1 := <span class="kw">by</span>
+    change g ∈ D.φ.ker at hgKernel
+    <span class="kw">exact</span> MonoidHom.mem_ker.mp hgKernel
+  rcases hConj <span class="kw">with</span> ⟨i, n, hconj⟩
+  <span class="kw">have</span> hφconj : IsConj (D.φ g) (D.φ (elliptic i ^ n)) :=
+    D.φ.map_isConj hconj
+  <span class="kw">have</span> hφtarget : D.φ (elliptic i ^ n) = 1 := <span class="kw">by</span>
+    <span class="kw">exact</span> isConj_one_right.mp &lt;| <span class="kw">by</span> simpa [hgKernel_eq] using hφconj
+  <span class="kw">have</span> hdiv : (periods i : ℤ) ∣ n := <span class="kw">by</span>
+    <span class="kw">rw</span> [← D.elliptic_exact i]
+    <span class="kw">exact</span> orderOf_dvd_iff_zpow_eq_one.mpr (<span class="kw">by</span>
+      simpa [MonoidHom.map_zpow] using hφtarget)
+  <span class="kw">have</span> htargetOne : elliptic i ^ n = 1 :=
+    hEllipticZPow i n hdiv
+  <span class="kw">exact</span> isConj_one_left.mp &lt;| <span class="kw">by</span> simpa [htargetOne] using hconj</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Kernel and normal-closure claims are proved by showing that each rewritten relator lies in the generated normal subgroup and that the quotient map kills exactly those relations required by the presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.SmoothQuotientData.kernel_torsionFree_of_finiteOrderClassification">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.SmoothQuotientData.kernel_torsionFree_of_finiteOrderClassification">FenchelNielsen.SmoothQuotientData.kernel_torsionFree_of_finiteOrderClassification</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#L82">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> kernel_torsionFree_of_finiteOrderClassification
+    {G : <span class="kw">Type</span>*} [Group G] {ι : <span class="kw">Type</span>*} {periods : ι → ℕ}
+    {elliptic : ι → G} {m : ℕ}
+    (D : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#decl-FenchelNielsen.SmoothQuotientData">SmoothQuotientData</a> G ι periods elliptic m)
+    (hEllipticZPow :
+      ∀ i : ι, ∀ n : ℤ, (periods i : ℤ) ∣ n → elliptic i ^ n = 1)
+    (hFiniteOrder :
+      ∀ g : G, IsOfFinOrder g →
+        g = 1 ∨ ∃ i : ι, ∃ n : ℤ, IsConj g (elliptic i ^ n)) :
+    IsTorsionFreeGroup D.kernel</code></pre></section>
+    <section><div class="natural-text"><p>The smooth quotient kernel is torsion-free when every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-order source element is either trivial or conjugate to an elliptic power.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> g hgfin
+  <span class="kw">have</span> hgfinSource : IsOfFinOrder (g : G) := <span class="kw">by</span>
+    simpa using
+      (Submonoid.isOfFinOrder_coe
+        (H := D.kernel.toSubmonoid) (x := g)).2 hgfin
+  rcases hFiniteOrder (g : G) hgfinSource <span class="kw">with</span> hgOne | hConj
+  · <span class="kw">exact</span> Subtype.ext hgOne
+  · <span class="kw">exact</span> Subtype.ext
+      (D.source_element_eq_one_of_kernel_conjugate_elliptic_zpow
+        hEllipticZPow (g : G) g.2 hConj)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Kernel and normal-closure claims are proved by showing that each rewritten relator lies in the generated normal subgroup and that the quotient map kills exactly those relations required by the presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.SmoothQuotientData.sourceSubgroup_exists_of_finiteOrderClassification">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.SmoothQuotientData.sourceSubgroup_exists_of_finiteOrderClassification">FenchelNielsen.SmoothQuotientData.sourceSubgroup_exists_of_finiteOrderClassification</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#L103">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> sourceSubgroup_exists_of_finiteOrderClassification
+    {G : <span class="kw">Type</span>*} [Group G] {ι : <span class="kw">Type</span>*} {periods : ι → ℕ}
+    {elliptic : ι → G} {m : ℕ}
+    (D : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Smooth.html#decl-FenchelNielsen.SmoothQuotientData">SmoothQuotientData</a> G ι periods elliptic m)
+    (hEllipticZPow :
+      ∀ i : ι, ∀ n : ℤ, (periods i : ℤ) ∣ n → elliptic i ^ n = 1)
+    (hFiniteOrder :
+      ∀ g : G, IsOfFinOrder g →
+        g = 1 ∨ ∃ i : ι, ∃ n : ℤ, IsConj g (elliptic i ^ n)) :
+  ∃ L : Subgroup G,
+      L.FiniteIndex ∧ IsTorsionFreeGroup L ∧
+        <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/FiniteIndex/Definitions.html#decl-FenchelNielsen.SubgroupQuotientHasDerivedLengthAtMost">SubgroupQuotientHasDerivedLengthAtMost</a> L m</code></pre></section>
+    <section><div class="natural-text"><p>The source subgroup associated with the smooth quotient exists under the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-order classification hypothesis.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hfinite : D.kernel.FiniteIndex := <span class="kw">by</span>
+    letI : Group D.Q := D.group
+    letI : Finite D.Q := D.finite
+    change D.φ.ker.FiniteIndex
+    <span class="kw">exact</span> Subgroup.finiteIndex_of_finite_quotient
+  <span class="kw">exact</span> ⟨D.kernel, hfinite,
+    D.kernel_torsionFree_of_finiteOrderClassification
+      hEllipticZPow hFiniteOrder,
+    D.kernel_quotient_has_derivedLengthAtMost⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Check the quotient data on the named elliptic, surface, cusp, and boundary generators. The period, power, and product <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> follow from the displayed order and product calculations, so the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> supplies the quotient map; derived-length, smoothness, and profinite fields are inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> or profinite quotient construction.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FenchelNielsenZomorrodian.Discrete.FiniteIndex.Smooth"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

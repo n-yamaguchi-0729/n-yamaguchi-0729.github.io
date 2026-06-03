@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FenchelNielsenZomorrodian.Discrete.CompactFuchsian.PeriodOne.KernelEquivalence | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../../download/index.html">Download</a></nav>
+  <div class="header-current">FenchelNielsenZomorrodian.Discrete.CompactFuchsian.PeriodOne.KernelEquivalence</div>
+  <form class="search-form" action="../../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../../library/FenchelNielsenZomorrodian.html">FenchelNielsenZomorrodian</a><span class="sep">/</span><a href="../../../../../library/FenchelNielsenZomorrodian/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian.html">CompactFuchsian</a><span class="sep">/</span><a href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne.html">PeriodOne</a><span class="sep">/</span><span>KernelEquivalence</span></div>
+      <h1 class="module-title">FenchelNielsenZomorrodian.Discrete.CompactFuchsian.PeriodOne.KernelEquivalence</h1>
+      <div class="module-meta">9 Definition</div>
+      <div class="module-overview"><p>This module develops the rewriting and basis constructions behind the subgroup calculations. It tracks words and relations through the chosen transversal to obtain the required presentation or basis statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html">FenchelNielsenZomorrodian.Discrete.CompactFuchsian.PeriodOne.RelatorProofs</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian.html">FenchelNielsenZomorrodian.Discrete.CompactFuchsian</a></li><li><a href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne.html">FenchelNielsenZomorrodian.Discrete.CompactFuchsian.PeriodOne</a></li><li><a href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/SourceSubgroup.html">FenchelNielsenZomorrodian.Discrete.CompactFuchsian.PeriodOne.SourceSubgroup</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-FenchelNielsen.OriginalFirstReductionPeriodOneSchreierRelatorData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.OriginalFirstReductionPeriodOneSchreierRelatorData">FenchelNielsen.OriginalFirstReductionPeriodOneSchreierRelatorData</a>
+    <a class="source-link" href="../../../../../library/src/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#L21">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> OriginalFirstReductionPeriodOneSchreierRelatorData
+    {tailLen p : ℕ}
+    (m₁&#x27; m₂&#x27; : ℕ) (tail : Fin tailLen → ℕ)
+    (hp : 2 ≤ p) (hm₁&#x27; : 0 &lt; m₁&#x27;) (hm₂&#x27; : 0 &lt; m₂&#x27;)
+    (htail : ∀ j, 2 ≤ tail j) (hTailLen : 0 &lt; tailLen)
+    (e :
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen ≃
+        Fin (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail
+          hTailLen).numPeriods)
+    {Y : <span class="kw">Type</span>} (targetRelators : Set (FreeGroup Y)) : <span class="kw">Type</span> :=
+  (letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+    <span class="kw">let</span> source :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+    letI : DecidableEq (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> source) := Classical.decEq _
+    <span class="kw">let</span> ξ :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+    <span class="kw">let</span> f := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ
+    <span class="kw">let</span> x :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneDistinguishedGenerator">originalFirstReductionPeriodOneDistinguishedGenerator</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+    <span class="kw">let</span> hx : FreeGroup.lift f (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod p) := <span class="kw">by</span>
+      simpa [f, x, ξ, <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom">originalFirstReductionPeriodOneFreeQuotientHom</a>] using
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom_head_zero">originalFirstReductionPeriodOneFreeQuotientHom_head_zero</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.CyclicSchreierRelatorData">CyclicSchreierRelatorData</a>
+      (N := p) (rels := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source) f x hx targetRelators)</code></pre></section>
+    <section><div class="natural-text"><p>Schreier relator data for the original first-reduction period-<a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> presentation.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData">FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData</a>
+    <a class="source-link" href="../../../../../library/src/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#L49">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> OriginalFirstReductionPeriodOneForwardMapData
+    {tailLen p : ℕ}
+    (m₁&#x27; m₂&#x27; : ℕ) (tail : Fin tailLen → ℕ)
+    (hp : 2 ≤ p) (hm₁&#x27; : 0 &lt; m₁&#x27;) (hm₂&#x27; : 0 &lt; m₂&#x27;)
+    (htail : ∀ j, 2 ≤ tail j) (hTailLen : 0 &lt; tailLen)
+    (e :
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen ≃
+        Fin (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail
+          hTailLen).numPeriods)
+    (τ : <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianSignature">FuchsianSignature</a>)
+    (θ :
+      letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+      <span class="kw">let</span> source :=
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+      letI : DecidableEq (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> source) := Classical.decEq _
+      <span class="kw">let</span> hT :=
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierTransversal_isRightSchreierTransversal">originalFirstReductionPeriodOneSchreierTransversal_isRightSchreierTransversal</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+      FreeGroup (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> τ) →* FreeGroup ↥(<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">schreierGeneratorSet</a> hT)) :
+    <span class="kw">Type</span> :=
+  (letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+    <span class="kw">let</span> source :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+    letI : DecidableEq (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> source) := Classical.decEq _
+    <span class="kw">let</span> ξ :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+    <span class="kw">let</span> f := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ
+    <span class="kw">let</span> T :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierTransversal">originalFirstReductionPeriodOneSchreierTransversal</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+    <span class="kw">let</span> basis :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierBasisEquiv">originalFirstReductionPeriodOneSchreierBasisEquiv</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+    <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientForwardMapData">ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientForwardMapData</a>
+      (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/GeneratorMap.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet</a> basis
+        (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/KernelQuotient.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet</a> (f := f) (rels := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source) T))
+      (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> τ)
+      θ)</code></pre></section>
+    <section><div class="natural-text"><p>Forward map data for the original first reduction in the period-<a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> case.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.doublePeriodOneForwardMapData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.doublePeriodOneForwardMapData">FenchelNielsen.doublePeriodOneForwardMapData</a>
+    <a class="source-link" href="../../../../../library/src/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#L89">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> doublePeriodOneForwardMapData
+    {tailLen p : ℕ}
+    (m₁&#x27; m₂&#x27; : ℕ) (tail : Fin tailLen → ℕ)
+    (hp : 2 ≤ p) (hm₁&#x27; : 0 &lt; m₁&#x27;) (hm₂&#x27; : 0 &lt; m₂&#x27;)
+    (htail : ∀ j, 2 ≤ tail j) (hTailLen : 0 &lt; tailLen)
+    (hHigh : 3 ≤ p * tailLen)
+    (e :
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen ≃
+        Fin (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail
+          hTailLen).numPeriods)
+    (hperiods :
+      <span class="kw">let</span> source :=
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+      ∀ x : <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen,
+        source.periods (e x) =
+          <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.originalFirstReductionPeriods">originalFirstReductionPeriods</a> (p := p) m₁&#x27; m₂&#x27; tail x)
+    (he : e = <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionOrderedIndexEquiv">originalFirstReductionOrderedIndexEquiv</a> tailLen)
+    (hm₁&#x27;one : m₁&#x27; = 1) (hm₂&#x27;one : m₂&#x27; = 1) :
+    <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.doublePeriodOneTailReplicatedSignature">doublePeriodOneTailReplicatedSignature</a> tail htail hHigh
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData">OriginalFirstReductionPeriodOneForwardMapData</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e target
+      (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetMaps.html#decl-FenchelNielsen.doublePeriodOneTargetToSchreierHom">doublePeriodOneTargetToSchreierHom</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e) := <span class="kw">by</span>
+  classical
+  dsimp
+  letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+  <span class="kw">let</span> source :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+  <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.doublePeriodOneTailReplicatedSignature">doublePeriodOneTailReplicatedSignature</a> tail htail hHigh
+  letI : DecidableEq (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> source) := Classical.decEq _
+  <span class="kw">let</span> ξ :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> f := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ
+  <span class="kw">let</span> T :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierTransversal">originalFirstReductionPeriodOneSchreierTransversal</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> hT :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierTransversal_isRightSchreierTransversal">originalFirstReductionPeriodOneSchreierTransversal_isRightSchreierTransversal</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> basis :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierBasisEquiv">originalFirstReductionPeriodOneSchreierBasisEquiv</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> θ :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetMaps.html#decl-FenchelNielsen.doublePeriodOneTargetToSchreierHom">doublePeriodOneTargetToSchreierHom</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e
+  <span class="kw">let</span> η :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/SourceMaps.html#decl-FenchelNielsen.doublePeriodOneSchreierToTargetHom">doublePeriodOneSchreierToTargetHom</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e
+  refine
+    { toHom := η
+      mapsRelators := ?_
+      inv_toHom := ?_
+      to_invHom := ?_ }
+  · <span class="kw">intro</span> r hr
+    simpa [source, target, ξ, f, T, basis, η] using
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html#decl-FenchelNielsen.doublePeriodOneSchreierToTarget_mapsRelators">doublePeriodOneSchreierToTarget_mapsRelators</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e hperiods he
+        hm₁&#x27;one hm₂&#x27;one r hr
+  · <span class="kw">intro</span> w
+    simpa [source, target, ξ, f, T, hT, basis, θ, η] using
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html#decl-FenchelNielsen.doublePeriodOneSchreierToTarget_invComp_mem_normalClosure">doublePeriodOneSchreierToTarget_invComp_mem_normalClosure</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e hperiods he
+        hm₁&#x27;one w
+  · <span class="kw">intro</span> y
+    simpa [source, target, θ, η] using
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html#decl-FenchelNielsen.doublePeriodOneSchreierToTarget_toInv_mem_normalClosure_of_generators">doublePeriodOneSchreierToTarget_toInv_mem_normalClosure_of_generators</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e
+        (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html#decl-FenchelNielsen.doublePeriodOneSchreierToTarget_toInv_generators_mem_normalClosure">doublePeriodOneSchreierToTarget_toInv_generators_mem_normalClosure</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e) y</code></pre></section>
+    <section><div class="natural-text"><p>Forward-map data for the double-period-<a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier-to-target comparison.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.oneHeadPeriodOneForwardMapData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.oneHeadPeriodOneForwardMapData">FenchelNielsen.oneHeadPeriodOneForwardMapData</a>
+    <a class="source-link" href="../../../../../library/src/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#L160">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> oneHeadPeriodOneForwardMapData
+    {tailLen p : ℕ}
+    (m₁&#x27; m₂&#x27; : ℕ) (tail : Fin tailLen → ℕ)
+    (hp : 2 ≤ p) (hm₁&#x27; : 0 &lt; m₁&#x27;) (hm₂&#x27; : 0 &lt; m₂&#x27;)
+    (hm₂&#x27;ge : 2 ≤ m₂&#x27;) (htail : ∀ j, 2 ≤ tail j) (hTailLen : 0 &lt; tailLen)
+    (e :
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen ≃
+        Fin (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail
+          hTailLen).numPeriods)
+    (hperiods :
+      <span class="kw">let</span> source :=
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+      ∀ x : <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen,
+        source.periods (e x) =
+          <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.originalFirstReductionPeriods">originalFirstReductionPeriods</a> (p := p) m₁&#x27; m₂&#x27; tail x)
+    (he : e = <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionOrderedIndexEquiv">originalFirstReductionOrderedIndexEquiv</a> tailLen)
+    (hm₁&#x27;one : m₁&#x27; = 1) :
+    <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.oneHeadPeriodOneTargetSignature">oneHeadPeriodOneTargetSignature</a> m₂&#x27; tail hp hm₂&#x27;ge htail hTailLen
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData">OriginalFirstReductionPeriodOneForwardMapData</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e target
+      (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetMaps.html#decl-FenchelNielsen.oneHeadPeriodOneTargetToSchreierHom">oneHeadPeriodOneTargetToSchreierHom</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e) := <span class="kw">by</span>
+  classical
+  dsimp
+  letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+  <span class="kw">let</span> source :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+  <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.oneHeadPeriodOneTargetSignature">oneHeadPeriodOneTargetSignature</a> m₂&#x27; tail hp hm₂&#x27;ge htail hTailLen
+  letI : DecidableEq (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> source) := Classical.decEq _
+  <span class="kw">let</span> ξ :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> f := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ
+  <span class="kw">let</span> T :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierTransversal">originalFirstReductionPeriodOneSchreierTransversal</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> hT :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierTransversal_isRightSchreierTransversal">originalFirstReductionPeriodOneSchreierTransversal_isRightSchreierTransversal</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> basis :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierBasisEquiv">originalFirstReductionPeriodOneSchreierBasisEquiv</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> θ :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetMaps.html#decl-FenchelNielsen.oneHeadPeriodOneTargetToSchreierHom">oneHeadPeriodOneTargetToSchreierHom</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e
+  <span class="kw">let</span> η :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/SourceMaps.html#decl-FenchelNielsen.oneHeadPeriodOneSchreierToTargetHom">oneHeadPeriodOneSchreierToTargetHom</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e
+  refine
+    { toHom := η
+      mapsRelators := ?_
+      inv_toHom := ?_
+      to_invHom := ?_ }
+  · <span class="kw">intro</span> r hr
+    simpa [source, target, ξ, f, T, basis, η] using
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html#decl-FenchelNielsen.oneHeadPeriodOneSchreierToTarget_mapsRelators">oneHeadPeriodOneSchreierToTarget_mapsRelators</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e hperiods he
+        hm₁&#x27;one r hr
+  · <span class="kw">intro</span> w
+    simpa [source, target, ξ, f, T, hT, basis, θ, η] using
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html#decl-FenchelNielsen.oneHeadPeriodOneSchreierToTarget_invComp_mem_normalClosure">oneHeadPeriodOneSchreierToTarget_invComp_mem_normalClosure</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e hperiods he
+        hm₁&#x27;one w
+  · <span class="kw">intro</span> y
+    simpa [source, target, θ, η] using
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html#decl-FenchelNielsen.oneHeadPeriodOneSchreierToTarget_toInv_mem_normalClosure_of_generators">oneHeadPeriodOneSchreierToTarget_toInv_mem_normalClosure_of_generators</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e
+        (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html#decl-FenchelNielsen.oneHeadPeriodOneSchreierToTarget_toInv_generators_mem_normalClosure">oneHeadPeriodOneSchreierToTarget_toInv_generators_mem_normalClosure</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e) y</code></pre></section>
+    <section><div class="natural-text"><p>Forward-map data for the <a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a>-head period-<a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier-to-target comparison.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.oneHeadPeriodOneSchreierRelatorData_of_forwardMapData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.oneHeadPeriodOneSchreierRelatorData_of_forwardMapData">FenchelNielsen.oneHeadPeriodOneSchreierRelatorData_of_forwardMapData</a>
+    <a class="source-link" href="../../../../../library/src/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#L230">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> oneHeadPeriodOneSchreierRelatorData_of_forwardMapData
+    {tailLen p : ℕ}
+    (m₁&#x27; m₂&#x27; : ℕ) (tail : Fin tailLen → ℕ)
+    (hp : 2 ≤ p) (hm₁&#x27; : 0 &lt; m₁&#x27;) (hm₂&#x27; : 0 &lt; m₂&#x27;)
+    (hm₂&#x27;ge : 2 ≤ m₂&#x27;) (htail : ∀ j, 2 ≤ tail j) (hTailLen : 0 &lt; tailLen)
+    (e :
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen ≃
+        Fin (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail
+          hTailLen).numPeriods)
+    (hperiods :
+      <span class="kw">let</span> source :=
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+      ∀ x : <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen,
+        source.periods (e x) =
+          <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.originalFirstReductionPeriods">originalFirstReductionPeriods</a> (p := p) m₁&#x27; m₂&#x27; tail x)
+    (he : e = <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionOrderedIndexEquiv">originalFirstReductionOrderedIndexEquiv</a> tailLen)
+    (hm₁&#x27;one : m₁&#x27; = 1)
+    (D :
+      <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.oneHeadPeriodOneTargetSignature">oneHeadPeriodOneTargetSignature</a> m₂&#x27; tail hp hm₂&#x27;ge htail hTailLen
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData">OriginalFirstReductionPeriodOneForwardMapData</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e target
+        (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetMaps.html#decl-FenchelNielsen.oneHeadPeriodOneTargetToSchreierHom">oneHeadPeriodOneTargetToSchreierHom</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e)) :
+    <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.oneHeadPeriodOneTargetSignature">oneHeadPeriodOneTargetSignature</a> m₂&#x27; tail hp hm₂&#x27;ge htail hTailLen
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneSchreierRelatorData">OriginalFirstReductionPeriodOneSchreierRelatorData</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> target) := <span class="kw">by</span>
+  classical
+  dsimp
+  letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+  <span class="kw">let</span> source :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+  <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.oneHeadPeriodOneTargetSignature">oneHeadPeriodOneTargetSignature</a> m₂&#x27; tail hp hm₂&#x27;ge htail hTailLen
+  letI : DecidableEq (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> source) := Classical.decEq _
+  <span class="kw">let</span> ξ :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> f := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ
+  <span class="kw">let</span> T :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierTransversal">originalFirstReductionPeriodOneSchreierTransversal</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> basis :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierBasisEquiv">originalFirstReductionPeriodOneSchreierBasisEquiv</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> θ :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetMaps.html#decl-FenchelNielsen.oneHeadPeriodOneTargetToSchreierHom">oneHeadPeriodOneTargetToSchreierHom</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e
+  <span class="kw">have</span> hTarget :
+      ∀ s ∈ <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> target, θ s ∈
+        Subgroup.normalClosure
+          (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/GeneratorMap.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet</a> basis
+            (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/KernelQuotient.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet</a> (f := f) (rels := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source) T)) := <span class="kw">by</span>
+    simpa [source, target, ξ, f, T, basis, θ] using
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html#decl-FenchelNielsen.oneHeadPeriodOneTargetToSchreier_mapsTargetRelators">oneHeadPeriodOneTargetToSchreier_mapsTargetRelators</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e hperiods he hm₁&#x27;one
+  simpa [<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneSchreierRelatorData">OriginalFirstReductionPeriodOneSchreierRelatorData</a>,
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData">OriginalFirstReductionPeriodOneForwardMapData</a>, source, target, ξ, f, T, basis, θ] using
+    (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfForwardMapData">ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfForwardMapData</a>
+      (R := <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/GeneratorMap.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet</a> basis
+        (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/KernelQuotient.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet</a> (f := f) (rels := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source) T))
+      (S := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> target)
+      (invHom := θ)
+      hTarget
+      D)</code></pre></section>
+    <section><div class="natural-text"><p>Forward-map data produce the <a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a>-head period-<a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier relator data.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.doublePeriodOneSchreierRelatorData_of_forwardMapData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.doublePeriodOneSchreierRelatorData_of_forwardMapData">FenchelNielsen.doublePeriodOneSchreierRelatorData_of_forwardMapData</a>
+    <a class="source-link" href="../../../../../library/src/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#L294">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> doublePeriodOneSchreierRelatorData_of_forwardMapData
+    {tailLen p : ℕ}
+    (m₁&#x27; m₂&#x27; : ℕ) (tail : Fin tailLen → ℕ)
+    (hp : 2 ≤ p) (hm₁&#x27; : 0 &lt; m₁&#x27;) (hm₂&#x27; : 0 &lt; m₂&#x27;)
+    (htail : ∀ j, 2 ≤ tail j) (hTailLen : 0 &lt; tailLen)
+    (hHigh : 3 ≤ p * tailLen)
+    (e :
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen ≃
+        Fin (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail
+          hTailLen).numPeriods)
+    (hperiods :
+      <span class="kw">let</span> source :=
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+      ∀ x : <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen,
+        source.periods (e x) =
+          <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.originalFirstReductionPeriods">originalFirstReductionPeriods</a> (p := p) m₁&#x27; m₂&#x27; tail x)
+    (he : e = <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionOrderedIndexEquiv">originalFirstReductionOrderedIndexEquiv</a> tailLen)
+    (hm₁&#x27;one : m₁&#x27; = 1) (hm₂&#x27;one : m₂&#x27; = 1)
+    (D :
+      <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.doublePeriodOneTailReplicatedSignature">doublePeriodOneTailReplicatedSignature</a> tail htail hHigh
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData">OriginalFirstReductionPeriodOneForwardMapData</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e target
+        (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetMaps.html#decl-FenchelNielsen.doublePeriodOneTargetToSchreierHom">doublePeriodOneTargetToSchreierHom</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e)) :
+    <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.doublePeriodOneTailReplicatedSignature">doublePeriodOneTailReplicatedSignature</a> tail htail hHigh
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneSchreierRelatorData">OriginalFirstReductionPeriodOneSchreierRelatorData</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> target) := <span class="kw">by</span>
+  classical
+  dsimp
+  letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+  <span class="kw">let</span> source :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+  <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.doublePeriodOneTailReplicatedSignature">doublePeriodOneTailReplicatedSignature</a> tail htail hHigh
+  letI : DecidableEq (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> source) := Classical.decEq _
+  <span class="kw">let</span> ξ :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> f := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ
+  <span class="kw">let</span> T :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierTransversal">originalFirstReductionPeriodOneSchreierTransversal</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> basis :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneSchreierBasisEquiv">originalFirstReductionPeriodOneSchreierBasisEquiv</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> θ :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetMaps.html#decl-FenchelNielsen.doublePeriodOneTargetToSchreierHom">doublePeriodOneTargetToSchreierHom</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e
+  <span class="kw">have</span> hTarget :
+      ∀ s ∈ <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> target, θ s ∈
+        Subgroup.normalClosure
+          (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/GeneratorMap.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet</a> basis
+            (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/KernelQuotient.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet</a> (f := f) (rels := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source) T)) := <span class="kw">by</span>
+    simpa [source, target, ξ, f, T, basis, θ] using
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/RelatorProofs.html#decl-FenchelNielsen.doublePeriodOneTargetToSchreier_mapsTargetRelators">doublePeriodOneTargetToSchreier_mapsTargetRelators</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e hperiods he
+          hm₁&#x27;one hm₂&#x27;one
+  simpa [<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneSchreierRelatorData">OriginalFirstReductionPeriodOneSchreierRelatorData</a>,
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData">OriginalFirstReductionPeriodOneForwardMapData</a>, source, target, ξ, f, T, basis, θ] using
+    (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfForwardMapData">ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfForwardMapData</a>
+      (R := <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/GeneratorMap.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet</a> basis
+        (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/KernelQuotient.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet</a> (f := f) (rels := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source) T))
+      (S := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> target)
+      (invHom := θ)
+      hTarget
+      D)</code></pre></section>
+    <section><div class="natural-text"><p>Forward-map data produce the double-period-<a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier relator data.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.originalFirstReductionPeriodOneKernelEquivOfRelatorData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.originalFirstReductionPeriodOneKernelEquivOfRelatorData">FenchelNielsen.originalFirstReductionPeriodOneKernelEquivOfRelatorData</a>
+    <a class="source-link" href="../../../../../library/src/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#L360">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> originalFirstReductionPeriodOneKernelEquivOfRelatorData
+    {tailLen p : ℕ}
+    (m₁&#x27; m₂&#x27; : ℕ) (tail : Fin tailLen → ℕ)
+    (hp : 2 ≤ p) (hm₁&#x27; : 0 &lt; m₁&#x27;) (hm₂&#x27; : 0 &lt; m₂&#x27;)
+    (htail : ∀ j, 2 ≤ tail j) (hTailLen : 0 &lt; tailLen)
+    (e :
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen ≃
+        Fin (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail
+          hTailLen).numPeriods)
+    (hperiods :
+      <span class="kw">let</span> source :=
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+      ∀ x : <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen,
+        source.periods (e x) =
+          <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.originalFirstReductionPeriods">originalFirstReductionPeriods</a> (p := p) m₁&#x27; m₂&#x27; tail x)
+    (τ : <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianSignature">FuchsianSignature</a>)
+    (D : <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneSchreierRelatorData">OriginalFirstReductionPeriodOneSchreierRelatorData</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> τ)) :
+    letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+    <span class="kw">let</span> source :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+    <span class="kw">let</span> ξ :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+    <span class="kw">let</span> hrels : ∀ r ∈ <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source,
+        FreeGroup.lift (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ) r = 1 := <span class="kw">by</span>
+      simpa [ξ, <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom">originalFirstReductionPeriodOneFreeQuotientHom</a>] using
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom_respects_relators">originalFirstReductionPeriodOneFreeQuotientHom_respects_relators</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e hperiods
+    (PresentedGroup.toGroup (rels := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source)
+      (f := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ) hrels).<a class="decl-ref" href="../../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≃*
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianPresentedGroup">FuchsianPresentedGroup</a> τ := <span class="kw">by</span>
+  classical
+  letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+  <span class="kw">let</span> source :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+  letI : DecidableEq (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> source) := Classical.decEq _
+  <span class="kw">let</span> ξ :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> hpow : ∀ i, ξ i ^ source.periods i = 1 :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage_pow">originalFirstReductionPeriodOneQuotientImage_pow</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e hperiods
+  <span class="kw">let</span> hprod : ∏ i : Fin source.numPeriods, ξ i = 1 :=
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage_prod">originalFirstReductionPeriodOneQuotientImage_prod</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+  <span class="kw">let</span> hrels : ∀ r ∈ <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source,
+      FreeGroup.lift (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ) r = 1 := <span class="kw">by</span>
+    simpa [ξ, <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom">originalFirstReductionPeriodOneFreeQuotientHom</a>] using
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom_respects_relators">originalFirstReductionPeriodOneFreeQuotientHom_respects_relators</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e hperiods
+  <span class="kw">let</span> i₀ : Fin source.numPeriods := e (.inl (0 : Fin 2))
+  <span class="kw">have</span> hi₀ : ξ i₀ = Multiplicative.ofAdd (1 : ZMod p) := <span class="kw">by</span>
+    <span class="kw">simp</span> only [Fin.isValue, <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>, Equiv.symm_apply_apply, ofAdd_neg,
+  <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.twoPeriods_zero">twoPeriods_zero</a>, ξ, i₀]
+  <span class="kw">have</span> hData :
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.FuchsianEllipticCyclicSchreierRelatorData">FuchsianEllipticCyclicSchreierRelatorData</a> source τ ξ i₀ hi₀ := <span class="kw">by</span>
+    simpa [<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.FuchsianEllipticCyclicSchreierRelatorData">FuchsianEllipticCyclicSchreierRelatorData</a>,
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneSchreierRelatorData">OriginalFirstReductionPeriodOneSchreierRelatorData</a>,
+      source, ξ, i₀, hi₀, <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom">originalFirstReductionPeriodOneFreeQuotientHom</a>,
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneDistinguishedGenerator">originalFirstReductionPeriodOneDistinguishedGenerator</a>] using D
+  simpa [<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientHom">ellipticQuotientHom</a>, source, ξ, hpow, hprod, hrels] using
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.fuchsianEllipticCyclicKernelEquivOfRelatorData">fuchsianEllipticCyclicKernelEquivOfRelatorData</a>
+      source τ ξ hpow hprod i₀ hi₀ hData</code></pre></section>
+    <section><div class="natural-text"><p>Period-<a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> relator data identifies the original first-reduction elliptic-quotient kernel with the target Fuchsian presented group.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.oneHeadPeriodOneKernelEquivOfForwardMapData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.oneHeadPeriodOneKernelEquivOfForwardMapData">FenchelNielsen.oneHeadPeriodOneKernelEquivOfForwardMapData</a>
+    <a class="source-link" href="../../../../../library/src/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#L425">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> oneHeadPeriodOneKernelEquivOfForwardMapData
+    {tailLen p : ℕ}
+    (m₁&#x27; m₂&#x27; : ℕ) (tail : Fin tailLen → ℕ)
+    (hp : 2 ≤ p) (hm₁&#x27; : 0 &lt; m₁&#x27;) (hm₂&#x27; : 0 &lt; m₂&#x27;)
+    (hm₂&#x27;ge : 2 ≤ m₂&#x27;) (htail : ∀ j, 2 ≤ tail j) (hTailLen : 0 &lt; tailLen)
+    (e :
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen ≃
+        Fin (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail
+          hTailLen).numPeriods)
+    (hperiods :
+      <span class="kw">let</span> source :=
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+      ∀ x : <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen,
+        source.periods (e x) =
+          <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.originalFirstReductionPeriods">originalFirstReductionPeriods</a> (p := p) m₁&#x27; m₂&#x27; tail x)
+    (he : e = <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionOrderedIndexEquiv">originalFirstReductionOrderedIndexEquiv</a> tailLen)
+    (hm₁&#x27;one : m₁&#x27; = 1)
+    (D :
+      <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.oneHeadPeriodOneTargetSignature">oneHeadPeriodOneTargetSignature</a> m₂&#x27; tail hp hm₂&#x27;ge htail hTailLen
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData">OriginalFirstReductionPeriodOneForwardMapData</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e target
+        (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetMaps.html#decl-FenchelNielsen.oneHeadPeriodOneTargetToSchreierHom">oneHeadPeriodOneTargetToSchreierHom</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e)) :
+    letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+    <span class="kw">let</span> source :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+    <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.oneHeadPeriodOneTargetSignature">oneHeadPeriodOneTargetSignature</a> m₂&#x27; tail hp hm₂&#x27;ge htail hTailLen
+    <span class="kw">let</span> ξ :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+    <span class="kw">let</span> hrels : ∀ r ∈ <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source,
+        FreeGroup.lift (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ) r = 1 := <span class="kw">by</span>
+      simpa [ξ, <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom">originalFirstReductionPeriodOneFreeQuotientHom</a>] using
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom_respects_relators">originalFirstReductionPeriodOneFreeQuotientHom_respects_relators</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e hperiods
+    (PresentedGroup.toGroup (rels := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source)
+      (f := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ) hrels).<a class="decl-ref" href="../../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≃*
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianPresentedGroup">FuchsianPresentedGroup</a> target := <span class="kw">by</span>
+  classical
+  dsimp
+  <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.oneHeadPeriodOneTargetSignature">oneHeadPeriodOneTargetSignature</a> m₂&#x27; tail hp hm₂&#x27;ge htail hTailLen
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.originalFirstReductionPeriodOneKernelEquivOfRelatorData">originalFirstReductionPeriodOneKernelEquivOfRelatorData</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e hperiods target
+      (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.oneHeadPeriodOneSchreierRelatorData_of_forwardMapData">oneHeadPeriodOneSchreierRelatorData_of_forwardMapData</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; hm₂&#x27;ge htail hTailLen e hperiods he hm₁&#x27;one D)</code></pre></section>
+    <section><div class="natural-text"><p>Forward-map data for the <a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a>-head period-<a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> case identifies the elliptic-quotient kernel with the <a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a>-head target Fuchsian presented group.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.doublePeriodOneKernelEquivOfForwardMapData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.doublePeriodOneKernelEquivOfForwardMapData">FenchelNielsen.doublePeriodOneKernelEquivOfForwardMapData</a>
+    <a class="source-link" href="../../../../../library/src/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#L472">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> doublePeriodOneKernelEquivOfForwardMapData
+    {tailLen p : ℕ}
+    (m₁&#x27; m₂&#x27; : ℕ) (tail : Fin tailLen → ℕ)
+    (hp : 2 ≤ p) (hm₁&#x27; : 0 &lt; m₁&#x27;) (hm₂&#x27; : 0 &lt; m₂&#x27;)
+    (htail : ∀ j, 2 ≤ tail j) (hTailLen : 0 &lt; tailLen)
+    (hHigh : 3 ≤ p * tailLen)
+    (e :
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen ≃
+        Fin (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail
+          hTailLen).numPeriods)
+    (hperiods :
+      <span class="kw">let</span> source :=
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+      ∀ x : <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.OriginalFirstReductionIndex">OriginalFirstReductionIndex</a> tailLen,
+        source.periods (e x) =
+          <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodFamilies.html#decl-FenchelNielsen.originalFirstReductionPeriods">originalFirstReductionPeriods</a> (p := p) m₁&#x27; m₂&#x27; tail x)
+    (he : e = <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionOrderedIndexEquiv">originalFirstReductionOrderedIndexEquiv</a> tailLen)
+    (hm₁&#x27;one : m₁&#x27; = 1) (hm₂&#x27;one : m₂&#x27; = 1)
+    (D :
+      <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.doublePeriodOneTailReplicatedSignature">doublePeriodOneTailReplicatedSignature</a> tail htail hHigh
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.OriginalFirstReductionPeriodOneForwardMapData">OriginalFirstReductionPeriodOneForwardMapData</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e target
+        (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetMaps.html#decl-FenchelNielsen.doublePeriodOneTargetToSchreierHom">doublePeriodOneTargetToSchreierHom</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e)) :
+    letI : NeZero p := ⟨Nat.ne_of_gt (lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) hp)⟩
+    <span class="kw">let</span> source :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/FirstReductionData.html#decl-FenchelNielsen.originalFirstReductionSignature">originalFirstReductionSignature</a> m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen
+    <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.doublePeriodOneTailReplicatedSignature">doublePeriodOneTailReplicatedSignature</a> tail htail hHigh
+    <span class="kw">let</span> ξ :=
+      <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneQuotientImage">originalFirstReductionPeriodOneQuotientImage</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e
+    <span class="kw">let</span> hrels : ∀ r ∈ <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source,
+        FreeGroup.lift (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ) r = 1 := <span class="kw">by</span>
+      simpa [ξ, <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom">originalFirstReductionPeriodOneFreeQuotientHom</a>] using
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/QuotientAndBasis.html#decl-FenchelNielsen.originalFirstReductionPeriodOneFreeQuotientHom_respects_relators">originalFirstReductionPeriodOneFreeQuotientHom_respects_relators</a>
+          m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e hperiods
+    (PresentedGroup.toGroup (rels := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> source)
+      (f := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> source ξ) hrels).<a class="decl-ref" href="../../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≃*
+        <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianPresentedGroup">FuchsianPresentedGroup</a> target := <span class="kw">by</span>
+  classical
+  dsimp
+  <span class="kw">let</span> target := <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/TargetSignatures.html#decl-FenchelNielsen.doublePeriodOneTailReplicatedSignature">doublePeriodOneTailReplicatedSignature</a> tail htail hHigh
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.originalFirstReductionPeriodOneKernelEquivOfRelatorData">originalFirstReductionPeriodOneKernelEquivOfRelatorData</a>
+      m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen e hperiods target
+      (<a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/PeriodOne/KernelEquivalence.html#decl-FenchelNielsen.doublePeriodOneSchreierRelatorData_of_forwardMapData">doublePeriodOneSchreierRelatorData_of_forwardMapData</a>
+        m₁&#x27; m₂&#x27; tail hp hm₁&#x27; hm₂&#x27; htail hTailLen hHigh e hperiods he
+          hm₁&#x27;one hm₂&#x27;one D)</code></pre></section>
+    <section><div class="natural-text"><p>Forward-map data for the double period-<a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> case identifies the elliptic-quotient kernel with the double-period-<a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> target Fuchsian presented group.</p></div></section>
+  </div>
+</section></div></main>
+  <aside class="file-tree" data-active="FenchelNielsenZomorrodian.Discrete.CompactFuchsian.PeriodOne.KernelEquivalence"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../../assets/site.js" data-root="../../../../../"></script>
+</body>
+</html>

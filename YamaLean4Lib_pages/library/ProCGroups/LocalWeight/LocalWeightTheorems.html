@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.LocalWeight.LocalWeightTheorems | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.LocalWeight.LocalWeightTheorems</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/LocalWeight.html">LocalWeight</a><span class="sep">/</span><span>LocalWeightTheorems</span></div>
+      <h1 class="module-title">ProCGroups.LocalWeight.LocalWeightTheorems</h1>
+      <div class="module-meta">3 Theorem</div>
+      <div class="module-overview"><p>This module studies local <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.weight">weight</a> theorems for pro cgroups. 6.2(a). Closed generating subsets compute the local weight.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/LocalWeight/ClosedNormalDataAndTransfiniteSeries.html">ProCGroups.LocalWeight.ClosedNormalDataAndTransfiniteSeries</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/LocalWeight/GeneratingSetsConvergingToOne.html">ProCGroups.LocalWeight.GeneratingSetsConvergingToOne</a></li><li><a href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/BasisInfiniteRank.html">ReidemeisterSchreier.Profinite.OpenSubgroups.BasisInfiniteRank</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ProCGroups.LocalWeight.localWeight_eq_rho_of_closedGeneratingSet">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.LocalWeight.localWeight_eq_rho_of_closedGeneratingSet">ProCGroups.LocalWeight.localWeight_eq_rho_of_closedGeneratingSet</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/LocalWeight/LocalWeightTheorems.html#L33">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> localWeight_eq_rho_of_closedGeneratingSet
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (X : Set G) (hG : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G) (hXclosed : IsClosed X)
+    (hXgen : <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.TopologicallyGenerates">TopologicallyGenerates</a> (G := G) X) (hXinfinite : Set.Infinite X) :
+    <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.localWeight">localWeight</a> G = <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.rho">rho</a> ↥X</code></pre></section>
+    <section><div class="natural-text"><p>6.2(a). Closed generating subsets compute the local weight.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : CompactSpace G := IsProfiniteGroup.compactSpace hG
+  letI : T2Space G := IsProfiniteGroup.t2Space hG
+  letI : TotallyDisconnectedSpace G := IsProfiniteGroup.totallyDisconnectedSpace hG
+  <span class="kw">have</span> hGinf : Infinite G := <span class="kw">by</span>
+    classical
+    by_contra hfin
+    letI : Finite G := not_infinite_iff_finite.mp hfin
+    <span class="kw">exact</span> hXinfinite (Set.toFinite X)
+  letI : Infinite G := hGinf
+  <span class="kw">have</span> hle : <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.localWeight">localWeight</a> G ≤ <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.rho">rho</a> ↥X :=
+    <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-localWeight_le_rho_of_closedGeneratingSet">localWeight_le_rho_of_closedGeneratingSet</a>
+      (G := G) X hG hXclosed hXgen hXinfinite
+  <span class="kw">have</span> hrho_le : <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.rho">rho</a> ↥X ≤ <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.localWeight">localWeight</a> G := <span class="kw">by</span>
+    <span class="kw">have</span> hBasis : TopologicalSpace.IsTopologicalBasis { U : Set G | IsClopen U } :=
+      <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteSpace.html#decl-ProCGroups.InverseSystems.isTopologicalBasis_isClopen_of_compact_t2_totallyDisconnected">ProCGroups.InverseSystems.isTopologicalBasis_isClopen_of_compact_t2_totallyDisconnected</a>
+    <span class="kw">calc</span>
+      <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.rho">rho</a> ↥X ≤ <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.rho">rho</a> G :=
+        <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-rho_subtype_le_rho_of_closed">rho_subtype_le_rho_of_closed</a> (X := G) (A := X) hXclosed
+      _ = <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.weight">weight</a> G := (<a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.weight_eq_rho_of_clopenBasis">weight_eq_rho_of_clopenBasis</a> (X := G) hBasis).symm
+      _ = <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.localWeight">localWeight</a> G :=
+        (<a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-localWeight_eq_weight_of_infinite_profiniteGroup">localWeight_eq_weight_of_infinite_profiniteGroup</a> (G := G) hG).symm
+  <span class="kw">exact</span> le_antisymm hle hrho_le</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the clopen-neighborhood basis of a profinite space. Left translations and continuous maps preserve clopen sets by continuity, and local-<a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.weight">weight</a> or cardinal estimates are obtained by counting the relevant clopen neighborhoods, <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete quotients, and maps determined on a topological generating set. The inequalities then follow from the standard basis and cardinal-arithmetic comparisons.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.LocalWeight.cardinalEqLocalWeight_of_generatesAndConvergesToOne_infinite">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.LocalWeight.cardinalEqLocalWeight_of_generatesAndConvergesToOne_infinite">ProCGroups.LocalWeight.cardinalEqLocalWeight_of_generatesAndConvergesToOne_infinite</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/LocalWeight/LocalWeightTheorems.html#L63">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> cardinalEqLocalWeight_of_generatesAndConvergesToOne_infinite
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (X : Set G) (hG : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G)
+    (hX : <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.GeneratesAndConvergesToOne">GeneratesAndConvergesToOne</a> (G := G) X) (hXinfinite : Set.Infinite X) :
+    Cardinal.mk X = <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.localWeight">localWeight</a> G</code></pre></section>
+    <section><div class="natural-text"><p>6.2(b). Infinite generating sets converging to \(1\) have cardinality \(w_0(G)\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : T2Space G := IsProfiniteGroup.t2Space hG
+  <span class="kw">have</span> hclosure : closure X = X ∪ ({1} : Set G) := <span class="kw">by</span>
+    <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/Generation/Convergence.html#decl-ProCGroups.Generation.closure_generatorsConvergingToOne">closure_generatorsConvergingToOne</a> (G := G) hG hX.2).2 hXinfinite
+  <span class="kw">have</span> hClosureInf : Set.Infinite (closure X) := <span class="kw">by</span>
+    by_contra hfin
+    <span class="kw">exact</span> hXinfinite ((Set.not_infinite.mp hfin).subset subset_closure)
+  <span class="kw">have</span> hClosureGen : <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.TopologicallyGenerates">TopologicallyGenerates</a> (G := G) (closure X) := <span class="kw">by</span>
+    <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicallyGenerates_closure_iff">topologicallyGenerates_closure_iff</a> (G := G) (X := X)).1 hX.1
+  <span class="kw">have</span> hClosureClosed : IsClosed (closure X) := isClosed_closure
+  <span class="kw">calc</span>
+    Cardinal.mk X = <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.rho">rho</a> ↥(closure X) := <span class="kw">by</span>
+      symm
+      <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-rho_closure_eq_cardinal_of_generatesAndConvergesToOne_infinite">rho_closure_eq_cardinal_of_generatesAndConvergesToOne_infinite</a>
+        (G := G) X hG hX hXinfinite hclosure
+    _ = <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.localWeight">localWeight</a> G := <span class="kw">by</span>
+      simpa using
+        (<a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/LocalWeightTheorems.html#decl-ProCGroups.LocalWeight.localWeight_eq_rho_of_closedGeneratingSet">localWeight_eq_rho_of_closedGeneratingSet</a>
+          (G := G) (closure X) hG hClosureClosed hClosureGen hClosureInf).symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the clopen-neighborhood basis of a profinite space. Left translations and continuous maps preserve clopen sets by continuity, and local-<a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.weight">weight</a> or cardinal estimates are obtained by counting the relevant clopen neighborhoods, <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete quotients, and maps determined on a topological generating set. The inequalities then follow from the standard basis and cardinal-arithmetic comparisons.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.LocalWeight.topologicalRank_eq_localWeight_of_infinite">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.LocalWeight.topologicalRank_eq_localWeight_of_infinite">ProCGroups.LocalWeight.topologicalRank_eq_localWeight_of_infinite</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/LocalWeight/LocalWeightTheorems.html#L92">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> topologicalRank_eq_localWeight_of_infinite
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (hG : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G) (hdinf : Cardinal.aleph0 ≤ <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicalRank">topologicalRank</a> G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicalRank">topologicalRank</a> G = <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.localWeight">localWeight</a> G</code></pre></section>
+    <section><div class="natural-text"><p>For an infinite profinite group, the topological <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> rank equals the local weight.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  obtain ⟨X, hX, hXle⟩ :=
+    <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/MetrizabilityAndQuotients.html#decl-hasGeneratingSetConvergingToOneOfCardinalLE_of_d_le">hasGeneratingSetConvergingToOneOfCardinalLE_of_d_le</a>
+      (G := G) hG (κ := <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicalRank">topologicalRank</a> G) le_rfl
+  <span class="kw">let</span> C : Set Cardinal := {κ : Cardinal |
+    ∃ Y : Set G, <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.GeneratesAndConvergesToOne">GeneratesAndConvergesToOne</a> (G := G) Y ∧ Cardinal.mk Y = κ}
+  <span class="kw">have</span> hd_le : <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicalRank">topologicalRank</a> G ≤ Cardinal.mk X := <span class="kw">by</span>
+    <span class="kw">have</span> hXmem : Cardinal.mk X ∈ C := <span class="kw">by</span>
+      <span class="kw">exact</span> ⟨X, hX, <span class="kw">rfl</span>⟩
+    simpa [<a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicalRank">topologicalRank</a>, C] using (csInf_le&#x27; hXmem)
+  <span class="kw">have</span> hXcard : Cardinal.mk X = <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicalRank">topologicalRank</a> G := le_antisymm hXle hd_le
+  <span class="kw">have</span> hXinfinite : Set.Infinite X := <span class="kw">by</span>
+    refine <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/MetrizabilityAndQuotients.html#decl-setInfinite_of_cardinal_ge_aleph0">setInfinite_of_cardinal_ge_aleph0</a> (X := X) ?_
+    <span class="kw">calc</span>
+      Cardinal.aleph0 ≤ <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicalRank">topologicalRank</a> G := hdinf
+      _ = Cardinal.mk X := hXcard.symm
+  <span class="kw">calc</span>
+    <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicalRank">topologicalRank</a> G = Cardinal.mk X := hXcard.symm
+    _ = <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.localWeight">localWeight</a> G :=
+      <a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/LocalWeightTheorems.html#decl-ProCGroups.LocalWeight.cardinalEqLocalWeight_of_generatesAndConvergesToOne_infinite">cardinalEqLocalWeight_of_generatesAndConvergesToOne_infinite</a>
+        (G := G) X hG hX hXinfinite</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the clopen-neighborhood basis of a profinite space. Left translations and continuous maps preserve clopen sets by continuity, and local-<a class="decl-ref" href="../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.weight">weight</a> or cardinal estimates are obtained by counting the relevant clopen neighborhoods, <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete quotients, and maps determined on a topological generating set. The inequalities then follow from the standard basis and cardinal-arithmetic comparisons.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.LocalWeight.LocalWeightTheorems"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

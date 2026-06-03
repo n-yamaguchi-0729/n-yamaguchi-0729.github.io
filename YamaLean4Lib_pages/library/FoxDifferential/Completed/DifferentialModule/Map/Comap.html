@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FoxDifferential.Completed.DifferentialModule.Map.Comap | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../../download/index.html">Download</a></nav>
+  <div class="header-current">FoxDifferential.Completed.DifferentialModule.Map.Comap</div>
+  <form class="search-form" action="../../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../../library/FoxDifferential.html">FoxDifferential</a><span class="sep">/</span><a href="../../../../../library/FoxDifferential/Completed.html">Completed</a><span class="sep">/</span><a href="../../../../../library/FoxDifferential/Completed/DifferentialModule.html">DifferentialModule</a><span class="sep">/</span><a href="../../../../../library/FoxDifferential/Completed/DifferentialModule/Map.html">Map</a><span class="sep">/</span><span>Comap</span></div>
+      <h1 class="module-title">FoxDifferential.Completed.DifferentialModule.Map.Comap</h1>
+      <div class="module-meta">5 Theorem | 2 Definition</div>
+      <div class="module-overview"><p>This module develops the maps induced by continuous homomorphisms. It organizes the relevant quotient pullbacks and <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage maps, then proves the compatibility statements needed for the completed construction.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../../library/FoxDifferential/Completed/DifferentialModule/Identity.html">FoxDifferential.Completed.DifferentialModule.Identity</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../../library/FoxDifferential.html">FoxDifferential</a></li><li><a href="../../../../../library/FoxDifferential/Completed.html">FoxDifferential.Completed</a></li><li><a href="../../../../../library/FoxDifferential/Completed/DifferentialModule.html">FoxDifferential.Completed.DifferentialModule</a></li><li><a href="../../../../../library/FoxDifferential/Completed/DifferentialModule/Map.html">FoxDifferential.Completed.DifferentialModule.Map</a></li><li><a href="../../../../../library/FoxDifferential/Completed/DifferentialModule/Map/Stage.html">FoxDifferential.Completed.DifferentialModule.Map.Stage</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-FoxDifferential.completedGroupAlgebraComapIndex">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.completedGroupAlgebraComapIndex">FoxDifferential.completedGroupAlgebraComapIndex</a>
+    <a class="source-link" href="../../../../../library/src/FoxDifferential/Completed/DifferentialModule/Map/Comap.html#L30">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraComapIndex
+    (ψ : ContinuousMonoidHom G H) (U : _root_.CompletedGroupAlgebra.CompletedGroupAlgebraIndex H) :
+    _root_.CompletedGroupAlgebra.CompletedGroupAlgebraIndex G := <span class="kw">by</span>
+  <span class="kw">let</span> V : OpenNormalSubgroup H := (OrderDual.ofDual U).1
+  <span class="kw">let</span> W : OpenNormalSubgroup G := OpenNormalSubgroup.comap ψ.toMonoidHom ψ.continuous_toFun V
+  refine OrderDual.toDual ⟨W, ?_⟩
+  <span class="kw">let</span> q : G →* H ⧸ (V : Subgroup H) :=
+    (QuotientGroup.mk&#x27; (V : Subgroup H)).comp ψ.toMonoidHom
+  <span class="kw">let</span> f : G ⧸ (W : Subgroup G) → H ⧸ (V : Subgroup H) :=
+    QuotientGroup.map _ _ ψ.toMonoidHom (<span class="kw">by</span>
+      <span class="kw">intro</span> g hg
+      simpa [W] using hg)
+  <span class="kw">have</span> hf : Function.Injective f := <span class="kw">by</span>
+    <span class="kw">intro</span> x y hxy
+    rcases QuotientGroup.mk&#x27;_surjective (W : Subgroup G) x <span class="kw">with</span> ⟨a, <span class="kw">rfl</span>⟩
+    rcases QuotientGroup.mk&#x27;_surjective (W : Subgroup G) y <span class="kw">with</span> ⟨b, <span class="kw">rfl</span>⟩
+    <span class="kw">apply</span> QuotientGroup.eq.2
+    change ψ (a⁻¹ * b) ∈ (V : Subgroup H)
+    <span class="kw">have</span> hv : (ψ a)⁻¹ * ψ b ∈ (V : Subgroup H) := QuotientGroup.eq.1 hxy
+    simpa using hv
+  letI : Finite (H ⧸ (V : Subgroup H)) := (OrderDual.ofDual U).2
+  <span class="kw">exact</span> Finite.of_injective f hf</code></pre></section>
+    <section><div class="natural-text"><p>The index map that sends a target <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient to its pullback <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient on the source.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.completedGroupAlgebraComapIndex_subgroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.completedGroupAlgebraComapIndex_subgroup">FoxDifferential.completedGroupAlgebraComapIndex_subgroup</a>
+    <a class="source-link" href="../../../../../library/src/FoxDifferential/Completed/DifferentialModule/Map/Comap.html#L56">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraComapIndex_subgroup
+    (ψ : ContinuousMonoidHom G H) (U : _root_.CompletedGroupAlgebra.CompletedGroupAlgebraIndex H) :
+    (((OrderDual.ofDual (completedGroupAlgebraComapIndex (G := G) (H := H) ψ U)).1 :
+        OpenNormalSubgroup G) : Subgroup G) =
+      Subgroup.comap ψ.toMonoidHom
+        (((OrderDual.ofDual U).1 : OpenNormalSubgroup H) : Subgroup H)</code></pre></section>
+    <section><div class="natural-text"><p>The subgroup underlying the comap index is the subgroup-theoretic comap.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the completed group-algebra map induced stagewise by the relevant quotient, comap, target, or coefficient map. At each <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, supports are sent by the <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient homomorphism and coefficients are transported by the given coefficient map when present. Compatibility with refinements gives a map of inverse limits; formulas, group-like elements, <a class="decl-ref" href="../../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>, linearity, and surjectivity are checked on singleton basis elements and extended by <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.completedGroupAlgebraComapQuotientMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.completedGroupAlgebraComapQuotientMap">FoxDifferential.completedGroupAlgebraComapQuotientMap</a>
+    <a class="source-link" href="../../../../../library/src/FoxDifferential/Completed/DifferentialModule/Map/Comap.html#L65">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraComapQuotientMap
+    (ψ : ContinuousMonoidHom G H) (U : _root_.CompletedGroupAlgebra.CompletedGroupAlgebraIndex H) :
+    _root_.CompletedGroupAlgebra.CompletedGroupAlgebraQuotient G
+        (completedGroupAlgebraComapIndex (G := G) (H := H) ψ U) →*
+      _root_.CompletedGroupAlgebra.CompletedGroupAlgebraQuotient H U :=
+  QuotientGroup.map _ _ ψ.toMonoidHom (<span class="kw">by</span>
+    <span class="kw">intro</span> g hg
+    simpa [completedGroupAlgebraComapIndex] using hg)</code></pre></section>
+    <section><div class="natural-text"><p>The quotient map from the pulled-back source quotient to the target quotient induced by the original homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.completedGroupAlgebraComapQuotientMap_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.completedGroupAlgebraComapQuotientMap_mk">FoxDifferential.completedGroupAlgebraComapQuotientMap_mk</a>
+    <a class="source-link" href="../../../../../library/src/FoxDifferential/Completed/DifferentialModule/Map/Comap.html#L76">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraComapQuotientMap_mk
+    (ψ : ContinuousMonoidHom G H) (U : _root_.CompletedGroupAlgebra.CompletedGroupAlgebraIndex H) (g : G) :
+    completedGroupAlgebraComapQuotientMap (G := G) (H := H) ψ U
+        (QuotientGroup.mk&#x27; _ g) =
+      QuotientGroup.mk&#x27; (((OrderDual.ofDual U).1 : OpenNormalSubgroup H) : Subgroup H) (ψ g)</code></pre></section>
+    <section><div class="natural-text"><p>The pullback quotient map sends the class of a source element to the class of its image in the target quotient in the Fox differential construction.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the completed group-algebra map induced stagewise by the relevant quotient, comap, target, or coefficient map. At each <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, supports are sent by the <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient homomorphism and coefficients are transported by the given coefficient map when present. Compatibility with refinements gives a map of inverse limits; formulas, group-like elements, <a class="decl-ref" href="../../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>, linearity, and surjectivity are checked on singleton basis elements and extended by <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.completedGroupAlgebraComapQuotientMap_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.completedGroupAlgebraComapQuotientMap_surjective">FoxDifferential.completedGroupAlgebraComapQuotientMap_surjective</a>
+    <a class="source-link" href="../../../../../library/src/FoxDifferential/Completed/DifferentialModule/Map/Comap.html#L87">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraComapQuotientMap_surjective
+    (ψ : ContinuousMonoidHom G H) (hψ : Function.Surjective ψ)
+    (U : _root_.CompletedGroupAlgebra.CompletedGroupAlgebraIndex H) :
+    Function.Surjective
+      (completedGroupAlgebraComapQuotientMap (G := G) (H := H) ψ U)</code></pre></section>
+    <section><div class="natural-text"><p>If \(\psi : G \to H\) is surjective, the induced map from the pulled-back <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient \(G / \psi^{-1}(U)\) to \(H / U\) is surjective. This is the <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient input used later to lift coefficients in the completed free-derivative construction.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> q
+  rcases QuotientGroup.mk&#x27;_surjective
+      ((((OrderDual.ofDual U).1 : OpenNormalSubgroup H) : Subgroup H)) q <span class="kw">with</span>
+    ⟨h, <span class="kw">rfl</span>⟩
+  rcases hψ h <span class="kw">with</span> ⟨g, <span class="kw">rfl</span>⟩
+  refine ⟨QuotientGroup.mk&#x27;
+      ((((OrderDual.ofDual
+        (completedGroupAlgebraComapIndex (G := G) (H := H) ψ U)).1 :
+          OpenNormalSubgroup G) : Subgroup G)) g, ?_⟩
+  <span class="kw">rw</span> [completedGroupAlgebraComapQuotientMap_mk]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the completed group-algebra map induced stagewise by the relevant quotient, comap, target, or coefficient map. At each <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, supports are sent by the <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient homomorphism and coefficients are transported by the given coefficient map when present. Compatibility with refinements gives a map of inverse limits; formulas, group-like elements, <a class="decl-ref" href="../../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>, linearity, and surjectivity are checked on singleton basis elements and extended by <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.completedGroupAlgebraComapIndex_mono">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.completedGroupAlgebraComapIndex_mono">FoxDifferential.completedGroupAlgebraComapIndex_mono</a>
+    <a class="source-link" href="../../../../../library/src/FoxDifferential/Completed/DifferentialModule/Map/Comap.html#L105">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraComapIndex_mono
+    (ψ : ContinuousMonoidHom G H) {U V : _root_.CompletedGroupAlgebra.CompletedGroupAlgebraIndex H} (hUV : U ≤ V) :
+    completedGroupAlgebraComapIndex (G := G) (H := H) ψ U ≤
+      completedGroupAlgebraComapIndex (G := G) (H := H) ψ V</code></pre></section>
+    <section><div class="natural-text"><p>Comap of all-<a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> completed-group-algebra indices is monotone.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change
+    Subgroup.comap ψ.toMonoidHom
+        (((OrderDual.ofDual V).1 : OpenNormalSubgroup H) : Subgroup H) ≤
+      Subgroup.comap ψ.toMonoidHom
+        (((OrderDual.ofDual U).1 : OpenNormalSubgroup H) : Subgroup H)
+  <span class="kw">exact</span> Subgroup.comap_mono hUV</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the completed group-algebra map induced stagewise by the relevant quotient, comap, target, or coefficient map. At each <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, supports are sent by the <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient homomorphism and coefficients are transported by the given coefficient map when present. Compatibility with refinements gives a map of inverse limits; formulas, group-like elements, <a class="decl-ref" href="../../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>, linearity, and surjectivity are checked on singleton basis elements and extended by <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.completedGroupAlgebraComapQuotientMap_compatible">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.completedGroupAlgebraComapQuotientMap_compatible">FoxDifferential.completedGroupAlgebraComapQuotientMap_compatible</a>
+    <a class="source-link" href="../../../../../library/src/FoxDifferential/Completed/DifferentialModule/Map/Comap.html#L118">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraComapQuotientMap_compatible
+    (ψ : ContinuousMonoidHom G H) {U V : _root_.CompletedGroupAlgebra.CompletedGroupAlgebraIndex H} (hUV : U ≤ V) :
+    (OpenNormalSubgroupInClass.map
+        (C := <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := H)
+        (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV).comp
+        (completedGroupAlgebraComapQuotientMap (G := G) (H := H) ψ V) =
+      (completedGroupAlgebraComapQuotientMap (G := G) (H := H) ψ U).comp
+        (OpenNormalSubgroupInClass.map
+          (C := <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G)
+          (U := OrderDual.ofDual
+            (completedGroupAlgebraComapIndex (G := G) (H := H) ψ U))
+          (V := OrderDual.ofDual
+            (completedGroupAlgebraComapIndex (G := G) (H := H) ψ V))
+          (completedGroupAlgebraComapIndex_mono (G := G) (H := H) ψ hUV))</code></pre></section>
+    <section><div class="natural-text"><p>The comap quotient maps are <a class="decl-ref" href="../../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with refinement of <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext q
+  rcases QuotientGroup.mk&#x27;_surjective
+      ((((OrderDual.ofDual
+        (completedGroupAlgebraComapIndex (G := G) (H := H) ψ V)).1 :
+          OpenNormalSubgroup G) : Subgroup G)) q <span class="kw">with</span> ⟨g, <span class="kw">rfl</span>⟩
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the completed group-algebra comap system. An open normal subgroup of the target pulls back to an open normal subgroup of the source, the quotient map sends a source class to the corresponding target class, and compatibility follows by comparing the induced maps under refinement.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FoxDifferential.Completed.DifferentialModule.Map.Comap"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../../assets/site.js" data-root="../../../../../"></script>
+</body>
+</html>

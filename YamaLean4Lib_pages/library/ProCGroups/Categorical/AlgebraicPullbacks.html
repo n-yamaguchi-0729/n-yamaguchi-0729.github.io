@@ -1,0 +1,2128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Categorical.AlgebraicPullbacks | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.Categorical.AlgebraicPullbacks</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Categorical.html">Categorical</a><span class="sep">/</span><span>AlgebraicPullbacks</span></div>
+      <h1 class="module-title">ProCGroups.Categorical.AlgebraicPullbacks</h1>
+      <div class="module-meta">49 Theorem | 16 Definition | 1 Abbreviation</div>
+      <div class="module-overview"><p>This module studies algebraic pullbacks for pro cgroups. Concrete pullback subgroup of \(\beta_1\) and \(\beta_2\). Concrete pullback attached to \(\beta_1\) and \(\beta_2\).</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li>Mathlib.Algebra.Category.Grp.Limits</li><li>Mathlib.GroupTheory.QuotientGroup.Basic</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../library/ProCGroups/Categorical.html">ProCGroups.Categorical</a></li><li><a href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html">ProCGroups.Categorical.ProfinitePullbacks</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.Categorical.FiberProduct.subgroup">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.subgroup">ProCGroups.Categorical.FiberProduct.subgroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L32">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> FiberProduct.subgroup (β₁ : H₁ →* H) (β₂ : H₂ →* H) : Subgroup (H₁ × H₂) <span class="kw">where</span>
+  carrier := { x | β₁ x.1 = β₂ x.2 }
+  one_mem&#x27; := <span class="kw">by</span> <span class="kw">simp</span> only [Set.mem_setOf_eq, Prod.fst_one, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, Prod.snd_one]
+  mul_mem&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y hx hy
+    change β₁ x.1 = β₂ x.2 at hx
+    change β₁ y.1 = β₂ y.2 at hy
+    simpa [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>] using congrArg₂ (· * ·) hx hy
+  inv_mem&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x hx
+    simpa [map_inv, hx]</code></pre></section>
+    <section><div class="natural-text"><p>Concrete pullback subgroup of \(\beta_1\) and \(\beta_2\).</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-ProCGroups.Categorical.FiberProduct.carrier">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.carrier">ProCGroups.Categorical.FiberProduct.carrier</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L46">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> FiberProduct.carrier (β₁ : H₁ →* H) (β₂ : H₂ →* H) :=
+  ↥(FiberProduct.subgroup β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>Concrete pullback attached to \(\beta_1\) and \(\beta_2\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.mem_pullbackSubgroup_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.mem_pullbackSubgroup_iff">ProCGroups.Categorical.mem_pullbackSubgroup_iff</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L50">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> mem_pullbackSubgroup_iff {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    {x : H₁ × H₂} :
+    x ∈ FiberProduct.subgroup β₁ β₂ ↔ β₁ x.1 = β₂ x.2</code></pre></section>
+    <section><div class="natural-text"><p>Membership in the pullback subgroup is equivalent to the displayed coordinate condition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Iff.rfl</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.FiberProduct.fst">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.fst">ProCGroups.Categorical.FiberProduct.fst</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L56">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> FiberProduct.fst (β₁ : H₁ →* H) (β₂ : H₂ →* H) : FiberProduct.carrier β₁ β₂ →* H₁ <span class="kw">where</span>
+  toFun := <span class="kw">fun</span> x =&gt; x.1.1
+  map_one&#x27; := <span class="kw">rfl</span>
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The first projection from the concrete pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.FiberProduct.snd">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.snd">ProCGroups.Categorical.FiberProduct.snd</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L64">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> FiberProduct.snd (β₁ : H₁ →* H) (β₂ : H₂ →* H) : FiberProduct.carrier β₁ β₂ →* H₂ <span class="kw">where</span>
+  toFun := <span class="kw">fun</span> x =&gt; x.1.2
+  map_one&#x27; := <span class="kw">rfl</span>
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The second projection from the concrete pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.FiberProduct.lift">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.lift">ProCGroups.Categorical.FiberProduct.lift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L72">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> FiberProduct.lift (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) : K →* FiberProduct.carrier β₁ β₂ <span class="kw">where</span>
+  toFun := <span class="kw">fun</span> k =&gt; ⟨(φ₁ k, φ₂ k), h k⟩
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, OneMemClass.coe_one, Prod.mk_eq_one, and_self]
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, Subgroup.coe_mul, Prod.mk_mul_mk]</code></pre></section>
+    <section><div class="natural-text"><p>The canonical homomorphism into the concrete pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLift_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLift_apply">ProCGroups.Categorical.pullbackLift_apply</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L85">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackLift_apply (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) (k : K) :
+    FiberProduct.lift β₁ β₂ φ₁ φ₂ h k = ⟨(φ₁ k, φ₂ k), h k⟩</code></pre></section>
+    <section><div class="natural-text"><p>The canonical lift into a concrete pullback evaluates to the pair of the two coordinate maps.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackFst_pullbackLift_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackFst_pullbackLift_apply">ProCGroups.Categorical.pullbackFst_pullbackLift_apply</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L92">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackFst_pullbackLift_apply (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) (k : K) :
+    FiberProduct.fst β₁ β₂ (FiberProduct.lift β₁ β₂ φ₁ φ₂ h k) = φ₁ k</code></pre></section>
+    <section><div class="natural-text"><p>The pullback map is evaluated by applying the two coordinate maps.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackSnd_pullbackLift_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSnd_pullbackLift_apply">ProCGroups.Categorical.pullbackSnd_pullbackLift_apply</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L99">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackSnd_pullbackLift_apply (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) (k : K) :
+    FiberProduct.snd β₁ β₂ (FiberProduct.lift β₁ β₂ φ₁ φ₂ h k) = φ₂ k</code></pre></section>
+    <section><div class="natural-text"><p>The pullback map is evaluated by applying the two coordinate maps.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.FiberProduct.cone">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.cone">ProCGroups.Categorical.FiberProduct.cone</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L106">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> FiberProduct.cone (β₁ : H₁ →* H) (β₂ : H₂ →* H) :
+    PullbackCone (GrpCat.ofHom β₁) (GrpCat.ofHom β₂) :=
+  PullbackCone.mk
+    (GrpCat.ofHom (FiberProduct.fst β₁ β₂))
+    (GrpCat.ofHom (FiberProduct.snd β₁ β₂))
+    (<span class="kw">by</span>
+      <span class="kw">apply</span> GrpCat.hom_ext
+      ext x
+      <span class="kw">exact</span> x.2)</code></pre></section>
+    <section><div class="natural-text"><p>The concrete group pullback as a categorical pullback cone in GrpCat.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.FiberProduct.isLimitCone">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.isLimitCone">ProCGroups.Categorical.FiberProduct.isLimitCone</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L117">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> FiberProduct.isLimitCone (β₁ : H₁ →* H) (β₂ : H₂ →* H) :
+    IsLimit (FiberProduct.cone β₁ β₂) := <span class="kw">by</span>
+  refine PullbackCone.IsLimit.mk (<span class="kw">by</span>
+    <span class="kw">apply</span> GrpCat.hom_ext
+    ext x
+    <span class="kw">exact</span> x.2) ?lift ?fac_left ?fac_right ?<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.uniq">uniq</a>
+  · <span class="kw">intro</span> s
+    <span class="kw">exact</span> GrpCat.ofHom &lt;|
+      FiberProduct.lift β₁ β₂ s.fst.hom s.snd.hom (<span class="kw">fun</span> x =&gt; <span class="kw">by</span>
+        <span class="kw">have</span> hcondition :
+            (s.fst ≫ GrpCat.ofHom β₁).hom =
+              (s.snd ≫ GrpCat.ofHom β₂).hom :=
+          congrArg (<span class="kw">fun</span> f : s.pt ⟶ GrpCat.of H =&gt; f.hom) s.condition
+        <span class="kw">exact</span> DFunLike.congr_fun hcondition x)
+  · <span class="kw">intro</span> s
+    <span class="kw">apply</span> GrpCat.hom_ext
+    <span class="kw">rfl</span>
+  · <span class="kw">intro</span> s
+    <span class="kw">apply</span> GrpCat.hom_ext
+    <span class="kw">rfl</span>
+  · <span class="kw">intro</span> s m hfst hsnd
+    <span class="kw">apply</span> GrpCat.hom_ext
+    ext x
+    · <span class="kw">have</span> hfst&#x27; :
+          (m ≫ GrpCat.ofHom (FiberProduct.fst β₁ β₂)).hom = s.fst.hom :=
+        congrArg (<span class="kw">fun</span> f : s.pt ⟶ GrpCat.of H₁ =&gt; f.hom) hfst
+      <span class="kw">exact</span> DFunLike.congr_fun hfst&#x27; x
+    · <span class="kw">have</span> hsnd&#x27; :
+          (m ≫ GrpCat.ofHom (FiberProduct.snd β₁ β₂)).hom = s.snd.hom :=
+        congrArg (<span class="kw">fun</span> f : s.pt ⟶ GrpCat.of H₂ =&gt; f.hom) hsnd
+      <span class="kw">exact</span> DFunLike.congr_fun hsnd&#x27; x</code></pre></section>
+    <section><div class="natural-text"><p>The concrete group pullback cone is a limit cone in GrpCat.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.ker_pullbackLift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.ker_pullbackLift">ProCGroups.Categorical.ker_pullbackLift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L151">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> ker_pullbackLift (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    (FiberProduct.lift β₁ β₂ φ₁ φ₂ h).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = φ₁.ker ⊓ φ₂.ker</code></pre></section>
+    <section><div class="natural-text"><p>The kernel of the canonical map into a concrete pullback is the intersection of the two coordinate kernels.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext k
+  change FiberProduct.lift β₁ β₂ φ₁ φ₂ h k = 1 ↔ φ₁ k = 1 ∧ φ₂ k = 1
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hk
+    <span class="kw">exact</span> ⟨congrArg (<span class="kw">fun</span> z =&gt; FiberProduct.fst β₁ β₂ z) hk,
+      congrArg (<span class="kw">fun</span> z =&gt; FiberProduct.snd β₁ β₂ z) hk⟩
+  · rintro ⟨h₁, h₂⟩
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">exact</span> Prod.ext h₁ h₂</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLift_injective_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLift_injective_iff">ProCGroups.Categorical.pullbackLift_injective_iff</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L167">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLift_injective_iff (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    Function.Injective (FiberProduct.lift β₁ β₂ φ₁ φ₂ h) ↔ φ₁.ker ⊓ φ₂.ker = ⊥</code></pre></section>
+    <section><div class="natural-text"><p>The canonical map into a concrete pullback is injective iff the two coordinate kernels intersect trivially.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [← MonoidHom.ker_eq_bot_iff, <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.ker_pullbackLift">ker_pullbackLift</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.ker_sup_le_ker_comp_of_comp_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.ker_sup_le_ker_comp_of_comp_eq">ProCGroups.Categorical.ker_sup_le_ker_comp_of_comp_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L174">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> ker_sup_le_ker_comp_of_comp_eq
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂) :
+    φ₁.ker ⊔ φ₂.ker ≤ (β₁.comp φ₁).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a></code></pre></section>
+    <section><div class="natural-text"><p>The supremum of the two kernels is contained in the kernel of the composite when the composites agree.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [sup_le_iff]
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> k hk
+    change β₁ (φ₁ k) = 1
+    <span class="kw">have</span> hk&#x27; : φ₁ k = 1 := <span class="kw">by</span> simpa using hk
+    <span class="kw">simp</span> only [hk&#x27;, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>]
+  · <span class="kw">intro</span> k hk
+    <span class="kw">calc</span>
+      β₁ (φ₁ k) = β₂ (φ₂ k) := DFunLike.congr_fun hcomp k
+      _ = 1 := <span class="kw">by</span>
+        <span class="kw">have</span> hk&#x27; : φ₂ k = 1 := <span class="kw">by</span> simpa using hk
+        <span class="kw">simp</span> only [hk&#x27;, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.HasPullbackKernelCriterion">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.HasPullbackKernelCriterion">ProCGroups.Categorical.HasPullbackKernelCriterion</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L193">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> HasPullbackKernelCriterion
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂) : <span class="kw">Prop</span> :=
+  β₁.comp φ₁ = β₂.comp φ₂ ∧ (β₁.comp φ₁).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = φ₁.ker ⊔ φ₂.ker</code></pre></section>
+    <section><div class="natural-text"><p>The standard kernel condition for surjectivity onto a pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.HasPullbackKernelCriterion.comp_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.HasPullbackKernelCriterion.comp_eq">ProCGroups.Categorical.HasPullbackKernelCriterion.comp_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L199">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> HasPullbackKernelCriterion.comp_eq
+    {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    {φ₁ : K →* H₁} {φ₂ : K →* H₂}
+    (h : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.HasPullbackKernelCriterion">HasPullbackKernelCriterion</a> β₁ β₂ φ₁ φ₂) :
+    β₁.comp φ₁ = β₂.comp φ₂</code></pre></section>
+    <section><div class="natural-text"><p>In the pullback kernel criterion, the two composites agree.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>h.1</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.HasPullbackKernelCriterion.ker_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.HasPullbackKernelCriterion.ker_eq">ProCGroups.Categorical.HasPullbackKernelCriterion.ker_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L207">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> HasPullbackKernelCriterion.ker_eq
+    {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    {φ₁ : K →* H₁} {φ₂ : K →* H₂}
+    (h : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.HasPullbackKernelCriterion">HasPullbackKernelCriterion</a> β₁ β₂ φ₁ φ₂) :
+    (β₁.comp φ₁).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = φ₁.ker ⊔ φ₂.ker</code></pre></section>
+    <section><div class="natural-text"><p>In the pullback kernel criterion, the required kernel equality holds.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>h.2</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_comp_le_sup_ker">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_comp_le_sup_ker">ProCGroups.Categorical.pullbackLift_surjective_iff_ker_comp_le_sup_ker</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L216">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLift_surjective_iff_ker_comp_le_sup_ker
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (hφ₁ : Function.Surjective φ₁) (hφ₂ : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂) :
+    Function.Surjective (FiberProduct.lift β₁ β₂ φ₁ φ₂
+        (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hcomp k)) ↔
+      (β₁.comp φ₁).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≤ φ₁.ker ⊔ φ₂.ker</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the algebraic pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hsurj k hk
+    <span class="kw">let</span> z : FiberProduct.carrier β₁ β₂ :=
+      ⟨(φ₁ k, 1), <span class="kw">by</span>
+        change β₁ (φ₁ k) = β₂ 1
+        simpa using hk⟩
+    rcases hsurj z <span class="kw">with</span> ⟨a, ha⟩
+    <span class="kw">have</span> hφ₁a : φ₁ a = φ₁ k := <span class="kw">by</span>
+      <span class="kw">exact</span> congrArg (<span class="kw">fun</span> y =&gt; FiberProduct.fst β₁ β₂ y) ha
+    <span class="kw">have</span> hφ₂a : φ₂ a = 1 := <span class="kw">by</span>
+      <span class="kw">exact</span> congrArg (<span class="kw">fun</span> y =&gt; FiberProduct.snd β₁ β₂ y) ha
+    <span class="kw">have</span> ha_ker₂ : a ∈ φ₂.ker := <span class="kw">by</span>
+      simpa using hφ₂a
+    <span class="kw">have</span> ha_inv_mul_ker₁ : a⁻¹ * k ∈ φ₁.ker := <span class="kw">by</span>
+      change φ₁ (a⁻¹ * k) = 1
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, map_inv, hφ₁a, inv_mul_cancel]
+    <span class="kw">have</span> hprod : a * (a⁻¹ * k) ∈ φ₁.ker ⊔ φ₂.ker :=
+      (φ₁.ker ⊔ φ₂.ker).mul_mem
+        ((le_sup_right : φ₂.ker ≤ φ₁.ker ⊔ φ₂.ker) ha_ker₂)
+        ((le_sup_left : φ₁.ker ≤ φ₁.ker ⊔ φ₂.ker) ha_inv_mul_ker₁)
+    simpa [mul_assoc] using hprod
+  · <span class="kw">intro</span> hker_le z
+    rcases hφ₁ z.1.1 <span class="kw">with</span> ⟨a₁, ha₁⟩
+    rcases hφ₂ z.1.2 <span class="kw">with</span> ⟨a₂, ha₂⟩
+    <span class="kw">have</span> hEq : β₁ (φ₁ a₁) = β₁ (φ₁ a₂) := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        β₁ (φ₁ a₁) = β₁ z.1.1 := <span class="kw">by</span> <span class="kw">simp</span> only [ha₁]
+        _ = β₂ z.1.2 := z.2
+        _ = β₂ (φ₂ a₂) := <span class="kw">by</span> <span class="kw">simp</span> only [ha₂]
+        _ = β₁ (φ₁ a₂) := <span class="kw">by</span>
+          <span class="kw">exact</span> (DFunLike.congr_fun hcomp a₂).symm
+    <span class="kw">have</span> hgker : a₁ * a₂⁻¹ ∈ (β₁.comp φ₁).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> := <span class="kw">by</span>
+      change β₁ (φ₁ (a₁ * a₂⁻¹)) = 1
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, map_inv, hEq, mul_inv_cancel]
+    <span class="kw">have</span> hgjoin : a₁ * a₂⁻¹ ∈ (φ₁.ker : Subgroup K) ⊔ (φ₂.ker : Subgroup K) :=
+      hker_le hgker
+    <span class="kw">have</span> hgjoin&#x27; : a₁ * a₂⁻¹ ∈ ((φ₁.ker : Set K) * (φ₂.ker : Set K)) := <span class="kw">by</span>
+      <span class="kw">rw</span> [← Subgroup.mul_normal (φ₁.ker) (φ₂.ker)]
+      simpa [SetLike.mem_coe] using hgjoin
+    rcases (<span class="kw">show</span> ∃ y ∈ (φ₁.ker : Set K), ∃ z ∈ (φ₂.ker : Set K),
+        y * z = a₁ * a₂⁻¹ from <span class="kw">by</span>
+          simpa [Set.mem_mul] using hgjoin&#x27;) <span class="kw">with</span> ⟨k₁, hk₁, k₂, hk₂, hkprod⟩
+    <span class="kw">have</span> hk₁&#x27; : φ₁ k₁ = 1 := <span class="kw">by</span> simpa using hk₁
+    <span class="kw">have</span> hk₂&#x27; : φ₂ k₂ = 1 := <span class="kw">by</span> simpa using hk₂
+    <span class="kw">have</span> haeq : a₁ = k₁ * k₂ * a₂ := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        a₁ = (a₁ * a₂⁻¹) * a₂ := <span class="kw">by</span> <span class="kw">simp</span> only [mul_assoc, inv_mul_cancel, mul_one]
+        _ = (k₁ * k₂) * a₂ := <span class="kw">by</span> <span class="kw">rw</span> [hkprod]
+        _ = k₁ * k₂ * a₂ := <span class="kw">by</span> <span class="kw">simp</span> only [mul_assoc]
+    refine ⟨k₂ * a₂, ?_⟩
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">apply</span> Prod.ext
+    · <span class="kw">calc</span>
+        φ₁ (k₂ * a₂) = φ₁ (k₁ * k₂ * a₂) := <span class="kw">by</span>
+          <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, mul_assoc, hk₁&#x27;, one_mul]
+        _ = φ₁ a₁ := <span class="kw">by</span> <span class="kw">rw</span> [haeq]
+        _ = z.1.1 := ha₁
+    · <span class="kw">calc</span>
+        φ₂ (k₂ * a₂) = φ₂ k₂ * φ₂ a₂ := <span class="kw">by</span> <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>]
+        _ = 1 * φ₂ a₂ := <span class="kw">by</span> <span class="kw">simp</span> only [hk₂&#x27;, one_mul]
+        _ = z.1.2 := <span class="kw">by</span> <span class="kw">simp</span> only [ha₂, one_mul]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_eq">ProCGroups.Categorical.pullbackLift_surjective_iff_ker_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L288">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLift_surjective_iff_ker_eq
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (hφ₁ : Function.Surjective φ₁) (hφ₂ : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂) :
+    Function.Surjective (FiberProduct.lift β₁ β₂ φ₁ φ₂
+        (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hcomp k)) ↔
+      (β₁.comp φ₁).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = φ₁.ker ⊔ φ₂.ker</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the algebraic pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hsurj
+    <span class="kw">exact</span> le_antisymm
+      ((<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_comp_le_sup_ker">pullbackLift_surjective_iff_ker_comp_le_sup_ker</a>
+        β₁ β₂ φ₁ φ₂ hφ₁ hφ₂ hcomp).1 hsurj)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.ker_sup_le_ker_comp_of_comp_eq">ker_sup_le_ker_comp_of_comp_eq</a> β₁ β₂ φ₁ φ₂ hcomp)
+  · <span class="kw">intro</span> hker
+    <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_comp_le_sup_ker">pullbackLift_surjective_iff_ker_comp_le_sup_ker</a>
+      β₁ β₂ φ₁ φ₂ hφ₁ hφ₂ hcomp).2 (<span class="kw">by</span>
+        <span class="kw">intro</span> k hk
+        <span class="kw">rw</span> [← hker]
+        <span class="kw">exact</span> hk)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLift_surjective_of_hasPullbackKernelCriterion">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLift_surjective_of_hasPullbackKernelCriterion">ProCGroups.Categorical.pullbackLift_surjective_of_hasPullbackKernelCriterion</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L310">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLift_surjective_of_hasPullbackKernelCriterion
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (hφ₁ : Function.Surjective φ₁) (hφ₂ : Function.Surjective φ₂)
+    (hcrit : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.HasPullbackKernelCriterion">HasPullbackKernelCriterion</a> β₁ β₂ φ₁ φ₂) :
+    Function.Surjective (FiberProduct.lift β₁ β₂ φ₁ φ₂
+        (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hcrit.comp_eq k))</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the algebraic pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_eq">pullbackLift_surjective_iff_ker_eq</a>
+    β₁ β₂ φ₁ φ₂ hφ₁ hφ₂ hcrit.comp_eq).2 hcrit.ker_eq</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackFst_pullbackLift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackFst_pullbackLift">ProCGroups.Categorical.pullbackFst_pullbackLift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L321">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackFst_pullbackLift (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    (FiberProduct.fst β₁ β₂).comp (FiberProduct.lift β₁ β₂ φ₁ φ₂ h) = φ₁</code></pre></section>
+    <section><div class="natural-text"><p>Composing the first projection with the canonical pullback lift gives \(\varphi_1\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext k
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackSnd_pullbackLift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSnd_pullbackLift">ProCGroups.Categorical.pullbackSnd_pullbackLift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L329">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackSnd_pullbackLift (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    (FiberProduct.snd β₁ β₂).comp (FiberProduct.lift β₁ β₂ φ₁ φ₂ h) = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>Composing the second projection with the canonical pullback lift gives \(\varphi_2\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext k
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLift_injective_of_left_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLift_injective_of_left_injective">ProCGroups.Categorical.pullbackLift_injective_of_left_injective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L337">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLift_injective_of_left_injective (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k))
+    (hφ₁ : Function.Injective φ₁) :
+    Function.Injective (FiberProduct.lift β₁ β₂ φ₁ φ₂ h)</code></pre></section>
+    <section><div class="natural-text"><p>If \(\varphi_1\) is injective, then the canonical map into the concrete pullback is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x y hxy
+  <span class="kw">apply</span> hφ₁
+  simpa using congrArg (<span class="kw">fun</span> z =&gt; FiberProduct.fst β₁ β₂ z) hxy</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLift_injective_of_right_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLift_injective_of_right_injective">ProCGroups.Categorical.pullbackLift_injective_of_right_injective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L347">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLift_injective_of_right_injective (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k))
+    (hφ₂ : Function.Injective φ₂) :
+    Function.Injective (FiberProduct.lift β₁ β₂ φ₁ φ₂ h)</code></pre></section>
+    <section><div class="natural-text"><p>If \(\varphi_2\) is injective, then the canonical map into the concrete pullback is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x y hxy
+  <span class="kw">apply</span> hφ₂
+  simpa using congrArg (<span class="kw">fun</span> z =&gt; FiberProduct.snd β₁ β₂ z) hxy</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.IsPullbackSquare">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare">ProCGroups.Categorical.IsPullbackSquare</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L358">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> IsPullbackSquare (α₁ : G →* H₁) (α₂ : G →* H₂)
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H) : <span class="kw">Prop</span> :=
+  β₁.comp α₁ = β₂.comp α₂ ∧
+    ∀ ⦃K : <span class="kw">Type</span> v⦄ [Group K] (φ₁ : K →* H₁) (φ₂ : K →* H₂),
+      β₁.comp φ₁ = β₂.comp φ₂ →
+      ∃! φ : K →* G, α₁.comp φ = φ₁ ∧ α₂.comp φ = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>The carrier of the fiber product forms a pullback square in the category of groups.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.groupPullbackSquareCone">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.groupPullbackSquareCone">ProCGroups.Categorical.groupPullbackSquareCone</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L366">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> groupPullbackSquareCone (α₁ : G →* H₁) (α₂ : G →* H₂)
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hcomm : β₁.comp α₁ = β₂.comp α₂) :
+    PullbackCone (GrpCat.ofHom β₁) (GrpCat.ofHom β₂) :=
+  PullbackCone.mk (GrpCat.ofHom α₁) (GrpCat.ofHom α₂) (<span class="kw">by</span>
+    <span class="kw">apply</span> GrpCat.hom_ext
+    <span class="kw">exact</span> hcomm)</code></pre></section>
+    <section><div class="natural-text"><p>A commutative square of groups as a categorical pullback cone in GrpCat.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.IsPullbackSquare.desc">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.desc">ProCGroups.Categorical.IsPullbackSquare.desc</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L375">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> IsPullbackSquare.desc
+    {α₁ : G →* H₁} {α₂ : G →* H₂}
+    {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    {K : <span class="kw">Type</span> v} [Group K]
+    (hpb : IsPullbackSquare α₁ α₂ β₁ β₂)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂) : K →* G :=
+  Classical.choose (ExistsUnique.exists (hpb.2 φ₁ φ₂ hφ))</code></pre></section>
+    <section><div class="natural-text"><p>The pullback universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> supplies the induced morphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.desc_spec">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.desc_spec">ProCGroups.Categorical.IsPullbackSquare.desc_spec</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L385">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> IsPullbackSquare.desc_spec
+    {α₁ : G →* H₁} {α₂ : G →* H₂}
+    {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    {K : <span class="kw">Type</span> v} [Group K]
+    (hpb : IsPullbackSquare α₁ α₂ β₁ β₂)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂) :
+    α₁.comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ) = φ₁ ∧
+      α₂.comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ) = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>Specification of the chosen pullback descent map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Classical.choose_spec (ExistsUnique.exists (hpb.2 φ₁ φ₂ hφ))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.desc_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.desc_left">ProCGroups.Categorical.IsPullbackSquare.desc_left</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L397">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> IsPullbackSquare.desc_left
+    {α₁ : G →* H₁} {α₂ : G →* H₂}
+    {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    {K : <span class="kw">Type</span> v} [Group K]
+    (hpb : IsPullbackSquare α₁ α₂ β₁ β₂)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂) :
+    α₁.comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ) = φ₁</code></pre></section>
+    <section><div class="natural-text"><p>The left composite of the chosen pullback descent map is the prescribed left leg.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>(IsPullbackSquare.desc_spec hpb φ₁ φ₂ hφ).1</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.desc_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.desc_right">ProCGroups.Categorical.IsPullbackSquare.desc_right</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L408">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> IsPullbackSquare.desc_right
+    {α₁ : G →* H₁} {α₂ : G →* H₂}
+    {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    {K : <span class="kw">Type</span> v} [Group K]
+    (hpb : IsPullbackSquare α₁ α₂ β₁ β₂)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂) :
+    α₂.comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ) = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>The right composite of the chosen pullback descent map is the prescribed right leg.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>(IsPullbackSquare.desc_spec hpb φ₁ φ₂ hφ).2</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.desc_uniq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.desc_uniq">ProCGroups.Categorical.IsPullbackSquare.desc_uniq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L419">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> IsPullbackSquare.desc_uniq
+    {α₁ : G →* H₁} {α₂ : G →* H₂}
+    {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    {K : <span class="kw">Type</span> v} [Group K]
+    (hpb : IsPullbackSquare α₁ α₂ β₁ β₂)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂)
+    {ψ : K →* G}
+    (hψ : α₁.comp ψ = φ₁ ∧ α₂.comp ψ = φ₂) :
+    ψ = IsPullbackSquare.desc hpb φ₁ φ₂ hφ</code></pre></section>
+    <section><div class="natural-text"><p>Uniqueness of the chosen pullback descent map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases hpb.2 φ₁ φ₂ hφ <span class="kw">with</span> ⟨u, hu, huuniq⟩
+  <span class="kw">have</span> hψ&#x27; : ψ = u := huuniq _ hψ
+  <span class="kw">have</span> hdesc : IsPullbackSquare.desc hpb φ₁ φ₂ hφ = u :=
+    huuniq _ (IsPullbackSquare.desc_spec hpb φ₁ φ₂ hφ)
+  <span class="kw">exact</span> hψ&#x27;.trans hdesc.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.isLimit_groupPullbackSquareCone_of_isPullbackSquare">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.isLimit_groupPullbackSquareCone_of_isPullbackSquare">ProCGroups.Categorical.isLimit_groupPullbackSquareCone_of_isPullbackSquare</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L436">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> isLimit_groupPullbackSquareCone_of_isPullbackSquare
+    {α₁ : G →* H₁} {α₂ : G →* H₂}
+    {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    (hpb : IsPullbackSquare.{u, u} α₁ α₂ β₁ β₂) :
+    IsLimit (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.groupPullbackSquareCone">groupPullbackSquareCone</a> α₁ α₂ β₁ β₂ hpb.1) := <span class="kw">by</span>
+  refine PullbackCone.IsLimit.mk (<span class="kw">by</span>
+    <span class="kw">apply</span> GrpCat.hom_ext
+    <span class="kw">exact</span> hpb.1) ?lift ?fac_left ?fac_right ?<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.uniq">uniq</a>
+  · <span class="kw">intro</span> s
+    <span class="kw">exact</span> GrpCat.ofHom &lt;|
+      IsPullbackSquare.desc hpb s.fst.hom s.snd.hom (<span class="kw">by</span>
+        <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : s.pt ⟶ GrpCat.of H =&gt; f.hom) s.condition)
+  · <span class="kw">intro</span> s
+    <span class="kw">apply</span> GrpCat.hom_ext
+    <span class="kw">exact</span> IsPullbackSquare.desc_left hpb s.fst.hom s.snd.hom
+      (<span class="kw">by</span> <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : s.pt ⟶ GrpCat.of H =&gt; f.hom) s.condition)
+  · <span class="kw">intro</span> s
+    <span class="kw">apply</span> GrpCat.hom_ext
+    <span class="kw">exact</span> IsPullbackSquare.desc_right hpb s.fst.hom s.snd.hom
+      (<span class="kw">by</span> <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : s.pt ⟶ GrpCat.of H =&gt; f.hom) s.condition)
+  · <span class="kw">intro</span> s m hfst hsnd
+    <span class="kw">apply</span> GrpCat.hom_ext
+    <span class="kw">apply</span> IsPullbackSquare.desc_uniq hpb s.fst.hom s.snd.hom
+      (<span class="kw">by</span> <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : s.pt ⟶ GrpCat.of H =&gt; f.hom) s.condition)
+    <span class="kw">constructor</span>
+    · <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : s.pt ⟶ GrpCat.of H₁ =&gt; f.hom) hfst
+    · <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : s.pt ⟶ GrpCat.of H₂ =&gt; f.hom) hsnd</code></pre></section>
+    <section><div class="natural-text"><p>The hand-written group pullback <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> gives a categorical IsLimit cone in GrpCat.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.isPullbackSquare_of_isLimit_groupPullbackSquareCone">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.isPullbackSquare_of_isLimit_groupPullbackSquareCone">ProCGroups.Categorical.isPullbackSquare_of_isLimit_groupPullbackSquareCone</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L465">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> isPullbackSquare_of_isLimit_groupPullbackSquareCone
+    {α₁ : G →* H₁} {α₂ : G →* H₂}
+    {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    (hcomm : β₁.comp α₁ = β₂.comp α₂)
+    (hlim : IsLimit (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.groupPullbackSquareCone">groupPullbackSquareCone</a> α₁ α₂ β₁ β₂ hcomm)) :
+    IsPullbackSquare.{u, u} α₁ α₂ β₁ β₂ := <span class="kw">by</span>
+  refine ⟨hcomm, ?_⟩
+  <span class="kw">intro</span> K _ φ₁ φ₂ hφ
+  <span class="kw">let</span> s : PullbackCone (GrpCat.ofHom β₁) (GrpCat.ofHom β₂) :=
+    PullbackCone.mk (GrpCat.ofHom φ₁) (GrpCat.ofHom φ₂) (<span class="kw">by</span>
+      <span class="kw">apply</span> GrpCat.hom_ext
+      <span class="kw">exact</span> hφ)
+  <span class="kw">let</span> φ : K →* G := (PullbackCone.IsLimit.lift hlim (GrpCat.ofHom φ₁)
+    (GrpCat.ofHom φ₂) (<span class="kw">by</span>
+      <span class="kw">apply</span> GrpCat.hom_ext
+      <span class="kw">exact</span> hφ)).hom
+  refine ⟨φ, ?_, ?_⟩
+  · <span class="kw">constructor</span>
+    · <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : GrpCat.of K ⟶ GrpCat.of H₁ =&gt; f.hom)
+        (PullbackCone.IsLimit.lift_fst hlim (GrpCat.ofHom φ₁) (GrpCat.ofHom φ₂) (<span class="kw">by</span>
+          <span class="kw">apply</span> GrpCat.hom_ext
+          <span class="kw">exact</span> hφ))
+    · <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : GrpCat.of K ⟶ GrpCat.of H₂ =&gt; f.hom)
+        (PullbackCone.IsLimit.lift_snd hlim (GrpCat.ofHom φ₁) (GrpCat.ofHom φ₂) (<span class="kw">by</span>
+          <span class="kw">apply</span> GrpCat.hom_ext
+          <span class="kw">exact</span> hφ))
+  · <span class="kw">intro</span> ψ hψ
+    <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : GrpCat.of K ⟶ GrpCat.of G =&gt; f.hom) &lt;| <span class="kw">by</span>
+      change GrpCat.ofHom ψ =
+        PullbackCone.IsLimit.lift hlim (GrpCat.ofHom φ₁) (GrpCat.ofHom φ₂) (<span class="kw">by</span>
+          <span class="kw">apply</span> GrpCat.hom_ext
+          <span class="kw">exact</span> hφ)
+      <span class="kw">apply</span> PullbackCone.IsLimit.hom_ext hlim
+      · <span class="kw">apply</span> GrpCat.hom_ext
+        <span class="kw">calc</span>
+          (GrpCat.ofHom ψ ≫ (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.groupPullbackSquareCone">groupPullbackSquareCone</a> α₁ α₂ β₁ β₂ hcomm).fst).hom =
+              α₁.comp ψ := <span class="kw">rfl</span>
+          _ = φ₁ := hψ.1
+          _ = (GrpCat.ofHom φ₁).hom := <span class="kw">rfl</span>
+          _ =
+              (PullbackCone.IsLimit.lift hlim (GrpCat.ofHom φ₁) (GrpCat.ofHom φ₂) (<span class="kw">by</span>
+                    <span class="kw">apply</span> GrpCat.hom_ext
+                    <span class="kw">exact</span> hφ) ≫
+                  (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.groupPullbackSquareCone">groupPullbackSquareCone</a> α₁ α₂ β₁ β₂ hcomm).fst).hom := <span class="kw">by</span>
+                symm
+                <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : GrpCat.of K ⟶ GrpCat.of H₁ =&gt; f.hom)
+                  (PullbackCone.IsLimit.lift_fst hlim (GrpCat.ofHom φ₁) (GrpCat.ofHom φ₂)
+                    (<span class="kw">by</span>
+                      <span class="kw">apply</span> GrpCat.hom_ext
+                      <span class="kw">exact</span> hφ))
+      · <span class="kw">apply</span> GrpCat.hom_ext
+        <span class="kw">calc</span>
+          (GrpCat.ofHom ψ ≫ (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.groupPullbackSquareCone">groupPullbackSquareCone</a> α₁ α₂ β₁ β₂ hcomm).snd).hom =
+              α₂.comp ψ := <span class="kw">rfl</span>
+          _ = φ₂ := hψ.2
+          _ = (GrpCat.ofHom φ₂).hom := <span class="kw">rfl</span>
+          _ =
+              (PullbackCone.IsLimit.lift hlim (GrpCat.ofHom φ₁) (GrpCat.ofHom φ₂) (<span class="kw">by</span>
+                    <span class="kw">apply</span> GrpCat.hom_ext
+                    <span class="kw">exact</span> hφ) ≫
+                  (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.groupPullbackSquareCone">groupPullbackSquareCone</a> α₁ α₂ β₁ β₂ hcomm).snd).hom := <span class="kw">by</span>
+                symm
+                <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : GrpCat.of K ⟶ GrpCat.of H₂ =&gt; f.hom)
+                  (PullbackCone.IsLimit.lift_snd hlim (GrpCat.ofHom φ₁) (GrpCat.ofHom φ₂)
+                    (<span class="kw">by</span>
+                      <span class="kw">apply</span> GrpCat.hom_ext
+                      <span class="kw">exact</span> hφ))</code></pre></section>
+    <section><div class="natural-text"><p>A categorical IsLimit cone in GrpCat gives the hand-written group pullback property.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.isPullbackSquare_iff_nonempty_isLimit_groupPullbackSquareCone">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.isPullbackSquare_iff_nonempty_isLimit_groupPullbackSquareCone">ProCGroups.Categorical.isPullbackSquare_iff_nonempty_isLimit_groupPullbackSquareCone</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L535">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isPullbackSquare_iff_nonempty_isLimit_groupPullbackSquareCone
+    {α₁ : G →* H₁} {α₂ : G →* H₂}
+    {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    (hcomm : β₁.comp α₁ = β₂.comp α₂) :
+    IsPullbackSquare.{u, u} α₁ α₂ β₁ β₂ ↔
+      Nonempty (IsLimit (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.groupPullbackSquareCone">groupPullbackSquareCone</a> α₁ α₂ β₁ β₂ hcomm))</code></pre></section>
+    <section><div class="natural-text"><p>Same-universe hand-written group pullback squares are exactly categorical limit cones in GrpCat, up to the choice of IsLimit data.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hpb
+    <span class="kw">exact</span> ⟨<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.isLimit_groupPullbackSquareCone_of_isPullbackSquare">isLimit_groupPullbackSquareCone_of_isPullbackSquare</a> hpb⟩
+  · rintro ⟨hlim⟩
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.isPullbackSquare_of_isLimit_groupPullbackSquareCone">isPullbackSquare_of_isLimit_groupPullbackSquareCone</a> hcomm hlim</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.FiberProduct.hom_ext">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.hom_ext">ProCGroups.Categorical.FiberProduct.hom_ext</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L548">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> FiberProduct.hom_ext {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    {K : <span class="kw">Type</span> v} [Group K]
+    {ψ ψ&#x27; : K →* FiberProduct.carrier β₁ β₂}
+    (h₁ : ∀ k, FiberProduct.fst β₁ β₂ (ψ k) = FiberProduct.fst β₁ β₂ (ψ&#x27; k))
+    (h₂ : ∀ k, FiberProduct.snd β₁ β₂ (ψ k) = FiberProduct.snd β₁ β₂ (ψ&#x27; k)) :
+    ψ = ψ&#x27;</code></pre></section>
+    <section><div class="natural-text"><p>Two homomorphisms into the concrete pullback are equal once both coordinates agree.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> MonoidHom.ext
+  <span class="kw">intro</span> k
+  <span class="kw">exact</span> Subtype.ext &lt;| Prod.ext (h₁ k) (h₂ k)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.FiberProduct.congr">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.congr">ProCGroups.Categorical.FiberProduct.congr</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L561">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> congr {β₁ β₁&#x27; : H₁ →* H} {β₂ β₂&#x27; : H₂ →* H}
+    (h₁ : β₁ = β₁&#x27;) (h₂ : β₂ = β₂&#x27;) :
+    carrier β₁ β₂ ≃* carrier β₁&#x27; β₂&#x27; := <span class="kw">by</span>
+  subst β₁&#x27;
+  subst β₂&#x27;
+  <span class="kw">exact</span> MulEquiv.refl _</code></pre></section>
+    <section><div class="natural-text"><p>Transport a concrete fiber product across equal cospan maps.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.FiberProduct.fst_lift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.fst_lift">ProCGroups.Categorical.FiberProduct.fst_lift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L569">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> fst_lift (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    (fst β₁ β₂).comp (lift β₁ β₂ φ₁ φ₂ h) = φ₁</code></pre></section>
+    <section><div class="natural-text"><p>Composing the first projection with a fiber-product lift gives the left map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackFst_pullbackLift">pullbackFst_pullbackLift</a> β₁ β₂ φ₁ φ₂ h</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.FiberProduct.snd_lift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.snd_lift">ProCGroups.Categorical.FiberProduct.snd_lift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L576">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> snd_lift (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    (snd β₁ β₂).comp (lift β₁ β₂ φ₁ φ₂ h) = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>Composing the second projection with a fiber-product lift gives the right map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSnd_pullbackLift">pullbackSnd_pullbackLift</a> β₁ β₂ φ₁ φ₂ h</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.FiberProduct.fst_lift_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.fst_lift_apply">ProCGroups.Categorical.FiberProduct.fst_lift_apply</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L582">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> fst_lift_apply (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) (k : K) :
+    fst β₁ β₂ (lift β₁ β₂ φ₁ φ₂ h k) = φ₁ k</code></pre></section>
+    <section><div class="natural-text"><p>The map is evaluated on an element by its defining coordinate formula.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.FiberProduct.snd_lift_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.snd_lift_apply">ProCGroups.Categorical.FiberProduct.snd_lift_apply</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L588">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> snd_lift_apply (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) (k : K) :
+    snd β₁ β₂ (lift β₁ β₂ φ₁ φ₂ h k) = φ₂ k</code></pre></section>
+    <section><div class="natural-text"><p>The map is evaluated on an element by its defining coordinate formula.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLift_eta">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLift_eta">ProCGroups.Categorical.pullbackLift_eta</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L597">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> pullbackLift_eta {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    {K : <span class="kw">Type</span> v} [Group K]
+    (ψ : K →* FiberProduct.carrier β₁ β₂) :
+    FiberProduct.lift β₁ β₂
+      ((FiberProduct.fst β₁ β₂).comp ψ)
+      ((FiberProduct.snd β₁ β₂).comp ψ)
+      (<span class="kw">fun</span> k =&gt; <span class="kw">by</span> <span class="kw">exact</span> (ψ k).2) = ψ</code></pre></section>
+    <section><div class="natural-text"><p>The concrete pullback is reconstructed from its two projections by the canonical lift.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> FiberProduct.hom_ext
+  · <span class="kw">intro</span> k
+    <span class="kw">rfl</span>
+  · <span class="kw">intro</span> k
+    <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullback_isPullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullback_isPullback">ProCGroups.Categorical.pullback_isPullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L612">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullback_isPullback (β₁ : H₁ →* H) (β₂ : H₂ →* H) :
+    IsPullbackSquare (FiberProduct.fst β₁ β₂) (FiberProduct.snd β₁ β₂) β₁ β₂</code></pre></section>
+    <section><div class="natural-text"><p>The concrete pullback satisfies the pullback universal property.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · ext x
+    <span class="kw">exact</span> x.2
+  · <span class="kw">intro</span> K _ φ₁ φ₂ hφ
+    <span class="kw">let</span> hφfun : ∀ k : K, β₁ (φ₁ k) = β₂ (φ₂ k) := <span class="kw">fun</span> k =&gt;
+      DFunLike.congr_fun hφ k
+    refine ⟨FiberProduct.lift (K := K) β₁ β₂ φ₁ φ₂ hφfun, ?_, ?_⟩
+    · <span class="kw">exact</span> ⟨<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackFst_pullbackLift">pullbackFst_pullbackLift</a> (K := K) β₁ β₂ φ₁ φ₂ hφfun,
+        <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSnd_pullbackLift">pullbackSnd_pullbackLift</a> (K := K) β₁ β₂ φ₁ φ₂ hφfun⟩
+    · <span class="kw">intro</span> ψ hψ
+      <span class="kw">have</span> hfst :
+          (FiberProduct.fst β₁ β₂).comp ψ =
+            (FiberProduct.fst β₁ β₂).comp
+              (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)) := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          (FiberProduct.fst β₁ β₂).comp ψ = φ₁ := hψ.1
+          _ =
+              (FiberProduct.fst β₁ β₂).comp
+                (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)) := <span class="kw">by</span>
+              symm
+              <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackFst_pullbackLift">pullbackFst_pullbackLift</a> β₁ β₂ φ₁ φ₂
+                (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)
+      <span class="kw">have</span> hsnd :
+          (FiberProduct.snd β₁ β₂).comp ψ =
+            (FiberProduct.snd β₁ β₂).comp
+              (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)) := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          (FiberProduct.snd β₁ β₂).comp ψ = φ₂ := hψ.2
+          _ =
+              (FiberProduct.snd β₁ β₂).comp
+                (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)) := <span class="kw">by</span>
+              symm
+              <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSnd_pullbackLift">pullbackSnd_pullbackLift</a> β₁ β₂ φ₁ φ₂
+                (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)
+      <span class="kw">exact</span> FiberProduct.hom_ext
+        (<span class="kw">fun</span> k =&gt; <span class="kw">by</span>
+          <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →* H₁ =&gt; f k) hfst)
+        (<span class="kw">fun</span> k =&gt; <span class="kw">by</span>
+          <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →* H₂ =&gt; f k) hsnd)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.pullbackSwap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSwap">ProCGroups.Categorical.pullbackSwap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L655">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> pullbackSwap (β₁ : H₁ →* H) (β₂ : H₂ →* H) :
+    FiberProduct.carrier β₁ β₂ ≃* FiberProduct.carrier β₂ β₁ <span class="kw">where</span>
+  toFun := <span class="kw">fun</span> x =&gt; ⟨(x.1.2, x.1.1), x.2.symm⟩
+  invFun := <span class="kw">fun</span> x =&gt; ⟨(x.1.2, x.1.1), x.2.symm⟩
+  left_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">rfl</span>
+  right_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">rfl</span>
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>Symmetry of the concrete pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackFst_pullbackSwap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackFst_pullbackSwap">ProCGroups.Categorical.pullbackFst_pullbackSwap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L673">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackFst_pullbackSwap (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (x : FiberProduct.carrier β₁ β₂) :
+    FiberProduct.fst β₂ β₁ (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSwap">pullbackSwap</a> β₁ β₂ x) = FiberProduct.snd β₁ β₂ x</code></pre></section>
+    <section><div class="natural-text"><p>The first projection after swapping equals the original second projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackSnd_pullbackSwap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSnd_pullbackSwap">ProCGroups.Categorical.pullbackSnd_pullbackSwap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L679">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackSnd_pullbackSwap (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (x : FiberProduct.carrier β₁ β₂) :
+    FiberProduct.snd β₂ β₁ (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSwap">pullbackSwap</a> β₁ β₂ x) = FiberProduct.fst β₁ β₂ x</code></pre></section>
+    <section><div class="natural-text"><p>The second projection after swapping equals the original first projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackSwap_symm">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSwap_symm">ProCGroups.Categorical.pullbackSwap_symm</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L685">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackSwap_symm (β₁ : H₁ →* H) (β₂ : H₂ →* H) :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSwap">pullbackSwap</a> β₁ β₂).symm = <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSwap">pullbackSwap</a> β₂ β₁</code></pre></section>
+    <section><div class="natural-text"><p>The symmetry map for the algebraic pullback is inverse to the corresponding swapped pullback comparison.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackFst_surjective_of_right_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackFst_surjective_of_right_surjective">ProCGroups.Categorical.pullbackFst_surjective_of_right_surjective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L690">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackFst_surjective_of_right_surjective
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hβ₂ : Function.Surjective β₂) :
+    Function.Surjective (FiberProduct.fst β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the algebraic pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x
+  rcases hβ₂ (β₁ x) <span class="kw">with</span> ⟨y, hy⟩
+  refine ⟨⟨(x, y), ?_⟩, <span class="kw">rfl</span>⟩
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.mem_pullbackSubgroup_iff">mem_pullbackSubgroup_iff</a>, hy]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackSnd_surjective_of_left_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSnd_surjective_of_left_surjective">ProCGroups.Categorical.pullbackSnd_surjective_of_left_surjective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L700">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackSnd_surjective_of_left_surjective
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hβ₁ : Function.Surjective β₁) :
+    Function.Surjective (FiberProduct.snd β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the algebraic pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> y
+  rcases hβ₁ (β₂ y) <span class="kw">with</span> ⟨x, hx⟩
+  refine ⟨⟨(x, y), ?_⟩, <span class="kw">rfl</span>⟩
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.mem_pullbackSubgroup_iff">mem_pullbackSubgroup_iff</a>, hx]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackFst_injective_of_right_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackFst_injective_of_right_injective">ProCGroups.Categorical.pullbackFst_injective_of_right_injective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L710">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackFst_injective_of_right_injective
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hβ₂ : Function.Injective β₂) :
+    Function.Injective (FiberProduct.fst β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>If \(\beta_2\) is injective, then the first pullback projection is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x y hxy
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">exact</span> Prod.ext hxy &lt;| hβ₂ &lt;| <span class="kw">by</span>
+    <span class="kw">calc</span>
+      β₂ x.1.2 = β₁ x.1.1 := x.2.symm
+      _ = β₁ y.1.1 := <span class="kw">by</span> simpa using congrArg β₁ hxy
+      _ = β₂ y.1.2 := y.2</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackSnd_injective_of_left_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSnd_injective_of_left_injective">ProCGroups.Categorical.pullbackSnd_injective_of_left_injective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L723">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackSnd_injective_of_left_injective
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hβ₁ : Function.Injective β₁) :
+    Function.Injective (FiberProduct.snd β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>If \(\beta_1\) is injective, then the second pullback projection is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x y hxy
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">exact</span> Prod.ext (hβ₁ &lt;| <span class="kw">by</span>
+      <span class="kw">calc</span>
+        β₁ x.1.1 = β₂ x.1.2 := x.2
+        _ = β₂ y.1.2 := <span class="kw">by</span> simpa using congrArg β₂ hxy
+        _ = β₁ y.1.1 := y.2.symm) hxy</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.isPullbackSquare_of_bijective_toConcretePullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.isPullbackSquare_of_bijective_toConcretePullback">ProCGroups.Categorical.isPullbackSquare_of_bijective_toConcretePullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L736">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isPullbackSquare_of_bijective_toConcretePullback
+    (α₁ : G →* H₁) (α₂ : G →* H₂) (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (τ : G →* FiberProduct.carrier β₁ β₂)
+    (hτ : Function.Bijective τ)
+    (h₁ : (FiberProduct.fst β₁ β₂).comp τ = α₁)
+    (h₂ : (FiberProduct.snd β₁ β₂).comp τ = α₂) :
+    IsPullbackSquare α₁ α₂ β₁ β₂</code></pre></section>
+    <section><div class="natural-text"><p>A square with a bijective <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map to the concrete pullback is a pullback square.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  refine ⟨?_, ?_⟩
+  · ext g
+    <span class="kw">have</span> hτ₁ : FiberProduct.fst β₁ β₂ (τ g) = α₁ g := <span class="kw">by</span>
+      simpa using congrArg (<span class="kw">fun</span> f : G →* H₁ =&gt; f g) h₁
+    <span class="kw">have</span> hτ₂ : FiberProduct.snd β₁ β₂ (τ g) = α₂ g := <span class="kw">by</span>
+      simpa using congrArg (<span class="kw">fun</span> f : G →* H₂ =&gt; f g) h₂
+    <span class="kw">calc</span>
+      β₁ (α₁ g) = β₁ (FiberProduct.fst β₁ β₂ (τ g)) := <span class="kw">by</span> <span class="kw">rw</span> [← hτ₁]
+      _ = β₂ (FiberProduct.snd β₁ β₂ (τ g)) := (τ g).2
+      _ = β₂ (α₂ g) := <span class="kw">by</span> <span class="kw">rw</span> [hτ₂]
+  · <span class="kw">intro</span> K _ φ₁ φ₂ hφ
+    <span class="kw">let</span> e : G ≃* FiberProduct.carrier β₁ β₂ := MulEquiv.ofBijective τ hτ
+    <span class="kw">let</span> hφfun : ∀ k : K, β₁ (φ₁ k) = β₂ (φ₂ k) := <span class="kw">fun</span> k =&gt;
+      DFunLike.congr_fun hφ k
+    <span class="kw">let</span> θ : K →* FiberProduct.carrier β₁ β₂ :=
+      FiberProduct.lift (K := K) β₁ β₂ φ₁ φ₂ hφfun
+    refine ⟨e.symm.toMonoidHom.comp θ, ?_, ?_⟩
+    · <span class="kw">constructor</span>
+      · ext k
+        <span class="kw">have</span> hτ₁ : FiberProduct.fst β₁ β₂ (τ (e.symm (θ k))) = α₁ (e.symm (θ k)) := <span class="kw">by</span>
+          simpa using congrArg (<span class="kw">fun</span> f : G →* H₁ =&gt; f (e.symm (θ k))) h₁
+        <span class="kw">calc</span>
+          α₁ (e.symm (θ k)) = FiberProduct.fst β₁ β₂ (τ (e.symm (θ k))) := <span class="kw">by</span>
+            simpa using hτ₁.symm
+          _ = FiberProduct.fst β₁ β₂ (θ k) := <span class="kw">by</span>
+            <span class="kw">rw</span> [<span class="kw">show</span> τ (e.symm (θ k)) = θ k from e.apply_symm_apply (θ k)]
+          _ = φ₁ k := <span class="kw">by</span>
+            change
+              FiberProduct.fst β₁ β₂
+                (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k) k) = φ₁ k
+            <span class="kw">rfl</span>
+      · ext k
+        <span class="kw">have</span> hτ₂ : FiberProduct.snd β₁ β₂ (τ (e.symm (θ k))) = α₂ (e.symm (θ k)) := <span class="kw">by</span>
+          simpa using congrArg (<span class="kw">fun</span> f : G →* H₂ =&gt; f (e.symm (θ k))) h₂
+        <span class="kw">calc</span>
+          α₂ (e.symm (θ k)) = FiberProduct.snd β₁ β₂ (τ (e.symm (θ k))) := <span class="kw">by</span>
+            simpa using hτ₂.symm
+          _ = FiberProduct.snd β₁ β₂ (θ k) := <span class="kw">by</span>
+            <span class="kw">rw</span> [<span class="kw">show</span> τ (e.symm (θ k)) = θ k from e.apply_symm_apply (θ k)]
+          _ = φ₂ k := <span class="kw">by</span>
+            change
+              FiberProduct.snd β₁ β₂
+                (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k) k) = φ₂ k
+            <span class="kw">rfl</span>
+    · <span class="kw">intro</span> ψ hψ
+      <span class="kw">have</span> hcoord : τ.comp ψ = θ := <span class="kw">by</span>
+        <span class="kw">apply</span> FiberProduct.hom_ext
+        · <span class="kw">intro</span> k
+          <span class="kw">have</span> hτ₁ : FiberProduct.fst β₁ β₂ (τ (ψ k)) = α₁ (ψ k) := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : G →* H₁ =&gt; f (ψ k)) h₁
+          <span class="kw">have</span> hψ₁ : α₁ (ψ k) = φ₁ k := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : K →* H₁ =&gt; f k) hψ.1
+          <span class="kw">calc</span>
+            FiberProduct.fst β₁ β₂ ((τ.comp ψ) k) = α₁ (ψ k) := <span class="kw">by</span>
+              simpa [MonoidHom.comp_apply] using hτ₁
+            _ = φ₁ k := hψ₁
+            _ = FiberProduct.fst β₁ β₂ (θ k) := <span class="kw">by</span>
+              change
+                φ₁ k =
+                  FiberProduct.fst β₁ β₂
+                    (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k) k)
+              <span class="kw">rfl</span>
+        · <span class="kw">intro</span> k
+          <span class="kw">have</span> hτ₂ : FiberProduct.snd β₁ β₂ (τ (ψ k)) = α₂ (ψ k) := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : G →* H₂ =&gt; f (ψ k)) h₂
+          <span class="kw">have</span> hψ₂ : α₂ (ψ k) = φ₂ k := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : K →* H₂ =&gt; f k) hψ.2
+          <span class="kw">calc</span>
+            FiberProduct.snd β₁ β₂ ((τ.comp ψ) k) = α₂ (ψ k) := <span class="kw">by</span>
+              simpa [MonoidHom.comp_apply] using hτ₂
+            _ = φ₂ k := hψ₂
+            _ = FiberProduct.snd β₁ β₂ (θ k) := <span class="kw">by</span>
+              change
+                φ₂ k =
+                  FiberProduct.snd β₁ β₂
+                    (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k) k)
+              <span class="kw">rfl</span>
+      ext k
+      <span class="kw">apply</span> hτ.1
+      <span class="kw">calc</span>
+        τ (ψ k) = (τ.comp ψ) k := <span class="kw">by</span> <span class="kw">rfl</span>
+        _ = θ k := <span class="kw">by</span>
+          <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →* FiberProduct.carrier β₁ β₂ =&gt; f k) hcoord
+        _ = τ ((e.symm.toMonoidHom.comp θ) k) := <span class="kw">by</span>
+          change θ k = τ (e.symm (θ k))
+          symm
+          <span class="kw">exact</span> e.apply_symm_apply (θ k)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.IsPullbackSquare.toConcretePullback">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.toConcretePullback">ProCGroups.Categorical.IsPullbackSquare.toConcretePullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L833">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> IsPullbackSquare.toConcretePullback
+    (α₁ : G →* H₁) (α₂ : G →* H₂) (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hpb : IsPullbackSquare α₁ α₂ β₁ β₂) :
+    G →* FiberProduct.carrier β₁ β₂ :=
+  FiberProduct.lift β₁ β₂ α₁ α₂ (<span class="kw">fun</span> g =&gt; <span class="kw">by</span>
+    <span class="kw">exact</span> DFunLike.congr_fun hpb.1 g)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical map from an abstract pullback square into the concrete subgroup pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.toConcretePullback_self">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.toConcretePullback_self">ProCGroups.Categorical.IsPullbackSquare.toConcretePullback_self</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L842">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> IsPullbackSquare.toConcretePullback_self
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H) :
+    IsPullbackSquare.toConcretePullback (FiberProduct.fst β₁ β₂) (FiberProduct.snd β₁ β₂) β₁ β₂
+        (pullback_isPullback.{u, u} β₁ β₂) =
+      MonoidHom.id (FiberProduct.carrier β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map from the concrete pullback to itself is the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [IsPullbackSquare.toConcretePullback] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_eta">pullbackLift_eta</a> (β₁ := β₁) (β₂ := β₂) (ψ := MonoidHom.id (FiberProduct.carrier β₁ β₂)))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.fst_toConcretePullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.fst_toConcretePullback">ProCGroups.Categorical.IsPullbackSquare.fst_toConcretePullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L851">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> IsPullbackSquare.fst_toConcretePullback
+    (α₁ : G →* H₁) (α₂ : G →* H₂) (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hpb : IsPullbackSquare α₁ α₂ β₁ β₂) :
+    (FiberProduct.fst β₁ β₂).comp (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb) = α₁</code></pre></section>
+    <section><div class="natural-text"><p>The first coordinate of the canonical <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map recovers \(\alpha_1\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext g
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.snd_toConcretePullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.snd_toConcretePullback">ProCGroups.Categorical.IsPullbackSquare.snd_toConcretePullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L859">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> IsPullbackSquare.snd_toConcretePullback
+    (α₁ : G →* H₁) (α₂ : G →* H₂) (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hpb : IsPullbackSquare α₁ α₂ β₁ β₂) :
+    (FiberProduct.snd β₁ β₂).comp (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb) = α₂</code></pre></section>
+    <section><div class="natural-text"><p>The second coordinate of the canonical <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map recovers \(\alpha_2\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext g
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.bijective_toConcretePullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.bijective_toConcretePullback">ProCGroups.Categorical.IsPullbackSquare.bijective_toConcretePullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L867">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> IsPullbackSquare.bijective_toConcretePullback
+    (α₁ : G →* H₁) (α₂ : G →* H₂) (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hpb : IsPullbackSquare.{u, u} α₁ α₂ β₁ β₂) :
+    Function.Bijective (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb)</code></pre></section>
+    <section><div class="natural-text"><p>Any abstract pullback square is canonically bijective to the concrete pullback.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> ψ : FiberProduct.carrier β₁ β₂ →* G :=
+    IsPullbackSquare.desc hpb (FiberProduct.fst β₁ β₂) (FiberProduct.snd β₁ β₂)
+      ((pullback_isPullback.{u, u} β₁ β₂).1)
+  <span class="kw">have</span> hψfst : α₁.comp ψ = FiberProduct.fst β₁ β₂ := <span class="kw">by</span>
+    change
+      α₁.comp
+          (IsPullbackSquare.desc hpb (FiberProduct.fst β₁ β₂) (FiberProduct.snd β₁ β₂)
+            ((pullback_isPullback.{u, u} β₁ β₂).1)) =
+        FiberProduct.fst β₁ β₂
+    <span class="kw">exact</span> IsPullbackSquare.desc_left hpb (FiberProduct.fst β₁ β₂) (FiberProduct.snd β₁ β₂)
+      ((pullback_isPullback.{u, u} β₁ β₂).1)
+  <span class="kw">have</span> hψsnd : α₂.comp ψ = FiberProduct.snd β₁ β₂ := <span class="kw">by</span>
+    change
+      α₂.comp
+          (IsPullbackSquare.desc hpb (FiberProduct.fst β₁ β₂) (FiberProduct.snd β₁ β₂)
+            ((pullback_isPullback.{u, u} β₁ β₂).1)) =
+        FiberProduct.snd β₁ β₂
+    <span class="kw">exact</span> IsPullbackSquare.desc_right hpb (FiberProduct.fst β₁ β₂) (FiberProduct.snd β₁ β₂)
+      ((pullback_isPullback.{u, u} β₁ β₂).1)
+  <span class="kw">have</span> hleft :
+      (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb).comp ψ =
+        MonoidHom.id (FiberProduct.carrier β₁ β₂) := <span class="kw">by</span>
+    <span class="kw">apply</span> FiberProduct.hom_ext
+    · <span class="kw">intro</span> x
+      <span class="kw">calc</span>
+        FiberProduct.fst β₁ β₂ ((IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb).comp ψ x)
+            = α₁ (ψ x) := <span class="kw">by</span>
+                <span class="kw">rfl</span>
+        _ = FiberProduct.fst β₁ β₂ x := <span class="kw">by</span>
+              <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : FiberProduct.carrier β₁ β₂ →* H₁ =&gt; f x) hψfst
+    · <span class="kw">intro</span> x
+      <span class="kw">calc</span>
+        FiberProduct.snd β₁ β₂ ((IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb).comp ψ x)
+            = α₂ (ψ x) := <span class="kw">by</span>
+                <span class="kw">rfl</span>
+        _ = FiberProduct.snd β₁ β₂ x := <span class="kw">by</span>
+              <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : FiberProduct.carrier β₁ β₂ →* H₂ =&gt; f x) hψsnd
+  <span class="kw">have</span> hright_desc :
+      ψ.comp (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb) =
+        IsPullbackSquare.desc hpb α₁ α₂ hpb.1 := <span class="kw">by</span>
+    <span class="kw">apply</span> IsPullbackSquare.desc_uniq hpb α₁ α₂ hpb.1
+    <span class="kw">constructor</span>
+    · ext g
+      <span class="kw">calc</span>
+        α₁ ((ψ.comp (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb)) g)
+            = FiberProduct.fst β₁ β₂ (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb g) := <span class="kw">by</span>
+                <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : FiberProduct.carrier β₁ β₂ →* H₁ =&gt;
+                  f (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb g)) hψfst
+        _ = α₁ g := <span class="kw">by</span>
+              <span class="kw">rfl</span>
+    · ext g
+      <span class="kw">calc</span>
+        α₂ ((ψ.comp (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb)) g)
+            = FiberProduct.snd β₁ β₂ (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb g) := <span class="kw">by</span>
+                <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : FiberProduct.carrier β₁ β₂ →* H₂ =&gt;
+                  f (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb g)) hψsnd
+        _ = α₂ g := <span class="kw">by</span>
+              <span class="kw">rfl</span>
+  <span class="kw">have</span> hself : IsPullbackSquare.desc hpb α₁ α₂ hpb.1 = MonoidHom.id G := <span class="kw">by</span>
+    symm
+    <span class="kw">exact</span> IsPullbackSquare.desc_uniq hpb α₁ α₂ hpb.1 (<span class="kw">by</span> <span class="kw">simp</span> only [MonoidHom.comp_id, and_self])
+  <span class="kw">have</span> hright :
+      ψ.comp (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb) = MonoidHom.id G := <span class="kw">by</span>
+    <span class="kw">exact</span> hright_desc.trans hself
+  refine ⟨?_, ?_⟩
+  · <span class="kw">intro</span> x y hxy
+    <span class="kw">have</span> hx : ψ (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb x) = x := <span class="kw">by</span>
+      simpa using congrArg (<span class="kw">fun</span> f : G →* G =&gt; f x) hright
+    <span class="kw">have</span> hy : ψ (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb y) = y := <span class="kw">by</span>
+      simpa using congrArg (<span class="kw">fun</span> f : G →* G =&gt; f y) hright
+    <span class="kw">calc</span>
+      x = ψ (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb x) := hx.symm
+      _ = ψ (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb y) := <span class="kw">by</span> simpa using congrArg ψ hxy
+      _ = y := hy
+  · <span class="kw">intro</span> x
+    refine ⟨ψ x, ?_⟩
+    simpa using congrArg (<span class="kw">fun</span> f : FiberProduct.carrier β₁ β₂ →* FiberProduct.carrier β₁ β₂ =&gt; f x) hleft</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.IsPullbackSquare.concretePullbackEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.concretePullbackEquiv">ProCGroups.Categorical.IsPullbackSquare.concretePullbackEquiv</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L950">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> IsPullbackSquare.concretePullbackEquiv
+    (α₁ : G →* H₁) (α₂ : G →* H₂) (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hpb : IsPullbackSquare.{u, u} α₁ α₂ β₁ β₂) :
+    G ≃* FiberProduct.carrier β₁ β₂ :=
+  MulEquiv.ofBijective
+    (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb)
+    (IsPullbackSquare.bijective_toConcretePullback α₁ α₂ β₁ β₂ hpb)</code></pre></section>
+    <section><div class="natural-text"><p>Any abstract pullback square is canonically isomorphic to the concrete pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.concretePullbackEquiv_fst">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.concretePullbackEquiv_fst">ProCGroups.Categorical.IsPullbackSquare.concretePullbackEquiv_fst</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L959">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> IsPullbackSquare.concretePullbackEquiv_fst
+    (α₁ : G →* H₁) (α₂ : G →* H₂) (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hpb : IsPullbackSquare.{u, u} α₁ α₂ β₁ β₂) :
+    (FiberProduct.fst β₁ β₂).comp (IsPullbackSquare.concretePullbackEquiv α₁ α₂ β₁ β₂ hpb).toMonoidHom = α₁</code></pre></section>
+    <section><div class="natural-text"><p>The first coordinate of the pullback <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> equivalence is \(\alpha_1\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext g
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.concretePullbackEquiv_snd">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.concretePullbackEquiv_snd">ProCGroups.Categorical.IsPullbackSquare.concretePullbackEquiv_snd</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L967">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> IsPullbackSquare.concretePullbackEquiv_snd
+    (α₁ : G →* H₁) (α₂ : G →* H₂) (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hpb : IsPullbackSquare.{u, u} α₁ α₂ β₁ β₂) :
+    (FiberProduct.snd β₁ β₂).comp (IsPullbackSquare.concretePullbackEquiv α₁ α₂ β₁ β₂ hpb).toMonoidHom = α₂</code></pre></section>
+    <section><div class="natural-text"><p>The second coordinate of the pullback <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> equivalence is \(\alpha_2\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext g
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.isPullbackSquare_iff_bijective_toConcretePullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.isPullbackSquare_iff_bijective_toConcretePullback">ProCGroups.Categorical.isPullbackSquare_iff_bijective_toConcretePullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L975">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isPullbackSquare_iff_bijective_toConcretePullback
+    {α₁ : G →* H₁} {α₂ : G →* H₂} {β₁ : H₁ →* H} {β₂ : H₂ →* H}
+    (hcomm : β₁.comp α₁ = β₂.comp α₂) :
+    IsPullbackSquare.{u, u} α₁ α₂ β₁ β₂ ↔
+      Function.Bijective (FiberProduct.lift β₁ β₂ α₁ α₂ (<span class="kw">fun</span> g =&gt; <span class="kw">by</span>
+        <span class="kw">exact</span> DFunLike.congr_fun hcomm g))</code></pre></section>
+    <section><div class="natural-text"><p>A square is a pullback if and only if its canonical map to the concrete pullback is bijective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hpb
+    simpa [IsPullbackSquare.toConcretePullback] using
+      (IsPullbackSquare.bijective_toConcretePullback α₁ α₂ β₁ β₂ hpb)
+  · <span class="kw">intro</span> hbij
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.isPullbackSquare_of_bijective_toConcretePullback">isPullbackSquare_of_bijective_toConcretePullback</a>
+      α₁ α₂ β₁ β₂
+      (FiberProduct.lift β₁ β₂ α₁ α₂ (<span class="kw">fun</span> g =&gt; DFunLike.congr_fun hcomm g))
+      hbij
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackFst_pullbackLift">pullbackFst_pullbackLift</a> β₁ β₂ α₁ α₂ (<span class="kw">fun</span> g =&gt; DFunLike.congr_fun hcomm g))
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSnd_pullbackLift">pullbackSnd_pullbackLift</a> β₁ β₂ α₁ α₂ (<span class="kw">fun</span> g =&gt; DFunLike.congr_fun hcomm g))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.toConcretePullback_comp_desc">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.toConcretePullback_comp_desc">ProCGroups.Categorical.IsPullbackSquare.toConcretePullback_comp_desc</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L995">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> IsPullbackSquare.toConcretePullback_comp_desc
+    (α₁ : G →* H₁) (α₂ : G →* H₂)
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hpb : IsPullbackSquare α₁ α₂ β₁ β₂)
+    (φ₁ : K →* H₁) (φ₂ : K →* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂) :
+    (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb).comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ) =
+      FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map sends the chosen pullback descent map to the concrete pullback lift.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> FiberProduct.hom_ext
+  · <span class="kw">intro</span> k
+    <span class="kw">have</span> hleft :
+        (FiberProduct.fst β₁ β₂).comp
+            ((IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb).comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ)) = φ₁ := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        (FiberProduct.fst β₁ β₂).comp
+            ((IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb).comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ))
+            = ((FiberProduct.fst β₁ β₂).comp
+                (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb)).comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ) := <span class="kw">by</span>
+                  <span class="kw">rfl</span>
+        _ = α₁.comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ) := <span class="kw">by</span>
+              <span class="kw">rw</span> [IsPullbackSquare.fst_toConcretePullback α₁ α₂ β₁ β₂ hpb]
+        _ = φ₁ := IsPullbackSquare.desc_left hpb φ₁ φ₂ hφ
+    <span class="kw">have</span> hright :
+        (FiberProduct.fst β₁ β₂).comp
+            (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)) = φ₁ :=
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackFst_pullbackLift">pullbackFst_pullbackLift</a> β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)
+    <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →* H₁ =&gt; f k) (hleft.trans hright.symm)
+  · <span class="kw">intro</span> k
+    <span class="kw">have</span> hleft :
+        (FiberProduct.snd β₁ β₂).comp
+            ((IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb).comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ)) = φ₂ := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        (FiberProduct.snd β₁ β₂).comp
+            ((IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb).comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ))
+            = ((FiberProduct.snd β₁ β₂).comp
+                (IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb)).comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ) := <span class="kw">by</span>
+                  <span class="kw">rfl</span>
+        _ = α₂.comp (IsPullbackSquare.desc hpb φ₁ φ₂ hφ) := <span class="kw">by</span>
+              <span class="kw">rw</span> [IsPullbackSquare.snd_toConcretePullback α₁ α₂ β₁ β₂ hpb]
+        _ = φ₂ := IsPullbackSquare.desc_right hpb φ₁ φ₂ hφ
+    <span class="kw">have</span> hright :
+        (FiberProduct.snd β₁ β₂).comp
+            (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)) = φ₂ :=
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSnd_pullbackLift">pullbackSnd_pullbackLift</a> β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)
+    <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →* H₂ =&gt; f k) (hleft.trans hright.symm)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.surjective_desc_iff_surjective_lift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.surjective_desc_iff_surjective_lift">ProCGroups.Categorical.IsPullbackSquare.surjective_desc_iff_surjective_lift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L1043">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> IsPullbackSquare.surjective_desc_iff_surjective_lift
+    (α₁ : G →* H₁) (α₂ : G →* H₂)
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hpb : IsPullbackSquare.{u, u} α₁ α₂ β₁ β₂)
+    (φ₁ : A →* H₁) (φ₂ : A →* H₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂) :
+    Function.Surjective (IsPullbackSquare.desc hpb φ₁ φ₂ hcomp) ↔
+      Function.Surjective (FiberProduct.lift β₁ β₂ φ₁ φ₂
+        (<span class="kw">fun</span> a =&gt; DFunLike.congr_fun hcomp a))</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the algebraic pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> c : G →* FiberProduct.carrier β₁ β₂ := IsPullbackSquare.toConcretePullback α₁ α₂ β₁ β₂ hpb
+  <span class="kw">have</span> hc : Function.Bijective c := IsPullbackSquare.bijective_toConcretePullback α₁ α₂ β₁ β₂ hpb
+  <span class="kw">have</span> hcomm :
+      c.comp (IsPullbackSquare.desc hpb φ₁ φ₂ hcomp) =
+        FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> a =&gt; DFunLike.congr_fun hcomp a) := <span class="kw">by</span>
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.IsPullbackSquare.toConcretePullback_comp_desc">toConcretePullback_comp_desc</a>, c]
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hdesc z
+    rcases hc.2 z <span class="kw">with</span> ⟨g, <span class="kw">rfl</span>⟩
+    rcases hdesc g <span class="kw">with</span> ⟨a, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> ⟨a, (DFunLike.congr_fun hcomm a).symm⟩
+  · <span class="kw">intro</span> hlift g
+    rcases hlift (c g) <span class="kw">with</span> ⟨a, ha⟩
+    refine ⟨a, ?_⟩
+    <span class="kw">apply</span> hc.1
+    <span class="kw">calc</span>
+      c (IsPullbackSquare.desc hpb φ₁ φ₂ hcomp a) =
+          FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> a =&gt; DFunLike.congr_fun hcomp a) a := <span class="kw">by</span>
+            <span class="kw">exact</span> DFunLike.congr_fun hcomm a
+      _ = c g := ha</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.IsPullbackSquare.surjective_desc_of_ker_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.IsPullbackSquare.surjective_desc_of_ker_eq">ProCGroups.Categorical.IsPullbackSquare.surjective_desc_of_ker_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L1074">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> IsPullbackSquare.surjective_desc_of_ker_eq
+    (α₁ : G →* H₁) (α₂ : G →* H₂)
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (hpb : IsPullbackSquare.{u, u} α₁ α₂ β₁ β₂)
+    (φ₁ : A →* H₁) (φ₂ : A →* H₂)
+    (hφ₁ : Function.Surjective φ₁) (hφ₂ : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂)
+    (hker : (β₁.comp φ₁).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = φ₁.ker ⊔ φ₂.ker) :
+    Function.Surjective (IsPullbackSquare.desc hpb φ₁ φ₂ hcomp)</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the algebraic pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> (IsPullbackSquare.surjective_desc_iff_surjective_lift
+    α₁ α₂ β₁ β₂ hpb φ₁ φ₂ hcomp).2
+      ((<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_eq">pullbackLift_surjective_iff_ker_eq</a> β₁ β₂ φ₁ φ₂ hφ₁ hφ₂ hcomp).2 hker)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.surjective_pullbackLift_of_ker_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.surjective_pullbackLift_of_ker_eq">ProCGroups.Categorical.surjective_pullbackLift_of_ker_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L1088">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> surjective_pullbackLift_of_ker_eq
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : A →* H₁) (φ₂ : A →* H₂)
+    (hφ₁ : Function.Surjective φ₁) (hφ₂ : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂)
+    (hker : (β₁.comp φ₁).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = φ₁.ker ⊔ φ₂.ker) :
+    Function.Surjective (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> a =&gt; <span class="kw">by</span>
+      <span class="kw">exact</span> DFunLike.congr_fun hcomp a))</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the algebraic pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_eq">pullbackLift_surjective_iff_ker_eq</a> β₁ β₂ φ₁ φ₂ hφ₁ hφ₂ hcomp).2 hker</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.bijective_pullbackLift_of_left_injective_of_ker_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.bijective_pullbackLift_of_left_injective_of_ker_eq">ProCGroups.Categorical.bijective_pullbackLift_of_left_injective_of_ker_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L1099">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> bijective_pullbackLift_of_left_injective_of_ker_eq
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : A →* H₁) (φ₂ : A →* H₂)
+    (hφ₁surj : Function.Surjective φ₁) (hφ₂surj : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂)
+    (hker : (β₁.comp φ₁).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = φ₁.ker ⊔ φ₂.ker)
+    (hφ₁inj : Function.Injective φ₁) :
+    Function.Bijective (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> a =&gt; <span class="kw">by</span>
+      <span class="kw">exact</span> DFunLike.congr_fun hcomp a))</code></pre></section>
+    <section><div class="natural-text"><p>The algebraic pullback lift is bijective when the left map is injective and the required kernel equality holds.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_injective_of_left_injective">pullbackLift_injective_of_left_injective</a> β₁ β₂ φ₁ φ₂
+      (<span class="kw">fun</span> a =&gt; DFunLike.congr_fun hcomp a) hφ₁inj
+  · <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_eq">pullbackLift_surjective_iff_ker_eq</a>
+      β₁ β₂ φ₁ φ₂ hφ₁surj hφ₂surj hcomp).2 hker</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.bijective_pullbackLift_of_right_injective_of_ker_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.bijective_pullbackLift_of_right_injective_of_ker_eq">ProCGroups.Categorical.bijective_pullbackLift_of_right_injective_of_ker_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/AlgebraicPullbacks.html#L1115">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> bijective_pullbackLift_of_right_injective_of_ker_eq
+    (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+    (φ₁ : A →* H₁) (φ₂ : A →* H₂)
+    (hφ₁surj : Function.Surjective φ₁) (hφ₂surj : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂)
+    (hker : (β₁.comp φ₁).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = φ₁.ker ⊔ φ₂.ker)
+    (hφ₂inj : Function.Injective φ₂) :
+    Function.Bijective (FiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> a =&gt; <span class="kw">by</span>
+      <span class="kw">exact</span> DFunLike.congr_fun hcomp a))</code></pre></section>
+    <section><div class="natural-text"><p>The algebraic pullback lift is bijective when the right map is injective and the required kernel equality holds.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_injective_of_right_injective">pullbackLift_injective_of_right_injective</a> β₁ β₂ φ₁ φ₂
+      (<span class="kw">fun</span> a =&gt; DFunLike.congr_fun hcomp a) hφ₂inj
+  · <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_eq">pullbackLift_surjective_iff_ker_eq</a>
+      β₁ β₂ φ₁ φ₂ hφ₁surj hφ₂surj hcomp).2 hker</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the concrete algebraic pullback as the subgroup of pairs with equal images under the two structure maps. The two projections are the coordinate projections, and the lift from any cone is the unique map whose coordinates are the two cone maps. The pullback equation gives membership in the carrier, while equality and universal properties reduce to equality of the two coordinates.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Categorical.AlgebraicPullbacks"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

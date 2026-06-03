@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Duality | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.Duality</div>
+  <form class="search-form" action="../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><span>Duality</span></div>
+      <h1 class="module-title">ProCGroups.Duality</h1>
+      <div class="module-meta">21 Theorem | 5 Definition | 1 Instance</div>
+      <div class="module-overview"><p>This module formalizes elementary duality constructions for profinite groups.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li>Mathlib.Analysis.Fourier.FiniteAbelian.PontryaginDuality</li><li>Mathlib.NumberTheory.Cyclotomic.Basic</li><li>Mathlib.Topology.Algebra.PontryaginDual</li><li>Mathlib.Topology.Instances.AddCircle.DenseSubgroup</li><li><a href="../../library/ProCGroups/Profinite/Basic.html">ProCGroups.Profinite.Basic</a></li><li><a href="../../library/ProCGroups/Topologies/ContinuousMulEquiv.html">ProCGroups.Topologies.ContinuousMulEquiv</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><div class="imports-empty">None</div></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ProCGroups.Duality.properClosedAddSubgroup_addCircle_finite">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.properClosedAddSubgroup_addCircle_finite">ProCGroups.Duality.properClosedAddSubgroup_addCircle_finite</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L33">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> properClosedAddSubgroup_addCircle_finite
+    {p : ℝ} [Fact (0 &lt; p)] (B : AddSubgroup (AddCircle p))
+    (hBclosed : IsClosed (B : Set (AddCircle p))) (hBproper : B ≠ ⊤) :
+    Finite B</code></pre></section>
+    <section><div class="natural-text"><p>A closed proper additive subgroup of \(\mathrm{AddCircle}(p)\) is finite.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">have</span> hBnotDense : ¬ Dense (B : Set (AddCircle p)) := <span class="kw">by</span>
+    <span class="kw">intro</span> hDense
+    <span class="kw">apply</span> hBproper
+    <span class="kw">rw</span> [AddSubgroup.eq_top_iff&#x27;]
+    <span class="kw">intro</span> x
+    change x ∈ (B : Set (AddCircle p))
+    <span class="kw">have</span> hclosure : closure (B : Set (AddCircle p)) = Set.univ := hDense.closure_eq
+    <span class="kw">rw</span> [← hBclosed.closure_eq]
+    <span class="kw">rw</span> [hclosure]
+    trivial
+  <span class="kw">have</span> hnot_zmultiples :
+      ¬ ∀ a : AddCircle p, addOrderOf a ≠ 0 → B ≠ AddSubgroup.zmultiples a := <span class="kw">by</span>
+    simpa [AddCircle.dense_addSubgroup_iff_ne_zmultiples (p := p) (s := B)] using hBnotDense
+  push_neg at hnot_zmultiples
+  rcases hnot_zmultiples <span class="kw">with</span> ⟨a, haorder, hBgen⟩
+  <span class="kw">have</span> haFin : IsOfFinAddOrder a :=
+    (addOrderOf_ne_zero_iff).mp haorder
+  <span class="kw">have</span> hBfiniteSet : (B : Set (AddCircle p)).Finite := <span class="kw">by</span>
+    simpa [hBgen] using ((finite_zmultiples (a := a)).2 haFin)
+  <span class="kw">exact</span> hBfiniteSet.to_subtype</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Duality.circleSubgroupToAddCircleSubgroup">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.circleSubgroupToAddCircleSubgroup">ProCGroups.Duality.circleSubgroupToAddCircleSubgroup</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L61">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> circleSubgroupToAddCircleSubgroup (A : Subgroup Circle) :
+    AddSubgroup (AddCircle (2 * Real.pi)) := <span class="kw">by</span>
+  refine
+    { carrier := {θ | AddCircle.homeomorphCircle&#x27; θ ∈ A}
+      zero_mem&#x27; := <span class="kw">by</span>
+        <span class="kw">simp</span> only [AddCircle.homeomorphCircle&#x27;_apply, Set.mem_setOf_eq, Real.Angle.toCircle_zero, one_mem]
+      add_mem&#x27; := ?_
+      neg_mem&#x27; := ?_ }
+  · <span class="kw">intro</span> a b ha hb
+    change AddCircle.homeomorphCircle&#x27; (a + b) ∈ A
+    <span class="kw">rw</span> [<span class="kw">show</span> AddCircle.homeomorphCircle&#x27; (a + b) =
+      AddCircle.homeomorphCircle&#x27; a * AddCircle.homeomorphCircle&#x27; b <span class="kw">by</span>
+      change Real.Angle.toCircle (a + b) = Real.Angle.toCircle a * Real.Angle.toCircle b
+      <span class="kw">exact</span> Real.Angle.toCircle_add a b]
+    <span class="kw">exact</span> A.mul_mem ha hb
+  · <span class="kw">intro</span> a ha
+    change AddCircle.homeomorphCircle&#x27; (-a) ∈ A
+    <span class="kw">rw</span> [<span class="kw">show</span> AddCircle.homeomorphCircle&#x27; (-a) = (AddCircle.homeomorphCircle&#x27; a)⁻¹ <span class="kw">by</span>
+      change Real.Angle.toCircle (-a) = (Real.Angle.toCircle a)⁻¹
+      <span class="kw">exact</span> Real.Angle.toCircle_neg a]
+    <span class="kw">exact</span> A.inv_mem ha</code></pre></section>
+    <section><div class="natural-text"><p>Transport a multiplicative subgroup of Circle to the standard additive circle \(\mathbb{R} / (2\pi)\mathbb{Z}\). This is convenient for applying AddCircle subgroup-classification lemmas.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.mem_circleSubgroupToAddCircleSubgroup_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.mem_circleSubgroupToAddCircleSubgroup_iff">ProCGroups.Duality.mem_circleSubgroupToAddCircleSubgroup_iff</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L83">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> mem_circleSubgroupToAddCircleSubgroup_iff
+    {A : Subgroup Circle} {θ : AddCircle (2 * Real.pi)} :
+    θ ∈ <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.circleSubgroupToAddCircleSubgroup">circleSubgroupToAddCircleSubgroup</a> A ↔ AddCircle.homeomorphCircle&#x27; θ ∈ A</code></pre></section>
+    <section><div class="natural-text"><p>Membership in the additive circle subgroup associated to a circle subgroup is equivalent to the displayed coordinate condition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.isClosed_circleSubgroupToAddCircleSubgroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.isClosed_circleSubgroupToAddCircleSubgroup">ProCGroups.Duality.isClosed_circleSubgroupToAddCircleSubgroup</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L88">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isClosed_circleSubgroupToAddCircleSubgroup
+    (A : Subgroup Circle) (hAclosed : IsClosed (A : Set Circle)) :
+    IsClosed (<a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.circleSubgroupToAddCircleSubgroup">circleSubgroupToAddCircleSubgroup</a> A : Set (AddCircle (2 * Real.pi)))</code></pre></section>
+    <section><div class="natural-text"><p>The dual-group construction is functorial and is evaluated pointwise on continuous characters.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change IsClosed (AddCircle.homeomorphCircle&#x27; ⁻¹&#x27; (A : Set Circle))
+  <span class="kw">exact</span> (AddCircle.homeomorphCircle&#x27;.isClosed_preimage).2 hAclosed</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.circleSubgroupToAddCircleSubgroup_ne_top">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.circleSubgroupToAddCircleSubgroup_ne_top">ProCGroups.Duality.circleSubgroupToAddCircleSubgroup_ne_top</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L94">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> circleSubgroupToAddCircleSubgroup_ne_top
+    (A : Subgroup Circle) (hAproper : A ≠ ⊤) :
+    <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.circleSubgroupToAddCircleSubgroup">circleSubgroupToAddCircleSubgroup</a> A ≠ ⊤</code></pre></section>
+    <section><div class="natural-text"><p>The dual-group construction is functorial and is evaluated pointwise on continuous characters.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> htop
+  <span class="kw">apply</span> hAproper
+  <span class="kw">rw</span> [Subgroup.eq_top_iff&#x27;]
+  <span class="kw">intro</span> z
+  <span class="kw">have</span> hz : AddCircle.homeomorphCircle&#x27;.symm z ∈ <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.circleSubgroupToAddCircleSubgroup">circleSubgroupToAddCircleSubgroup</a> A := <span class="kw">by</span>
+    <span class="kw">rw</span> [htop]
+    <span class="kw">simp</span> only [AddCircle.homeomorphCircle&#x27;_symm_apply, AddSubgroup.mem_top]
+  <span class="kw">have</span> hz&#x27; : AddCircle.homeomorphCircle&#x27; (AddCircle.homeomorphCircle&#x27;.symm z) ∈ A :=
+    mem_circleSubgroupToAddCircleSubgroup_iff.mp hz
+  <span class="kw">rw</span> [AddCircle.homeomorphCircle&#x27;.apply_symm_apply] at hz&#x27;
+  <span class="kw">exact</span> hz&#x27;</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.properClosedSubgroup_circleTarget_finite">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.properClosedSubgroup_circleTarget_finite">ProCGroups.Duality.properClosedSubgroup_circleTarget_finite</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L110">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> properClosedSubgroup_circleTarget_finite
+    (A : Subgroup Circle) (hAclosed : IsClosed (A : Set Circle))
+    (hAproper : A ≠ ⊤) :
+    Finite A</code></pre></section>
+    <section><div class="natural-text"><p>Every proper closed subgroup of the circle is finite.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> B := <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.circleSubgroupToAddCircleSubgroup">circleSubgroupToAddCircleSubgroup</a> A
+  <span class="kw">have</span> hBclosed : IsClosed (B : Set (AddCircle (2 * Real.pi))) :=
+    <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.isClosed_circleSubgroupToAddCircleSubgroup">isClosed_circleSubgroupToAddCircleSubgroup</a> A hAclosed
+  <span class="kw">have</span> hBproper : B ≠ ⊤ := <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.circleSubgroupToAddCircleSubgroup_ne_top">circleSubgroupToAddCircleSubgroup_ne_top</a> A hAproper
+  haveI : Fact (0 &lt; 2 * Real.pi) := ⟨<span class="kw">by</span> positivity⟩
+  <span class="kw">have</span> hBfinite : Finite B := <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.properClosedAddSubgroup_addCircle_finite">properClosedAddSubgroup_addCircle_finite</a> B hBclosed hBproper
+  <span class="kw">let</span> e : B ≃ A :=
+    { toFun := <span class="kw">fun</span> θ =&gt; ⟨AddCircle.homeomorphCircle&#x27; θ, θ.2⟩
+      invFun := <span class="kw">fun</span> z =&gt; ⟨AddCircle.homeomorphCircle&#x27;.symm z, <span class="kw">by</span>
+        change AddCircle.homeomorphCircle&#x27; (AddCircle.homeomorphCircle&#x27;.symm z) ∈ A
+        <span class="kw">rw</span> [AddCircle.homeomorphCircle&#x27;.apply_symm_apply]
+        <span class="kw">exact</span> z.2⟩
+      left_inv := <span class="kw">by</span>
+        <span class="kw">intro</span> θ
+        <span class="kw">apply</span> Subtype.ext
+        <span class="kw">exact</span> AddCircle.homeomorphCircle&#x27;.symm_apply_apply θ.1
+      right_inv := <span class="kw">by</span>
+        <span class="kw">intro</span> z
+        <span class="kw">apply</span> Subtype.ext
+        <span class="kw">exact</span> AddCircle.homeomorphCircle&#x27;.apply_symm_apply z.1 }
+  <span class="kw">exact</span> Finite.of_equiv B e</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.circleTarget_one_ne_exp_pi">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.circleTarget_one_ne_exp_pi">ProCGroups.Duality.circleTarget_one_ne_exp_pi</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L139">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> circleTarget_one_ne_exp_pi :
+    (1 : Circle) ≠ Circle.exp Real.pi</code></pre></section>
+    <section><div class="natural-text"><p>The circle target contains two distinct points.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [eq_comm] using Circle.exp_pi_ne_one</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.not_totallyDisconnectedSpace_circleTarget">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.not_totallyDisconnectedSpace_circleTarget">ProCGroups.Duality.not_totallyDisconnectedSpace_circleTarget</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L144">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> not_totallyDisconnectedSpace_circleTarget :
+    ¬ TotallyDisconnectedSpace Circle</code></pre></section>
+    <section><div class="natural-text"><p>The circle target is not totally disconnected.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> htd
+  letI : TotallyDisconnectedSpace Circle := htd
+  letI : ConnectedSpace Circle :=
+    AddCircle.homeomorphCircle&#x27;.surjective.connectedSpace
+      AddCircle.homeomorphCircle&#x27;.continuous_toFun
+  letI : PreconnectedSpace Circle := inferInstance
+  <span class="kw">have</span> hEq : (1 : Circle) = Circle.exp Real.pi :=
+    TotallyDisconnectedSpace.eq_of_continuous
+      (f := <span class="kw">fun</span> z : Circle =&gt; z) continuous_id 1 (Circle.exp Real.pi)
+  <span class="kw">exact</span> <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.circleTarget_one_ne_exp_pi">circleTarget_one_ne_exp_pi</a> hEq</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.subgroup_eq_bot_of_isCompact_subset_rightHalfPlane">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.subgroup_eq_bot_of_isCompact_subset_rightHalfPlane">ProCGroups.Duality.subgroup_eq_bot_of_isCompact_subset_rightHalfPlane</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L158">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> subgroup_eq_bot_of_isCompact_subset_rightHalfPlane
+    (A : Subgroup Circle) (hAcompact : <a class="decl-ref" href="../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature.IsCompact">IsCompact</a> (A : Set Circle))
+    (hApos : ∀ z ∈ A, 0 &lt; Complex.re (z : ℂ)) :
+    A = ⊥</code></pre></section>
+    <section><div class="natural-text"><p>A compact subgroup of T contained in the open right half-plane is trivial.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  by_cases hAbot : A = ⊥
+  · <span class="kw">exact</span> hAbot
+  <span class="kw">have</span> hAproper : A ≠ ⊤ := <span class="kw">by</span>
+    <span class="kw">intro</span> hAtop
+    <span class="kw">have</span> hneg : Circle.exp Real.pi ∈ A := <span class="kw">by</span>
+      <span class="kw">simp</span> only [hAtop, Subgroup.mem_top]
+    <span class="kw">have</span> hneg&#x27; : ¬ 0 &lt; Complex.re ((Circle.exp Real.pi : Circle) : ℂ) := <span class="kw">by</span>
+      <span class="kw">simp</span> only [Circle.coe_exp, Complex.exp_pi_mul_I, Complex.neg_re, Complex.one_re, Left.neg_pos_iff, not_lt,
+  zero_le_one]
+    <span class="kw">exact</span> hneg&#x27; (hApos (Circle.exp Real.pi) hneg)
+  <span class="kw">have</span> hAfinite : Finite A :=
+    <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.properClosedSubgroup_circleTarget_finite">properClosedSubgroup_circleTarget_finite</a> A hAcompact.isClosed hAproper
+  letI : Fintype A := Fintype.ofFinite A
+  <span class="kw">have</span> hCircleToUnits_injective :
+      Function.Injective (Circle.toUnits : Circle →* Units ℂ) := <span class="kw">by</span>
+    simpa [Circle.toUnits] using unitSphereToUnits_injective (𝕜 := ℂ)
+  <span class="kw">let</span> B : Subgroup (Units ℂ) := A.map Circle.toUnits
+  <span class="kw">let</span> e : A ≃* B := A.equivMapOfInjective Circle.toUnits hCircleToUnits_injective
+  <span class="kw">have</span> hBfinite : Finite B := Finite.of_equiv A e
+  letI : Fintype B := Fintype.ofFinite B
+  <span class="kw">have</span> hBnebot : B ≠ ⊥ := <span class="kw">by</span>
+    <span class="kw">intro</span> hBbot
+    <span class="kw">apply</span> hAbot
+    <span class="kw">exact</span> (Subgroup.map_eq_bot_iff_of_injective
+      (H := A) (f := Circle.toUnits) hCircleToUnits_injective).mp (<span class="kw">by</span> simpa [B] using hBbot)
+  <span class="kw">have</span> hsumB : ∑ x : B, ((x : Units ℂ) : ℂ) = 0 :=
+    FiniteField.sum_subgroup_units_eq_zero hBnebot
+  <span class="kw">have</span> hsumA : ∑ x : A, (x : ℂ) = 0 := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      ∑ x : A, (x : ℂ) = ∑ x : A, (((e x : B) : Units ℂ) : ℂ) := <span class="kw">by</span>
+        <span class="kw">exact</span> Fintype.sum_congr _ _ <span class="kw">fun</span> x =&gt; <span class="kw">by</span>
+          <span class="kw">simp</span> only [Subgroup.coe_equivMapOfInjective_apply, Circle.toUnits_apply, Units.val_mk0, B, e]
+      _ = ∑ y : B, ((y : Units ℂ) : ℂ) := <span class="kw">by</span>
+        simpa using (e.toEquiv.sum_comp <span class="kw">fun</span> y : B =&gt; ((y : Units ℂ) : ℂ))
+      _ = 0 := hsumB
+  <span class="kw">have</span> hsumRePos : 0 &lt; Complex.re (∑ x : A, (x : ℂ)) := <span class="kw">by</span>
+    <span class="kw">rw</span> [Complex.re_sum]
+    simpa using
+      (Finset.sum_pos&#x27; (s := (Finset.univ : Finset A))
+        (f := <span class="kw">fun</span> x : A =&gt; Complex.re (x : ℂ))
+        (<span class="kw">fun</span> x hx =&gt; le_of_lt (hApos x x.2))
+        ⟨1, <span class="kw">by</span> <span class="kw">simp</span> only [Finset.mem_univ], hApos (1 : Circle) A.one_mem⟩)
+  exfalso
+  <span class="kw">rw</span> [hsumA] at hsumRePos
+  <span class="kw">simp</span> only [Complex.zero_re, lt_self_iff_false] at hsumRePos</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.dualGroup_discrete_of_compact">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroup_discrete_of_compact">ProCGroups.Duality.dualGroup_discrete_of_compact</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L210">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> dualGroup_discrete_of_compact [CompactSpace G] :
+    DiscreteTopology (PontryaginDual G)</code></pre></section>
+    <section><div class="natural-text"><p>The Pontryagin dual of a compact <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> group is discrete.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> U : Set Circle := {z | 0 &lt; Complex.re (z : ℂ)}
+  <span class="kw">let</span> V : Set (PontryaginDual G) := {χ | Set.MapsTo χ Set.univ U}
+  <span class="kw">have</span> hUopen : IsOpen U := <span class="kw">by</span>
+    change IsOpen {z : Circle | 0 &lt; Complex.re (z : ℂ)}
+    <span class="kw">exact</span> isOpen_lt continuous_const (Complex.continuous_re.comp continuous_subtype_val)
+  <span class="kw">have</span> hVopen : IsOpen V := <span class="kw">by</span>
+    <span class="kw">let</span> W : Set C(G, Circle) := {f | Set.MapsTo f Set.univ U}
+    <span class="kw">have</span> hWopen : IsOpen W := <span class="kw">by</span>
+      simpa [W] using
+        (ContinuousMap.isOpen_setOf_mapsTo
+          (X := G) (Y := Circle) (K := Set.univ) (U := U) isCompact_univ hUopen)
+    <span class="kw">exact</span> (ContinuousMonoidHom.isInducing_toContinuousMap G Circle).isOpen_iff.mpr
+      ⟨W, hWopen, <span class="kw">by</span> ext χ; <span class="kw">rfl</span>⟩
+  <span class="kw">have</span> hVeq : V = ({1} : Set (PontryaginDual G)) := <span class="kw">by</span>
+    ext χ
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hχ
+      <span class="kw">rw</span> [Set.mem_singleton_iff]
+      <span class="kw">let</span> A : Subgroup Circle := χ.toMonoidHom.range
+      <span class="kw">have</span> hAcompact : <a class="decl-ref" href="../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature.IsCompact">IsCompact</a> (A : Set Circle) := <span class="kw">by</span>
+        simpa [A] using isCompact_range χ.continuous_toFun
+      <span class="kw">have</span> hApos : ∀ z ∈ A, 0 &lt; Complex.re (z : ℂ) := <span class="kw">by</span>
+        <span class="kw">intro</span> z hz
+        rcases hz <span class="kw">with</span> ⟨g, <span class="kw">rfl</span>⟩
+        <span class="kw">exact</span> hχ (<span class="kw">by</span> <span class="kw">simp</span> only [Set.mem_univ])
+      <span class="kw">have</span> hAbot : A = ⊥ :=
+        <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.subgroup_eq_bot_of_isCompact_subset_rightHalfPlane">subgroup_eq_bot_of_isCompact_subset_rightHalfPlane</a> A hAcompact hApos
+      <span class="kw">apply</span> ContinuousMonoidHom.ext
+      <span class="kw">intro</span> g
+      <span class="kw">have</span> hg : χ g ∈ A := ⟨g, <span class="kw">rfl</span>⟩
+      <span class="kw">have</span> hg&#x27; : χ g ∈ (⊥ : Subgroup Circle) := <span class="kw">by</span>
+        simpa [hAbot] using hg
+      simpa using hg&#x27;
+    · <span class="kw">intro</span> hχ
+      <span class="kw">rw</span> [Set.mem_singleton_iff] at hχ
+      subst hχ
+      <span class="kw">intro</span> _g _hg
+      change 0 &lt; Complex.re ((1 : Circle) : ℂ)
+      norm_num
+  <span class="kw">have</span> hOneOpen : IsOpen ({1} : Set (PontryaginDual G)) := <span class="kw">by</span>
+    simpa [hVeq] using hVopen
+  <span class="kw">exact</span> discreteTopology_of_isOpen_singleton_one hOneOpen</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-ProCGroups.Duality.dualCompactSpaceOfDiscreteTopology">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualCompactSpaceOfDiscreteTopology">ProCGroups.Duality.dualCompactSpaceOfDiscreteTopology</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L256">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> dualCompactSpaceOfDiscreteTopology [DiscreteTopology G] :
+    CompactSpace (PontryaginDual G) := <span class="kw">by</span>
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>A discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> group has compact Pontryagin dual.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.dualGroup_compact_of_discrete">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroup_compact_of_discrete">ProCGroups.Duality.dualGroup_compact_of_discrete</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L261">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> dualGroup_compact_of_discrete [DiscreteTopology G] :
+    CompactSpace (PontryaginDual G)</code></pre></section>
+    <section><div class="natural-text"><p>The Pontryagin dual of a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> group is compact.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  infer_instance</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Duality.torsionPowerWitnessOfElement">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.torsionPowerWitnessOfElement">ProCGroups.Duality.torsionPowerWitnessOfElement</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L265">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">noncomputable</span> <span class="kw">def</span> torsionPowerWitnessOfElement
+    {G : <span class="kw">Type</span> u} [CommGroup G] (htors : Monoid.IsTorsion G) (g : G) : ℕ :=
+  Classical.choose &lt;| (isOfFinOrder_iff_pow_eq_one).mp (htors g)</code></pre></section>
+    <section><div class="natural-text"><p>The torsion-power witness supplies the power relation required for the element.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.torsionPowerWitnessOfElement_pos">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.torsionPowerWitnessOfElement_pos">ProCGroups.Duality.torsionPowerWitnessOfElement_pos</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L269">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> torsionPowerWitnessOfElement_pos
+    {G : <span class="kw">Type</span> u} [CommGroup G] (htors : Monoid.IsTorsion G) (g : G) :
+    0 &lt; <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.torsionPowerWitnessOfElement">torsionPowerWitnessOfElement</a> htors g</code></pre></section>
+    <section><div class="natural-text"><p>The dual-group construction is functorial and is evaluated pointwise on continuous characters.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>(Classical.choose_spec &lt;| (isOfFinOrder_iff_pow_eq_one).mp (htors g)).1</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.pow_torsionPowerWitnessOfElement_eq_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.pow_torsionPowerWitnessOfElement_eq_one">ProCGroups.Duality.pow_torsionPowerWitnessOfElement_eq_one</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L274">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> pow_torsionPowerWitnessOfElement_eq_one
+    {G : <span class="kw">Type</span> u} [CommGroup G] (htors : Monoid.IsTorsion G) (g : G) :
+    g ^ <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.torsionPowerWitnessOfElement">torsionPowerWitnessOfElement</a> htors g = 1</code></pre></section>
+    <section><div class="natural-text"><p>The torsion-power witness supplies the power relation required for the element.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>(Classical.choose_spec &lt;| (isOfFinOrder_iff_pow_eq_one).mp (htors g)).2</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.dualGroup_totallyDisconnected_of_discrete_torsion">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroup_totallyDisconnected_of_discrete_torsion">ProCGroups.Duality.dualGroup_totallyDisconnected_of_discrete_torsion</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L280">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> dualGroup_totallyDisconnected_of_discrete_torsion
+    (G : <span class="kw">Type</span> u) [CommGroup G] [TopologicalSpace G]
+    [DiscreteTopology G] (htors : Monoid.IsTorsion G) :
+    TotallyDisconnectedSpace (PontryaginDual G)</code></pre></section>
+    <section><div class="natural-text"><p>The Pontryagin dual of a discrete torsion <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> group is totally disconnected.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> n : G → ℕ := <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.torsionPowerWitnessOfElement">torsionPowerWitnessOfElement</a> htors
+  <span class="kw">let</span> Ω : G → <span class="kw">Type</span> := <span class="kw">fun</span> g =&gt; { z : Circle // (z : ℂ) ^ n g = 1 }
+  <span class="kw">have</span> hΩfinite : ∀ g : G, Finite (Ω g) := <span class="kw">by</span>
+    <span class="kw">intro</span> g
+    classical
+    letI : NeZero (n g) := ⟨Nat.ne_of_gt &lt;| <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.torsionPowerWitnessOfElement_pos">torsionPowerWitnessOfElement_pos</a> htors g⟩
+    <span class="kw">have</span> hcomplexFinite :
+        Finite {z : ℂ // z ∈ Polynomial.nthRoots (n g) (1 : ℂ)} := <span class="kw">by</span>
+      simpa using
+        (((Polynomial.nthRoots (n g) (1 : ℂ)).toFinset.finite_toSet).to_subtype)
+    refine Finite.of_injective
+      (f := <span class="kw">fun</span> z : Ω g =&gt;
+        (⟨(z : ℂ), (Polynomial.mem_nthRoots (Nat.pos_of_neZero (n g))).2 z.2⟩ :
+          {z : ℂ // z ∈ Polynomial.nthRoots (n g) (1 : ℂ)})) ?_
+    <span class="kw">intro</span> x y hxy
+    <span class="kw">have</span> hxyComplex : ((x : Ω g) : ℂ) = ((y : Ω g) : ℂ) := <span class="kw">by</span>
+      <span class="kw">exact</span> congrArg
+        (<span class="kw">fun</span> w : {z : ℂ // z ∈ Polynomial.nthRoots (n g) (1 : ℂ)} =&gt; (w : ℂ)) hxy
+    <span class="kw">have</span> hxyCircle : ((x : Ω g) : Circle) = ((y : Ω g) : Circle) := <span class="kw">by</span>
+      <span class="kw">apply</span> Subtype.ext
+      <span class="kw">exact</span> hxyComplex
+    <span class="kw">exact</span> Subtype.ext hxyCircle
+  letI : ∀ g : G, Finite (Ω g) := hΩfinite
+  letI : ∀ g : G, TopologicalSpace (Ω g) := <span class="kw">fun</span> _ =&gt; inferInstance
+  letI : ∀ g : G, DiscreteTopology (Ω g) := <span class="kw">fun</span> _ =&gt; inferInstance
+  <span class="kw">let</span> F : PontryaginDual G → ∀ g : G, Ω g := <span class="kw">fun</span> χ g =&gt;
+    ⟨χ g, <span class="kw">by</span>
+      <span class="kw">have</span> hpow : χ g ^ n g = 1 := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          χ g ^ n g = χ (g ^ n g) := <span class="kw">by</span> <span class="kw">simp</span> only [map_pow]
+          _ = 1 := <span class="kw">by</span> <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.pow_torsionPowerWitnessOfElement_eq_one">pow_torsionPowerWitnessOfElement_eq_one</a> (htors := htors) g, <a class="decl-ref" href="../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, n]
+      <span class="kw">exact</span> congrArg (<span class="kw">fun</span> z : Circle =&gt; (z : ℂ)) hpow⟩
+  <span class="kw">have</span> hFcont : Continuous F := <span class="kw">by</span>
+    refine continuous_pi ?_
+    <span class="kw">intro</span> g
+    <span class="kw">exact</span>
+      ((continuous_eval_const (F := C(G, Circle)) g).comp
+        (ContinuousMonoidHom.isInducing_toContinuousMap G Circle).continuous).subtype_mk
+        <span class="kw">fun</span> χ =&gt; (F χ g).2
+  <span class="kw">have</span> hFinj : Function.Injective F := <span class="kw">by</span>
+    <span class="kw">intro</span> χ ψ hχψ
+    <span class="kw">apply</span> ContinuousMonoidHom.ext
+    <span class="kw">intro</span> g
+    <span class="kw">exact</span> congrArg (<span class="kw">fun</span> z : Ω g =&gt; (z : Circle)) (congrFun hχψ g)
+  <span class="kw">let</span> FRange : PontryaginDual G → Set.range F := <span class="kw">fun</span> χ =&gt; ⟨F χ, ⟨χ, <span class="kw">rfl</span>⟩⟩
+  <span class="kw">have</span> hFRange_continuous : Continuous FRange := hFcont.subtype_mk <span class="kw">fun</span> _ =&gt; ⟨_, <span class="kw">rfl</span>⟩
+  <span class="kw">have</span> hFRange_bij : Function.Bijective FRange := <span class="kw">by</span>
+    refine ⟨?_, ?_⟩
+    · <span class="kw">intro</span> χ ψ hχψ
+      <span class="kw">exact</span> hFinj &lt;| congrArg Subtype.val hχψ
+    · rintro ⟨y, χ, <span class="kw">rfl</span>⟩
+      <span class="kw">exact</span> ⟨χ, <span class="kw">rfl</span>⟩
+  <span class="kw">let</span> eTop : PontryaginDual G ≃ₜ Set.range F :=
+    <a class="decl-ref" href="../../library/ProCGroups/InverseSystems/Utilities.html#decl-Continuous.homeoOfBijectiveCompactToT2">Continuous.homeoOfBijectiveCompactToT2</a> hFRange_continuous hFRange_bij
+  letI : TotallyDisconnectedSpace (Set.range F) := inferInstance
+  <span class="kw">exact</span> Homeomorph.totallyDisconnectedSpace eTop.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.dualGroup_isProfiniteGroup_of_discrete_torsion">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroup_isProfiniteGroup_of_discrete_torsion">ProCGroups.Duality.dualGroup_isProfiniteGroup_of_discrete_torsion</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L342">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> dualGroup_isProfiniteGroup_of_discrete_torsion
+    (G : <span class="kw">Type</span> u) [CommGroup G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [DiscreteTopology G] (htors : Monoid.IsTorsion G) :
+    <a class="decl-ref" href="../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (PontryaginDual G)</code></pre></section>
+    <section><div class="natural-text"><p>The Pontryagin dual of a discrete torsion <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> group is profinite.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> ⟨inferInstance, <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_compact_of_discrete">dualGroup_compact_of_discrete</a> (G := G), inferInstance,
+    <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_totallyDisconnected_of_discrete_torsion">dualGroup_totallyDisconnected_of_discrete_torsion</a> (G := G) htors⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.dualGroup_map_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroup_map_apply">ProCGroups.Duality.dualGroup_map_apply</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L350">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> dualGroup_map_apply
+    {H : <span class="kw">Type</span> v} [CommGroup H] [TopologicalSpace H]
+    (f : G →ₜ* H) (χ : PontryaginDual H) (g : G) :
+    PontryaginDual.map f χ g = χ (f g)</code></pre></section>
+    <section><div class="natural-text"><p>The dual-group map is evaluated by precomposition with the original homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> PontryaginDual.map_apply f χ g</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.dualGroup_map_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroup_map_one">ProCGroups.Duality.dualGroup_map_one</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L357">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> dualGroup_map_one :
+    PontryaginDual.map (1 : G →ₜ* G) = 1</code></pre></section>
+    <section><div class="natural-text"><p>Identity compatibility for the induced dual map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> PontryaginDual.map_one</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.dualGroup_map_comp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroup_map_comp">ProCGroups.Duality.dualGroup_map_comp</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L362">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> dualGroup_map_comp
+    {H K : <span class="kw">Type</span>*} [CommGroup H] [TopologicalSpace H]
+    [CommGroup K] [TopologicalSpace K]
+    (g : H →ₜ* K) (f : G →ₜ* H) :
+    PontryaginDual.map (g.comp f) = (PontryaginDual.map f).comp (PontryaginDual.map g)</code></pre></section>
+    <section><div class="natural-text"><p>Composition compatibility for the induced dual map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> PontryaginDual.map_comp g f</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.dualGroup_map_mul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroup_map_mul">ProCGroups.Duality.dualGroup_map_mul</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L370">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> dualGroup_map_mul
+    {H : <span class="kw">Type</span>*} [CommGroup H] [TopologicalSpace H] [IsTopologicalGroup H]
+    (f₁ f₂ : G →ₜ* H) :
+    PontryaginDual.map (f₁ * f₂) = PontryaginDual.map f₁ * PontryaginDual.map f₂</code></pre></section>
+    <section><div class="natural-text"><p>Multiplicative compatibility for the induced dual map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> PontryaginDual.map_mul f₁ f₂</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Duality.dualGroupEquivAddCharCircle">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroupEquivAddCharCircle">ProCGroups.Duality.dualGroupEquivAddCharCircle</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L378">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> dualGroupEquivAddCharCircle
+    (A : <span class="kw">Type</span> u) [CommGroup A] [TopologicalSpace A] [DiscreteTopology A] :
+    PontryaginDual A ≃ AddChar (Additive A) Circle <span class="kw">where</span>
+  toFun := <span class="kw">fun</span> χ =&gt;
+    { toFun := <span class="kw">fun</span> a =&gt; χ a.toMul
+      map_zero_eq_one&#x27; := <span class="kw">by</span> <span class="kw">simp</span> only [toMul_zero, <a class="decl-ref" href="../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>]
+      map_add_eq_mul&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> a b
+        <span class="kw">exact</span> <a class="decl-ref" href="../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a> χ a.toMul b.toMul }
+  invFun := <span class="kw">fun</span> χ =&gt;
+    { toFun := <span class="kw">fun</span> a =&gt; χ (Additive.ofMul a)
+      map_one&#x27; := <span class="kw">by</span> <span class="kw">simp</span> only [ofMul_one, AddChar.map_zero_eq_one]
+      map_mul&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> a b
+        <span class="kw">exact</span> χ.map_add_eq_mul (Additive.ofMul a) (Additive.ofMul b)
+      continuous_toFun := continuous_of_discreteTopology }
+  left_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> χ
+    <span class="kw">apply</span> ContinuousMonoidHom.ext
+    <span class="kw">intro</span> a
+    <span class="kw">rfl</span>
+  right_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> χ
+    ext a
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>For a discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> group, multiplicative characters to the circle are the same as additive characters on the additive type synonym.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.dualGroup_finite_of_finite_discrete">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroup_finite_of_finite_discrete">ProCGroups.Duality.dualGroup_finite_of_finite_discrete</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L405">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> dualGroup_finite_of_finite_discrete
+    (A : <span class="kw">Type</span> u) [CommGroup A] [TopologicalSpace A] [Finite A] [DiscreteTopology A] :
+    Finite (PontryaginDual A)</code></pre></section>
+    <section><div class="natural-text"><p>The Pontryagin dual of a <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> group is finite.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  letI : Fintype A := Fintype.ofFinite A
+  letI : Fintype (Additive A) := Fintype.ofFinite (Additive A)
+  haveI : Finite (AddChar (Additive A) ℂ) := <span class="kw">by</span> infer_instance
+  haveI : Finite (AddChar (Additive A) Circle) :=
+    Finite.of_equiv (AddChar (Additive A) ℂ)
+      (AddChar.circleEquivComplex (α := Additive A)).symm
+  <span class="kw">exact</span> Finite.of_equiv (AddChar (Additive A) Circle)
+    (<a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroupEquivAddCharCircle">dualGroupEquivAddCharCircle</a> A).symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.card_dualGroup_eq_card_of_finite_discrete">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.card_dualGroup_eq_card_of_finite_discrete">ProCGroups.Duality.card_dualGroup_eq_card_of_finite_discrete</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L419">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> card_dualGroup_eq_card_of_finite_discrete
+    (A : <span class="kw">Type</span> u) [CommGroup A] [TopologicalSpace A] [Finite A] [DiscreteTopology A] :
+    Nat.card (PontryaginDual A) = Nat.card A</code></pre></section>
+    <section><div class="natural-text"><p>A <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> group and its Pontryagin dual have the same cardinality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  letI : Fintype A := Fintype.ofFinite A
+  letI : Fintype (Additive A) := Fintype.ofFinite (Additive A)
+  <span class="kw">let</span> e₁ := <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroupEquivAddCharCircle">dualGroupEquivAddCharCircle</a> A
+  <span class="kw">let</span> e₂ := (AddChar.circleEquivComplex (α := Additive A)).toEquiv
+  haveI : Finite (PontryaginDual A) := <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_finite_of_finite_discrete">dualGroup_finite_of_finite_discrete</a> A
+  letI : Fintype (PontryaginDual A) := Fintype.ofFinite (PontryaginDual A)
+  haveI : Finite (AddChar (Additive A) Circle) :=
+    Finite.of_equiv (AddChar (Additive A) ℂ)
+      (AddChar.circleEquivComplex (α := Additive A)).symm
+  letI : Fintype (AddChar (Additive A) Circle) :=
+    Fintype.ofFinite (AddChar (Additive A) Circle)
+  <span class="kw">calc</span>
+    Nat.card (PontryaginDual A) = Fintype.card (PontryaginDual A) := Nat.card_eq_fintype_card
+    _ = Fintype.card (AddChar (Additive A) Circle) := Fintype.card_congr e₁
+    _ = Fintype.card (AddChar (Additive A) ℂ) := Fintype.card_congr e₂
+    _ = Fintype.card (Additive A) := AddChar.card_eq (α := Additive A)
+    _ = Fintype.card A := <span class="kw">rfl</span>
+    _ = Nat.card A := Nat.card_eq_fintype_card.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Duality.dualGroupEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroupEquiv">ProCGroups.Duality.dualGroupEquiv</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L443">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> dualGroupEquiv
+    {H : <span class="kw">Type</span> v} [CommGroup H] [TopologicalSpace H]
+    (e : G ≃ₜ* H) :
+    PontryaginDual H ≃* PontryaginDual G :=
+{ toFun := PontryaginDual.map e.toContinuousMonoidHom
+  invFun := PontryaginDual.map e.symm.toContinuousMonoidHom
+  left_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> χ
+    <span class="kw">apply</span> ContinuousMonoidHom.ext
+    <span class="kw">intro</span> g
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_map_apply">dualGroup_map_apply</a>, <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_map_apply">dualGroup_map_apply</a>]
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/Topologies/ContinuousMulEquiv.html#decl-ContinuousMulEquiv.toContinuousMonoidHom_apply">ContinuousMulEquiv.toContinuousMonoidHom_apply</a>, ContinuousMulEquiv.apply_symm_apply]
+  right_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> χ
+    <span class="kw">apply</span> ContinuousMonoidHom.ext
+    <span class="kw">intro</span> g
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_map_apply">dualGroup_map_apply</a>, <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_map_apply">dualGroup_map_apply</a>]
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/Topologies/ContinuousMulEquiv.html#decl-ContinuousMulEquiv.toContinuousMonoidHom_apply">ContinuousMulEquiv.toContinuousMonoidHom_apply</a>, ContinuousMulEquiv.symm_apply_apply]
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> χ ψ
+    <span class="kw">exact</span> (PontryaginDual.map e.toContinuousMonoidHom).<a class="decl-ref" href="../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a> χ ψ }</code></pre></section>
+    <section><div class="natural-text"><p>A topological group equivalence induces an equivalence on Pontryagin duals.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Duality.dualGroupContinuousMulEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroupContinuousMulEquiv">ProCGroups.Duality.dualGroupContinuousMulEquiv</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L466">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> dualGroupContinuousMulEquiv
+    {H : <span class="kw">Type</span> v} [CommGroup H] [TopologicalSpace H]
+    (e : G ≃ₜ* H) :
+    PontryaginDual H ≃ₜ* PontryaginDual G :=
+  <a class="decl-ref" href="../../library/ProCGroups/Topologies/ContinuousMulEquiv.html#decl-ContinuousMulEquiv.ofHomInv">ContinuousMulEquiv.ofHomInv</a>
+    (PontryaginDual.map e.toContinuousMonoidHom)
+    (PontryaginDual.map e.symm.toContinuousMonoidHom)
+    (<span class="kw">by</span>
+      <span class="kw">intro</span> χ
+      <span class="kw">apply</span> ContinuousMonoidHom.ext
+      <span class="kw">intro</span> h
+      <span class="kw">rw</span> [<a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_map_apply">dualGroup_map_apply</a>, <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_map_apply">dualGroup_map_apply</a>]
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/Topologies/ContinuousMulEquiv.html#decl-ContinuousMulEquiv.toContinuousMonoidHom_apply">ContinuousMulEquiv.toContinuousMonoidHom_apply</a>, ContinuousMulEquiv.apply_symm_apply])
+    (<span class="kw">by</span>
+      <span class="kw">intro</span> χ
+      <span class="kw">apply</span> ContinuousMonoidHom.ext
+      <span class="kw">intro</span> g
+      <span class="kw">rw</span> [<a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_map_apply">dualGroup_map_apply</a>, <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroup_map_apply">dualGroup_map_apply</a>]
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ProCGroups/Topologies/ContinuousMulEquiv.html#decl-ContinuousMulEquiv.toContinuousMonoidHom_apply">ContinuousMulEquiv.toContinuousMonoidHom_apply</a>, ContinuousMulEquiv.symm_apply_apply])</code></pre></section>
+    <section><div class="natural-text"><p>A topological group equivalence induces a continuous equivalence on Pontryagin duals.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Duality.dualGroupContinuousMulEquiv_toMulEquiv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Duality.dualGroupContinuousMulEquiv_toMulEquiv">ProCGroups.Duality.dualGroupContinuousMulEquiv_toMulEquiv</a>
+    <a class="source-link" href="../../library/src/ProCGroups/Duality.html#L486">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> dualGroupContinuousMulEquiv_toMulEquiv
+    {H : <span class="kw">Type</span> v} [CommGroup H] [TopologicalSpace H]
+    (e : G ≃ₜ* H) :
+    (<a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroupContinuousMulEquiv">dualGroupContinuousMulEquiv</a> (G := G) e).toMulEquiv = <a class="decl-ref" href="../../library/ProCGroups/Duality.html#decl-ProCGroups.Duality.dualGroupEquiv">dualGroupEquiv</a> (G := G) e</code></pre></section>
+    <section><div class="natural-text"><p>The underlying multiplicative equivalence of the dual-group continuous multiplicative equivalence is <a class="decl-ref" href="../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with the profinite topology and gives the continuous map or equivalence determined by the <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use Pontryagin duality pointwise on continuous characters. Functoriality is by precomposition, equivalences are transported by composing with the given topological equivalence, and <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, discrete, and compact claims use the standard duality facts for <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> groups, compact groups, and circle subgroups. Torsion witnesses and cardinal statements are checked on the corresponding characters or <a class="decl-ref" href="../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> dual groups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Duality"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../assets/site.js" data-root="../../"></script>
+</body>
+</html>

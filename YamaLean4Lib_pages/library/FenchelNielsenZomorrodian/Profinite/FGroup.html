@@ -1,0 +1,1717 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FenchelNielsenZomorrodian.Profinite.FGroup | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">FenchelNielsenZomorrodian.Profinite.FGroup</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/FenchelNielsenZomorrodian.html">FenchelNielsenZomorrodian</a><span class="sep">/</span><a href="../../../library/FenchelNielsenZomorrodian/Profinite.html">Profinite</a><span class="sep">/</span><span>FGroup</span></div>
+      <h1 class="module-title">FenchelNielsenZomorrodian.Profinite.FGroup</h1>
+      <div class="module-meta">34 Theorem | 22 Definition | 2 Abbreviation | 1 Structure | 1 Inductive | 4 Instance</div>
+      <div class="module-overview"><p>This module develops Fenchel--Nielsen--Zomorrodian presentation reductions, period relations, reindexings, and quotient maps.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html">FenchelNielsenZomorrodian.Discrete.Core.Signature</a></li><li>Mathlib.GroupTheory.Solvable</li><li><a href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html">ProCGroups.FiniteStepSolvableQuotients.Commutators.DerivedSeriesAndQuotients</a></li><li><a href="../../../library/ProCGroups/Presentations/SchreierTietze/Restricted.html">ProCGroups.Presentations.SchreierTietze.Restricted</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/FenchelNielsenZomorrodian/Profinite/CharacteristicClosure.html">FenchelNielsenZomorrodian.Profinite.CharacteristicClosure</a></li><li><a href="../../../library/FenchelNielsenZomorrodian/Profinite/Perfectness.html">FenchelNielsenZomorrodian.Profinite.Perfectness</a></li><li><a href="../../../library/FenchelNielsenZomorrodian/Profinite/TorsionFrontier.html">FenchelNielsenZomorrodian.Profinite.TorsionFrontier</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-FenchelNielsen.ContinuousMonoidHom.liftOfSurjective">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ContinuousMonoidHom.liftOfSurjective">FenchelNielsen.ContinuousMonoidHom.liftOfSurjective</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L40">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> liftOfSurjective
+    [CompactSpace F] [T2Space G]
+    (<a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> : F →ₜ* G) (hπ : Function.Surjective <a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a>)
+    (φ : F →ₜ* A) (hker : π.toMonoidHom.ker ≤ φ.toMonoidHom.ker) :
+    G →ₜ* A := <span class="kw">by</span>
+  <span class="kw">let</span> ψ : G →* A :=
+    (π.toMonoidHom.liftOfSurjective hπ) ⟨φ.toMonoidHom, hker⟩
+  <span class="kw">have</span> hψcomp : ψ.comp π.toMonoidHom = φ.toMonoidHom := <span class="kw">by</span>
+    ext x
+    <span class="kw">simp</span> only [ContinuousMonoidHom.coe_toMonoidHom, MonoidHom.liftOfSurjective, MonoidHom.coe_coe,
+  MonoidHom.liftOfRightInverse_comp, ψ]
+  <span class="kw">have</span> hcomp_continuous : Continuous <span class="kw">fun</span> x : F =&gt; ψ (<a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> x) := <span class="kw">by</span>
+    convert φ.continuous_toFun using 1
+    funext x
+    <span class="kw">exact</span> MonoidHom.ext_iff.mp hψcomp x
+  <span class="kw">exact</span>
+    { toMonoidHom := ψ
+      continuous_toFun :=
+        (IsQuotientMap.of_surjective_continuous
+          hπ π.continuous_toFun).continuous_iff.2 hcomp_continuous }</code></pre></section>
+    <section><div class="natural-text"><p>Descend a continuous homomorphism along a continuous surjection, using a kernel inclusion. This is the presentation quotient bridge used for profinite F-groups: a continuous homomorphism out of the free profinite source descends to the presented group once it kills the presentation kernel.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ContinuousMonoidHom.liftOfSurjective_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ContinuousMonoidHom.liftOfSurjective_apply">FenchelNielsen.ContinuousMonoidHom.liftOfSurjective_apply</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L61">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> liftOfSurjective_apply
+    [CompactSpace F] [T2Space G]
+    (<a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> : F →ₜ* G) (hπ : Function.Surjective <a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a>)
+    (φ : F →ₜ* A) (hker : π.toMonoidHom.ker ≤ φ.toMonoidHom.ker)
+    (x : F) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ContinuousMonoidHom.liftOfSurjective">liftOfSurjective</a> <a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπ φ hker (<a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> x) = φ x</code></pre></section>
+    <section><div class="natural-text"><p>The descended homomorphism is evaluated by applying the original homomorphism to any chosen preimage.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change
+    ((π.toMonoidHom.liftOfSurjective hπ) ⟨φ.toMonoidHom, hker⟩)
+        (π.toMonoidHom x) = φ.toMonoidHom x
+  <span class="kw">exact</span>
+    MonoidHom.liftOfRightInverse_comp_apply
+      (f := π.toMonoidHom) (f_inv := Function.surjInv hπ)
+      (Function.rightInverse_surjInv hπ) ⟨φ.toMonoidHom, hker⟩ x</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ContinuousMonoidHom.liftOfSurjective_comp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ContinuousMonoidHom.liftOfSurjective_comp">FenchelNielsen.ContinuousMonoidHom.liftOfSurjective_comp</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L75">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> liftOfSurjective_comp
+    [CompactSpace F] [T2Space G]
+    (<a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> : F →ₜ* G) (hπ : Function.Surjective <a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a>)
+    (φ : F →ₜ* A) (hker : π.toMonoidHom.ker ≤ φ.toMonoidHom.ker) :
+    (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ContinuousMonoidHom.liftOfSurjective">liftOfSurjective</a> <a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπ φ hker).toMonoidHom.comp π.toMonoidHom =
+      φ.toMonoidHom</code></pre></section>
+    <section><div class="natural-text"><p>Composing the descended homomorphism with the quotient map recovers the original homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext x
+  <span class="kw">simp</span> only [ContinuousMonoidHom.coe_toMonoidHom, MonoidHom.coe_comp, MonoidHom.coe_coe, Function.comp_apply,
+  <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ContinuousMonoidHom.liftOfSurjective_apply">liftOfSurjective_apply</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl abbrev" id="decl-FenchelNielsen.profiniteDerivedSeries">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.profiniteDerivedSeries">FenchelNielsen.profiniteDerivedSeries</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L88">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> profiniteDerivedSeries
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (m : ℕ) : Subgroup G :=
+  <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop">ProCGroups.FiniteStepSolvableQuotients.topDerivedTop</a> G m</code></pre></section>
+    <section><div class="natural-text"><p>The closed derived series of a profinite group, starting from the whole group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.profiniteDerivedSeries_one_eq_bot_of_commGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.profiniteDerivedSeries_one_eq_bot_of_commGroup">FenchelNielsen.profiniteDerivedSeries_one_eq_bot_of_commGroup</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L93">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> profiniteDerivedSeries_one_eq_bot_of_commGroup
+    (G : <span class="kw">Type</span> u) [CommGroup G] [TopologicalSpace G] [T1Space G]
+    [IsTopologicalGroup G] :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a> G 1 = ⊥</code></pre></section>
+    <section><div class="natural-text"><p>In a commutative \(T_1\) topological group, the first closed derived subgroup is trivial.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change
+    (⁅(⊤ : Subgroup G), (⊤ : Subgroup G)⁆).<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.TopologicallyCharacteristic.topologicalClosure">topologicalClosure</a> =
+      (⊥ : Subgroup G)
+  <span class="kw">have</span> hcomm :
+      ⁅(⊤ : Subgroup G), (⊤ : Subgroup G)⁆ = (⊥ : Subgroup G) := <span class="kw">by</span>
+    <span class="kw">rw</span> [Subgroup.commutator_eq_bot_iff_le_centralizer]
+    <span class="kw">intro</span> x _hx
+    <span class="kw">rw</span> [Subgroup.mem_centralizer_iff]
+    <span class="kw">intro</span> y _hy
+    <span class="kw">exact</span> mul_comm y x
+  <span class="kw">rw</span> [hcomm]
+  <span class="kw">apply</span> le_antisymm
+  · <span class="kw">exact</span>
+      Subgroup.topologicalClosure_minimal
+        (s := (⊥ : Subgroup G)) bot_le (<span class="kw">by</span>
+          change IsClosed ({1} : Set G)
+          <span class="kw">exact</span> isClosed_singleton)
+  · <span class="kw">exact</span> bot_le</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the closed derived series. In the discrete case closures do not change the ordinary derived subgroup, and for a commutative \(T_1\) group the <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup is trivial.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.profiniteDerivedSeries_eq_derivedSeries_of_discrete">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.profiniteDerivedSeries_eq_derivedSeries_of_discrete">FenchelNielsen.profiniteDerivedSeries_eq_derivedSeries_of_discrete</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L116">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> profiniteDerivedSeries_eq_derivedSeries_of_discrete
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [DiscreteTopology G]
+    [IsTopologicalGroup G] :
+    ∀ m : ℕ, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a> G m = derivedSeries G m</code></pre></section>
+    <section><div class="natural-text"><p>For a discrete topological group, the closed profinite derived series agrees with the ordinary derived series.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> m
+  <span class="kw">induction</span> m <span class="kw">with</span>
+  | <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> =&gt;
+      <span class="kw">rfl</span>
+  | succ m ih =&gt;
+      change
+        (⁅<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a> G m, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a> G m⁆).<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.TopologicallyCharacteristic.topologicalClosure">topologicalClosure</a> =
+          derivedSeries G (m + 1)
+      <span class="kw">rw</span> [ih, derivedSeries_succ]
+      <span class="kw">apply</span> le_antisymm
+      · <span class="kw">exact</span>
+          Subgroup.topologicalClosure_minimal
+            (s := ⁅derivedSeries G m, derivedSeries G m⁆) le_rfl
+            (isClosed_discrete _)
+      · <span class="kw">exact</span>
+          Subgroup.le_topologicalClosure
+            (s := ⁅derivedSeries G m, derivedSeries G m⁆)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the closed derived series. In the discrete case closures do not change the ordinary derived subgroup, and for a commutative \(T_1\) group the <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup is trivial.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.profiniteFenchelGeneratorSet">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.profiniteFenchelGeneratorSet">FenchelNielsen.profiniteFenchelGeneratorSet</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L139">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> profiniteFenchelGeneratorSet
+    {G : <span class="kw">Type</span> u} {σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>}
+    (surfaceA surfaceB : Fin σ.orbitGenus → G)
+    (cusp : Fin σ.numCusps → G)
+    (inertia : Fin σ.numPeriods → G) : Set G :=
+  Set.range surfaceA ∪ Set.range surfaceB ∪ Set.range cusp ∪ Set.range inertia</code></pre></section>
+    <section><div class="natural-text"><p>The Fenchel--Nielsen <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> set for a profinite F-group presentation.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.profiniteFenchelTotalRelation">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.profiniteFenchelTotalRelation">FenchelNielsen.profiniteFenchelTotalRelation</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L147">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> profiniteFenchelTotalRelation
+    {G : <span class="kw">Type</span> u} [Group G] {σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>}
+    (surfaceA surfaceB : Fin σ.orbitGenus → G)
+    (cusp : Fin σ.numCusps → G)
+    (inertia : Fin σ.numPeriods → G) : G :=
+  ((List.finRange σ.orbitGenus).map <span class="kw">fun</span> i =&gt; ⁅surfaceA i, surfaceB i⁆).prod *
+    ((List.finRange σ.numCusps).map <span class="kw">fun</span> j =&gt; cusp j).prod *
+      ((List.finRange σ.numPeriods).map <span class="kw">fun</span> k =&gt; inertia k).prod</code></pre></section>
+    <section><div class="natural-text"><p>The single Fenchel--Nielsen surface relation is \(\prod_i [\alpha_i,\beta_i]\,\prod_j \gamma_j\,\prod_k \delta_k=1\).</p></div></section>
+  </div>
+</section>
+<section class="decl inductive" id="decl-FenchelNielsen.ProfiniteFenchelGenerator">
+  <div class="decl-head">
+    <span class="kind inductive">Inductive</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFenchelGenerator">FenchelNielsen.ProfiniteFenchelGenerator</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L157">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">inductive</span> ProfiniteFenchelGenerator (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>)
+  | surfaceA : Fin σ.orbitGenus → ProfiniteFenchelGenerator σ
+  | surfaceB : Fin σ.orbitGenus → ProfiniteFenchelGenerator σ
+  | cusp : Fin σ.numCusps → ProfiniteFenchelGenerator σ
+  | inertia : Fin σ.numPeriods → ProfiniteFenchelGenerator σ</code></pre></section>
+    <section><div class="natural-text"><p>Formal indices for the Fenchel--Nielsen profinite F-group generators.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-FenchelNielsen.instTopologicalSpaceProfiniteFenchelGenerator">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.instTopologicalSpaceProfiniteFenchelGenerator">FenchelNielsen.instTopologicalSpaceProfiniteFenchelGenerator</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L163">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instTopologicalSpaceProfiniteFenchelGenerator (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    TopologicalSpace (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFenchelGenerator">ProfiniteFenchelGenerator</a> σ) :=
+  ⊥</code></pre></section>
+    <section><div class="natural-text"><p>The profinite Fenchel <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> type carries the topology induced by its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-FenchelNielsen.instDiscreteTopologyProfiniteFenchelGenerator">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.instDiscreteTopologyProfiniteFenchelGenerator">FenchelNielsen.instDiscreteTopologyProfiniteFenchelGenerator</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L167">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instDiscreteTopologyProfiniteFenchelGenerator (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    DiscreteTopology (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFenchelGenerator">ProfiniteFenchelGenerator</a> σ) :=
+  ⟨<span class="kw">rfl</span>⟩</code></pre></section>
+    <section><div class="natural-text"><p>The profinite Fenchel <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> type carries the discrete topology at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient stage.</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-FenchelNielsen.ProfiniteFenchelGeneratorIndex">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFenchelGeneratorIndex">FenchelNielsen.ProfiniteFenchelGeneratorIndex</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L172">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> ProfiniteFenchelGeneratorIndex (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) : <span class="kw">Type</span> v :=
+  ULift.{v, 0} (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFenchelGenerator">ProfiniteFenchelGenerator</a> σ)</code></pre></section>
+    <section><div class="natural-text"><p>A universe-lifted Fenchel--Nielsen <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> index, suitable as a free pro-\(C\) basis.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-FenchelNielsen.instTopologicalSpaceProfiniteFenchelGeneratorIndex">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.instTopologicalSpaceProfiniteFenchelGeneratorIndex">FenchelNielsen.instTopologicalSpaceProfiniteFenchelGeneratorIndex</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L175">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instTopologicalSpaceProfiniteFenchelGeneratorIndex (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    TopologicalSpace (ProfiniteFenchelGeneratorIndex.{v} σ) :=
+  ⊥</code></pre></section>
+    <section><div class="natural-text"><p>The profinite Fenchel <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-index type carries the topology induced by its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-FenchelNielsen.instDiscreteTopologyProfiniteFenchelGeneratorIndex">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.instDiscreteTopologyProfiniteFenchelGeneratorIndex">FenchelNielsen.instDiscreteTopologyProfiniteFenchelGeneratorIndex</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L179">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instDiscreteTopologyProfiniteFenchelGeneratorIndex (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    DiscreteTopology (ProfiniteFenchelGeneratorIndex.{v} σ) :=
+  ⟨<span class="kw">rfl</span>⟩</code></pre></section>
+    <section><div class="natural-text"><p>The profinite Fenchel <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-index type carries the discrete topology at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient stage.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.profiniteFenchelRelatorSet">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.profiniteFenchelRelatorSet">FenchelNielsen.profiniteFenchelRelatorSet</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L184">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> profiniteFenchelRelatorSet
+    {F : <span class="kw">Type</span> u} [Group F] (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>)
+    (basis : ProfiniteFenchelGeneratorIndex.{u} σ → F) : Set F :=
+  {<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>
+      (<span class="kw">fun</span> i =&gt; basis (ULift.up (ProfiniteFenchelGenerator.surfaceA i)))
+      (<span class="kw">fun</span> i =&gt; basis (ULift.up (ProfiniteFenchelGenerator.surfaceB i)))
+      (<span class="kw">fun</span> j =&gt; basis (ULift.up (ProfiniteFenchelGenerator.cusp j)))
+      (<span class="kw">fun</span> k =&gt; basis (ULift.up (ProfiniteFenchelGenerator.inertia k)))} ∪
+    Set.range <span class="kw">fun</span> k : Fin σ.numPeriods =&gt;
+      basis (ULift.up (ProfiniteFenchelGenerator.inertia k)) ^ σ.periods k</code></pre></section>
+    <section><div class="natural-text"><p>The Fenchel--Nielsen relator set: the total surface relation and all inertia-period relations.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFenchelGenerator.eval">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFenchelGenerator.eval">FenchelNielsen.ProfiniteFenchelGenerator.eval</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L195">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> ProfiniteFenchelGenerator.eval
+    {G : <span class="kw">Type</span> u} {σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>}
+    (surfaceA surfaceB : Fin σ.orbitGenus → G)
+    (cusp : Fin σ.numCusps → G)
+    (inertia : Fin σ.numPeriods → G) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFenchelGenerator">ProfiniteFenchelGenerator</a> σ → G
+  | .surfaceA i =&gt; surfaceA i
+  | .surfaceB i =&gt; surfaceB i
+  | .cusp j =&gt; cusp j
+  | .inertia k =&gt; inertia k</code></pre></section>
+    <section><div class="natural-text"><p>A profinite Fenchel <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> evaluates to its prescribed target element.</p></div></section>
+  </div>
+</section>
+<section class="decl structure" id="decl-FenchelNielsen.ProfiniteFGroup">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup">FenchelNielsen.ProfiniteFGroup</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L206">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> ProfiniteFGroup <span class="kw">where</span>
+  carrier : <span class="kw">Type</span> u
+  [group : Group carrier]
+  [topologicalSpace : TopologicalSpace carrier]
+  [isTopologicalGroup : IsTopologicalGroup carrier]
+  presentationSource : <span class="kw">Type</span> u
+  [presentationSourceGroup : Group presentationSource]
+  [presentationSourceTopologicalSpace : TopologicalSpace presentationSource]
+  [presentationSourceIsTopologicalGroup : IsTopologicalGroup presentationSource]
+  isProfinite : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">ProCGroups.IsProfiniteGroup</a> carrier
+  topologicallyFinitelyGenerated :
+    <a class="decl-ref" href="../../../library/ProCGroups/FiniteGeneration/Basic.html#decl-ProCGroups.FiniteGeneration.TopologicallyFinitelyGenerated">ProCGroups.FiniteGeneration.TopologicallyFinitelyGenerated</a> carrier
+  signature : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>
+  firstDerivedSignature : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>
+  surfaceA : Fin signature.orbitGenus → carrier
+  surfaceB : Fin signature.orbitGenus → carrier
+  cusp : Fin signature.numCusps → carrier
+  inertia : Fin signature.numPeriods → carrier
+  presentation_relation :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a> surfaceA surfaceB cusp inertia = 1
+  presentation_generates :
+    <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.TopologicallyGenerates">ProCGroups.Generation.TopologicallyGenerates</a>
+      (G := carrier)
+      (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelGeneratorSet">profiniteFenchelGeneratorSet</a> surfaceA surfaceB cusp inertia)
+  presentationBasis : ProfiniteFenchelGeneratorIndex.{u} signature → presentationSource
+  presentationRelators : Set presentationSource
+  presentationRelators_eq :
+    presentationRelators =
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelRelatorSet">profiniteFenchelRelatorSet</a> signature presentationBasis
+  presentation :
+    ProCGroups.Presentations.IsFreePresentationOfClass
+      (<a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a> :
+        ProCGroups.FiniteGroupClass.{u})
+      (X := ProfiniteFenchelGeneratorIndex.{u} signature)
+      (F := presentationSource) (G := carrier)
+      presentationBasis presentationRelators
+  presentation_π_surfaceA :
+    ∀ i : Fin signature.orbitGenus,
+      ProCGroups.Presentations.IsFreePresentationOf.π presentation
+        (presentationBasis
+          (ULift.up (ProfiniteFenchelGenerator.surfaceA i))) = surfaceA i
+  presentation_π_surfaceB :
+    ∀ i : Fin signature.orbitGenus,
+      ProCGroups.Presentations.IsFreePresentationOf.π presentation
+        (presentationBasis
+          (ULift.up (ProfiniteFenchelGenerator.surfaceB i))) = surfaceB i
+  presentation_π_cusp :
+    ∀ j : Fin signature.numCusps,
+      ProCGroups.Presentations.IsFreePresentationOf.π presentation
+        (presentationBasis
+          (ULift.up (ProfiniteFenchelGenerator.cusp j))) = cusp j
+  presentation_π_inertia :
+    ∀ k : Fin signature.numPeriods,
+      ProCGroups.Presentations.IsFreePresentationOf.π presentation
+        (presentationBasis
+          (ULift.up (ProfiniteFenchelGenerator.inertia k))) = inertia k
+  inertia_order : ∀ i, orderOf (inertia i) = signature.periods i</code></pre></section>
+    <section><div class="natural-text"><p>The profinite Fenchel--Nielsen group is the profinite group associated with the compact Fuchsian presentation.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.finiteOpenSubgroupsOfIndex">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.finiteOpenSubgroupsOfIndex">FenchelNielsen.ProfiniteFGroup.finiteOpenSubgroupsOfIndex</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L278">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> finiteOpenSubgroupsOfIndex (Δ : ProfiniteFGroup.{u}) :
+    ProCGroups.FiniteGeneration.HasFiniteOpenSubgroupsOfIndex Δ.carrier</code></pre></section>
+    <section><div class="natural-text"><p>A profinite Fenchel group has only finitely many open subgroups of each fixed index. This is the standard <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-generation consequence used by characteristic-closure arguments. Keeping it as a named lemma avoids rebuilding the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-generation proof in the public Fenchel--Nielsen theorems.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : CompactSpace Δ.carrier :=
+    <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup.compactSpace">ProCGroups.IsProfiniteGroup.compactSpace</a> Δ.isProfinite
+  <span class="kw">exact</span>
+    ProCGroups.FiniteGeneration.hasFiniteOpenSubgroupsOfIndex_of_topologicallyFinitelyGenerated
+      (G := Δ.carrier) Δ.topologicallyFinitelyGenerated</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.presentationMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationMap">FenchelNielsen.ProfiniteFGroup.presentationMap</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L286">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> presentationMap (Δ : ProfiniteFGroup.{u}) :
+    Δ.presentationSource →ₜ* Δ.carrier :=
+  ProCGroups.Presentations.IsFreePresentationOf.π Δ.presentation</code></pre></section>
+    <section><div class="natural-text"><p>The presentation map from the free profinite Fenchel source onto the profinite F-group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationMap_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_surjective">FenchelNielsen.ProfiniteFGroup.presentationMap_surjective</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L290">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> presentationMap_surjective (Δ : ProfiniteFGroup.{u}) :
+    Function.Surjective Δ.presentationMap</code></pre></section>
+    <section><div class="natural-text"><p>The presentation map of the profinite F-group is surjective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>ProCGroups.Presentations.IsFreePresentationOf.π_surjective Δ.presentation</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationMap_ker_eq_closedNormalClosure">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_ker_eq_closedNormalClosure">FenchelNielsen.ProfiniteFGroup.presentationMap_ker_eq_closedNormalClosure</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L294">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> presentationMap_ker_eq_closedNormalClosure
+    (Δ : ProfiniteFGroup.{u}) :
+    Δ.presentationMap.toMonoidHom.ker =
+      <a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.Presentations.closedNormalClosure">ProCGroups.Presentations.closedNormalClosure</a> Δ.presentationRelators</code></pre></section>
+    <section><div class="natural-text"><p>The kernel of the profinite Fuchsian presentation map is the closed normal closure of the presentation relators.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>ProCGroups.Presentations.IsFreePresentationOf.kernel_eq_closedNormalClosure
+    Δ.presentation</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationMap_eq_one_of_mem_relators">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_eq_one_of_mem_relators">FenchelNielsen.ProfiniteFGroup.presentationMap_eq_one_of_mem_relators</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L301">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> presentationMap_eq_one_of_mem_relators
+    (Δ : ProfiniteFGroup.{u}) {x : Δ.presentationSource}
+    (hx : x ∈ Δ.presentationRelators) :
+    Δ.presentationMap x = 1</code></pre></section>
+    <section><div class="natural-text"><p>The profinite F-group presentation map sends every defining presentation relator to the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hxClosed :
+      x ∈ <a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.Presentations.closedNormalClosure">ProCGroups.Presentations.closedNormalClosure</a>
+        Δ.presentationRelators :=
+    <a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.Presentations.subset_closedNormalClosure">ProCGroups.Presentations.subset_closedNormalClosure</a>
+      (F := Δ.presentationSource) Δ.presentationRelators hx
+  <span class="kw">have</span> hxKer : x ∈ Δ.presentationMap.toMonoidHom.ker := <span class="kw">by</span>
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_ker_eq_closedNormalClosure">presentationMap_ker_eq_closedNormalClosure</a> Δ]
+    <span class="kw">exact</span> hxClosed
+  <span class="kw">exact</span> hxKer</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationMap_surfaceA">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_surfaceA">FenchelNielsen.ProfiniteFGroup.presentationMap_surfaceA</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L315">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationMap_surfaceA (Δ : ProfiniteFGroup.{u})
+    (i : Fin Δ.signature.orbitGenus) :
+    Δ.presentationMap
+        (Δ.presentationBasis
+          (ULift.up (ProfiniteFenchelGenerator.surfaceA i))) =
+      Δ.surfaceA i</code></pre></section>
+    <section><div class="natural-text"><p>The presentation map sends a surface \(A\)-<a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its image in the profinite F-group.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Δ.presentation_π_surfaceA i</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationMap_surfaceB">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_surfaceB">FenchelNielsen.ProfiniteFGroup.presentationMap_surfaceB</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L323">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationMap_surfaceB (Δ : ProfiniteFGroup.{u})
+    (i : Fin Δ.signature.orbitGenus) :
+    Δ.presentationMap
+        (Δ.presentationBasis
+          (ULift.up (ProfiniteFenchelGenerator.surfaceB i))) =
+      Δ.surfaceB i</code></pre></section>
+    <section><div class="natural-text"><p>The presentation map sends a surface \(B\)-<a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its image in the profinite F-group.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Δ.presentation_π_surfaceB i</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationMap_cusp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_cusp">FenchelNielsen.ProfiniteFGroup.presentationMap_cusp</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L331">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationMap_cusp (Δ : ProfiniteFGroup.{u})
+    (j : Fin Δ.signature.numCusps) :
+    Δ.presentationMap
+        (Δ.presentationBasis
+          (ULift.up (ProfiniteFenchelGenerator.cusp j))) =
+      Δ.cusp j</code></pre></section>
+    <section><div class="natural-text"><p>The presentation map sends a cusp <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its image in the profinite F-group.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Δ.presentation_π_cusp j</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationMap_inertia">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_inertia">FenchelNielsen.ProfiniteFGroup.presentationMap_inertia</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L339">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationMap_inertia (Δ : ProfiniteFGroup.{u})
+    (k : Fin Δ.signature.numPeriods) :
+    Δ.presentationMap
+        (Δ.presentationBasis
+          (ULift.up (ProfiniteFenchelGenerator.inertia k))) =
+      Δ.inertia k</code></pre></section>
+    <section><div class="natural-text"><p>The presentation map sends an inertia <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its image in the profinite F-group.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Δ.presentation_π_inertia k</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationMap_totalRelator_eq_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_totalRelator_eq_one">FenchelNielsen.ProfiniteFGroup.presentationMap_totalRelator_eq_one</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L347">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> presentationMap_totalRelator_eq_one
+    (Δ : ProfiniteFGroup.{u}) :
+    Δ.presentationMap
+        (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>
+          (<span class="kw">fun</span> i =&gt; Δ.presentationBasis
+            (ULift.up (ProfiniteFenchelGenerator.surfaceA i)))
+          (<span class="kw">fun</span> i =&gt; Δ.presentationBasis
+            (ULift.up (ProfiniteFenchelGenerator.surfaceB i)))
+          (<span class="kw">fun</span> j =&gt; Δ.presentationBasis
+            (ULift.up (ProfiniteFenchelGenerator.cusp j)))
+          (<span class="kw">fun</span> k =&gt; Δ.presentationBasis
+            (ULift.up (ProfiniteFenchelGenerator.inertia k)))) = 1</code></pre></section>
+    <section><div class="natural-text"><p>Under the profinite F-group presentation map, the total surface relator maps to the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_eq_one_of_mem_relators">presentationMap_eq_one_of_mem_relators</a> Δ (<span class="kw">by</span>
+    <span class="kw">rw</span> [Δ.presentationRelators_eq]
+    <span class="kw">exact</span> Or.inl <span class="kw">rfl</span>)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationMap_periodRelator_eq_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_periodRelator_eq_one">FenchelNielsen.ProfiniteFGroup.presentationMap_periodRelator_eq_one</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L363">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> presentationMap_periodRelator_eq_one
+    (Δ : ProfiniteFGroup.{u}) (k : Fin Δ.signature.numPeriods) :
+    Δ.presentationMap
+        (Δ.presentationBasis
+          (ULift.up (ProfiniteFenchelGenerator.inertia k)) ^
+          Δ.signature.periods k) = 1</code></pre></section>
+    <section><div class="natural-text"><p>Under the profinite F-group presentation map, each inertia period relator maps to the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_eq_one_of_mem_relators">presentationMap_eq_one_of_mem_relators</a> Δ (<span class="kw">by</span>
+    <span class="kw">rw</span> [Δ.presentationRelators_eq]
+    <span class="kw">exact</span> Or.inr ⟨k, <span class="kw">rfl</span>⟩)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLift">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLift">FenchelNielsen.ProfiniteFGroup.presentationLift</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L373">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> presentationLift
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [T1Space A]
+    (φ : Δ.presentationSource →ₜ* A)
+    (hφ :
+      Δ.presentationRelators ⊆ φ.toMonoidHom.ker) :
+    Δ.carrier →ₜ* A := <span class="kw">by</span>
+  <span class="kw">have</span> hSourceProfinite :
+      <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">ProCGroups.IsProfiniteGroup</a> Δ.presentationSource :=
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.isProfiniteGroup_of_finiteGroupClassProCPredicate">ProCGroups.ProC.isProfiniteGroup_of_finiteGroupClassProCPredicate</a>
+      (<a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a> :
+        ProCGroups.FiniteGroupClass.{u})
+      Δ.presentation.1.isProC
+  letI : CompactSpace Δ.presentationSource :=
+    <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup.compactSpace">ProCGroups.IsProfiniteGroup.compactSpace</a> hSourceProfinite
+  letI : T2Space Δ.carrier :=
+    <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup.t2Space">ProCGroups.IsProfiniteGroup.t2Space</a> Δ.isProfinite
+  <span class="kw">have</span> hClosedKer :
+      IsClosed ((φ.toMonoidHom.ker : Subgroup Δ.presentationSource) :
+        Set Δ.presentationSource) := <span class="kw">by</span>
+    change IsClosed (φ ⁻¹&#x27; ({1} : Set A))
+    <span class="kw">exact</span> isClosed_singleton.preimage φ.continuous_toFun
+  <span class="kw">have</span> hClosedNormal :
+      <a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.Presentations.closedNormalClosure">ProCGroups.Presentations.closedNormalClosure</a> Δ.presentationRelators ≤
+        φ.toMonoidHom.ker :=
+    <a class="decl-ref" href="../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.Presentations.closedNormalClosure_le_closed_normal">ProCGroups.Presentations.closedNormalClosure_le_closed_normal</a>
+      (F := Δ.presentationSource) hClosedKer hφ
+  <span class="kw">have</span> hker : Δ.presentationMap.toMonoidHom.ker ≤ φ.toMonoidHom.ker := <span class="kw">by</span>
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_ker_eq_closedNormalClosure">presentationMap_ker_eq_closedNormalClosure</a> Δ]
+    <span class="kw">exact</span> hClosedNormal
+  <span class="kw">exact</span>
+    ContinuousMonoidHom.liftOfSurjective
+      Δ.presentationMap (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_surjective">presentationMap_surjective</a> Δ) φ hker</code></pre></section>
+    <section><div class="natural-text"><p>A continuous homomorphism from the presentation source whose <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish descends to a continuous homomorphism from the profinite F-group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLift_comp_presentationMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_comp_presentationMap">FenchelNielsen.ProfiniteFGroup.presentationLift_comp_presentationMap</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L407">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationLift_comp_presentationMap
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [T1Space A]
+    (φ : Δ.presentationSource →ₜ* A)
+    (hφ :
+      Δ.presentationRelators ⊆ φ.toMonoidHom.ker) :
+    (Δ.presentationLift φ hφ).toMonoidHom.comp
+        Δ.presentationMap.toMonoidHom =
+      φ.toMonoidHom</code></pre></section>
+    <section><div class="natural-text"><p>Composing a descended presentation lift with the presentation map recovers the original source homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext x
+  dsimp [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLift">presentationLift</a>]
+  <span class="kw">simp</span> only [ContinuousMonoidHom.liftOfSurjective_apply]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index transport and the chosen Schreier transversal. The forward map, quotient map, or <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> equivalence is determined on the named generators, and the relator-respecting statement follows by checking the listed source relator cases after applying those <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLift_surfaceA">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_surfaceA">FenchelNielsen.ProfiniteFGroup.presentationLift_surfaceA</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L420">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationLift_surfaceA
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [T1Space A]
+    (φ : Δ.presentationSource →ₜ* A)
+    (hφ :
+      Δ.presentationRelators ⊆ φ.toMonoidHom.ker)
+    (i : Fin Δ.signature.orbitGenus) :
+    Δ.presentationLift φ hφ (Δ.surfaceA i) =
+      φ (Δ.presentationBasis
+        (ULift.up (ProfiniteFenchelGenerator.surfaceA i)))</code></pre></section>
+    <section><div class="natural-text"><p>The descended presentation lift sends the surface \(A\)-<a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its prescribed image.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [← <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_surfaceA">presentationMap_surfaceA</a> Δ i]
+  <span class="kw">exact</span>
+    MonoidHom.ext_iff.mp
+      (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_comp_presentationMap">presentationLift_comp_presentationMap</a> Δ φ hφ)
+      (Δ.presentationBasis
+        (ULift.up (ProfiniteFenchelGenerator.surfaceA i)))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLift_surfaceB">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_surfaceB">FenchelNielsen.ProfiniteFGroup.presentationLift_surfaceB</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L437">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationLift_surfaceB
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [T1Space A]
+    (φ : Δ.presentationSource →ₜ* A)
+    (hφ :
+      Δ.presentationRelators ⊆ φ.toMonoidHom.ker)
+    (i : Fin Δ.signature.orbitGenus) :
+    Δ.presentationLift φ hφ (Δ.surfaceB i) =
+      φ (Δ.presentationBasis
+        (ULift.up (ProfiniteFenchelGenerator.surfaceB i)))</code></pre></section>
+    <section><div class="natural-text"><p>The descended presentation lift sends the surface \(B\)-<a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its prescribed image.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [← <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_surfaceB">presentationMap_surfaceB</a> Δ i]
+  <span class="kw">exact</span>
+    MonoidHom.ext_iff.mp
+      (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_comp_presentationMap">presentationLift_comp_presentationMap</a> Δ φ hφ)
+      (Δ.presentationBasis
+        (ULift.up (ProfiniteFenchelGenerator.surfaceB i)))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLift_cusp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_cusp">FenchelNielsen.ProfiniteFGroup.presentationLift_cusp</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L454">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationLift_cusp
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [T1Space A]
+    (φ : Δ.presentationSource →ₜ* A)
+    (hφ :
+      Δ.presentationRelators ⊆ φ.toMonoidHom.ker)
+    (j : Fin Δ.signature.numCusps) :
+    Δ.presentationLift φ hφ (Δ.cusp j) =
+      φ (Δ.presentationBasis
+        (ULift.up (ProfiniteFenchelGenerator.cusp j)))</code></pre></section>
+    <section><div class="natural-text"><p>The descended presentation lift sends the cusp <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its prescribed image.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [← <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_cusp">presentationMap_cusp</a> Δ j]
+  <span class="kw">exact</span>
+    MonoidHom.ext_iff.mp
+      (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_comp_presentationMap">presentationLift_comp_presentationMap</a> Δ φ hφ)
+      (Δ.presentationBasis
+        (ULift.up (ProfiniteFenchelGenerator.cusp j)))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLift_inertia">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_inertia">FenchelNielsen.ProfiniteFGroup.presentationLift_inertia</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L471">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> presentationLift_inertia
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [T1Space A]
+    (φ : Δ.presentationSource →ₜ* A)
+    (hφ :
+      Δ.presentationRelators ⊆ φ.toMonoidHom.ker)
+    (k : Fin Δ.signature.numPeriods) :
+    Δ.presentationLift φ hφ (Δ.inertia k) =
+      φ (Δ.presentationBasis
+        (ULift.up (ProfiniteFenchelGenerator.inertia k)))</code></pre></section>
+    <section><div class="natural-text"><p>The descended presentation lift sends the inertia <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its prescribed image.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [← <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationMap_inertia">presentationMap_inertia</a> Δ k]
+  <span class="kw">exact</span>
+    MonoidHom.ext_iff.mp
+      (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_comp_presentationMap">presentationLift_comp_presentationMap</a> Δ φ hφ)
+      (Δ.presentationBasis
+        (ULift.up (ProfiniteFenchelGenerator.inertia k)))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite">FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L490">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> presentationSourceLiftToFinite
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A) :
+    Δ.presentationSource →ₜ* A := <span class="kw">by</span>
+  letI : IsTopologicalGroup A := inferInstance
+  <span class="kw">have</span> hCG :
+      (<a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a> :
+        ProCGroups.FiniteGroupClass.{u}).pred A := <span class="kw">by</span>
+    change Finite A
+    infer_instance
+  <span class="kw">have</span> hA :
+      (<a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a>
+        (<a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a> :
+          ProCGroups.FiniteGroupClass.{u})).<a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCTheory.holds">holds</a> (G := A) := <span class="kw">by</span>
+    <span class="kw">exact</span>
+      <a class="decl-ref" href="../../../library/ProCGroups/ProC/InverseLimits/FiniteQuotients.html#decl-ProCGroups.ProC.IsProCGroup.of_finite_discrete">ProCGroups.ProC.IsProCGroup.of_finite_discrete</a>
+        (C := (<a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a> :
+          ProCGroups.FiniteGroupClass.{u}))
+        <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite_quotientClosed">ProCGroups.FiniteGroupClass.allFinite_quotientClosed</a> hCG
+  <span class="kw">have</span> hχ : Continuous χ := continuous_of_discreteTopology
+  <span class="kw">exact</span>
+    { toMonoidHom := Δ.presentation.1.lift hA χ hχ
+      continuous_toFun := (Δ.presentation.1.lift_spec hA χ hχ).1 }</code></pre></section>
+    <section><div class="natural-text"><p>An arbitrary assignment of the Fenchel--Nielsen presentation generators to a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete group lifts to the free profinite presentation source.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_basis">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_basis">FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_basis</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L515">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> presentationSourceLiftToFinite_basis
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A)
+    (x : ProfiniteFenchelGeneratorIndex.{u} Δ.signature) :
+    Δ.presentationSourceLiftToFinite χ (Δ.presentationBasis x) = χ x</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-target source lift sends each presentation basis <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its prescribed value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : IsTopologicalGroup A := inferInstance
+  <span class="kw">have</span> hCG :
+      (<a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a> :
+        ProCGroups.FiniteGroupClass.{u}).pred A := <span class="kw">by</span>
+    change Finite A
+    infer_instance
+  <span class="kw">have</span> hA :
+      (<a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a>
+        (<a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a> :
+          ProCGroups.FiniteGroupClass.{u})).<a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCTheory.holds">holds</a> (G := A) := <span class="kw">by</span>
+    <span class="kw">exact</span>
+      <a class="decl-ref" href="../../../library/ProCGroups/ProC/InverseLimits/FiniteQuotients.html#decl-ProCGroups.ProC.IsProCGroup.of_finite_discrete">ProCGroups.ProC.IsProCGroup.of_finite_discrete</a>
+        (C := (<a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a> :
+          ProCGroups.FiniteGroupClass.{u}))
+        <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite_quotientClosed">ProCGroups.FiniteGroupClass.allFinite_quotientClosed</a> hCG
+  <span class="kw">have</span> hχ : Continuous χ := continuous_of_discreteTopology
+  change (Δ.presentation.1.lift hA χ hχ) (Δ.presentationBasis x) = χ x
+  <span class="kw">exact</span> (Δ.presentation.1.lift_spec hA χ hχ).2 x</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_totalRelator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_totalRelator">FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_totalRelator</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L540">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> presentationSourceLiftToFinite_totalRelator
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A) :
+    Δ.presentationSourceLiftToFinite χ
+        (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>
+          (<span class="kw">fun</span> i =&gt; Δ.presentationBasis
+            (ULift.up (ProfiniteFenchelGenerator.surfaceA i)))
+          (<span class="kw">fun</span> i =&gt; Δ.presentationBasis
+            (ULift.up (ProfiniteFenchelGenerator.surfaceB i)))
+          (<span class="kw">fun</span> j =&gt; Δ.presentationBasis
+            (ULift.up (ProfiniteFenchelGenerator.cusp j)))
+          (<span class="kw">fun</span> k =&gt; Δ.presentationBasis
+            (ULift.up (ProfiniteFenchelGenerator.inertia k)))) =
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>
+        (<span class="kw">fun</span> i =&gt; χ (ULift.up (ProfiniteFenchelGenerator.surfaceA i)))
+        (<span class="kw">fun</span> i =&gt; χ (ULift.up (ProfiniteFenchelGenerator.surfaceB i)))
+        (<span class="kw">fun</span> j =&gt; χ (ULift.up (ProfiniteFenchelGenerator.cusp j)))
+        (<span class="kw">fun</span> k =&gt; χ (ULift.up (ProfiniteFenchelGenerator.inertia k)))</code></pre></section>
+    <section><div class="natural-text"><p>The lifted <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> presentation satisfies the total relator.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, map_list_prod, List.map_map, Function.comp_def,
+  map_commutatorElement, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_basis">presentationSourceLiftToFinite_basis</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_periodRelator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_periodRelator">FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_periodRelator</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L562">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> presentationSourceLiftToFinite_periodRelator
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A)
+    (k : Fin Δ.signature.numPeriods) :
+    Δ.presentationSourceLiftToFinite χ
+        (Δ.presentationBasis
+          (ULift.up (ProfiniteFenchelGenerator.inertia k)) ^
+          Δ.signature.periods k) =
+      χ (ULift.up (ProfiniteFenchelGenerator.inertia k)) ^
+        Δ.signature.periods k</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> lift of the profinite Fenchel presentation satisfies each period relator.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [map_pow, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_basis">presentationSourceLiftToFinite_basis</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the named period, <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-image, or quotient-data construction. Period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked by the prescribed orders of inertia or elliptic generators; total relations are checked by multiplying the displayed <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images; and data definitions follow by reading off the corresponding period family, index, or signature field.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_relators_subset_ker">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_relators_subset_ker">FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_relators_subset_ker</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L575">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> presentationSourceLiftToFinite_relators_subset_ker
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A)
+    (hTotal :
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>
+          (<span class="kw">fun</span> i =&gt; χ (ULift.up (ProfiniteFenchelGenerator.surfaceA i)))
+          (<span class="kw">fun</span> i =&gt; χ (ULift.up (ProfiniteFenchelGenerator.surfaceB i)))
+          (<span class="kw">fun</span> j =&gt; χ (ULift.up (ProfiniteFenchelGenerator.cusp j)))
+          (<span class="kw">fun</span> k =&gt; χ (ULift.up (ProfiniteFenchelGenerator.inertia k))) = 1)
+    (hPeriod :
+      ∀ k : Fin Δ.signature.numPeriods,
+        χ (ULift.up (ProfiniteFenchelGenerator.inertia k)) ^
+          Δ.signature.periods k = 1) :
+    Δ.presentationRelators ⊆
+      (Δ.presentationSourceLiftToFinite χ).toMonoidHom.ker</code></pre></section>
+    <section><div class="natural-text"><p>The lifted presentation <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> lie in the kernel of the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x hx
+  <span class="kw">rw</span> [Δ.presentationRelators_eq] at hx
+  rcases hx <span class="kw">with</span> hxTotal | ⟨k, <span class="kw">rfl</span>⟩
+  · <span class="kw">rw</span> [Set.mem_singleton_iff] at hxTotal
+    subst x
+    simpa [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_totalRelator">presentationSourceLiftToFinite_totalRelator</a>] using hTotal
+  · simpa [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_periodRelator">presentationSourceLiftToFinite_periodRelator</a>] using hPeriod k</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite">FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L601">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> presentationLiftToFinite
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A)
+    (hχ :
+      Δ.presentationRelators ⊆
+        (Δ.presentationSourceLiftToFinite χ).toMonoidHom.ker) :
+    Δ.carrier →ₜ* A :=
+  Δ.presentationLift (Δ.presentationSourceLiftToFinite χ) hχ</code></pre></section>
+    <section><div class="natural-text"><p>Descend a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-<a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> assignment to the presented profinite F-group once the presentation <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish under the induced free-source map.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFiniteOfRelations">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFiniteOfRelations">FenchelNielsen.ProfiniteFGroup.presentationLiftToFiniteOfRelations</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L613">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> presentationLiftToFiniteOfRelations
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A)
+    (hTotal :
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>
+          (<span class="kw">fun</span> i =&gt; χ (ULift.up (ProfiniteFenchelGenerator.surfaceA i)))
+          (<span class="kw">fun</span> i =&gt; χ (ULift.up (ProfiniteFenchelGenerator.surfaceB i)))
+          (<span class="kw">fun</span> j =&gt; χ (ULift.up (ProfiniteFenchelGenerator.cusp j)))
+          (<span class="kw">fun</span> k =&gt; χ (ULift.up (ProfiniteFenchelGenerator.inertia k))) = 1)
+    (hPeriod :
+      ∀ k : Fin Δ.signature.numPeriods,
+        χ (ULift.up (ProfiniteFenchelGenerator.inertia k)) ^
+          Δ.signature.periods k = 1) :
+    Δ.carrier →ₜ* A :=
+  Δ.presentationLiftToFinite χ
+    (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_relators_subset_ker">presentationSourceLiftToFinite_relators_subset_ker</a> Δ χ hTotal hPeriod)</code></pre></section>
+    <section><div class="natural-text"><p>A <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> target assignment satisfying exactly the Fenchel--Nielsen total and period relations descends to the profinite F-group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_surfaceA">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_surfaceA">FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_surfaceA</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L631">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationLiftToFinite_surfaceA
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A)
+    (hχ :
+      Δ.presentationRelators ⊆
+        (Δ.presentationSourceLiftToFinite χ).toMonoidHom.ker)
+    (i : Fin Δ.signature.orbitGenus) :
+    Δ.presentationLiftToFinite χ hχ (Δ.surfaceA i) =
+      χ (ULift.up (ProfiniteFenchelGenerator.surfaceA i))</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-target presentation lift sends the surface \(A\)-<a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its prescribed <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-target value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite">presentationLiftToFinite</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_surfaceA">presentationLift_surfaceA</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_basis">presentationSourceLiftToFinite_basis</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_surfaceB">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_surfaceB">FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_surfaceB</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L643">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationLiftToFinite_surfaceB
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A)
+    (hχ :
+      Δ.presentationRelators ⊆
+        (Δ.presentationSourceLiftToFinite χ).toMonoidHom.ker)
+    (i : Fin Δ.signature.orbitGenus) :
+    Δ.presentationLiftToFinite χ hχ (Δ.surfaceB i) =
+      χ (ULift.up (ProfiniteFenchelGenerator.surfaceB i))</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-target presentation lift sends the surface \(B\)-<a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its prescribed <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-target value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite">presentationLiftToFinite</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_surfaceB">presentationLift_surfaceB</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_basis">presentationSourceLiftToFinite_basis</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_cusp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_cusp">FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_cusp</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L655">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationLiftToFinite_cusp
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A)
+    (hχ :
+      Δ.presentationRelators ⊆
+        (Δ.presentationSourceLiftToFinite χ).toMonoidHom.ker)
+    (j : Fin Δ.signature.numCusps) :
+    Δ.presentationLiftToFinite χ hχ (Δ.cusp j) =
+      χ (ULift.up (ProfiniteFenchelGenerator.cusp j))</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-target presentation lift sends the cusp <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its prescribed <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-target value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite">presentationLiftToFinite</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_cusp">presentationLift_cusp</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_basis">presentationSourceLiftToFinite_basis</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_inertia">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_inertia">FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite_inertia</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L667">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> presentationLiftToFinite_inertia
+    (Δ : ProfiniteFGroup.{u})
+    {A : <span class="kw">Type</span> u} [Group A] [TopologicalSpace A] [DiscreteTopology A] [Finite A]
+    (χ : ProfiniteFenchelGeneratorIndex.{u} Δ.signature → A)
+    (hχ :
+      Δ.presentationRelators ⊆
+        (Δ.presentationSourceLiftToFinite χ).toMonoidHom.ker)
+    (k : Fin Δ.signature.numPeriods) :
+    Δ.presentationLiftToFinite χ hχ (Δ.inertia k) =
+      χ (ULift.up (ProfiniteFenchelGenerator.inertia k))</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-target presentation lift sends the inertia <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its prescribed <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-target value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLiftToFinite">presentationLiftToFinite</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationLift_inertia">presentationLift_inertia</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup.presentationSourceLiftToFinite_basis">presentationSourceLiftToFinite_basis</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the profinite Fenchel--Nielsen presentation. A map out of the presented group is constructed by assigning images to the surface, cusp, and inertia generators and checking the total surface relator together with the inertia period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>; the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> then gives the descended continuous homomorphism and its <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.IsHyperbolic">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.IsHyperbolic">FenchelNielsen.ProfiniteFGroup.IsHyperbolic</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L679">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> IsHyperbolic (Δ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup">ProfiniteFGroup</a>) : <span class="kw">Prop</span> :=
+  Δ.signature.IsHyperbolic</code></pre></section>
+    <section><div class="natural-text"><p>A profinite F-group is hyperbolic when its signature is hyperbolic.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.IsPerfect">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.IsPerfect">FenchelNielsen.ProfiniteFGroup.IsPerfect</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L682">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> IsPerfect (Δ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup">ProfiniteFGroup</a>) : <span class="kw">Prop</span> :=
+  <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a> Δ.carrier 1 = ⊤</code></pre></section>
+    <section><div class="natural-text"><p>A profinite F-group is perfect when its first profinite derived subgroup is the whole carrier.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.IsNonPerfect">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.IsNonPerfect">FenchelNielsen.ProfiniteFGroup.IsNonPerfect</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L685">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> IsNonPerfect (Δ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup">ProfiniteFGroup</a>) : <span class="kw">Prop</span> :=
+  ¬ Δ.IsPerfect</code></pre></section>
+    <section><div class="natural-text"><p>A profinite F-group is nonperfect when it is not perfect.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.PairwiseCoprimePeriods">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.PairwiseCoprimePeriods">FenchelNielsen.ProfiniteFGroup.PairwiseCoprimePeriods</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L688">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> PairwiseCoprimePeriods (Δ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup">ProfiniteFGroup</a>) : <span class="kw">Prop</span> :=
+  ∀ i j : Fin Δ.signature.numPeriods,
+    i ≠ j → Nat.Coprime (Δ.signature.periods i) (Δ.signature.periods j)</code></pre></section>
+    <section><div class="natural-text"><p>The profinite F-group signature has pairwise coprime periods.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.CharPerfectNumericalCondition">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.CharPerfectNumericalCondition">FenchelNielsen.ProfiniteFGroup.CharPerfectNumericalCondition</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L692">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> CharPerfectNumericalCondition (Δ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteFGroup">ProfiniteFGroup</a>) : <span class="kw">Prop</span> :=
+  Δ.signature.orbitGenus = 0 ∧
+    Δ.signature.numCusps = 0 ∧
+      Δ.PairwiseCoprimePeriods</code></pre></section>
+    <section><div class="natural-text"><p>The characteristic perfectness numerical condition says: orbit genus <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a>, no cusps, and pairwise coprime periods.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L699">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> ProfiniteOpenNormalQuotientHasDerivedLengthAtMost
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (U : OpenNormalSubgroup G) (m : ℕ) : <span class="kw">Prop</span> :=
+  <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a> (G ⧸ (U : Subgroup G)) m = ⊥</code></pre></section>
+    <section><div class="natural-text"><p>The selected open normal quotient has derived length bounded by the given parameter.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteOpenNormalSubgroupTorsionFree">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteOpenNormalSubgroupTorsionFree">FenchelNielsen.ProfiniteOpenNormalSubgroupTorsionFree</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L704">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> ProfiniteOpenNormalSubgroupTorsionFree
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G]
+    (U : OpenNormalSubgroup G) : <span class="kw">Prop</span> :=
+  ∀ x : G, x ∈ (U : Subgroup G) → IsOfFinOrder x → x = 1</code></pre></section>
+    <section><div class="natural-text"><p>The selected open normal subgroup is torsion-free for the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index reduction.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteOpenCharacteristicSubgroup">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteOpenCharacteristicSubgroup">FenchelNielsen.ProfiniteOpenCharacteristicSubgroup</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L709">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> ProfiniteOpenCharacteristicSubgroup
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] : <span class="kw">Type</span> u :=
+  { U : OpenNormalSubgroup G //
+    <a class="decl-ref" href="../../../library/ProCGroups/FiniteGeneration/Basic.html#decl-ProCGroups.FiniteGeneration.IsTopologicallyCharacteristic">ProCGroups.FiniteGeneration.IsTopologicallyCharacteristic</a> (G := G) (U : Subgroup G) }</code></pre></section>
+    <section><div class="natural-text"><p>The profinite open characteristic subgroup is the open normal subgroup selected by the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data in the construction.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteOpenCharacteristicSubgroup.toOpenNormalSubgroup">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteOpenCharacteristicSubgroup.toOpenNormalSubgroup">FenchelNielsen.ProfiniteOpenCharacteristicSubgroup.toOpenNormalSubgroup</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L714">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> ProfiniteOpenCharacteristicSubgroup.toOpenNormalSubgroup
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G]
+    (U : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenCharacteristicSubgroup">ProfiniteOpenCharacteristicSubgroup</a> G) :
+    OpenNormalSubgroup G :=
+  U.1</code></pre></section>
+    <section><div class="natural-text"><p>An open characteristic subgroup is, in particular, an open normal subgroup.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteOpenCharacteristicQuotientHasDerivedLengthAtMost">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteOpenCharacteristicQuotientHasDerivedLengthAtMost">FenchelNielsen.ProfiniteOpenCharacteristicQuotientHasDerivedLengthAtMost</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L720">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> ProfiniteOpenCharacteristicQuotientHasDerivedLengthAtMost
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (U : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenCharacteristicSubgroup">ProfiniteOpenCharacteristicSubgroup</a> G) (m : ℕ) : <span class="kw">Prop</span> :=
+  <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">ProfiniteOpenNormalQuotientHasDerivedLengthAtMost</a> G U.toOpenNormalSubgroup m</code></pre></section>
+    <section><div class="natural-text"><p>The selected open characteristic quotient has derived length bounded by the given parameter.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost">FenchelNielsen.HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L725">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] (m : ℕ) : <span class="kw">Prop</span> :=
+  ∃ U : OpenNormalSubgroup G,
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalSubgroupTorsionFree">ProfiniteOpenNormalSubgroupTorsionFree</a> G U ∧
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">ProfiniteOpenNormalQuotientHasDerivedLengthAtMost</a> G U m</code></pre></section>
+    <section><div class="natural-text"><p>The predicate records a torsion-free open normal subgroup whose quotient has derived length at most the given bound.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost">FenchelNielsen.HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L731">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] (m : ℕ) : <span class="kw">Prop</span> :=
+  ∃ U : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenCharacteristicSubgroup">ProfiniteOpenCharacteristicSubgroup</a> G,
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalSubgroupTorsionFree">ProfiniteOpenNormalSubgroupTorsionFree</a> G U.toOpenNormalSubgroup ∧
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenCharacteristicQuotientHasDerivedLengthAtMost">ProfiniteOpenCharacteristicQuotientHasDerivedLengthAtMost</a> G U m</code></pre></section>
+    <section><div class="natural-text"><p>The predicate records a torsion-free open characteristic subgroup whose quotient has derived length at most the given bound.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.of_topDerived_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.of_topDerived_le">FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.of_topDerived_le</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L737">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.of_topDerived_le
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (U : OpenNormalSubgroup G) {m : ℕ}
+    (hU : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a> G m ≤ (U : Subgroup G)) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">ProfiniteOpenNormalQuotientHasDerivedLengthAtMost</a> G U m</code></pre></section>
+    <section><div class="natural-text"><p>A containment of the top derived subgroup gives the corresponding open-normal quotient derived-length bound.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> q : G →ₜ* G ⧸ (U : Subgroup G) := OpenNormalSubgroup.quotientProj U
+  <span class="kw">have</span> hclosed_comm :
+      ∀ n : ℕ,
+        IsClosed
+          (((closedCommutator
+              (<a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop">topDerivedTop</a> G n) (<a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop">topDerivedTop</a> G n)).map
+                (q : G →* G ⧸ (U : Subgroup G)) :
+              Subgroup (G ⧸ (U : Subgroup G))) :
+            Set (G ⧸ (U : Subgroup G))) := <span class="kw">by</span>
+    <span class="kw">intro</span> n
+    <span class="kw">exact</span> isClosed_discrete _
+  <span class="kw">have</span> hmap :
+      (<a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop">topDerivedTop</a> G m).map (q : G →* G ⧸ (U : Subgroup G)) =
+        <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop">topDerivedTop</a> (G ⧸ (U : Subgroup G)) m := <span class="kw">by</span>
+    <span class="kw">exact</span>
+      <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerived_map_eq_of_surj">topDerived_map_eq_of_surj</a> (f := q)
+        (OpenNormalSubgroup.quotientProj_surjective U) hclosed_comm m
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">ProfiniteOpenNormalQuotientHasDerivedLengthAtMost</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a>,
+    ← hmap]
+  <span class="kw">apply</span> le_bot_iff.mp
+  <span class="kw">intro</span> y hy
+  rcases hy <span class="kw">with</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+  change QuotientGroup.mk&#x27; (U : Subgroup G) x = 1
+  <span class="kw">exact</span> (QuotientGroup.eq_one_iff (N := (U : Subgroup G)) x).2 (hU hx)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Kernel and normal-closure claims are proved by showing that each rewritten relator lies in the generated normal subgroup and that the quotient map kills exactly those relations required by the presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.topDerived_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.topDerived_le">FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.topDerived_le</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L767">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.topDerived_le
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (U : OpenNormalSubgroup G) {m : ℕ}
+    (hU : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">ProfiniteOpenNormalQuotientHasDerivedLengthAtMost</a> G U m) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a> G m ≤ (U : Subgroup G)</code></pre></section>
+    <section><div class="natural-text"><p>A profinite open-normal quotient derived-length bound implies containment of the top derived subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> q : G →ₜ* G ⧸ (U : Subgroup G) := OpenNormalSubgroup.quotientProj U
+  <span class="kw">have</span> hle := <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop_le_comap">topDerivedTop_le_comap</a> (f := q) (m := m)
+  <span class="kw">intro</span> x hx
+  <span class="kw">have</span> hxq :
+      q x ∈ <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop">topDerivedTop</a> (G ⧸ (U : Subgroup G)) m :=
+    hle hx
+  <span class="kw">have</span> hderbot :
+      <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop">topDerivedTop</a> (G ⧸ (U : Subgroup G)) m = ⊥ := <span class="kw">by</span>
+    simpa [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">ProfiniteOpenNormalQuotientHasDerivedLengthAtMost</a>,
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a>] using hU
+  <span class="kw">have</span> hxqbot :
+      q x ∈ (⊥ : Subgroup (G ⧸ (U : Subgroup G))) := <span class="kw">by</span>
+    simpa [hderbot] using hxq
+  <span class="kw">have</span> hq1 : q x = 1 := Subgroup.mem_bot.mp hxqbot
+  simpa [q] using
+    (OpenNormalSubgroup.quotientProj_eq_one_iff (U := U) (x := x)).1 hq1</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Kernel and normal-closure claims are proved by showing that each rewritten relator lies in the generated normal subgroup and that the quotient map kills exactly those relations required by the presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.profiniteOpenNormalQuotientHasDerivedLengthAtMost_iff_topDerived_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.profiniteOpenNormalQuotientHasDerivedLengthAtMost_iff_topDerived_le">FenchelNielsen.profiniteOpenNormalQuotientHasDerivedLengthAtMost_iff_topDerived_le</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L789">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> profiniteOpenNormalQuotientHasDerivedLengthAtMost_iff_topDerived_le
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    {U : OpenNormalSubgroup G} {m : ℕ} :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">ProfiniteOpenNormalQuotientHasDerivedLengthAtMost</a> G U m ↔
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteDerivedSeries">profiniteDerivedSeries</a> G m ≤ (U : Subgroup G)</code></pre></section>
+    <section><div class="natural-text"><p>A profinite open-normal quotient has derived length at most the given bound exactly when its top derived subgroup is contained in the given subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">exact</span> ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.topDerived_le U
+  · <span class="kw">exact</span> ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.of_topDerived_le U</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.mono">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.mono">FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.mono</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L798">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.mono
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    {U : OpenNormalSubgroup G} {m n : ℕ}
+    (hmn : m ≤ n)
+    (hU : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">ProfiniteOpenNormalQuotientHasDerivedLengthAtMost</a> G U m) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.ProfiniteOpenNormalQuotientHasDerivedLengthAtMost">ProfiniteOpenNormalQuotientHasDerivedLengthAtMost</a> G U n</code></pre></section>
+    <section><div class="natural-text"><p>Increasing the derived-length bound preserves the profinite open-normal quotient derived-length condition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteOpenNormalQuotientHasDerivedLengthAtMost_iff_topDerived_le">profiniteOpenNormalQuotientHasDerivedLengthAtMost_iff_topDerived_le</a>] at hU ⊢
+  <span class="kw">intro</span> x hx
+  <span class="kw">exact</span> hU ((<a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop_antitone">topDerivedTop_antitone</a> hmn) hx)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost.mono">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost.mono">FenchelNielsen.HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost.mono</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L808">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost.mono
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    {m n : ℕ} (hmn : m ≤ n)
+    (h :
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost">HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost</a> G m) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost">HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost</a> G n</code></pre></section>
+    <section><div class="natural-text"><p>Increasing the derived-length bound preserves the existence of a torsion-free open normal subgroup whose quotient has derived length at most that bound.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases h <span class="kw">with</span> ⟨U, htf, hquot⟩
+  <span class="kw">exact</span> ⟨U, htf,
+    ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.mono hmn hquot⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the profinite open subgroup predicate. It packages an open normal or characteristic subgroup, torsion-freeness, and a derived-length bound for the quotient; monotonicity keeps the same witness and increases only the bound.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost.mono">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost.mono">FenchelNielsen.HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost.mono</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L818">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost.mono
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    {m n : ℕ} (hmn : m ≤ n)
+    (h :
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost">HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost</a>
+        G m) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost">HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost</a>
+      G n</code></pre></section>
+    <section><div class="natural-text"><p>Increasing the derived-length bound preserves the existence of a torsion-free open characteristic subgroup whose quotient has derived length at most that bound.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases h <span class="kw">with</span> ⟨U, htf, hquot⟩
+  <span class="kw">exact</span> ⟨U, htf,
+    ProfiniteOpenNormalQuotientHasDerivedLengthAtMost.mono hmn hquot⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the profinite open subgroup predicate. It packages an open normal or characteristic subgroup, torsion-freeness, and a derived-length bound for the quotient; monotonicity keeps the same witness and increases only the bound.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.hasTorsionFreeOpenNormal_of_characteristic">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.hasTorsionFreeOpenNormal_of_characteristic">FenchelNielsen.hasTorsionFreeOpenNormal_of_characteristic</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/FGroup.html#L830">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hasTorsionFreeOpenNormal_of_characteristic
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] {m : ℕ}
+    (h :
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost">HasTorsionFreeOpenCharacteristicSubgroupQuotientDerivedLengthAtMost</a>
+        G m) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost">HasTorsionFreeOpenNormalSubgroupQuotientDerivedLengthAtMost</a> G m</code></pre></section>
+    <section><div class="natural-text"><p>A torsion-free open characteristic subgroup with a quotient derived-length bound gives the corresponding open-normal-subgroup statement.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases h <span class="kw">with</span> ⟨U, htf, hquot⟩
+  <span class="kw">exact</span> ⟨U.toOpenNormalSubgroup, htf, hquot⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the profinite open subgroup predicate. It packages an open normal or characteristic subgroup, torsion-freeness, and a derived-length bound for the quotient; monotonicity keeps the same witness and increases only the bound.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FenchelNielsenZomorrodian.Profinite.FGroup"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

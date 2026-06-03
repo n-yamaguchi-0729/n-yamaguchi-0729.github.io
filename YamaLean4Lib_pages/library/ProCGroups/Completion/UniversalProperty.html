@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Completion.UniversalProperty | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.Completion.UniversalProperty</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Completion.html">Completion</a><span class="sep">/</span><span>UniversalProperty</span></div>
+      <h1 class="module-title">ProCGroups.Completion.UniversalProperty</h1>
+      <div class="module-meta">8 Theorem | 3 Definition | 1 Structure</div>
+      <div class="module-overview"><p>This module develops the maps induced by continuous homomorphisms. It organizes the relevant quotient pullbacks and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage maps, then proves the compatibility statements needed for the completed construction.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/ProC/GroupPredicate.html">ProCGroups.ProC.GroupPredicate</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/Completion.html">ProCGroups.Completion</a></li><li><a href="../../../library/ProCGroups/Completion/FiniteQuotientLifts.html">ProCGroups.Completion.FiniteQuotientLifts</a></li><li><a href="../../../library/ProCGroups/FreeProC/Basic.html">ProCGroups.FreeProC.Basic</a></li><li><a href="../../../library/ProCGroups/FreeProducts/UniversalProperty.html">ProCGroups.FreeProducts.UniversalProperty</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl structure" id="decl-ProCGroups.Completion.IsProCCompletion">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion">ProCGroups.Completion.IsProCCompletion</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L26">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> IsProCCompletion
+    (ProC : <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicate.html#decl-ProCGroups.ProC.ProCGroupPredicate">ProCGroups.ProC.ProCGroupPredicate</a>)
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (Ghat : <span class="kw">Type</span> u) [Group Ghat] [TopologicalSpace Ghat] [IsTopologicalGroup Ghat]
+    (ι : G →ₜ* Ghat) : <span class="kw">Prop</span> <span class="kw">where</span>
+  <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/FinitelyGenerated.html#decl-ProCGroups.FreeProC.FiniteRankData.isProC">isProC</a> : ProC (G := Ghat)
+  denseRange : DenseRange ι
+  <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/DifferentialModule/Universal.html#decl-FoxDifferential.existsUnique_lift">existsUnique_lift</a> :
+    ∀ {H : <span class="kw">Type</span> u} [Group H] [TopologicalSpace H] [IsTopologicalGroup H],
+      ProC (G := H) →
+      ∀ (φ : G →ₜ* H), ∃! φbar : Ghat →ₜ* H, φbar.comp ι = φ</code></pre></section>
+    <section><div class="natural-text"><p>An abstract pro-\(C\) completion of a topological group.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Completion.IsProCCompletion.lift">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.lift">ProCGroups.Completion.IsProCCompletion.lift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L45">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> lift
+    (hι : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι)
+    {H : <span class="kw">Type</span> u} [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
+    (hH : ProC (G := H)) (φ : G →ₜ* H) :
+    Ghat →ₜ* H :=
+  Classical.choose (ExistsUnique.exists (hι.existsUnique_lift hH φ))</code></pre></section>
+    <section><div class="natural-text"><p>A continuous homomorphism from the source group to a pro-\(C\) target factors uniquely through the pro-\(C\) completion.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.IsProCCompletion.lift_spec">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.lift_spec">ProCGroups.Completion.IsProCCompletion.lift_spec</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L53">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> lift_spec
+    (hι : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι)
+    {H : <span class="kw">Type</span> u} [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
+    (hH : ProC (G := H)) (φ : G →ₜ* H) :
+    (hι.lift hH φ).comp ι = φ</code></pre></section>
+    <section><div class="natural-text"><p>The universal-<a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> lift is continuous and extends the given homomorphism along the completion map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Classical.choose_spec (ExistsUnique.exists (hι.existsUnique_lift hH φ))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the pro-\(C\) completion. Maps to <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete \(C\)-quotients are checked stagewise, <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> lifts assemble to a map into the inverse limit, and uniqueness follows because <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients separate points. Continuity is supplied by the inverse-limit topology, and class membership is inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient system and the closure properties of the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.IsProCCompletion.lift_unique">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.lift_unique">ProCGroups.Completion.IsProCCompletion.lift_unique</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L61">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> lift_unique
+    (hι : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι)
+    {H : <span class="kw">Type</span> u} [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
+    (hH : ProC (G := H)) (φ : G →ₜ* H)
+    {f : Ghat →ₜ* H} (hfac : f.comp ι = φ) :
+    f = hι.lift hH φ</code></pre></section>
+    <section><div class="natural-text"><p>The universal-<a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> lift is the unique continuous map extending the given homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases hι.existsUnique_lift hH φ <span class="kw">with</span> ⟨g, hg, huniq⟩
+  <span class="kw">have</span> hchosen : hι.lift hH φ = g := huniq _ (hι.lift_spec hH φ)
+  <span class="kw">exact</span> (huniq _ hfac).trans hchosen.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the pro-\(C\) completion. Maps to <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete \(C\)-quotients are checked stagewise, <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> lifts assemble to a map into the inverse limit, and uniqueness follows because <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients separate points. Continuity is supplied by the inverse-limit topology, and class membership is inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient system and the closure properties of the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.IsProCCompletion.hom_ext">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.hom_ext">ProCGroups.Completion.IsProCCompletion.hom_ext</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L72">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hom_ext
+    (hι : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι)
+    {H : <span class="kw">Type</span> u} [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
+    (hH : ProC (G := H))
+    {f g : Ghat →ₜ* H}
+    (hfg : f.comp ι = g.comp ι) :
+    f = g</code></pre></section>
+    <section><div class="natural-text"><p>Continuous homomorphisms out of a pro-\(C\) completion are determined by their composites with the dense source map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hf_lift : f = hι.lift hH (f.comp ι) :=
+    hι.lift_unique hH (f.comp ι) <span class="kw">rfl</span>
+  <span class="kw">have</span> hg_lift : g = hι.lift hH (f.comp ι) :=
+    hι.lift_unique hH (f.comp ι) hfg.symm
+  <span class="kw">exact</span> hf_lift.trans hg_lift.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the pro-\(C\) completion. Maps to <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete \(C\)-quotients are checked stagewise, <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> lifts assemble to a map into the inverse limit, and uniqueness follows because <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients separate points. Continuity is supplied by the inverse-limit topology, and class membership is inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient system and the closure properties of the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.IsProCCompletion.lift_self_eq_id">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.lift_self_eq_id">ProCGroups.Completion.IsProCCompletion.lift_self_eq_id</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L86">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> lift_self_eq_id
+    (hι : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι) :
+    hι.lift hι.isProC ι = ContinuousMonoidHom.id Ghat</code></pre></section>
+    <section><div class="natural-text"><p>The lift of the completion map to the completion itself is the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  symm
+  <span class="kw">exact</span> hι.lift_unique hι.isProC ι <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the pro-\(C\) completion. Maps to <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete \(C\)-quotients are checked stagewise, <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> lifts assemble to a map into the inverse limit, and uniqueness follows because <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients separate points. Continuity is supplied by the inverse-limit topology, and class membership is inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient system and the closure properties of the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Completion.IsProCCompletion.comparison">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.comparison">ProCGroups.Completion.IsProCCompletion.comparison</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L96">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> comparison
+    (h₁ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι)
+    (h₂ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat₂ ι₂) : Ghat →ₜ* Ghat₂ :=
+  h₁.lift h₂.isProC ι₂</code></pre></section>
+    <section><div class="natural-text"><p>The canonical comparison map between two pro-\(C\) completions of the same group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.IsProCCompletion.comparison_spec">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.comparison_spec">ProCGroups.Completion.IsProCCompletion.comparison_spec</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L102">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> comparison_spec
+    (h₁ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι)
+    (h₂ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat₂ ι₂) :
+    (h₁.comparison h₂).comp ι = ι₂</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map between two pro-\(C\) completions agrees with the second completion map on the source.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>h₁.lift_spec h₂.isProC ι₂</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the pro-\(C\) completion. Maps to <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete \(C\)-quotients are checked stagewise, <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> lifts assemble to a map into the inverse limit, and uniqueness follows because <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients separate points. Continuity is supplied by the inverse-limit topology, and class membership is inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient system and the closure properties of the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.IsProCCompletion.comparison_comp_eq_id">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.comparison_comp_eq_id">ProCGroups.Completion.IsProCCompletion.comparison_comp_eq_id</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L109">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> comparison_comp_eq_id
+    (h₁ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι)
+    (h₂ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat₂ ι₂) :
+    (h₂.comparison h₁).comp (h₁.comparison h₂) = ContinuousMonoidHom.id Ghat</code></pre></section>
+    <section><div class="natural-text"><p>The two <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps between pro-\(C\) completions compose to the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> e12 : Ghat →ₜ* Ghat₂ := h₁.comparison h₂
+  <span class="kw">let</span> e21 : Ghat₂ →ₜ* Ghat := h₂.comparison h₁
+  <span class="kw">have</span> he12 : e12.comp ι = ι₂ := h₁.comparison_spec h₂
+  <span class="kw">have</span> he21 : e21.comp ι₂ = ι := h₂.comparison_spec h₁
+  <span class="kw">have</span> hfac : (e21.comp e12).comp ι = ι := <span class="kw">by</span>
+    ext x
+    <span class="kw">have</span> h12 : e12 (ι x) = ι₂ x := congrArg (<span class="kw">fun</span> f : G →ₜ* Ghat₂ =&gt; f x) he12
+    <span class="kw">have</span> h21 : e21 (ι₂ x) = ι x := congrArg (<span class="kw">fun</span> f : G →ₜ* Ghat =&gt; f x) he21
+    simpa [MonoidHom.comp_apply, h12] using h21
+  <span class="kw">calc</span>
+    e21.comp e12 = h₁.lift h₁.isProC ι :=
+      h₁.lift_unique h₁.isProC ι hfac
+    _ = ContinuousMonoidHom.id Ghat := h₁.lift_self_eq_id</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the pro-\(C\) completion. Maps to <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete \(C\)-quotients are checked stagewise, <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> lifts assemble to a map into the inverse limit, and uniqueness follows because <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients separate points. Continuity is supplied by the inverse-limit topology, and class membership is inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient system and the closure properties of the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Completion.IsProCCompletion.continuousMulEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.continuousMulEquiv">ProCGroups.Completion.IsProCCompletion.continuousMulEquiv</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L129">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> continuousMulEquiv
+    (h₁ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι)
+    (h₂ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat₂ ι₂) : Ghat ≃ₜ* Ghat₂ :=
+  <span class="kw">let</span> f : Ghat →ₜ* Ghat₂ := h₁.comparison h₂
+  <span class="kw">let</span> g : Ghat₂ →ₜ* Ghat := h₂.comparison h₁
+  { toMulEquiv :=
+      { toFun := f
+        invFun := g
+        left_inv := <span class="kw">by</span>
+          <span class="kw">intro</span> x
+          <span class="kw">have</span> hgf : g.comp f = ContinuousMonoidHom.id Ghat := h₁.comparison_comp_eq_id h₂
+          <span class="kw">exact</span> congrArg (<span class="kw">fun</span> h : Ghat →ₜ* Ghat =&gt; h x) hgf
+        right_inv := <span class="kw">by</span>
+          <span class="kw">intro</span> x
+          <span class="kw">have</span> hfg : f.comp g = ContinuousMonoidHom.id Ghat₂ := h₂.comparison_comp_eq_id h₁
+          <span class="kw">exact</span> congrArg (<span class="kw">fun</span> h : Ghat₂ →ₜ* Ghat₂ =&gt; h x) hfg
+        map_mul&#x27; := f.map_mul }
+    continuous_toFun := f.continuous_toFun
+    continuous_invFun := g.continuous_toFun }</code></pre></section>
+    <section><div class="natural-text"><p>The canonical multiplicative homeomorphism between two pro-\(C\) completions of the same topological group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.IsProCCompletion.continuousMulEquiv_apply_completionMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.continuousMulEquiv_apply_completionMap">ProCGroups.Completion.IsProCCompletion.continuousMulEquiv_apply_completionMap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L150">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> continuousMulEquiv_apply_completionMap
+    (h₁ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι)
+    (h₂ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat₂ ι₂) (x : G) :
+    h₁.continuousMulEquiv h₂ (ι x) = ι₂ x</code></pre></section>
+    <section><div class="natural-text"><p>The canonical equivalence between pro-\(C\) completions sends <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> completion map to the other.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [<a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.continuousMulEquiv">continuousMulEquiv</a>, <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a>] using
+    congrArg (<span class="kw">fun</span> f : G →ₜ* Ghat₂ =&gt; f x) (h₁.comparison_spec h₂)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the pro-\(C\) completion. Maps to <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete \(C\)-quotients are checked stagewise, <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> lifts assemble to a map into the inverse limit, and uniqueness follows because <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients separate points. Continuity is supplied by the inverse-limit topology, and class membership is inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient system and the closure properties of the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.IsProCCompletion.continuousMulEquiv_symm_apply_completionMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.IsProCCompletion.continuousMulEquiv_symm_apply_completionMap">ProCGroups.Completion.IsProCCompletion.continuousMulEquiv_symm_apply_completionMap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/UniversalProperty.html#L158">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> continuousMulEquiv_symm_apply_completionMap
+    (h₁ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat ι)
+    (h₂ : <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion">IsProCCompletion</a> ProC G Ghat₂ ι₂) (x : G) :
+    (h₁.continuousMulEquiv h₂).symm (ι₂ x) = ι x</code></pre></section>
+    <section><div class="natural-text"><p>The inverse canonical equivalence between pro-\(C\) completions sends the second completion map back to the first.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [<a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.continuousMulEquiv">continuousMulEquiv</a>, <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a>] using
+    congrArg (<span class="kw">fun</span> f : G →ₜ* Ghat =&gt; f x) (h₂.comparison_spec h₁)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the pro-\(C\) completion. Maps to <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete \(C\)-quotients are checked stagewise, <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> lifts assemble to a map into the inverse limit, and uniqueness follows because <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients separate points. Continuity is supplied by the inverse-limit topology, and class membership is inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient system and the closure properties of the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Completion.UniversalProperty"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

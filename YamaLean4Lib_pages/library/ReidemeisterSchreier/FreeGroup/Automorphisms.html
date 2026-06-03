@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReidemeisterSchreier.FreeGroup.Automorphisms | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ReidemeisterSchreier.FreeGroup.Automorphisms</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a><span class="sep">/</span><a href="../../../library/ReidemeisterSchreier/FreeGroup.html">FreeGroup</a><span class="sep">/</span><span>Automorphisms</span></div>
+      <h1 class="module-title">ReidemeisterSchreier.FreeGroup.Automorphisms</h1>
+      <div class="module-meta">5 Theorem | 3 Definition</div>
+      <div class="module-overview"><p>This module develops Reidemeister--Schreier rewriting, Schreier generators, <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient transversals, and presentation transformations.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li>Mathlib.GroupTheory.FreeGroup.NielsenSchreier</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a></li><li><a href="../../../library/ReidemeisterSchreier/Discrete.html">ReidemeisterSchreier.Discrete</a></li><li><a href="../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/PrefixTree.html">ReidemeisterSchreier.Discrete.OpenSubgroups.PrefixTree</a></li><li><a href="../../../library/ReidemeisterSchreier/FreeGroup.html">ReidemeisterSchreier.FreeGroup</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ReidemeisterSchreier.FreeGroup.generatorInversionEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.FreeGroup.generatorInversionEquiv">ReidemeisterSchreier.FreeGroup.generatorInversionEquiv</a>
+    <a class="source-link" href="../../../library/src/ReidemeisterSchreier/FreeGroup/Automorphisms.html#L20">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> FreeGroup.generatorInversionEquiv (X : <span class="kw">Type</span> u) : FreeGroup X ≃* FreeGroup X <span class="kw">where</span>
+  toFun := FreeGroup.lift <span class="kw">fun</span> x =&gt; (FreeGroup.of x)⁻¹
+  invFun := FreeGroup.lift <span class="kw">fun</span> x =&gt; (FreeGroup.of x)⁻¹
+  left_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> g
+    <span class="kw">have</span> h :
+        (FreeGroup.lift <span class="kw">fun</span> x =&gt; (FreeGroup.of x)⁻¹).comp
+            (FreeGroup.lift <span class="kw">fun</span> x =&gt; (FreeGroup.of x)⁻¹) =
+          MonoidHom.id (FreeGroup X) := <span class="kw">by</span>
+      <span class="kw">apply</span> FreeGroup.ext_hom
+      <span class="kw">intro</span> x
+      <span class="kw">simp</span> only [MonoidHom.coe_comp, Function.comp_apply, FreeGroup.lift_apply_of, map_inv, <a class="decl-ref" href="../../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>,
+  MonoidHom.id_apply]
+    <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : FreeGroup X →* FreeGroup X =&gt; f g) h
+  right_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> g
+    <span class="kw">have</span> h :
+        (FreeGroup.lift <span class="kw">fun</span> x =&gt; (FreeGroup.of x)⁻¹).comp
+            (FreeGroup.lift <span class="kw">fun</span> x =&gt; (FreeGroup.of x)⁻¹) =
+          MonoidHom.id (FreeGroup X) := <span class="kw">by</span>
+      <span class="kw">apply</span> FreeGroup.ext_hom
+      <span class="kw">intro</span> x
+      <span class="kw">simp</span> only [MonoidHom.coe_comp, Function.comp_apply, FreeGroup.lift_apply_of, map_inv, <a class="decl-ref" href="../../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>,
+  MonoidHom.id_apply]
+    <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : FreeGroup X →* FreeGroup X =&gt; f g) h
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> g h
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>]</code></pre></section>
+    <section><div class="natural-text"><p>The free-group automorphism sending every <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its inverse. It packages mutually inverse maps as an algebraic or topological equivalence.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.FreeGroup.generatorInversionEquiv_apply_of">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.FreeGroup.generatorInversionEquiv_apply_of">ReidemeisterSchreier.FreeGroup.generatorInversionEquiv_apply_of</a>
+    <a class="source-link" href="../../../library/src/ReidemeisterSchreier/FreeGroup/Automorphisms.html#L49">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> FreeGroup.generatorInversionEquiv_apply_of (X : <span class="kw">Type</span> u) (x : X) :
+    FreeGroup.generatorInversionEquiv X (FreeGroup.of x) = (FreeGroup.of x)⁻¹</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-inversion map defines an equivalence, with inverse given by the same inversion construction.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ReidemeisterSchreier/FreeGroup/Automorphisms.html#decl-ReidemeisterSchreier.FreeGroup.generatorInversionEquiv">generatorInversionEquiv</a>, MulEquiv.coe_mk, Equiv.coe_fn_mk, FreeGroup.lift_apply_of]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the free group. The proposed map is determined by its values on generators, and the inverse map sends each <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> back by the opposite <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Checking the two composites on generators proves that the maps are inverse homomorphisms, so the packaged automorphism and its pointwise formulas follow.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.FreeGroup.generatorInversionEquiv_symm">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.FreeGroup.generatorInversionEquiv_symm">ReidemeisterSchreier.FreeGroup.generatorInversionEquiv_symm</a>
+    <a class="source-link" href="../../../library/src/ReidemeisterSchreier/FreeGroup/Automorphisms.html#L53">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> FreeGroup.generatorInversionEquiv_symm (X : <span class="kw">Type</span> u) :
+    (FreeGroup.generatorInversionEquiv X).symm = FreeGroup.generatorInversionEquiv X</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-inversion map defines an equivalence, with inverse given by the same inversion construction.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext x
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the free group. The proposed map is determined by its values on generators, and the inverse map sends each <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> back by the opposite <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Checking the two composites on generators proves that the maps are inverse homomorphisms, so the packaged automorphism and its pointwise formulas follow.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.FreeGroupBasis.generatorInversionAut">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.FreeGroupBasis.generatorInversionAut">ReidemeisterSchreier.FreeGroupBasis.generatorInversionAut</a>
+    <a class="source-link" href="../../../library/src/ReidemeisterSchreier/FreeGroup/Automorphisms.html#L59">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> FreeGroupBasis.generatorInversionAut {ι G : <span class="kw">Type</span> u} [Group G]
+    (b : FreeGroupBasis ι G) : G ≃* G <span class="kw">where</span>
+  toFun := b.lift <span class="kw">fun</span> i =&gt; (b i)⁻¹
+  invFun := b.lift <span class="kw">fun</span> i =&gt; (b i)⁻¹
+  left_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> g
+    <span class="kw">have</span> h :
+        (b.lift <span class="kw">fun</span> i =&gt; (b i)⁻¹).comp (b.lift <span class="kw">fun</span> i =&gt; (b i)⁻¹) = MonoidHom.id G := <span class="kw">by</span>
+      <span class="kw">apply</span> b.ext_hom
+      <span class="kw">intro</span> i
+      <span class="kw">simp</span> only [MonoidHom.coe_comp, Function.comp_apply, FreeGroupBasis.lift_apply_apply,
+  FreeGroupBasis.repr_apply_coe, FreeGroup.lift_apply_of, map_inv, <a class="decl-ref" href="../../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>, MonoidHom.id_apply]
+    <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : G →* G =&gt; f g) h
+  right_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> g
+    <span class="kw">have</span> h :
+        (b.lift <span class="kw">fun</span> i =&gt; (b i)⁻¹).comp (b.lift <span class="kw">fun</span> i =&gt; (b i)⁻¹) = MonoidHom.id G := <span class="kw">by</span>
+      <span class="kw">apply</span> b.ext_hom
+      <span class="kw">intro</span> i
+      <span class="kw">simp</span> only [MonoidHom.coe_comp, Function.comp_apply, FreeGroupBasis.lift_apply_apply,
+  FreeGroupBasis.repr_apply_coe, FreeGroup.lift_apply_of, map_inv, <a class="decl-ref" href="../../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>, MonoidHom.id_apply]
+    <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : G →* G =&gt; f g) h
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> g h
+    <span class="kw">simp</span> only [FreeGroupBasis.lift_apply_apply, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>]</code></pre></section>
+    <section><div class="natural-text"><p>The automorphism of a free group sending every basis element to its inverse.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.FreeGroupBasis.generatorInversionAut_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.FreeGroupBasis.generatorInversionAut_apply">ReidemeisterSchreier.FreeGroupBasis.generatorInversionAut_apply</a>
+    <a class="source-link" href="../../../library/src/ReidemeisterSchreier/FreeGroup/Automorphisms.html#L85">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> FreeGroupBasis.generatorInversionAut_apply {ι G : <span class="kw">Type</span> u} [Group G]
+    (b : FreeGroupBasis ι G) (i : ι) :
+    FreeGroupBasis.generatorInversionAut b (b i) = (b i)⁻¹</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-inversion automorphism sends a <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its prescribed inverse.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ReidemeisterSchreier/FreeGroup/Automorphisms.html#decl-ReidemeisterSchreier.FreeGroupBasis.generatorInversionAut">generatorInversionAut</a>, MulEquiv.coe_mk, Equiv.coe_fn_mk, FreeGroupBasis.lift_apply_apply,
+  FreeGroupBasis.repr_apply_coe, FreeGroup.lift_apply_of]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the free group. The proposed map is determined by its values on generators, and the inverse map sends each <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> back by the opposite <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Checking the two composites on generators proves that the maps are inverse homomorphisms, so the packaged automorphism and its pointwise formulas follow.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.FreeGroupBasis.generatorInversionAut_involutive">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.FreeGroupBasis.generatorInversionAut_involutive">ReidemeisterSchreier.FreeGroupBasis.generatorInversionAut_involutive</a>
+    <a class="source-link" href="../../../library/src/ReidemeisterSchreier/FreeGroup/Automorphisms.html#L91">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> FreeGroupBasis.generatorInversionAut_involutive {ι G : <span class="kw">Type</span> u} [Group G]
+    (b : FreeGroupBasis ι G) :
+    Function.Involutive (FreeGroupBasis.generatorInversionAut b)</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-inversion automorphism is involutive.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>(FreeGroupBasis.generatorInversionAut b).left_inv</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the free group. The proposed map is determined by its values on generators, and the inverse map sends each <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> back by the opposite <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Checking the two composites on generators proves that the maps are inverse homomorphisms, so the packaged automorphism and its pointwise formulas follow.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.FreeGroup.inverseBasis">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.FreeGroup.inverseBasis">ReidemeisterSchreier.FreeGroup.inverseBasis</a>
+    <a class="source-link" href="../../../library/src/ReidemeisterSchreier/FreeGroup/Automorphisms.html#L97">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> FreeGroup.inverseBasis (X : <span class="kw">Type</span> u) : FreeGroupBasis X (FreeGroup X) :=
+  (FreeGroupBasis.ofFreeGroup X).map (FreeGroup.generatorInversionEquiv X)</code></pre></section>
+    <section><div class="natural-text"><p>The basis of a free group obtained by inverting the standard generators.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.FreeGroup.inverseBasis_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.FreeGroup.inverseBasis_apply">ReidemeisterSchreier.FreeGroup.inverseBasis_apply</a>
+    <a class="source-link" href="../../../library/src/ReidemeisterSchreier/FreeGroup/Automorphisms.html#L100">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> FreeGroup.inverseBasis_apply {X : <span class="kw">Type</span> u} (x : X) :
+    FreeGroup.inverseBasis X x = (FreeGroup.of x)⁻¹</code></pre></section>
+    <section><div class="natural-text"><p>The inverse-basis map sends each <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> to its specified inverse-basis value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change (FreeGroup.generatorInversionEquiv X) (FreeGroup.of x) = (FreeGroup.of x)⁻¹
+  change FreeGroup.lift (<span class="kw">fun</span> y : X =&gt; (FreeGroup.of y)⁻¹) (FreeGroup.of x) = (FreeGroup.of x)⁻¹
+  <span class="kw">simp</span> only [FreeGroup.lift_apply_of]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> of the free group. The proposed map is determined by its values on generators, and the inverse map sends each <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> back by the opposite <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Checking the two composites on generators proves that the maps are inverse homomorphisms, so the packaged automorphism and its pointwise formulas follow.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ReidemeisterSchreier.FreeGroup.Automorphisms"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

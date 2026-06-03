@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Completion.ProCIntegerPrimePower | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.Completion.ProCIntegerPrimePower</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Completion.html">Completion</a><span class="sep">/</span><span>ProCIntegerPrimePower</span></div>
+      <h1 class="module-title">ProCGroups.Completion.ProCIntegerPrimePower</h1>
+      <div class="module-meta">9 Theorem | 1 Definition</div>
+      <div class="module-overview"><p>Pro C Groups / Completion / Prime-Power pro-C Integer.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/Completion/ProCInteger.html">ProCGroups.Completion.ProCInteger</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/FoxDifferential/Completed/Comparison/DiscreteCompletion.html">FoxDifferential.Completed.Comparison.DiscreteCompletion</a></li><li><a href="../../../library/ProCGroups/Completion.html">ProCGroups.Completion</a></li><li><a href="../../../library/ProCGroups/FreeProC/CanonicalData.html">ProCGroups.FreeProC.CanonicalData</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.Completion.ProCIntegerIndex.pGroupPower">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.ProCIntegerIndex.pGroupPower">ProCGroups.Completion.ProCIntegerIndex.pGroupPower</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/ProCIntegerPrimePower.html#L26">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> pGroupPower (p k : ℕ) [Fact (Nat.Prime p)] :
+    <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerIndex">ProCIntegerIndex</a> (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}) <span class="kw">where</span>
+  modulus := p ^ k
+  positive := <span class="kw">by</span>
+    <span class="kw">exact</span> Nat.pow_pos (<span class="kw">show</span> 0 &lt; p from (Fact.out : Nat.Prime p).pos)
+  cyclic_mem := <span class="kw">by</span>
+    letI : NeZero (p ^ k) := ⟨Nat.ne_of_gt (Nat.pow_pos
+      (<span class="kw">show</span> 0 &lt; p from (Fact.out : Nat.Prime p).pos))⟩
+    letI : Fintype (ZMod (p ^ k)) := ZMod.fintype (p ^ k)
+    <span class="kw">constructor</span>
+    · <span class="kw">have</span> hfinZ : Finite (ZMod (p ^ k)) := Finite.of_fintype _
+      <span class="kw">have</span> hfinMul : Finite (Multiplicative (ZMod (p ^ k))) :=
+        @Finite.of_equiv _ _ hfinZ Multiplicative.toAdd
+      <span class="kw">exact</span> @Finite.of_equiv _ _ hfinMul Equiv.ulift.symm
+    · <span class="kw">intro</span> g
+      refine ⟨k, ?_⟩
+      <span class="kw">cases</span> g <span class="kw">with</span>
+      | up g&#x27; =&gt;
+        <span class="kw">apply</span> ULift.ext
+        change g&#x27; ^ p ^ k = 1
+        <span class="kw">cases</span> g&#x27; <span class="kw">with</span>
+        | ofAdd z =&gt;
+          change Multiplicative.ofAdd ((p ^ k) • z) = Multiplicative.ofAdd 0
+          <span class="kw">simp</span> only [nsmul_eq_mul, CharP.cast_eq_zero, zero_mul, ofAdd_zero]</code></pre></section>
+    <section><div class="natural-text"><p>The \(p^k\)-modulus coefficient index for the pro-\(p\) integer limit.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.ProCIntegerIndex.modulus_pGroupPower">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.ProCIntegerIndex.modulus_pGroupPower">ProCGroups.Completion.ProCIntegerIndex.modulus_pGroupPower</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/ProCIntegerPrimePower.html#L53">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> modulus_pGroupPower (p k : ℕ) [Fact (Nat.Prime p)] :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCIntegerPrimePower.html#decl-ProCGroups.Completion.ProCIntegerIndex.pGroupPower">pGroupPower</a> p k :
+      <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerIndex">ProCIntegerIndex</a> (FiniteGroupClass.pGroup p : FiniteGroupClass.{u})).modulus = p ^ k</code></pre></section>
+    <section><div class="natural-text"><p>The prime-power coefficient index has modulus \(p ^ n\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the pro-\(C\) integer object as the inverse limit of its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> coefficient stages. Arithmetic operations, prime-power coordinates, projections, and transition maps are computed coordinatewise modulo the relevant modulus. Density of ordinary integers and procyclicity follow because every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coordinate is reached by an integer <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a>, while pro-\(p\) or pro-\(C\) membership is checked at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.ProCIntegerIndex.modulus_dvd_pow_of_mem_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.ProCIntegerIndex.modulus_dvd_pow_of_mem_pGroup">ProCGroups.Completion.ProCIntegerIndex.modulus_dvd_pow_of_mem_pGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/ProCIntegerPrimePower.html#L59">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> modulus_dvd_pow_of_mem_pGroup (p : ℕ)
+    (i : <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerIndex">ProCIntegerIndex</a> (FiniteGroupClass.pGroup p : FiniteGroupClass.{u})) :
+    ∃ k, i.modulus ∣ p ^ k</code></pre></section>
+    <section><div class="natural-text"><p>Any coefficient index for the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> \(p\)-group class is dominated by a prime-power modulus.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases i.cyclic_mem <span class="kw">with</span> ⟨_hfin, hp⟩
+  rcases hp (ULift.up (Multiplicative.ofAdd (1 : ZMod i.modulus))) <span class="kw">with</span> ⟨k, hk⟩
+  refine ⟨k, ?_⟩
+  letI : NeZero i.modulus := ⟨Nat.ne_of_gt i.positive⟩
+  <span class="kw">have</span> hk&#x27; : ((p ^ k : ℕ) : ZMod i.modulus) = 0 := <span class="kw">by</span>
+    <span class="kw">have</span> hdown := congrArg ULift.down hk
+    change (Multiplicative.ofAdd (1 : ZMod i.modulus)) ^ (p ^ k) = 1 at hdown
+    <span class="kw">have</span> h := congrArg Multiplicative.toAdd hdown
+    simpa using h
+  <span class="kw">exact</span> (ZMod.natCast_eq_zero_iff (p ^ k) i.modulus).mp hk&#x27;</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the pro-\(C\) integer object as the inverse limit of its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> coefficient stages. Arithmetic operations, prime-power coordinates, projections, and transition maps are computed coordinatewise modulo the relevant modulus. Density of ordinary integers and procyclicity follow because every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coordinate is reached by an integer <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a>, while pro-\(p\) or pro-\(C\) membership is checked at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.ProCIntegerIndex.directed_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.ProCIntegerIndex.directed_pGroup">ProCGroups.Completion.ProCIntegerIndex.directed_pGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/ProCIntegerPrimePower.html#L74">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> directed_pGroup (p : ℕ) [Fact (Nat.Prime p)] :
+    Directed (· ≤ ·)
+      (id : <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerIndex">ProCIntegerIndex</a> (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}) →
+        <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerIndex">ProCIntegerIndex</a> (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}))</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> \(p\)-group coefficient indices for pro-\(C\) integers are directed.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> i j
+  rcases <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCIntegerPrimePower.html#decl-ProCGroups.Completion.ProCIntegerIndex.modulus_dvd_pow_of_mem_pGroup">modulus_dvd_pow_of_mem_pGroup</a> (p := p) i <span class="kw">with</span> ⟨ki, hki⟩
+  rcases <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCIntegerPrimePower.html#decl-ProCGroups.Completion.ProCIntegerIndex.modulus_dvd_pow_of_mem_pGroup">modulus_dvd_pow_of_mem_pGroup</a> (p := p) j <span class="kw">with</span> ⟨kj, hkj⟩
+  refine ⟨<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCIntegerPrimePower.html#decl-ProCGroups.Completion.ProCIntegerIndex.pGroupPower">pGroupPower</a> p (ki + kj), ?_, ?_⟩
+  · <span class="kw">exact</span> dvd_trans hki (pow_dvd_pow p (Nat.le_add_right ki kj))
+  · <span class="kw">exact</span> dvd_trans hkj (pow_dvd_pow p (Nat.le_add_left kj ki))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the pro-\(C\) integer object as the inverse limit of its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> coefficient stages. Arithmetic operations, prime-power coordinates, projections, and transition maps are computed coordinatewise modulo the relevant modulus. Density of ordinary integers and procyclicity follow because every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coordinate is reached by an integer <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a>, while pro-\(p\) or pro-\(C\) membership is checked at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.proCIntegerProj_pGroupPower_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.proCIntegerProj_pGroupPower_one">ProCGroups.Completion.proCIntegerProj_pGroupPower_one</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/ProCIntegerPrimePower.html#L89">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> proCIntegerProj_pGroupPower_one (p k : ℕ) [Fact (Nat.Prime p)] :
+    <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.proCIntegerProj">proCIntegerProj</a>
+        (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}))
+        (ProCIntegerIndex.pGroupPower p k)
+        (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.proCIntegerOne">proCIntegerOne</a>
+          (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}))).toAdd =
+      (1 : ZMod (p ^ k))</code></pre></section>
+    <section><div class="natural-text"><p>The distinguished element \(1\) projects to \(1\) on every prime-power coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the pro-\(C\) integer object as the inverse limit of its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> coefficient stages. Arithmetic operations, prime-power coordinates, projections, and transition maps are computed coordinatewise modulo the relevant modulus. Density of ordinary integers and procyclicity follow because every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coordinate is reached by an integer <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a>, while pro-\(p\) or pro-\(C\) membership is checked at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.denseRange_intToProCInteger_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.denseRange_intToProCInteger_pGroup">ProCGroups.Completion.denseRange_intToProCInteger_pGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/ProCIntegerPrimePower.html#L99">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> denseRange_intToProCInteger_pGroup (p : ℕ) [Fact (Nat.Prime p)] :
+    DenseRange (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.intToProCInteger">intToProCInteger</a>
+      (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{u})))</code></pre></section>
+    <section><div class="natural-text"><p>The ordinary integers are dense in the pro-\(p\) integer coefficient ring.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> C : FiniteGroupClass.{u} := FiniteGroupClass.pGroup p
+  <span class="kw">let</span> S := <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.proCIntegerSystem">proCIntegerSystem</a> C
+  <span class="kw">let</span> φ : ∀ i : <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerIndex">ProCIntegerIndex</a> C, ℤ → S.X i := <span class="kw">fun</span> i n =&gt; (n : ZMod i.modulus)
+  <span class="kw">have</span> hφ : S.CompatibleMaps φ := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext n
+    <span class="kw">exact</span> map_intCast (ZMod.castHom hij (ZMod i.modulus)) n
+  <span class="kw">have</span> hsurj : ∀ i, Function.Surjective (φ i) := <span class="kw">by</span>
+    <span class="kw">intro</span> i
+    <span class="kw">exact</span> ZMod.intCast_surjective
+  letI : Nonempty (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerIndex">ProCIntegerIndex</a> C) := ⟨ProCIntegerIndex.pGroupPower p 0⟩
+  <span class="kw">have</span> hdense : DenseRange (S.inverseLimitLift φ hφ) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CofinalityAndDensity.html#decl-ProCGroups.InverseSystems.InverseSystem.denseRange_lift">ProCGroups.InverseSystems.InverseSystem.denseRange_lift</a>
+      (S := S) φ hφ hsurj (ProCIntegerIndex.directed_pGroup (p := p))
+  simpa [C, S, φ, <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.proCIntegerSystem">proCIntegerSystem</a>, <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerLimitCarrier">ProCIntegerLimitCarrier</a>, <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerCompatible">ProCIntegerCompatible</a>, <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.intToProCInteger">intToProCInteger</a>,
+    <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.inverseLimitLift">ProCGroups.InverseSystems.InverseSystem.inverseLimitLift</a>] using hdense</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the pro-\(C\) integer object as the inverse limit of its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> coefficient stages. Arithmetic operations, prime-power coordinates, projections, and transition maps are computed coordinatewise modulo the relevant modulus. Density of ordinary integers and procyclicity follow because every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coordinate is reached by an integer <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a>, while pro-\(p\) or pro-\(C\) membership is checked at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.denseRange_multiplicativeIntToProCInteger_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.denseRange_multiplicativeIntToProCInteger_pGroup">ProCGroups.Completion.denseRange_multiplicativeIntToProCInteger_pGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/ProCIntegerPrimePower.html#L120">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> denseRange_multiplicativeIntToProCInteger_pGroup (p : ℕ) [Fact (Nat.Prime p)] :
+    DenseRange
+      (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.multiplicativeIntToProCInteger">multiplicativeIntToProCInteger</a>
+        (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{u})))</code></pre></section>
+    <section><div class="natural-text"><p>The multiplicative infinite-<a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> map is dense in the pro-\(p\) integers.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.multiplicativeIntToProCInteger">multiplicativeIntToProCInteger</a>, <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.intToProCInteger">intToProCInteger</a>, DenseRange, Function.comp_def] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCIntegerPrimePower.html#decl-ProCGroups.Completion.denseRange_intToProCInteger_pGroup">denseRange_intToProCInteger_pGroup</a> (p := p) :
+      DenseRange (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.intToProCInteger">intToProCInteger</a>
+        (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}))))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the pro-\(C\) integer object as the inverse limit of its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> coefficient stages. Arithmetic operations, prime-power coordinates, projections, and transition maps are computed coordinatewise modulo the relevant modulus. Density of ordinary integers and procyclicity follow because every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coordinate is reached by an integer <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a>, while pro-\(p\) or pro-\(C\) membership is checked at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.topologicallyGenerates_singleton_proCIntegerOne_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.topologicallyGenerates_singleton_proCIntegerOne_pGroup">ProCGroups.Completion.topologicallyGenerates_singleton_proCIntegerOne_pGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/ProCIntegerPrimePower.html#L130">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> topologicallyGenerates_singleton_proCIntegerOne_pGroup
+    (p : ℕ) [Fact (Nat.Prime p)] :
+    <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.TopologicallyGenerates">ProCGroups.Generation.TopologicallyGenerates</a>
+      (G := Multiplicative
+        (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerLimitCarrier">ProCIntegerLimitCarrier</a> (FiniteGroupClass.pGroup p : FiniteGroupClass.{0})))
+      ({<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.proCIntegerOne">proCIntegerOne</a>
+        (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{0}))} : Set _)</code></pre></section>
+    <section><div class="natural-text"><p>The distinguished element 1 topologically generates the pro-\(p\) integers.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> C : FiniteGroupClass.{0} := FiniteGroupClass.pGroup p
+  simpa [C, <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.proCIntegerOne">proCIntegerOne</a>] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicallyGenerates_singleton_of_denseRange_mint">ProCGroups.Generation.topologicallyGenerates_singleton_of_denseRange_mint</a>
+      (f := <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.multiplicativeIntToProCInteger">multiplicativeIntToProCInteger</a> (C := C))
+      (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCIntegerPrimePower.html#decl-ProCGroups.Completion.denseRange_multiplicativeIntToProCInteger_pGroup">denseRange_multiplicativeIntToProCInteger_pGroup</a> (p := p)))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the pro-\(C\) integer object as the inverse limit of its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> coefficient stages. Arithmetic operations, prime-power coordinates, projections, and transition maps are computed coordinatewise modulo the relevant modulus. Density of ordinary integers and procyclicity follow because every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coordinate is reached by an integer <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a>, while pro-\(p\) or pro-\(C\) membership is checked at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.isProPGroup_multiplicative_proCInteger_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.isProPGroup_multiplicative_proCInteger_pGroup">ProCGroups.Completion.isProPGroup_multiplicative_proCInteger_pGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/ProCIntegerPrimePower.html#L144">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isProPGroup_multiplicative_proCInteger_pGroup (p : ℕ) [Fact (Nat.Prime p)] :
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/InverseLimits/Predicates.html#decl-ProCGroups.ProC.IsProPGroup">ProCGroups.ProC.IsProPGroup</a> p
+      (Multiplicative
+        (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerLimitCarrier">ProCIntegerLimitCarrier</a> (FiniteGroupClass.pGroup p : FiniteGroupClass.{0})))</code></pre></section>
+    <section><div class="natural-text"><p>The pro-\(p\) integers are a pro-\(p\)-group.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> C : FiniteGroupClass.{0} := FiniteGroupClass.pGroup p
+  letI : Nonempty (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerIndex">ProCIntegerIndex</a> C) := ⟨ProCIntegerIndex.pGroupPower p 0⟩
+  simpa [<a class="decl-ref" href="../../../library/ProCGroups/ProC/InverseLimits/Predicates.html#decl-ProCGroups.ProC.IsProPGroup">ProCGroups.ProC.IsProPGroup</a>, C] using
+    <a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.isProCGroup_multiplicative_proCInteger">isProCGroup_multiplicative_proCInteger</a>
+      (C := C)
+      (FiniteGroupClass.pGroup_formation p).isomClosed
+      (FiniteGroupClass.pGroup_formation p).quotientClosed
+      (ProCIntegerIndex.directed_pGroup (p := p))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the pro-\(C\) integer object as the inverse limit of its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> coefficient stages. Arithmetic operations, prime-power coordinates, projections, and transition maps are computed coordinatewise modulo the relevant modulus. Density of ordinary integers and procyclicity follow because every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coordinate is reached by an integer <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a>, while pro-\(p\) or pro-\(C\) membership is checked at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.isProcyclicGroup_multiplicative_proCInteger_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.isProcyclicGroup_multiplicative_proCInteger_pGroup">ProCGroups.Completion.isProcyclicGroup_multiplicative_proCInteger_pGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Completion/ProCIntegerPrimePower.html#L158">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isProcyclicGroup_multiplicative_proCInteger_pGroup (p : ℕ) [Fact (Nat.Prime p)] :
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/InverseLimits/Predicates.html#decl-ProCGroups.ProC.IsProcyclicGroup">ProCGroups.ProC.IsProcyclicGroup</a>
+      (Multiplicative
+        (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerLimitCarrier">ProCIntegerLimitCarrier</a> (FiniteGroupClass.pGroup p : FiniteGroupClass.{0})))</code></pre></section>
+    <section><div class="natural-text"><p>The pro-\(p\) integers are procyclic.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/ProC/InverseLimits/Predicates.html#decl-ProCGroups.ProC.isProcyclicGroup_of_topologicallyGenerates_singleton">ProCGroups.ProC.isProcyclicGroup_of_topologicallyGenerates_singleton</a>
+    (G := Multiplicative
+      (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCInteger.html#decl-ProCGroups.Completion.ProCIntegerLimitCarrier">ProCIntegerLimitCarrier</a> (FiniteGroupClass.pGroup p : FiniteGroupClass.{0})))
+    ((<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCIntegerPrimePower.html#decl-ProCGroups.Completion.isProPGroup_multiplicative_proCInteger_pGroup">isProPGroup_multiplicative_proCInteger_pGroup</a> (p := p)).1)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Completion/ProCIntegerPrimePower.html#decl-ProCGroups.Completion.topologicallyGenerates_singleton_proCIntegerOne_pGroup">topologicallyGenerates_singleton_proCIntegerOne_pGroup</a> (p := p))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the pro-\(C\) integer object as the inverse limit of its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> coefficient stages. Arithmetic operations, prime-power coordinates, projections, and transition maps are computed coordinatewise modulo the relevant modulus. Density of ordinary integers and procyclicity follow because every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coordinate is reached by an integer <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a>, while pro-\(p\) or pro-\(C\) membership is checked at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Completion.ProCIntegerPrimePower"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

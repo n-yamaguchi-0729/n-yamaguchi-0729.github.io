@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FoxDifferential.Discrete.Jacobian.Automorphism | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">FoxDifferential.Discrete.Jacobian.Automorphism</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/FoxDifferential.html">FoxDifferential</a><span class="sep">/</span><a href="../../../../library/FoxDifferential/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../library/FoxDifferential/Discrete/Jacobian.html">Jacobian</a><span class="sep">/</span><span>Automorphism</span></div>
+      <h1 class="module-title">FoxDifferential.Discrete.Jacobian.Automorphism</h1>
+      <div class="module-meta">6 Theorem | 1 Definition</div>
+      <div class="module-overview"><p>This module develops the Fox-differential part of the theory. It records the formulas that connect generators, boundaries, Jacobians, and completed coordinates.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/FoxDifferential/Discrete/Jacobian/ChainRule.html">FoxDifferential.Discrete.Jacobian.ChainRule</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/FoxDifferential.html">FoxDifferential</a></li><li><a href="../../../../library/FoxDifferential/Discrete.html">FoxDifferential.Discrete</a></li><li><a href="../../../../library/FoxDifferential/Discrete/Jacobian.html">FoxDifferential.Discrete.Jacobian</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobian_left_inverse_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobian_left_inverse_apply">FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobian_left_inverse_apply</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/Jacobian/Automorphism.html#L30">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeGroupAutomorphismFoxJacobian_left_inverse_apply
+    [DecidableEq X] [Fintype X]
+    (ψ : FreeGroup X →* H) (e : FreeGroup X ≃* FreeGroup X)
+    (x z : X) :
+    (∑ y : X,
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) (ψ.comp e.toMonoidHom)
+          e.symm.toMonoidHom x y *
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) ψ e.toMonoidHom y z) =
+      (Pi.single x (1 : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) : X → <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) z</code></pre></section>
+    <section><div class="natural-text"><p>The Fox differential coordinate map is evaluated by the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula and the crossed-derivation rule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> h :=
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/ChainRule.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian_comp_apply">freeGroupHomFoxJacobian_comp_apply</a> (H := H)
+      (X := X) (Y := X) (Z := X) ψ e.toMonoidHom e.symm.toMonoidHom x z
+  <span class="kw">have</span> hid :
+      e.toMonoidHom.comp e.symm.toMonoidHom = MonoidHom.id (FreeGroup X) := <span class="kw">by</span>
+    ext w
+    <span class="kw">simp</span> only [MulEquiv.toMonoidHom_eq_coe, MulEquiv.coe_monoidHom_comp_coe_monoidHom_symm, MonoidHom.id_apply]
+  <span class="kw">rw</span> [hid, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/ChainRule.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian_id">freeGroupHomFoxJacobian_id</a>] at h
+  simpa using h.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobian_right_inverse_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobian_right_inverse_apply">FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobian_right_inverse_apply</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/Jacobian/Automorphism.html#L51">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeGroupAutomorphismFoxJacobian_right_inverse_apply
+    [DecidableEq X] [Fintype X]
+    (ψ : FreeGroup X →* H) (e : FreeGroup X ≃* FreeGroup X)
+    (x z : X) :
+    (∑ y : X,
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) (ψ.comp e.symm.toMonoidHom)
+          e.toMonoidHom x y *
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) ψ e.symm.toMonoidHom y z) =
+      (Pi.single x (1 : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) : X → <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) z</code></pre></section>
+    <section><div class="natural-text"><p>The Fox differential coordinate map is evaluated by the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula and the crossed-derivation rule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> h :=
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/ChainRule.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian_comp_apply">freeGroupHomFoxJacobian_comp_apply</a> (H := H)
+      (X := X) (Y := X) (Z := X) ψ e.symm.toMonoidHom e.toMonoidHom x z
+  <span class="kw">have</span> hid :
+      e.symm.toMonoidHom.comp e.toMonoidHom = MonoidHom.id (FreeGroup X) := <span class="kw">by</span>
+    ext w
+    <span class="kw">simp</span> only [MulEquiv.toMonoidHom_eq_coe, MulEquiv.coe_monoidHom_symm_comp_coe_monoidHom, MonoidHom.id_apply]
+  <span class="kw">rw</span> [hid, <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/ChainRule.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian_id">freeGroupHomFoxJacobian_id</a>] at h
+  simpa using h.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_left_inverse">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_left_inverse">FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_left_inverse</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/Jacobian/Automorphism.html#L71">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeGroupAutomorphismFoxJacobianMatrix_left_inverse
+    [DecidableEq X] [Fintype X]
+    (ψ : FreeGroup X →* H) (e : FreeGroup X ≃* FreeGroup X) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobianMatrix">freeGroupHomFoxJacobianMatrix</a> (H := H) (ψ.comp e.toMonoidHom)
+        e.symm.toMonoidHom *
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobianMatrix">freeGroupHomFoxJacobianMatrix</a> (H := H) ψ e.toMonoidHom =
+      (1 : Matrix X X (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H))</code></pre></section>
+    <section><div class="natural-text"><p>The Jacobian matrix of a free-group automorphism has the expected left inverse.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Matrix.ext
+  <span class="kw">intro</span> x z
+  <span class="kw">rw</span> [Matrix.mul_apply]
+  change
+    (∑ j : X,
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) (ψ.comp e.toMonoidHom)
+          e.symm.toMonoidHom x j *
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) ψ e.toMonoidHom j z) =
+      (1 : Matrix X X (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)) x z
+  <span class="kw">rw</span> [<span class="kw">show</span>
+      (∑ j : X,
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) (ψ.comp e.toMonoidHom)
+            e.symm.toMonoidHom x j *
+            <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) ψ e.toMonoidHom j z) =
+        (Pi.single x (1 : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) : X → <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) z from
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Automorphism.html#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobian_left_inverse_apply">freeGroupAutomorphismFoxJacobian_left_inverse_apply</a> (H := H) ψ e x z]
+  by_cases hxz : x = z
+  · subst z
+    <span class="kw">simp</span> only [Pi.single_eq_same, Matrix.one_apply_eq]
+  · <span class="kw">simp</span> only [ne_eq, hxz, not_false_eq_true, Pi.single_eq_of_ne&#x27;, Matrix.one_apply_ne]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_right_inverse">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_right_inverse">FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_right_inverse</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/Jacobian/Automorphism.html#L100">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeGroupAutomorphismFoxJacobianMatrix_right_inverse
+    [DecidableEq X] [Fintype X]
+    (ψ : FreeGroup X →* H) (e : FreeGroup X ≃* FreeGroup X) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobianMatrix">freeGroupHomFoxJacobianMatrix</a> (H := H) (ψ.comp e.symm.toMonoidHom)
+        e.toMonoidHom *
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobianMatrix">freeGroupHomFoxJacobianMatrix</a> (H := H) ψ e.symm.toMonoidHom =
+      (1 : Matrix X X (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H))</code></pre></section>
+    <section><div class="natural-text"><p>The Jacobian matrix of a free-group automorphism has the expected right inverse.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Matrix.ext
+  <span class="kw">intro</span> x z
+  <span class="kw">rw</span> [Matrix.mul_apply]
+  change
+    (∑ j : X,
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) (ψ.comp e.symm.toMonoidHom)
+          e.toMonoidHom x j *
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) ψ e.symm.toMonoidHom j z) =
+      (1 : Matrix X X (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H)) x z
+  <span class="kw">rw</span> [<span class="kw">show</span>
+      (∑ j : X,
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) (ψ.comp e.symm.toMonoidHom)
+            e.toMonoidHom x j *
+            <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobian">freeGroupHomFoxJacobian</a> (H := H) ψ e.symm.toMonoidHom j z) =
+        (Pi.single x (1 : <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) : X → <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) z from
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Automorphism.html#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobian_right_inverse_apply">freeGroupAutomorphismFoxJacobian_right_inverse_apply</a> (H := H) ψ e x z]
+  by_cases hxz : x = z
+  · subst z
+    <span class="kw">simp</span> only [Pi.single_eq_same, Matrix.one_apply_eq]
+  · <span class="kw">simp</span> only [ne_eq, hxz, not_false_eq_true, Pi.single_eq_of_ne&#x27;, Matrix.one_apply_ne]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrixInverse">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrixInverse">FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrixInverse</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/Jacobian/Automorphism.html#L132">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> freeGroupAutomorphismFoxJacobianMatrixInverse
+    [DecidableEq X]
+    (ψ : FreeGroup X →* H) (e : FreeGroup X ≃* FreeGroup X) :
+    Matrix X X (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H) :=
+  <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobianMatrix">freeGroupHomFoxJacobianMatrix</a> (H := H) (ψ.comp e.toMonoidHom) e.symm.toMonoidHom</code></pre></section>
+    <section><div class="natural-text"><p>The named inverse matrix for the Fox Jacobian of a free-group automorphism. For \(J_{\psi}(e)\), the inverse is the Jacobian of the inverse automorphism \(e^{-1}\), with coefficients pushed forward by the composite of \(\psi\) and the monoid homomorphism underlying \(e\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrixInverse_mul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrixInverse_mul">FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrixInverse_mul</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/Jacobian/Automorphism.html#L139">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeGroupAutomorphismFoxJacobianMatrixInverse_mul
+    [DecidableEq X] [Fintype X]
+    (ψ : FreeGroup X →* H) (e : FreeGroup X ≃* FreeGroup X) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Automorphism.html#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrixInverse">freeGroupAutomorphismFoxJacobianMatrixInverse</a> (H := H) ψ e *
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobianMatrix">freeGroupHomFoxJacobianMatrix</a> (H := H) ψ e.toMonoidHom =
+      (1 : Matrix X X (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H))</code></pre></section>
+    <section><div class="natural-text"><p>The named inverse matrix is a left inverse for the Fox Jacobian of a free-group automorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Automorphism.html#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrixInverse">freeGroupAutomorphismFoxJacobianMatrixInverse</a>] using
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Automorphism.html#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_left_inverse">freeGroupAutomorphismFoxJacobianMatrix_left_inverse</a> (H := H) ψ e</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_mul_inverse">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_mul_inverse">FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_mul_inverse</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Discrete/Jacobian/Automorphism.html#L149">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeGroupAutomorphismFoxJacobianMatrix_mul_inverse
+    [DecidableEq X] [Fintype X]
+    (ψ : FreeGroup X →* H) (e : FreeGroup X ≃* FreeGroup X) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Basic.html#decl-FoxDifferential.FoxCalculus.freeGroupHomFoxJacobianMatrix">freeGroupHomFoxJacobianMatrix</a> (H := H) ψ e.toMonoidHom *
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Automorphism.html#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrixInverse">freeGroupAutomorphismFoxJacobianMatrixInverse</a> (H := H) ψ e =
+      (1 : Matrix X X (<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html#decl-FoxDifferential.GroupRing">GroupRing</a> H))</code></pre></section>
+    <section><div class="natural-text"><p>The named inverse matrix is a right inverse for the Fox Jacobian of a free-group automorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> h :=
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Automorphism.html#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrix_right_inverse">freeGroupAutomorphismFoxJacobianMatrix_right_inverse</a> (H := H)
+      (ψ.comp e.toMonoidHom) e
+  <span class="kw">have</span> hcomp :
+      (ψ.comp e.toMonoidHom).comp e.symm.toMonoidHom = ψ := <span class="kw">by</span>
+    ext w
+    <span class="kw">simp</span> only [MulEquiv.toMonoidHom_eq_coe, MonoidHom.coe_comp, MonoidHom.coe_coe, Function.comp_apply,
+  MulEquiv.apply_symm_apply]
+  <span class="kw">rw</span> [hcomp] at h
+  simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/Jacobian/Automorphism.html#decl-FoxDifferential.FoxCalculus.freeGroupAutomorphismFoxJacobianMatrixInverse">freeGroupAutomorphismFoxJacobianMatrixInverse</a>] using h</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FoxDifferential.Discrete.Jacobian.Automorphism"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

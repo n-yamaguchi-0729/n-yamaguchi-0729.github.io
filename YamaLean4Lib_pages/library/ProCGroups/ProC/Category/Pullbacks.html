@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.ProC.Category.Pullbacks | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.ProC.Category.Pullbacks</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../../library/ProCGroups/ProC.html">ProC</a><span class="sep">/</span><a href="../../../../library/ProCGroups/ProC/Category.html">Category</a><span class="sep">/</span><span>Pullbacks</span></div>
+      <h1 class="module-title">ProCGroups.ProC.Category.Pullbacks</h1>
+      <div class="module-meta">13 Theorem | 4 Definition</div>
+      <div class="module-overview"><p>This module proves the universal-<a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> part of the construction. It packages <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage data into completed maps and shows the required <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Subgroups/Closed.html#decl-ProCGroups.ProC.IsProCGroup.extension">extension</a> and uniqueness statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ProCGroups/Categorical/ProfinitePullbacks.html">ProCGroups.Categorical.ProfinitePullbacks</a></li><li><a href="../../../../library/ProCGroups/ProC/Category/Basic.html">ProCGroups.ProC.Category.Basic</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../../library/ProCGroups/ProC.html">ProCGroups.ProC</a></li><li><a href="../../../../library/ProCGroups/ProC/Category.html">ProCGroups.ProC.Category</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGrp.IsPullbackSquare">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGrp.IsPullbackSquare">ProCGrp.IsPullbackSquare</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L28">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> IsPullbackSquare
+    (alpha1 : G ⟶ H1) (alpha2 : G ⟶ H2)
+    (beta1 : H1 ⟶ H) (beta2 : H2 ⟶ H) : <span class="kw">Prop</span> :=
+  alpha1 ≫ beta1 = alpha2 ≫ beta2 ∧
+    ∀ ⦃K : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> ProC⦄ (phi1 : K ⟶ H1) (phi2 : K ⟶ H2),
+      phi1 ≫ beta1 = phi2 ≫ beta2 →
+        ∃! phi : K ⟶ G, phi ≫ alpha1 = phi1 ∧ phi ≫ alpha2 = phi2</code></pre></section>
+    <section><div class="natural-text"><p>A pullback square in the bundled category pro-\(C\) groups.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGrp.pullbackLift">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackLift">ProCGrp.pullbackLift</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L37">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> pullbackLift
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {beta1 : H1 ⟶ H} {beta2 : H2 ⟶ H}
+    {K : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> ProC}
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (phi1 : K ⟶ H1) (phi2 : K ⟶ H2)
+    (hphi : phi1 ≫ beta1 = phi2 ≫ beta2) : K ⟶ G :=
+  Classical.choose (ExistsUnique.exists (hpb.2 phi1 phi2 hphi))</code></pre></section>
+    <section><div class="natural-text"><p>The pro-\(C\) pullback universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> supplies the induced morphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullbackLift_spec">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackLift_spec">ProCGrp.pullbackLift_spec</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L47">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLift_spec
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {beta1 : H1 ⟶ H} {beta2 : H2 ⟶ H}
+    {K : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> ProC}
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (phi1 : K ⟶ H1) (phi2 : K ⟶ H2)
+    (hphi : phi1 ≫ beta1 = phi2 ≫ beta2) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift">pullbackLift</a> hpb phi1 phi2 hphi ≫ alpha1 = phi1 ∧
+      <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift">pullbackLift</a> hpb phi1 phi2 hphi ≫ alpha2 = phi2</code></pre></section>
+    <section><div class="natural-text"><p>The chosen pullback lift has the prescribed composites.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Classical.choose_spec (ExistsUnique.exists (hpb.2 phi1 phi2 hphi))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps. For pro-\(C\) claims, the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient obtained from the construction remains in \(C\) by the relevant closure axiom, such as closure under subgroups, quotients, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. The universal or lifting <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is then checked on the prescribed generators, and uniqueness follows because the generators are dense or topologically generating.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullbackLift_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackLift_left">ProCGrp.pullbackLift_left</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L59">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackLift_left
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {beta1 : H1 ⟶ H} {beta2 : H2 ⟶ H}
+    {K : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> ProC}
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (phi1 : K ⟶ H1) (phi2 : K ⟶ H2)
+    (hphi : phi1 ≫ beta1 = phi2 ≫ beta2) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift">pullbackLift</a> hpb phi1 phi2 hphi ≫ alpha1 = phi1</code></pre></section>
+    <section><div class="natural-text"><p>The pullback lift has the prescribed left projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>(<a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift_spec">pullbackLift_spec</a> hpb phi1 phi2 hphi).1</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. Projection and transition formulas are proved at an arbitrary <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage. Both sides use the same quotient map on the support and the same coefficient map on the coefficient, so they agree on singleton basis elements; <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity extend the equality to the whole <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage group algebra. For pro-\(C\) claims, the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient obtained from the construction remains in \(C\) by the relevant closure axiom, such as closure under subgroups, quotients, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. The universal or lifting <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is then checked on the prescribed generators, and uniqueness follows because the generators are dense or topologically generating.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullbackLift_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackLift_right">ProCGrp.pullbackLift_right</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L70">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackLift_right
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {beta1 : H1 ⟶ H} {beta2 : H2 ⟶ H}
+    {K : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> ProC}
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (phi1 : K ⟶ H1) (phi2 : K ⟶ H2)
+    (hphi : phi1 ≫ beta1 = phi2 ≫ beta2) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift">pullbackLift</a> hpb phi1 phi2 hphi ≫ alpha2 = phi2</code></pre></section>
+    <section><div class="natural-text"><p>The pullback lift has the prescribed right projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>(<a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift_spec">pullbackLift_spec</a> hpb phi1 phi2 hphi).2</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. Projection and transition formulas are proved at an arbitrary <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage. Both sides use the same quotient map on the support and the same coefficient map on the coefficient, so they agree on singleton basis elements; <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity extend the equality to the whole <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage group algebra. For pro-\(C\) claims, the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient obtained from the construction remains in \(C\) by the relevant closure axiom, such as closure under subgroups, quotients, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. The universal or lifting <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is then checked on the prescribed generators, and uniqueness follows because the generators are dense or topologically generating.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullbackLift_unique">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackLift_unique">ProCGrp.pullbackLift_unique</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L81">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLift_unique
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {beta1 : H1 ⟶ H} {beta2 : H2 ⟶ H}
+    {K : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> ProC}
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (phi1 : K ⟶ H1) (phi2 : K ⟶ H2)
+    (hphi : phi1 ≫ beta1 = phi2 ≫ beta2)
+    {psi : K ⟶ G}
+    (hpsi : psi ≫ alpha1 = phi1 ∧ psi ≫ alpha2 = phi2) :
+    psi = <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift">pullbackLift</a> hpb phi1 phi2 hphi</code></pre></section>
+    <section><div class="natural-text"><p>Uniqueness of the chosen pullback lift.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases hpb.2 phi1 phi2 hphi <span class="kw">with</span> ⟨u, hu, huniq⟩
+  <span class="kw">have</span> hpsi&#x27; : psi = u := huniq _ hpsi
+  <span class="kw">have</span> hchosen : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift">pullbackLift</a> hpb phi1 phi2 hphi = u :=
+    huniq _ (<a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift_spec">pullbackLift_spec</a> hpb phi1 phi2 hphi)
+  <span class="kw">exact</span> hpsi&#x27;.trans hchosen.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullbackLift_self">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackLift_self">ProCGrp.pullbackLift_self</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L98">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackLift_self
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {beta1 : H1 ⟶ H} {beta2 : H2 ⟶ H}
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift">pullbackLift</a> hpb alpha1 alpha2 hpb.1 = 𝟙 G</code></pre></section>
+    <section><div class="natural-text"><p>The self-lift of a pullback object is the identity morphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  symm
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift_unique">pullbackLift_unique</a> hpb alpha1 alpha2 hpb.1 (psi := 𝟙 G) (<span class="kw">by</span> <span class="kw">simp</span> only [Category.id_comp, and_self])</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For pro-\(C\) claims, the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient obtained from the construction remains in \(C\) by the relevant closure axiom, such as closure under subgroups, quotients, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. The universal or lifting <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is then checked on the prescribed generators, and uniqueness follows because the generators are dense or topologically generating. Consequently the two expressions have the same determining coordinates, and the defining extensionality principle for the inverse-limit, quotient, or presentation construction gives the claim in the statement.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullback_hom_ext">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullback_hom_ext">ProCGrp.pullback_hom_ext</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L107">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullback_hom_ext
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {beta1 : H1 ⟶ H} {beta2 : H2 ⟶ H}
+    {K : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> ProC}
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    {psi psi&#x27; : K ⟶ G}
+    (h1 : psi ≫ alpha1 = psi&#x27; ≫ alpha1)
+    (h2 : psi ≫ alpha2 = psi&#x27; ≫ alpha2) :
+    psi = psi&#x27;</code></pre></section>
+    <section><div class="natural-text"><p>Extensionality of morphisms into a pro-\(C\) pullback object.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hphi : (psi ≫ alpha1) ≫ beta1 = (psi ≫ alpha2) ≫ beta2 := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      (psi ≫ alpha1) ≫ beta1 = psi ≫ (alpha1 ≫ beta1) := <span class="kw">by</span> <span class="kw">simp</span> only [Category.assoc]
+      _ = psi ≫ (alpha2 ≫ beta2) := <span class="kw">by</span> <span class="kw">rw</span> [hpb.1]
+      _ = (psi ≫ alpha2) ≫ beta2 := <span class="kw">by</span> <span class="kw">simp</span> only [Category.assoc]
+  <span class="kw">have</span> hpsi :
+      psi = <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift">pullbackLift</a> hpb (psi ≫ alpha1) (psi ≫ alpha2) hphi := <span class="kw">by</span>
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift_unique">pullbackLift_unique</a> hpb (psi ≫ alpha1) (psi ≫ alpha2) hphi
+      (psi := psi) ⟨<span class="kw">rfl</span>, <span class="kw">rfl</span>⟩
+  <span class="kw">have</span> hpsi&#x27; :
+      psi&#x27; = <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift">pullbackLift</a> hpb (psi ≫ alpha1) (psi ≫ alpha2) hphi := <span class="kw">by</span>
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift_unique">pullbackLift_unique</a> hpb (psi ≫ alpha1) (psi ≫ alpha2) hphi
+      (psi := psi&#x27;) ⟨h1.symm, h2.symm⟩
+  <span class="kw">exact</span> hpsi.trans hpsi&#x27;.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For pro-\(C\) claims, the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient obtained from the construction remains in \(C\) by the relevant closure axiom, such as closure under subgroups, quotients, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. The universal or lifting <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is then checked on the prescribed generators, and uniqueness follows because the generators are dense or topologically generating. Consequently the two expressions have the same determining coordinates, and the defining extensionality principle for the inverse-limit, quotient, or presentation construction gives the claim in the statement.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGrp.pullbackMapOfIsPullback">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackMapOfIsPullback">ProCGrp.pullbackMapOfIsPullback</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L132">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> pullbackMapOfIsPullback
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {alpha1&#x27; : G&#x27; ⟶ H1} {alpha2&#x27; : G&#x27; ⟶ H2}
+    (beta1 : H1 ⟶ H) (beta2 : H2 ⟶ H)
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (hpb&#x27; : IsPullbackSquare alpha1&#x27; alpha2&#x27; beta1 beta2) :
+    G&#x27; ⟶ G :=
+  <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift">pullbackLift</a> hpb alpha1&#x27; alpha2&#x27; hpb&#x27;.1</code></pre></section>
+    <section><div class="natural-text"><p>The canonical <a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map from <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> pro-\(C\) pullback object to another.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullbackMapOfIsPullback_self">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackMapOfIsPullback_self">ProCGrp.pullbackMapOfIsPullback_self</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L142">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackMapOfIsPullback_self
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    (beta1 : H1 ⟶ H) (beta2 : H2 ⟶ H)
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb hpb = 𝟙 G</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map from a pullback object to itself is the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift_self">pullbackLift_self</a> (hpb := hpb)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps. For pro-\(C\) claims, the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient obtained from the construction remains in \(C\) by the relevant closure axiom, such as closure under subgroups, quotients, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. The universal or lifting <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is then checked on the prescribed generators, and uniqueness follows because the generators are dense or topologically generating.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullbackMapOfIsPullback_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackMapOfIsPullback_left">ProCGrp.pullbackMapOfIsPullback_left</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L150">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackMapOfIsPullback_left
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {alpha1&#x27; : G&#x27; ⟶ H1} {alpha2&#x27; : G&#x27; ⟶ H2}
+    (beta1 : H1 ⟶ H) (beta2 : H2 ⟶ H)
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (hpb&#x27; : IsPullbackSquare alpha1&#x27; alpha2&#x27; beta1 beta2) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb hpb&#x27; ≫ alpha1 = alpha1&#x27;</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map between pullback objects respects the left projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift_left">pullbackLift_left</a> hpb alpha1&#x27; alpha2&#x27; hpb&#x27;.1</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. Projection and transition formulas are proved at an arbitrary <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage. Both sides use the same quotient map on the support and the same coefficient map on the coefficient, so they agree on singleton basis elements; <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity extend the equality to the whole <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage group algebra. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullbackMapOfIsPullback_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackMapOfIsPullback_right">ProCGrp.pullbackMapOfIsPullback_right</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L160">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackMapOfIsPullback_right
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {alpha1&#x27; : G&#x27; ⟶ H1} {alpha2&#x27; : G&#x27; ⟶ H2}
+    (beta1 : H1 ⟶ H) (beta2 : H2 ⟶ H)
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (hpb&#x27; : IsPullbackSquare alpha1&#x27; alpha2&#x27; beta1 beta2) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb hpb&#x27; ≫ alpha2 = alpha2&#x27;</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map between pullback objects respects the right projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackLift_right">pullbackLift_right</a> hpb alpha1&#x27; alpha2&#x27; hpb&#x27;.1</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. Projection and transition formulas are proved at an arbitrary <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage. Both sides use the same quotient map on the support and the same coefficient map on the coefficient, so they agree on singleton basis elements; <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity extend the equality to the whole <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage group algebra. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGrp.pullbackIsoOfIsPullback">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackIsoOfIsPullback">ProCGrp.pullbackIsoOfIsPullback</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L170">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> pullbackIsoOfIsPullback
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {alpha1&#x27; : G&#x27; ⟶ H1} {alpha2&#x27; : G&#x27; ⟶ H2}
+    (beta1 : H1 ⟶ H) (beta2 : H2 ⟶ H)
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (hpb&#x27; : IsPullbackSquare alpha1&#x27; alpha2&#x27; beta1 beta2) :
+    G ≅ G&#x27; <span class="kw">where</span>
+  hom := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb&#x27; hpb
+  inv := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb hpb&#x27;
+  hom_inv_id := <span class="kw">by</span>
+    <span class="kw">apply</span> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullback_hom_ext">pullback_hom_ext</a> hpb
+    · <span class="kw">calc</span>
+        (<a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb&#x27; hpb ≫
+            <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb hpb&#x27;) ≫ alpha1 =
+              <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb&#x27; hpb ≫ alpha1&#x27; := <span class="kw">by</span>
+          <span class="kw">rw</span> [Category.assoc, <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback_left">pullbackMapOfIsPullback_left</a>]
+        _ = alpha1 := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback_left">pullbackMapOfIsPullback_left</a> beta1 beta2 hpb&#x27; hpb
+    · <span class="kw">calc</span>
+        (<a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb&#x27; hpb ≫
+            <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb hpb&#x27;) ≫ alpha2 =
+              <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb&#x27; hpb ≫ alpha2&#x27; := <span class="kw">by</span>
+          <span class="kw">rw</span> [Category.assoc, <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback_right">pullbackMapOfIsPullback_right</a>]
+        _ = alpha2 := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback_right">pullbackMapOfIsPullback_right</a> beta1 beta2 hpb&#x27; hpb
+  inv_hom_id := <span class="kw">by</span>
+    <span class="kw">apply</span> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullback_hom_ext">pullback_hom_ext</a> hpb&#x27;
+    · <span class="kw">calc</span>
+        (<a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb hpb&#x27; ≫
+            <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb&#x27; hpb) ≫ alpha1&#x27; =
+              <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb hpb&#x27; ≫ alpha1 := <span class="kw">by</span>
+          <span class="kw">rw</span> [Category.assoc, <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback_left">pullbackMapOfIsPullback_left</a>]
+        _ = alpha1&#x27; := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback_left">pullbackMapOfIsPullback_left</a> beta1 beta2 hpb hpb&#x27;
+    · <span class="kw">calc</span>
+        (<a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb hpb&#x27; ≫
+            <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb&#x27; hpb) ≫ alpha2&#x27; =
+              <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback">pullbackMapOfIsPullback</a> beta1 beta2 hpb hpb&#x27; ≫ alpha2 := <span class="kw">by</span>
+          <span class="kw">rw</span> [Category.assoc, <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback_right">pullbackMapOfIsPullback_right</a>]
+        _ = alpha2&#x27; := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback_right">pullbackMapOfIsPullback_right</a> beta1 beta2 hpb hpb&#x27;</code></pre></section>
+    <section><div class="natural-text"><p>Any two pro-\(C\) pullback objects of the same cospan are canonically isomorphic.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullbackIsoOfIsPullback_hom_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackIsoOfIsPullback_hom_left">ProCGrp.pullbackIsoOfIsPullback_hom_left</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L209">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackIsoOfIsPullback_hom_left
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {alpha1&#x27; : G&#x27; ⟶ H1} {alpha2&#x27; : G&#x27; ⟶ H2}
+    (beta1 : H1 ⟶ H) (beta2 : H2 ⟶ H)
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (hpb&#x27; : IsPullbackSquare alpha1&#x27; alpha2&#x27; beta1 beta2) :
+    (<a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackIsoOfIsPullback">pullbackIsoOfIsPullback</a> beta1 beta2 hpb hpb&#x27;).hom ≫ alpha1&#x27; = alpha1</code></pre></section>
+    <section><div class="natural-text"><p>The canonical pullback isomorphism respects the left projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback_left">pullbackMapOfIsPullback_left</a> beta1 beta2 hpb&#x27; hpb</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. Projection and transition formulas are proved at an arbitrary <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage. Both sides use the same quotient map on the support and the same coefficient map on the coefficient, so they agree on singleton basis elements; <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity extend the equality to the whole <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage group algebra. For equivalence and homeomorphism statements, the two <a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are composed in both orders and evaluated on the coordinates that determine the source. Each composite reduces to the identity transition or to the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> identity on <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages, so the algebraic inverse laws and the topological inverse laws follow simultaneously.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.pullbackIsoOfIsPullback_hom_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.pullbackIsoOfIsPullback_hom_right">ProCGrp.pullbackIsoOfIsPullback_hom_right</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L219">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackIsoOfIsPullback_hom_right
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {alpha1&#x27; : G&#x27; ⟶ H1} {alpha2&#x27; : G&#x27; ⟶ H2}
+    (beta1 : H1 ⟶ H) (beta2 : H2 ⟶ H)
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2)
+    (hpb&#x27; : IsPullbackSquare alpha1&#x27; alpha2&#x27; beta1 beta2) :
+    (<a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackIsoOfIsPullback">pullbackIsoOfIsPullback</a> beta1 beta2 hpb hpb&#x27;).hom ≫ alpha2&#x27; = alpha2</code></pre></section>
+    <section><div class="natural-text"><p>The canonical pullback isomorphism respects the right projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Pullbacks.html#decl-ProCGrp.pullbackMapOfIsPullback_right">pullbackMapOfIsPullback_right</a> beta1 beta2 hpb&#x27; hpb</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. Projection and transition formulas are proved at an arbitrary <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage. Both sides use the same quotient map on the support and the same coefficient map on the coefficient, so they agree on singleton basis elements; <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity extend the equality to the whole <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage group algebra. For equivalence and homeomorphism statements, the two <a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are composed in both orders and evaluated on the coordinates that determine the source. Each composite reduces to the identity transition or to the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> identity on <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages, so the algebraic inverse laws and the topological inverse laws follow simultaneously.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.isPullbackSquare_of_hasProfiniteTestPullbackProperty">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.isPullbackSquare_of_hasProfiniteTestPullbackProperty">ProCGrp.isPullbackSquare_of_hasProfiniteTestPullbackProperty</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L229">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isPullbackSquare_of_hasProfiniteTestPullbackProperty
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {beta1 : H1 ⟶ H} {beta2 : H2 ⟶ H}
+    (hpb : <a class="decl-ref" href="../../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">ProCGroups.Categorical.HasProfiniteTestPullbackProperty</a>
+      alpha1.hom alpha2.hom beta1.hom beta2.hom) :
+    IsPullbackSquare alpha1 alpha2 beta1 beta2</code></pre></section>
+    <section><div class="natural-text"><p>A concrete continuous profinite pullback square is a pullback in ProCGrp.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · <span class="kw">apply</span> hom_ext
+    change beta1.hom.comp alpha1.hom = beta2.hom.comp alpha2.hom
+    <span class="kw">exact</span> hpb.1
+  · <span class="kw">intro</span> K phi1 phi2 hphi
+    <span class="kw">have</span> hK : <a class="decl-ref" href="../../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">ProCGroups.IsProfiniteGroup</a> K :=
+      <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroup.profiniteGroup">ProCGroups.ProC.ProCGroup.profiniteGroup</a> ProC K
+    <span class="kw">have</span> hphi&#x27; : beta1.hom.comp phi1.hom = beta2.hom.comp phi2.hom := <span class="kw">by</span>
+      simpa using congrArg (<span class="kw">fun</span> f : K ⟶ H =&gt; f.hom) hphi
+    rcases hpb.2 (K := K) hK phi1.hom phi2.hom hphi&#x27; <span class="kw">with</span> ⟨psi, hpsi, huniq⟩
+    <span class="kw">let</span> psi&#x27; : K ⟶ G := ConcreteCategory.ofHom (C := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> ProC) psi
+    refine ⟨psi&#x27;, ?_, ?_⟩
+    · <span class="kw">constructor</span>
+      · <span class="kw">apply</span> hom_ext
+        change alpha1.hom.comp psi = phi1.hom
+        <span class="kw">exact</span> hpsi.1
+      · <span class="kw">apply</span> hom_ext
+        change alpha2.hom.comp psi = phi2.hom
+        <span class="kw">exact</span> hpsi.2
+    · <span class="kw">intro</span> theta htheta
+      <span class="kw">apply</span> hom_ext
+      change theta.hom = psi
+      <span class="kw">apply</span> huniq
+      <span class="kw">constructor</span>
+      · simpa using congrArg (<span class="kw">fun</span> f : K ⟶ H1 =&gt; f.hom) htheta.1
+      · simpa using congrArg (<span class="kw">fun</span> f : K ⟶ H2 =&gt; f.hom) htheta.2</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Continuity is checked by composing with all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient projections; each composite is a continuous map between <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> or profinite quotient spaces. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGrp.hasProfiniteTestPullbackProperty_of_isPullbackSquare_allFinite">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGrp.hasProfiniteTestPullbackProperty_of_isPullbackSquare_allFinite">ProCGrp.hasProfiniteTestPullbackProperty_of_isPullbackSquare_allFinite</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/Category/Pullbacks.html#L264">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hasProfiniteTestPullbackProperty_of_isPullbackSquare_allFinite
+    {G H H1 H2 : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.allFiniteProC">ProCGroups.ProC.allFiniteProC</a>}
+    {alpha1 : G ⟶ H1} {alpha2 : G ⟶ H2}
+    {beta1 : H1 ⟶ H} {beta2 : H2 ⟶ H}
+    (hpb : IsPullbackSquare alpha1 alpha2 beta1 beta2) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">ProCGroups.Categorical.HasProfiniteTestPullbackProperty</a>
+      alpha1.hom alpha2.hom beta1.hom beta2.hom</code></pre></section>
+    <section><div class="natural-text"><p>For the all-<a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> predicate, the bundled <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> pullback <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is equivalent to the concrete profinite pullback property.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · change (alpha1 ≫ beta1).hom = (alpha2 ≫ beta2).hom
+    <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : G ⟶ H =&gt; f.hom) hpb.1
+  · <span class="kw">intro</span> K _ _ _ hK phi1 phi2 hphi
+    letI : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroup">ProCGroups.ProC.ProCGroup</a> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.allFiniteProC">ProCGroups.ProC.allFiniteProC</a> K :=
+      <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroup.of_isProCGroup">ProCGroups.ProC.ProCGroup.of_isProCGroup</a> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.allFiniteProC">ProCGroups.ProC.allFiniteProC</a> K
+        (<a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.allFiniteProC_isProCGroup_of_profinite">ProCGroups.ProC.allFiniteProC_isProCGroup_of_profinite</a> hK)
+    <span class="kw">let</span> Kc : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.allFiniteProC">ProCGroups.ProC.allFiniteProC</a> :=
+      <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp.of">ProCGrp.of</a> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.allFiniteProC">ProCGroups.ProC.allFiniteProC</a> K
+    <span class="kw">let</span> phi1&#x27; : Kc ⟶ H1 := ConcreteCategory.ofHom (C := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.allFiniteProC">ProCGroups.ProC.allFiniteProC</a>) phi1
+    <span class="kw">let</span> phi2&#x27; : Kc ⟶ H2 := ConcreteCategory.ofHom (C := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.allFiniteProC">ProCGroups.ProC.allFiniteProC</a>) phi2
+    <span class="kw">have</span> hphi&#x27; : phi1&#x27; ≫ beta1 = phi2&#x27; ≫ beta2 := <span class="kw">by</span>
+      <span class="kw">apply</span> hom_ext
+      <span class="kw">exact</span> hphi
+    rcases hpb.2 phi1&#x27; phi2&#x27; hphi&#x27; <span class="kw">with</span> ⟨psi, hpsi, huniq⟩
+    refine ⟨psi.hom, ?_, ?_⟩
+    · <span class="kw">constructor</span>
+      · simpa using congrArg (<span class="kw">fun</span> f : Kc ⟶ H1 =&gt; f.hom) hpsi.1
+      · simpa using congrArg (<span class="kw">fun</span> f : Kc ⟶ H2 =&gt; f.hom) hpsi.2
+    · <span class="kw">intro</span> theta htheta
+      <span class="kw">let</span> theta&#x27; : Kc ⟶ G :=
+        ConcreteCategory.ofHom (C := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp">ProCGrp</a> <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.allFiniteProC">ProCGroups.ProC.allFiniteProC</a>) theta
+      <span class="kw">have</span> htheta&#x27; : theta&#x27; ≫ alpha1 = phi1&#x27; ∧ theta&#x27; ≫ alpha2 = phi2&#x27; := <span class="kw">by</span>
+        <span class="kw">constructor</span>
+        · <span class="kw">apply</span> hom_ext
+          <span class="kw">exact</span> htheta.1
+        · <span class="kw">apply</span> hom_ext
+          <span class="kw">exact</span> htheta.2
+      <span class="kw">have</span> hthetaEq : theta&#x27; = psi := huniq theta&#x27; htheta&#x27;
+      simpa using congrArg (<span class="kw">fun</span> f : Kc ⟶ G =&gt; f.hom) hthetaEq</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For equivalence and homeomorphism statements, the two <a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are composed in both orders and evaluated on the coordinates that determine the source. Each composite reduces to the identity transition or to the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> identity on <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages, so the algebraic inverse laws and the topological inverse laws follow simultaneously.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.ProC.Category.Pullbacks"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

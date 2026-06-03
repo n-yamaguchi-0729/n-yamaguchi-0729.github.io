@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FenchelNielsenZomorrodian.Discrete.Singerman.CyclicSchreierKernel | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">FenchelNielsenZomorrodian.Discrete.Singerman.CyclicSchreierKernel</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/FenchelNielsenZomorrodian.html">FenchelNielsenZomorrodian</a><span class="sep">/</span><a href="../../../../library/FenchelNielsenZomorrodian/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman.html">Singerman</a><span class="sep">/</span><span>CyclicSchreierKernel</span></div>
+      <h1 class="module-title">FenchelNielsenZomorrodian.Discrete.Singerman.CyclicSchreierKernel</h1>
+      <div class="module-meta">6 Theorem | 6 Definition</div>
+      <div class="module-overview"><p>This module develops the rewriting and basis constructions behind the subgroup calculations. It tracks words and relations through the chosen transversal to obtain the required presentation or basis statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html">FenchelNielsenZomorrodian.Discrete.Core.EllipticQuotientHom</a></li><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html">FenchelNielsenZomorrodian.Discrete.Singerman.CyclicQuotientActions</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete.html">FenchelNielsenZomorrodian.Discrete</a></li><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/FirstReduction/QuotientAndBasis.html">FenchelNielsenZomorrodian.Discrete.CompactFuchsian.FirstReduction.QuotientAndBasis</a></li><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/ZeroGenus/Reindexing.html">FenchelNielsenZomorrodian.Discrete.CompactFuchsian.ZeroGenus.Reindexing</a></li><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman.html">FenchelNielsenZomorrodian.Discrete.Singerman</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-FenchelNielsen.CyclicSchreierRelatorData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.CyclicSchreierRelatorData">FenchelNielsen.CyclicSchreierRelatorData</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L19">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> CyclicSchreierRelatorData
+    {X Y : <span class="kw">Type</span>} [DecidableEq X] {N : ℕ} [NeZero N] {rels : Set (FreeGroup X)}
+    (f : X → Multiplicative (ZMod N))
+    (x : X)
+    (hx : FreeGroup.lift f (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod N))
+    (targetRelators : Set (FreeGroup Y)) : <span class="kw">Type</span> :=
+  (<span class="kw">let</span> φ : FreeGroup X →* Multiplicative (ZMod N) := FreeGroup.lift f
+    <span class="kw">let</span> T := Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))
+    <span class="kw">let</span> hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> φ.ker T :=
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator">cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator</a> φ x hx
+    <span class="kw">let</span> e : FreeGroup ↥(<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">schreierGeneratorSet</a> hT) ≃* φ.ker :=
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.freeGroupKernelSchreierBasisEquivOfCyclicQuotientGenerator">freeGroupKernelSchreierBasisEquivOfCyclicQuotientGenerator</a> φ x hx
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData</a>
+      (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/GeneratorMap.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet</a> e
+        (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/Presentations/KernelQuotient.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet</a> (f := f) (rels := rels) T))
+      targetRelators)</code></pre></section>
+    <section><div class="natural-text"><p>Relator-quotient mutual map data for the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> Schreier kernel presentation.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.cyclicSchreierKernelEquivPresentedGroupOfRelatorData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.cyclicSchreierKernelEquivPresentedGroupOfRelatorData">FenchelNielsen.cyclicSchreierKernelEquivPresentedGroupOfRelatorData</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L35">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> cyclicSchreierKernelEquivPresentedGroupOfRelatorData
+    {X Y : <span class="kw">Type</span>} [DecidableEq X] {N : ℕ} [NeZero N] {rels : Set (FreeGroup X)}
+    (f : X → Multiplicative (ZMod N))
+    (hrels : ∀ r ∈ rels, FreeGroup.lift f r = 1)
+    (x : X)
+    (hx : FreeGroup.lift f (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod N))
+    (targetRelators : Set (FreeGroup Y))
+    (hData : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.CyclicSchreierRelatorData">CyclicSchreierRelatorData</a> (rels := rels) f x hx targetRelators) :
+    (PresentedGroup.toGroup (rels := rels) (f := f) hrels).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≃*
+      PresentedGroup targetRelators := <span class="kw">by</span>
+  classical
+  <span class="kw">let</span> φ : FreeGroup X →* Multiplicative (ZMod N) := FreeGroup.lift f
+  <span class="kw">let</span> T := Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))
+  <span class="kw">let</span> hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> φ.ker T :=
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator">cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator</a> φ x hx
+  <span class="kw">let</span> e : FreeGroup ↥(<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">schreierGeneratorSet</a> hT) ≃* φ.ker :=
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.freeGroupKernelSchreierBasisEquivOfCyclicQuotientGenerator">freeGroupKernelSchreierBasisEquivOfCyclicQuotientGenerator</a> φ x hx
+  <span class="kw">let</span> R : Set (FreeGroup ↥(<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">schreierGeneratorSet</a> hT)) :=
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/GeneratorMap.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeGroupPullbackRelatorSet</a> e
+      (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/Presentations/KernelQuotient.html#decl-ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet">ReidemeisterSchreier.Discrete.Presentations.freeKernelTransversalRelatorSet</a> (f := f) (rels := rels) T)
+  <span class="kw">let</span> hTarget :
+      FreeGroup ↥(<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">schreierGeneratorSet</a> hT) ⧸ Subgroup.normalClosure R ≃*
+        PresentedGroup targetRelators :=
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/GeneratorMap.html#decl-ReidemeisterSchreier.Discrete.Presentations.quotientEquivOfRelatorQuotientMutualMapData">ReidemeisterSchreier.Discrete.Presentations.quotientEquivOfRelatorQuotientMutualMapData</a> R targetRelators
+      (<span class="kw">by</span> simpa [<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.CyclicSchreierRelatorData">CyclicSchreierRelatorData</a>, φ, T, hT, e, R] using hData)
+  <span class="kw">let</span> hKernel :
+      FreeGroup ↥(<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">schreierGeneratorSet</a> hT) ⧸ Subgroup.normalClosure R ≃*
+        (PresentedGroup.toGroup (rels := rels) (f := f) hrels).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> := <span class="kw">by</span>
+    simpa [φ, T, hT, e, R] using
+      (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.presentedFreeKernelCyclicSchreierRelatorQuotientEquivPresentedKernel">presentedFreeKernelCyclicSchreierRelatorQuotientEquivPresentedKernel</a>
+        (N := N) (rels := rels) (f := f) hrels x hx)
+  <span class="kw">exact</span> hKernel.symm.trans hTarget</code></pre></section>
+    <section><div class="natural-text"><p>Cyclic Schreier relator data identifies the presented kernel of a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient with the target presented group.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.FuchsianEllipticCyclicRelatorData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.FuchsianEllipticCyclicRelatorData">FenchelNielsen.FuchsianEllipticCyclicRelatorData</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L68">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> FuchsianEllipticCyclicRelatorData
+    {p : ℕ} [NeZero p] {Y : <span class="kw">Type</span>} (σ : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianSignature">FuchsianSignature</a>)
+    (ξ : Fin σ.numPeriods → Multiplicative (ZMod p))
+    (i₀ : Fin σ.numPeriods)
+    (hi₀ : ξ i₀ = Multiplicative.ofAdd (1 : ZMod p))
+    (targetRelators : Set (FreeGroup Y)) : <span class="kw">Type</span> :=
+  (letI := Classical.decEq (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> σ)
+   <span class="kw">let</span> f := <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> σ ξ
+   <span class="kw">let</span> x := FuchsianGenerator.elliptic i₀
+   <span class="kw">let</span> hx :
+      FreeGroup.lift f (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod p) := <span class="kw">by</span>
+    <span class="kw">simp</span> only [FreeGroup.lift_apply_of, <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a>, hi₀, f, x]
+   <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.CyclicSchreierRelatorData">CyclicSchreierRelatorData</a> (N := p) (rels := <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> σ) f x hx targetRelators)</code></pre></section>
+    <section><div class="natural-text"><p>Cyclic Schreier relator data for an elliptic quotient of a Fuchsian presentation and the chosen target relators.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.FuchsianEllipticCyclicSchreierRelatorData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.FuchsianEllipticCyclicSchreierRelatorData">FenchelNielsen.FuchsianEllipticCyclicSchreierRelatorData</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L82">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> FuchsianEllipticCyclicSchreierRelatorData
+    {p : ℕ} [NeZero p] (σ τ : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianSignature">FuchsianSignature</a>)
+    (ξ : Fin σ.numPeriods → Multiplicative (ZMod p))
+    (i₀ : Fin σ.numPeriods)
+    (hi₀ : ξ i₀ = Multiplicative.ofAdd (1 : ZMod p)) : <span class="kw">Type</span> :=
+  <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.FuchsianEllipticCyclicRelatorData">FuchsianEllipticCyclicRelatorData</a> σ ξ i₀ hi₀ (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> τ)</code></pre></section>
+    <section><div class="natural-text"><p>Cyclic Schreier relator data for an elliptic quotient of <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Fuchsian presentation with target <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> from another Fuchsian signature.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.fuchsianEllipticCyclicKernelEquivPresentedGroupOfRelatorData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.fuchsianEllipticCyclicKernelEquivPresentedGroupOfRelatorData">FenchelNielsen.fuchsianEllipticCyclicKernelEquivPresentedGroupOfRelatorData</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L89">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> fuchsianEllipticCyclicKernelEquivPresentedGroupOfRelatorData
+    {p : ℕ} [NeZero p] {Y : <span class="kw">Type</span>} (σ : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianSignature">FuchsianSignature</a>)
+    (ξ : Fin σ.numPeriods → Multiplicative (ZMod p))
+    (hpow : ∀ i, ξ i ^ σ.periods i = 1)
+    (hprod : ∏ i : Fin σ.numPeriods, ξ i = 1)
+    (i₀ : Fin σ.numPeriods)
+    (hi₀ : ξ i₀ = Multiplicative.ofAdd (1 : ZMod p))
+    (targetRelators : Set (FreeGroup Y))
+    (D : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.FuchsianEllipticCyclicRelatorData">FuchsianEllipticCyclicRelatorData</a> σ ξ i₀ hi₀ targetRelators) :
+    (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientHom">ellipticQuotientHom</a> σ ξ hpow hprod).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≃*
+      PresentedGroup targetRelators := <span class="kw">by</span>
+  classical
+  letI := Classical.decEq (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianGenerator">FuchsianGenerator</a> σ)
+  <span class="kw">let</span> f := <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a> σ ξ
+  <span class="kw">let</span> x := FuchsianGenerator.elliptic i₀
+  <span class="kw">let</span> hx :
+      FreeGroup.lift f (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod p) := <span class="kw">by</span>
+    <span class="kw">simp</span> only [FreeGroup.lift_apply_of, <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage">ellipticQuotientGeneratorImage</a>, hi₀, f, x]
+  <span class="kw">let</span> hrels : ∀ r ∈ <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> σ, FreeGroup.lift f r = 1 :=
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientGeneratorImage_respects_relators">ellipticQuotientGeneratorImage_respects_relators</a> σ ξ hpow hprod
+  <span class="kw">have</span> hD :
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.CyclicSchreierRelatorData">CyclicSchreierRelatorData</a> (N := p) (rels := <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> σ) f x hx targetRelators := <span class="kw">by</span>
+    simpa [<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.FuchsianEllipticCyclicRelatorData">FuchsianEllipticCyclicRelatorData</a>, f, x, hx] using D
+  simpa [<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientHom">ellipticQuotientHom</a>, f, x, hx, hrels] using
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.cyclicSchreierKernelEquivPresentedGroupOfRelatorData">cyclicSchreierKernelEquivPresentedGroupOfRelatorData</a>
+      (N := p) (rels := <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> σ) f hrels x hx targetRelators hD</code></pre></section>
+    <section><div class="natural-text"><p>Fuchsian elliptic <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> relator data identifies the elliptic-quotient kernel with the target presented group.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.fuchsianEllipticCyclicKernelEquivOfRelatorData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.fuchsianEllipticCyclicKernelEquivOfRelatorData">FenchelNielsen.fuchsianEllipticCyclicKernelEquivOfRelatorData</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L116">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> fuchsianEllipticCyclicKernelEquivOfRelatorData
+    {p : ℕ} [NeZero p] (σ τ : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianSignature">FuchsianSignature</a>)
+    (ξ : Fin σ.numPeriods → Multiplicative (ZMod p))
+    (hpow : ∀ i, ξ i ^ σ.periods i = 1)
+    (hprod : ∏ i : Fin σ.numPeriods, ξ i = 1)
+    (i₀ : Fin σ.numPeriods)
+    (hi₀ : ξ i₀ = Multiplicative.ofAdd (1 : ZMod p))
+    (D : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.FuchsianEllipticCyclicSchreierRelatorData">FuchsianEllipticCyclicSchreierRelatorData</a> σ τ ξ i₀ hi₀) :
+    (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/EllipticQuotientHom.html#decl-FenchelNielsen.ellipticQuotientHom">ellipticQuotientHom</a> σ ξ hpow hprod).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≃*
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.FuchsianPresentedGroup">FuchsianPresentedGroup</a> τ :=
+  <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.fuchsianEllipticCyclicKernelEquivPresentedGroupOfRelatorData">fuchsianEllipticCyclicKernelEquivPresentedGroupOfRelatorData</a>
+    σ ξ hpow hprod i₀ hi₀ (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> τ) D</code></pre></section>
+    <section><div class="natural-text"><p>Fuchsian elliptic <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> Schreier relator data identifies the elliptic-quotient kernel with the target Fuchsian presented group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.freeGroupGeneratorPower_mem_range_cyclicQuotientRightRep">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.freeGroupGeneratorPower_mem_range_cyclicQuotientRightRep">FenchelNielsen.freeGroupGeneratorPower_mem_range_cyclicQuotientRightRep</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L128">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeGroupGeneratorPower_mem_range_cyclicQuotientRightRep
+    {X : <span class="kw">Type</span>*} {N : ℕ}
+    (φ : FreeGroup X →* Multiplicative (ZMod N)) (x : X)
+    (hx : φ (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod N))
+    {m : ℕ} (hm : m &lt; N) :
+    (FreeGroup.of x) ^ m ∈ Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))</code></pre></section>
+    <section><div class="natural-text"><p>Each power of the distinguished free <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> below the modulus lies in the range of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient right representative.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  letI : NeZero N := ⟨Nat.ne_of_gt (lt_of_le_of_lt (Nat.zero_le m) hm)⟩
+  refine ⟨Quotient.mk&#x27;&#x27; ((FreeGroup.of x) ^ m), ?_⟩
+  <span class="kw">have</span> hφm : φ ((FreeGroup.of x) ^ m) = Multiplicative.ofAdd ((m : ℕ) : ZMod N) := <span class="kw">by</span>
+    <span class="kw">rw</span> [map_pow, hx]
+    <span class="kw">apply</span> (Multiplicative.toAdd : Multiplicative (ZMod N) ≃ ZMod N).injective
+    <span class="kw">simp</span> only [toAdd_pow, toAdd_ofAdd, nsmul_eq_mul, mul_one]
+  <span class="kw">have</span> hval : (Multiplicative.toAdd (φ ((FreeGroup.of x) ^ m))).val = m := <span class="kw">by</span>
+    <span class="kw">rw</span> [hφm]
+    simpa using (ZMod.val_natCast_of_lt hm)
+  change (FreeGroup.of x) ^ (Multiplicative.toAdd (φ ((FreeGroup.of x) ^ m))).val =
+    (FreeGroup.of x) ^ m
+  <span class="kw">rw</span> [hval]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Kernel and normal-closure claims are proved by showing that each rewritten relator lies in the generated normal subgroup and that the quotient map kills exactly those relations required by the presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. The Reidemeister--Schreier step tracks the transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> before and after each letter. Trivial Schreier generators are removed when the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is unchanged, while nontrivial generators record exactly the subgroup correction; products of these corrections reconstruct the original word inside the subgroup presentation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.freeGroupGeneratorPower_mul_generator_mem_range_cyclicQuotientRightRep">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.freeGroupGeneratorPower_mul_generator_mem_range_cyclicQuotientRightRep">FenchelNielsen.freeGroupGeneratorPower_mul_generator_mem_range_cyclicQuotientRightRep</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L147">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> freeGroupGeneratorPower_mul_generator_mem_range_cyclicQuotientRightRep
+    {X : <span class="kw">Type</span>*} {N : ℕ}
+    (φ : FreeGroup X →* Multiplicative (ZMod N)) (x : X)
+    (hx : φ (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod N))
+    {k : ℕ} (hk : k + 1 &lt; N) :
+    (FreeGroup.of x) ^ k * FreeGroup.of x ∈
+      Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))</code></pre></section>
+    <section><div class="natural-text"><p>A distinguished-<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> power followed by the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> lies in the range of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient right <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> before wraparound.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [pow_succ] using
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.freeGroupGeneratorPower_mem_range_cyclicQuotientRightRep">freeGroupGeneratorPower_mem_range_cyclicQuotientRightRep</a> φ x hx (m := k + 1) hk</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Kernel and normal-closure claims are proved by showing that each rewritten relator lies in the generated normal subgroup and that the quotient map kills exactly those relations required by the presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. The Reidemeister--Schreier step tracks the transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> before and after each letter. Trivial Schreier generators are removed when the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is unchanged, while nontrivial generators record exactly the subgroup correction; products of these corrections reconstruct the original word inside the subgroup presentation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.cyclicQuotient_distinguished_schreierGenerator_eq_one_of_succ_lt">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.cyclicQuotient_distinguished_schreierGenerator_eq_one_of_succ_lt">FenchelNielsen.cyclicQuotient_distinguished_schreierGenerator_eq_one_of_succ_lt</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L156">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> cyclicQuotient_distinguished_schreierGenerator_eq_one_of_succ_lt
+    {X : <span class="kw">Type</span>*} [DecidableEq X] {N : ℕ} [NeZero N]
+    (φ : FreeGroup X →* Multiplicative (ZMod N)) (x : X)
+    (hx : φ (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod N))
+    {k : ℕ} (hk : k + 1 &lt; N) :
+    <span class="kw">let</span> T</code></pre></section>
+    <section><div class="natural-text"><p>In a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient, the distinguished Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> is the identity before the wraparound step.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))
+    <span class="kw">let</span> hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> φ.ker T :=
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator">cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator</a> φ x hx
+    schreierGenerator hT ((FreeGroup.of x) ^ k) x = 1 := <span class="kw">by</span>
+  classical
+  <span class="kw">let</span> T := Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))
+  <span class="kw">let</span> hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> φ.ker T :=
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator">cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator</a> φ x hx
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_mem">schreierGenerator_eq_one_of_mem</a> hT
+    (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.freeGroupGeneratorPower_mul_generator_mem_range_cyclicQuotientRightRep">freeGroupGeneratorPower_mul_generator_mem_range_cyclicQuotientRightRep</a> φ x hx hk)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. The Reidemeister--Schreier step tracks the transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> before and after each letter. Trivial Schreier generators are removed when the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is unchanged, while nontrivial generators record exactly the subgroup correction; products of these corrections reconstruct the original word inside the subgroup presentation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.cyclicQuotient_distinguished_schreierGenerator_wrap_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.cyclicQuotient_distinguished_schreierGenerator_wrap_eq">FenchelNielsen.cyclicQuotient_distinguished_schreierGenerator_wrap_eq</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L171">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> cyclicQuotient_distinguished_schreierGenerator_wrap_eq
+    {X : <span class="kw">Type</span>*} [DecidableEq X] {N : ℕ} [NeZero N]
+    (φ : FreeGroup X →* Multiplicative (ZMod N)) (x : X)
+    (hx : φ (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod N)) :
+    <span class="kw">let</span> T</code></pre></section>
+    <section><div class="natural-text"><p>The distinguished <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a>-quotient Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> wraps to the prescribed generator.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))
+    <span class="kw">let</span> hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> φ.ker T :=
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator">cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator</a> φ x hx
+    schreierGenerator hT ((FreeGroup.of x) ^ (N - 1)) x =
+      (⟨(FreeGroup.of x) ^ N, <span class="kw">by</span>
+        <span class="kw">rw</span> [MonoidHom.mem_ker]
+        <span class="kw">rw</span> [map_pow, hx]
+        <span class="kw">apply</span> (Multiplicative.toAdd : Multiplicative (ZMod N) ≃ ZMod N).injective
+        <span class="kw">simp</span> only [toAdd_pow, toAdd_ofAdd, nsmul_eq_mul, CharP.cast_eq_zero, mul_one, toAdd_one]⟩ : φ.ker) := <span class="kw">by</span>
+  classical
+  <span class="kw">let</span> T := Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))
+  <span class="kw">let</span> hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> φ.ker T :=
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator">cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator</a> φ x hx
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">have</span> hpowKer : (FreeGroup.of x) ^ N ∈ φ.ker := <span class="kw">by</span>
+    <span class="kw">rw</span> [MonoidHom.mem_ker]
+    <span class="kw">rw</span> [map_pow, hx]
+    <span class="kw">apply</span> (Multiplicative.toAdd : Multiplicative (ZMod N) ≃ ZMod N).injective
+    <span class="kw">simp</span> only [toAdd_pow, toAdd_ofAdd, nsmul_eq_mul, CharP.cast_eq_zero, mul_one, toAdd_one]
+  <span class="kw">have</span> hNpos : 0 &lt; N := Nat.pos_of_ne_zero (NeZero.ne N)
+  <span class="kw">have</span> hsucc : N - 1 + 1 = N := Nat.sub_add_cancel (Nat.succ_le_iff.mpr hNpos)
+  <span class="kw">have</span> hprod : (FreeGroup.of x) ^ (N - 1) * FreeGroup.of x = (FreeGroup.of x) ^ N := <span class="kw">by</span>
+    <span class="kw">rw</span> [← pow_succ, hsucc]
+  <span class="kw">have</span> hprodKer : (FreeGroup.of x) ^ (N - 1) * FreeGroup.of x ∈ φ.ker := <span class="kw">by</span>
+    simpa [hprod] using hpowKer
+  <span class="kw">simp</span> only [schreierGenerator, hprod, <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_one_of_mem">schreierRepresentative_eq_one_of_mem</a> hT hpowKer, inv_one, mul_one]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the named Fenchel--Nielsen reduction, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a>-Schreier word, or total-relation definition. The equality or membership follows by evaluating the relevant <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> branch, simplifying the period or product formula, and using that normal closures are closed under products, inverses, and conjugation when a relator membership is involved.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.cyclicQuotient_trivialImage_schreierGenerator_eq_conj">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.cyclicQuotient_trivialImage_schreierGenerator_eq_conj">FenchelNielsen.cyclicQuotient_trivialImage_schreierGenerator_eq_conj</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L201">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> cyclicQuotient_trivialImage_schreierGenerator_eq_conj
+    {X : <span class="kw">Type</span>*} [DecidableEq X] {N : ℕ} [NeZero N]
+    (φ : FreeGroup X →* Multiplicative (ZMod N)) (x y : X)
+    (hx : φ (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod N))
+    (hy : φ (FreeGroup.of y) = 1) (k : Fin N) :
+    <span class="kw">let</span> T</code></pre></section>
+    <section><div class="natural-text"><p>If a <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has trivial <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a>-quotient image, its Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> is the corresponding conjugate by the quotient representative.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))
+    <span class="kw">let</span> hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> φ.ker T :=
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator">cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator</a> φ x hx
+    schreierGenerator hT ((FreeGroup.of x) ^ k.val) y =
+      (⟨(FreeGroup.of x) ^ k.val * FreeGroup.of y *
+          ((FreeGroup.of x) ^ k.val)⁻¹, <span class="kw">by</span>
+        <span class="kw">rw</span> [MonoidHom.mem_ker]
+        <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, map_pow, hx, hy, mul_one, map_inv, mul_inv_cancel]⟩ : φ.ker) := <span class="kw">by</span>
+  classical
+  <span class="kw">let</span> T := Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))
+  <span class="kw">let</span> hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> φ.ker T :=
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator">cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator</a> φ x hx
+  <span class="kw">let</span> t : FreeGroup X := (FreeGroup.of x) ^ k.val
+  <span class="kw">have</span> ht : t ∈ T := <span class="kw">by</span>
+    simpa [T, t] using
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.freeGroupGeneratorPower_mem_range_cyclicQuotientRightRep">freeGroupGeneratorPower_mem_range_cyclicQuotientRightRep</a> φ x hx (m := k.val) k.isLt
+  <span class="kw">have</span> hker : (t * FreeGroup.of y) * t⁻¹ ∈ φ.ker := <span class="kw">by</span>
+    <span class="kw">rw</span> [MonoidHom.mem_ker]
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, map_pow, hx, hy, mul_one, map_inv, mul_inv_cancel, t]
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">simp</span> only [schreierGenerator, <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem_mul_inv_mem">schreierRepresentative_eq_of_mem_mul_inv_mem</a> hT ht hker, t]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. The Reidemeister--Schreier step tracks the transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> before and after each letter. Trivial Schreier generators are removed when the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is unchanged, while nontrivial generators record exactly the subgroup correction; products of these corrections reconstruct the original word inside the subgroup presentation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.cyclicQuotient_negOneImage_schreierGenerator_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.cyclicQuotient_negOneImage_schreierGenerator_eq">FenchelNielsen.cyclicQuotient_negOneImage_schreierGenerator_eq</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#L227">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> cyclicQuotient_negOneImage_schreierGenerator_eq
+    {X : <span class="kw">Type</span>*} [DecidableEq X] {N : ℕ} [NeZero N]
+    (φ : FreeGroup X →* Multiplicative (ZMod N)) (x y : X)
+    (hx : φ (FreeGroup.of x) = Multiplicative.ofAdd (1 : ZMod N))
+    (hy : φ (FreeGroup.of y) = Multiplicative.ofAdd (-1 : ZMod N)) (k : Fin N) :
+    <span class="kw">let</span> T</code></pre></section>
+    <section><div class="natural-text"><p>The negative-<a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> image in the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient gives the corresponding Schreier generator.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))
+    <span class="kw">let</span> hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> φ.ker T :=
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator">cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator</a> φ x hx
+    <span class="kw">let</span> r : ℕ := ((k.val : ZMod N) - 1).val
+    schreierGenerator hT ((FreeGroup.of x) ^ k.val) y =
+      (⟨(FreeGroup.of x) ^ k.val * FreeGroup.of y *
+          ((FreeGroup.of x) ^ r)⁻¹, <span class="kw">by</span>
+        <span class="kw">rw</span> [MonoidHom.mem_ker]
+        <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, map_inv, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, map_pow, map_pow, hx, hy]
+        <span class="kw">apply</span> (Multiplicative.toAdd : Multiplicative (ZMod N) ≃ ZMod N).injective
+        <span class="kw">simp</span> only [ofAdd_neg, toAdd_mul, toAdd_pow, toAdd_ofAdd, nsmul_eq_mul, mul_one, toAdd_inv, ZMod.natCast_val,
+  dvd_refl, ZMod.cast_sub, ZMod.cast_natCast, ZMod.cast_one, neg_sub, toAdd_one, r]
+        ring⟩ : φ.ker) := <span class="kw">by</span>
+  classical
+  <span class="kw">let</span> T := Set.range (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep">cyclicQuotientRightRep</a> φ (FreeGroup.of x))
+  <span class="kw">let</span> hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> φ.ker T :=
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicQuotientActions.html#decl-FenchelNielsen.cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator">cyclicQuotientRightRep_isRightSchreierTransversal_of_freeGroupGenerator</a> φ x hx
+  <span class="kw">let</span> r : ℕ := ((k.val : ZMod N) - 1).val
+  <span class="kw">let</span> t : FreeGroup X := (FreeGroup.of x) ^ k.val
+  <span class="kw">let</span> u : FreeGroup X := (FreeGroup.of x) ^ r
+  <span class="kw">have</span> hu : u ∈ T := <span class="kw">by</span>
+    simpa [T, u, r] using
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicSchreierKernel.html#decl-FenchelNielsen.freeGroupGeneratorPower_mem_range_cyclicQuotientRightRep">freeGroupGeneratorPower_mem_range_cyclicQuotientRightRep</a>
+        φ x hx (m := r) (ZMod.val_lt ((k.val : ZMod N) - 1))
+  <span class="kw">have</span> hker : (t * FreeGroup.of y) * u⁻¹ ∈ φ.ker := <span class="kw">by</span>
+    <span class="kw">rw</span> [MonoidHom.mem_ker]
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, map_inv, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, map_pow, map_pow, hx, hy]
+    <span class="kw">apply</span> (Multiplicative.toAdd : Multiplicative (ZMod N) ≃ ZMod N).injective
+    <span class="kw">simp</span> only [ofAdd_neg, toAdd_mul, toAdd_pow, toAdd_ofAdd, nsmul_eq_mul, mul_one, toAdd_inv, ZMod.natCast_val,
+  dvd_refl, ZMod.cast_sub, ZMod.cast_natCast, ZMod.cast_one, neg_sub, toAdd_one, r]
+    ring
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">simp</span> only [schreierGenerator, <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem_mul_inv_mem">schreierRepresentative_eq_of_mem_mul_inv_mem</a> hT hu hker, u, r, t]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the named Fenchel--Nielsen reduction, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a>-Schreier word, or total-relation definition. The equality or membership follows by evaluating the relevant <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> branch, simplifying the period or product formula, and using that normal closures are closed under products, inverses, and conjugation when a relator membership is involved.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FenchelNielsenZomorrodian.Discrete.Singerman.CyclicSchreierKernel"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

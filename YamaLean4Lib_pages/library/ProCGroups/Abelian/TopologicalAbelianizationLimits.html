@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Abelian.TopologicalAbelianizationLimits | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.Abelian.TopologicalAbelianizationLimits</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Abelian.html">Abelian</a><span class="sep">/</span><span>TopologicalAbelianizationLimits</span></div>
+      <h1 class="module-title">ProCGroups.Abelian.TopologicalAbelianizationLimits</h1>
+      <div class="module-meta">11 Theorem | 6 Definition | 2 Instance</div>
+      <div class="module-overview"><p>This module sets up the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage and inverse-limit description of the construction. It records the stage maps, projections, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> lemmas used to pass back to the completed object.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.html">ProCGroups.Abelian.TopologicalAbelianizationFunctoriality</a></li><li><a href="../../../library/ProCGroups/InverseSystems/Quotients.html">ProCGroups.InverseSystems.Quotients</a></li><li><a href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html">ProCGroups.InverseSystems.StagewiseIso</a></li><li><a href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html">ProCGroups.ProC.Quotients.ClosedNormal</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../library/ProCGroups/Abelian.html">ProCGroups.Abelian</a></li><li><a href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/ClosedCommutator.html">ProCGroups.ProC.OpenNormalSubgroups.ClosedCommutator</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.Abelian.abelianizationInverseSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.abelianizationInverseSystem">ProCGroups.Abelian.abelianizationInverseSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L26">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> abelianizationInverseSystem
+    {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)] :
+    InverseSystems.InverseSystem (I := I) <span class="kw">where</span>
+  X := <span class="kw">fun</span> i =&gt; TopologicalAbelianization (S.X i)
+  topologicalSpace := <span class="kw">fun</span> i =&gt; inferInstance
+  map := <span class="kw">fun</span> {i j} hij =&gt;
+    TopologicalAbelianization.map
+      { toMonoidHom :=
+          { toFun := S.map hij
+            map_one&#x27; := InverseSystems.IsGroupSystem.map_one (S := S) hij
+            map_mul&#x27; := InverseSystems.IsGroupSystem.map_mul (S := S) hij }
+        continuous_toFun := S.continuous_map hij }
+  continuous_map := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">exact</span> (TopologicalAbelianization.map
+      { toMonoidHom :=
+          { toFun := S.map hij
+            map_one&#x27; := InverseSystems.IsGroupSystem.map_one (S := S) hij
+            map_mul&#x27; := InverseSystems.IsGroupSystem.map_mul (S := S) hij }
+        continuous_toFun := S.continuous_map hij }).continuous_toFun
+  map_id := <span class="kw">by</span>
+    <span class="kw">intro</span> i
+    funext x
+    refine Quotient.inductionOn&#x27; x ?_
+    <span class="kw">intro</span> a
+    change
+      QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i)))
+          (S.map (le_rfl : i ≤ i) a) =
+        QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i)))
+          a
+    <span class="kw">exact</span> congrArg
+      (QuotientGroup.mk&#x27; (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i))))
+      (S.map_id_apply i a)
+  map_comp := <span class="kw">by</span>
+    <span class="kw">intro</span> i j k hij hjk
+    funext x
+    refine Quotient.inductionOn&#x27; x ?_
+    <span class="kw">intro</span> a
+    change
+      QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i)))
+          (S.map hij (S.map hjk a)) =
+        QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i)))
+          (S.map (hij.trans hjk) a)
+    <span class="kw">exact</span> congrArg
+      (QuotientGroup.mk&#x27; (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i))))
+      (S.map_comp_apply hij hjk a)</code></pre></section>
+    <section><div class="natural-text"><p>The stagewise inverse system obtained by applying topological abelianization.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.Abelian.abelianizationInverseSystem_stageGroup">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.abelianizationInverseSystem_stageGroup">ProCGroups.Abelian.abelianizationInverseSystem_stageGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L81">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> abelianizationInverseSystem_stageGroup
+    {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)] (i : I) :
+    Group ((<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).X i) := <span class="kw">by</span>
+  change Group (TopologicalAbelianization (S.X i))
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>Each stage of the abelianization inverse system inherits its quotient group structure.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.Abelian.abelianizationInverseSystem_isGroupSystem">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.abelianizationInverseSystem_isGroupSystem">ProCGroups.Abelian.abelianizationInverseSystem_isGroupSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L91">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> abelianizationInverseSystem_isGroupSystem
+    {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)] :
+    InverseSystems.IsGroupSystem (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S) <span class="kw">where</span>
+  <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a> := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a>, Lean.Elab.WF.paramLet, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>]
+  <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a> := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij x y
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a>, Lean.Elab.WF.paramLet, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>]
+  map_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij x
+    <span class="kw">exact</span> (TopologicalAbelianization.map
+      { toMonoidHom :=
+          { toFun := S.map hij
+            map_one&#x27; := InverseSystems.IsGroupSystem.map_one (S := S) hij
+            map_mul&#x27; := InverseSystems.IsGroupSystem.map_mul (S := S) hij }
+        continuous_toFun := S.continuous_map hij }).map_inv x</code></pre></section>
+    <section><div class="natural-text"><p>The abelianization inverse system is a group-valued inverse system.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.toAbelianizationInverseSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.toAbelianizationInverseSystem">ProCGroups.Abelian.toAbelianizationInverseSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L114">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> toAbelianizationInverseSystem
+    {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)] :
+    S.Morphism (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S) <span class="kw">where</span>
+  map := <span class="kw">fun</span> i =&gt; TopologicalAbelianization.mk (S.X i)
+  continuous_map := <span class="kw">fun</span> _ =&gt; continuous_quotient_mk&#x27;
+  comm := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext x
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The stagewise quotient maps assemble into a morphism from an inverse system to its stagewise topological abelianization.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L129">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> closedCommutatorCompatibleClosedNormalSubgroups
+    {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)] :
+    S.CompatibleClosedNormalSubgroups <span class="kw">where</span>
+  N := <span class="kw">fun</span> i =&gt; <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (S.X i)
+  normal := <span class="kw">fun</span> i =&gt; <span class="kw">by</span> infer_instance
+  closed := <span class="kw">fun</span> i =&gt; <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.isClosed_closedCommutator">Subgroup.isClosed_closedCommutator</a> (S.X i)
+  map_le := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij x hx
+    <span class="kw">let</span> f : S.X j →ₜ* S.X i :=
+      { toMonoidHom := S.transitionHom hij
+        continuous_toFun :=
+          InverseSystems.InverseSystem.continuous_transitionHom (S := S) hij }
+    <span class="kw">have</span> hxmap :
+        S.transitionHom hij x ∈
+          (<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (S.X j)).map f.toMonoidHom :=
+      Subgroup.mem_map_of_mem f.toMonoidHom hx
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator_map_le">Subgroup.closedCommutator_map_le</a> f hxmap</code></pre></section>
+    <section><div class="natural-text"><p>The stagewise closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroups form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> closed-normal family in any group-valued inverse system of topological groups.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L152">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> topologicalAbelianizationInverseLimitComparison
+    {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)] :
+    TopologicalAbelianization S.inverseLimit →ₜ*
+      (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).inverseLimit := <span class="kw">by</span>
+  <span class="kw">let</span> T := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S
+  <span class="kw">let</span> ψ : ∀ i, TopologicalAbelianization S.inverseLimit →ₜ* T.X i := <span class="kw">fun</span> i =&gt;
+    TopologicalAbelianization.map
+      { toMonoidHom :=
+          { toFun := S.projection i
+            map_one&#x27; := <span class="kw">rfl</span>
+            map_mul&#x27; := <span class="kw">by</span> <span class="kw">intro</span> x y; <span class="kw">rfl</span> }
+        continuous_toFun := S.continuous_projection i }
+  <span class="kw">let</span> ψFun : ∀ i, TopologicalAbelianization S.inverseLimit → T.X i := <span class="kw">fun</span> i =&gt; ψ i
+  <span class="kw">have</span> hψ : ∀ i, Continuous (ψFun i) := <span class="kw">by</span>
+    <span class="kw">intro</span> i
+    <span class="kw">exact</span> (ψ i).continuous_toFun
+  <span class="kw">have</span> hcompat : T.CompatibleMaps ψFun := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext x
+    refine Quotient.inductionOn&#x27; x ?_
+    <span class="kw">intro</span> a
+    change
+      QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i)))
+          (S.map hij (S.projection j a)) =
+        QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i)))
+          (S.projection i a)
+    simpa using congrArg
+      (QuotientGroup.mk&#x27; (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i))))
+      (S.projection_compatible a i j hij)
+  refine
+    { toMonoidHom :=
+        { toFun := T.inverseLimitLift ψFun hcompat
+          map_one&#x27; := <span class="kw">by</span>
+            <span class="kw">apply</span> T.ext
+            <span class="kw">intro</span> i
+            change ψFun i 1 = 1
+            <span class="kw">exact</span> (ψ i).<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>
+          map_mul&#x27; := <span class="kw">by</span>
+            <span class="kw">intro</span> x y
+            <span class="kw">apply</span> T.ext
+            <span class="kw">intro</span> i
+            change ψFun i (x * y) = ψFun i x * ψFun i y
+            <span class="kw">exact</span> (ψ i).<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a> x y }
+      continuous_toFun := T.continuous_inverseLimitLift ψFun hψ hcompat }</code></pre></section>
+    <section><div class="natural-text"><p>The canonical <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map from the abelianization of an inverse limit to the inverse limit of the stagewise abelianizations.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian._u03c0_topologicalAbelianizationInverseLimitComparison">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian._u03c0_topologicalAbelianizationInverseLimitComparison">ProCGroups.Abelian.π_topologicalAbelianizationInverseLimitComparison</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L204">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> π_topologicalAbelianizationInverseLimitComparison
+    {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)]
+    (i : I) :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i ∘
+        <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S =
+      TopologicalAbelianization.map
+        { toMonoidHom :=
+            { toFun := S.projection i
+              map_one&#x27; := <span class="kw">rfl</span>
+              map_mul&#x27; := <span class="kw">by</span> <span class="kw">intro</span> x y; <span class="kw">rfl</span> }
+          continuous_toFun := S.continuous_projection i }</code></pre></section>
+    <section><div class="natural-text"><p>The projection from the topological abelianization inverse-limit <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> to a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> T := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S
+  <span class="kw">let</span> ψ : ∀ i, TopologicalAbelianization S.inverseLimit →ₜ* T.X i := <span class="kw">fun</span> i =&gt;
+    TopologicalAbelianization.map
+      { toMonoidHom :=
+          { toFun := S.projection i
+            map_one&#x27; := <span class="kw">rfl</span>
+            map_mul&#x27; := <span class="kw">by</span> <span class="kw">intro</span> x y; <span class="kw">rfl</span> }
+        continuous_toFun := S.continuous_projection i }
+  <span class="kw">let</span> ψFun : ∀ i, TopologicalAbelianization S.inverseLimit → T.X i := <span class="kw">fun</span> i =&gt; ψ i
+  <span class="kw">have</span> hcompat : T.CompatibleMaps ψFun := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext x
+    refine Quotient.inductionOn&#x27; x ?_
+    <span class="kw">intro</span> a
+    change
+      QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i)))
+          (S.map hij (S.projection j a)) =
+        QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i)))
+          (S.projection i a)
+    simpa using congrArg
+      (QuotientGroup.mk&#x27; (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i))))
+      (S.projection_compatible a i j hij)
+  funext x
+  change T.projection i (T.inverseLimitLift ψFun hcompat x) = ψFun i x
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-limit <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> and <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveSystemFreenessCriterion.apply">apply</a> the corresponding <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian._u03c0_topologicalAbelianizationInverseLimitComparison_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian._u03c0_topologicalAbelianizationInverseLimitComparison_mk">ProCGroups.Abelian.π_topologicalAbelianizationInverseLimitComparison_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L247">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> π_topologicalAbelianizationInverseLimitComparison_mk
+    {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)]
+    (i : I) (x : S.inverseLimit) :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i
+        (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S
+          (QuotientGroup.mk&#x27; (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit)) x)) =
+      QuotientGroup.mk&#x27; (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i))) (S.projection i x)</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection of the topological abelianization <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> has the stated value on representatives.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [Function.comp] using
+    congrFun (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian._u03c0_topologicalAbelianizationInverseLimitComparison">π_topologicalAbelianizationInverseLimitComparison</a> (S := S) i)
+      (QuotientGroup.mk&#x27; (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit)) x)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-limit <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> on a <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and read off its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage coordinate.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.limMap_toAbelianizationInverseSystem_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.limMap_toAbelianizationInverseSystem_apply">ProCGroups.Abelian.limMap_toAbelianizationInverseSystem_apply</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L263">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> limMap_toAbelianizationInverseSystem_apply
+    {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)]
+    (x : S.inverseLimit) :
+    S.limMap (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.toAbelianizationInverseSystem">toAbelianizationInverseSystem</a> S) x =
+      <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S
+        (TopologicalAbelianization.mk S.inverseLimit x)</code></pre></section>
+    <section><div class="natural-text"><p>The inverse-limit map induced by stagewise abelianization factors as the limit quotient map followed by the abelianization <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).ext
+  <span class="kw">intro</span> i
+  <span class="kw">calc</span>
+    (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i (S.limMap (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.toAbelianizationInverseSystem">toAbelianizationInverseSystem</a> S) x)
+        = (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.toAbelianizationInverseSystem">toAbelianizationInverseSystem</a> S).map i (S.projection i x) := <span class="kw">by</span>
+            simpa [Function.comp] using
+              congrFun
+                (InverseSystems.InverseSystem.π_comp_limMap
+                  (S := S) (Θ := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.toAbelianizationInverseSystem">toAbelianizationInverseSystem</a> S) i)
+                x
+    _ = QuotientGroup.mk&#x27; (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (S.X i))) (S.projection i x) := <span class="kw">rfl</span>
+    _ = (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i
+          (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S
+            (TopologicalAbelianization.mk S.inverseLimit x)) := <span class="kw">by</span>
+            symm
+            <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian._u03c0_topologicalAbelianizationInverseLimitComparison_mk">π_topologicalAbelianizationInverseLimitComparison_mk</a> (S := S) i x</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological abelianization as the quotient by the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. The quotient map kills commutators and is continuous, and any continuous homomorphism to a commutative \(T_1\) topological group descends because its kernel contains the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. Functoriality, Hom equivalences, category structure, and inverse-limit comparisons are checked on quotient representatives and by quotient extensionality.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.inj_topologicalAbelianizationInverseLimitComparison_of_profinite_inverse_system">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.inj_topologicalAbelianizationInverseLimitComparison_of_profinite_inverse_system">ProCGroups.Abelian.inj_topologicalAbelianizationInverseLimitComparison_of_profinite_inverse_system</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L291">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> inj_topologicalAbelianizationInverseLimitComparison_of_profinite_inverse_system
+    {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I)) :
+    Function.Injective (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S)</code></pre></section>
+    <section><div class="natural-text"><p>Proof-level injectivity of the canonical <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map, used to build the continuous equivalence. The main formulation is \(<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.injective_topologicalAbelianizationInverseLimitComparison">injective_topologicalAbelianizationInverseLimitComparison</a>\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> f := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S
+  letI : CompactSpace S.inverseLimit := inferInstance
+  letI : T2Space S.inverseLimit := S.t2Space_inverseLimit
+  letI : TotallyDisconnectedSpace S.inverseLimit := S.totallyDisconnectedSpace_inverseLimit
+  <span class="kw">let</span> hProfInv : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> S.inverseLimit :=
+    ⟨inferInstance, inferInstance, inferInstance, inferInstance⟩
+  <span class="kw">let</span> hProfAb : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (TopologicalAbelianization S.inverseLimit) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html#decl-ProCGroups.Generation.isProfinite_quotient_closedNormal">ProCGroups.Generation.isProfinite_quotient_closedNormal</a>
+      (G := S.inverseLimit) hProfInv
+      (N := Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit))
+      (Subgroup.isClosed_topologicalClosure (s := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit))
+  letI : CompactSpace (TopologicalAbelianization S.inverseLimit) :=
+    IsProfiniteGroup.compactSpace hProfAb
+  letI : T2Space (TopologicalAbelianization S.inverseLimit) :=
+    IsProfiniteGroup.t2Space hProfAb
+  letI : TotallyDisconnectedSpace (TopologicalAbelianization S.inverseLimit) :=
+    IsProfiniteGroup.totallyDisconnectedSpace hProfAb
+  <span class="kw">have</span> hkerbot : f.toMonoidHom.ker = ⊥ := <span class="kw">by</span>
+    ext a
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> ha
+      by_contra hane
+      rcases <a class="decl-ref" href="../../../library/ProCGroups/ProC/Quotients/LeftQuotientProjectionSections.html#decl-ProCGroups.ProC.exists_openNormalSubgroup_not_mem">ProCGroups.ProC.exists_openNormalSubgroup_not_mem</a>
+          (G := TopologicalAbelianization S.inverseLimit) hProfAb (x := a) hane <span class="kw">with</span> ⟨U, haU⟩
+      <span class="kw">let</span> Q := TopologicalAbelianization S.inverseLimit ⧸
+        (U : Subgroup (TopologicalAbelianization S.inverseLimit))
+      letI : Finite Q := <a class="decl-ref" href="../../../library/ProCGroups/Profinite/OpenSubgroups.html#decl-ProCGroups.openNormalSubgroup_finiteQuotient">openNormalSubgroup_finiteQuotient</a>
+        (G := TopologicalAbelianization S.inverseLimit) U
+      letI : DiscreteTopology Q :=
+        QuotientGroup.discreteTopology
+          (<a class="decl-ref" href="../../../library/ProCGroups/Profinite/OpenSubgroups.html#decl-ProCGroups.openNormalSubgroup_isOpen">openNormalSubgroup_isOpen</a> (G := TopologicalAbelianization S.inverseLimit) U)
+      <span class="kw">let</span> qInv : S.inverseLimit →ₜ* TopologicalAbelianization S.inverseLimit :=
+        { toMonoidHom := TopologicalAbelianization.mk S.inverseLimit
+          continuous_toFun := continuous_quotient_mk&#x27; }
+      <span class="kw">let</span> β : S.inverseLimit →ₜ* Q :=
+        { toMonoidHom :=
+            (QuotientGroup.mk&#x27; (U : Subgroup (TopologicalAbelianization S.inverseLimit))).comp
+              qInv.toMonoidHom
+          continuous_toFun := continuous_quotient_mk&#x27;.comp qInv.continuous_toFun
+        }
+      rcases InverseSystems.InverseSystem.factors_through_projection_finite_group_hom
+          (S := S) hdir β.toMonoidHom β.continuous_toFun <span class="kw">with</span> ⟨i, βi, hβi_continuous, hβfac⟩
+      <span class="kw">let</span> βiCont : S.X i →ₜ* Q :=
+        { toMonoidHom := βi
+          continuous_toFun := hβi_continuous }
+      <span class="kw">have</span> hq : QuotientGroup.mk&#x27; (U : Subgroup (TopologicalAbelianization S.inverseLimit)) a = 1 := <span class="kw">by</span>
+        rcases QuotientGroup.mk&#x27;_surjective
+            (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit)) a <span class="kw">with</span> ⟨x, <span class="kw">rfl</span>⟩
+        <span class="kw">calc</span>
+          QuotientGroup.mk&#x27;
+              (U : Subgroup (TopologicalAbelianization S.inverseLimit))
+              (TopologicalAbelianization.mk S.inverseLimit x)
+              = β x := <span class="kw">rfl</span>
+          _ = βi (S.projection i x) := <span class="kw">by</span>
+            simpa [Function.comp] using
+              congrArg
+                (<span class="kw">fun</span> g : S.inverseLimit → Q =&gt; g x)
+                hβfac
+          _ = TopologicalAbelianization.lift βiCont
+                (TopologicalAbelianization.mk (S.X i) (S.projection i x)) := <span class="kw">by</span>
+              symm
+              <span class="kw">exact</span> TopologicalAbelianization.lift_apply_mk βiCont (S.projection i x)
+            _ = TopologicalAbelianization.lift βiCont
+                  ((<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i
+                    (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S
+                      (TopologicalAbelianization.mk S.inverseLimit x))) := <span class="kw">by</span>
+                simpa [TopologicalAbelianization.mk] using
+                  congrArg (TopologicalAbelianization.lift βiCont)
+                    (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian._u03c0_topologicalAbelianizationInverseLimitComparison_mk">π_topologicalAbelianizationInverseLimitComparison_mk</a> (S := S) i x).symm
+          _ = TopologicalAbelianization.lift βiCont
+                ((<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i 1) := <span class="kw">by</span>
+              <span class="kw">rw</span> [<span class="kw">show</span> <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S
+                    (TopologicalAbelianization.mk S.inverseLimit x) = 1 <span class="kw">by</span>
+                    simpa [MonoidHom.mem_ker, f] using ha]
+          _ = TopologicalAbelianization.lift βiCont (1 : TopologicalAbelianization (S.X i)) := <span class="kw">by</span>
+              <span class="kw">rfl</span>
+          _ = 1 := <span class="kw">by</span> <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>]
+      <span class="kw">exact</span> haU &lt;| (QuotientGroup.eq_one_iff
+        (N := (U : Subgroup (TopologicalAbelianization S.inverseLimit))) a).1 hq
+    · <span class="kw">intro</span> hx
+      <span class="kw">rw</span> [Subgroup.mem_bot] at hx
+      <span class="kw">rw</span> [MonoidHom.mem_ker]
+      <span class="kw">simp</span> only [ContinuousMonoidHom.coe_toMonoidHom, hx, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>]
+  <span class="kw">exact</span> (MonoidHom.ker_eq_bot_iff (f := f.toMonoidHom)).mp hkerbot</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological abelianization as the quotient by the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. The quotient map kills commutators and is continuous, and any continuous homomorphism to a commutative \(T_1\) topological group descends because its kernel contains the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. Functoriality, Hom equivalences, category structure, and inverse-limit comparisons are checked on quotient representatives and by quotient extensionality.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.mem_closedCommutator_inverseLimit_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.mem_closedCommutator_inverseLimit_iff">ProCGroups.Abelian.mem_closedCommutator_inverseLimit_iff</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L387">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_closedCommutator_inverseLimit_iff
+      {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+      (S : InverseSystems.InverseSystem (I := I))
+      [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+      [∀ i, IsTopologicalGroup (S.X i)]
+      [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+      [∀ i, TotallyDisconnectedSpace (S.X i)]
+      (hdir : Directed (· ≤ ·) (id : I → I)) {x : S.inverseLimit} :
+      x ∈ <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> S.inverseLimit ↔
+        ∀ i, S.projection i x ∈ <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (S.X i)</code></pre></section>
+    <section><div class="natural-text"><p>Membership in the inverse-limit closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup is equivalent to the displayed coordinate condition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hx i
+      <span class="kw">have</span> hxmk :
+          TopologicalAbelianization.mk S.inverseLimit x = 1 :=
+        (TopologicalAbelianization.mk_eq_one_iff (G := S.inverseLimit) (x := x)).2 hx
+      <span class="kw">have</span> hcoord :=
+        <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian._u03c0_topologicalAbelianizationInverseLimitComparison_mk">π_topologicalAbelianizationInverseLimitComparison_mk</a> (S := S) i x
+      <span class="kw">have</span> hcoord&#x27; :
+          (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i
+              ((<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S)
+                (TopologicalAbelianization.mk S.inverseLimit x)) =
+            TopologicalAbelianization.mk (S.X i) (S.projection i x) := <span class="kw">by</span>
+        simpa [TopologicalAbelianization.mk] using hcoord
+      <span class="kw">rw</span> [hxmk] at hcoord&#x27;
+      <span class="kw">have</span> hmk :
+          TopologicalAbelianization.mk (S.X i) (S.projection i x) = 1 := <span class="kw">by</span>
+        simpa using hcoord&#x27;.symm
+      <span class="kw">exact</span> (TopologicalAbelianization.mk_eq_one_iff
+        (G := S.X i) (x := S.projection i x)).1 hmk
+    · <span class="kw">intro</span> hxcoord
+      <span class="kw">let</span> f := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S
+      <span class="kw">have</span> hf :
+          f (TopologicalAbelianization.mk S.inverseLimit x) = 1 := <span class="kw">by</span>
+        <span class="kw">apply</span> (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).ext
+        <span class="kw">intro</span> i
+        <span class="kw">have</span> hmk :
+            TopologicalAbelianization.mk (S.X i) (S.projection i x) = 1 :=
+          (TopologicalAbelianization.mk_eq_one_iff
+            (G := S.X i) (x := S.projection i x)).2 (hxcoord i)
+        simpa [f, TopologicalAbelianization.mk] using
+          (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian._u03c0_topologicalAbelianizationInverseLimitComparison_mk">π_topologicalAbelianizationInverseLimitComparison_mk</a> (S := S) i x).trans hmk
+      <span class="kw">have</span> hxmk :
+          TopologicalAbelianization.mk S.inverseLimit x = 1 := <span class="kw">by</span>
+        <span class="kw">apply</span> <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.inj_topologicalAbelianizationInverseLimitComparison_of_profinite_inverse_system">inj_topologicalAbelianizationInverseLimitComparison_of_profinite_inverse_system</a> (S := S) hdir
+        simpa [f] using hf
+      <span class="kw">exact</span> (TopologicalAbelianization.mk_eq_one_iff (G := S.inverseLimit) (x := x)).1 hxmk</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological abelianization as the quotient by the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. The quotient map kills commutators and is continuous, and any continuous homomorphism to a commutative \(T_1\) topological group descends because its kernel contains the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. Functoriality, Hom equivalences, category structure, and inverse-limit comparisons are checked on quotient representatives and by quotient extensionality.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.closedCommutator_inverseLimit_eq_iInf_comap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.closedCommutator_inverseLimit_eq_iInf_comap">ProCGroups.Abelian.closedCommutator_inverseLimit_eq_iInf_comap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L436">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> closedCommutator_inverseLimit_eq_iInf_comap
+      {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+      (S : InverseSystems.InverseSystem (I := I))
+      [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+      [∀ i, IsTopologicalGroup (S.X i)]
+      [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+      [∀ i, TotallyDisconnectedSpace (S.X i)]
+      (hdir : Directed (· ≤ ·) (id : I → I)) :
+      <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> S.inverseLimit =
+        ⨅ i, (<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (S.X i)).comap
+          ({ toFun := S.projection i
+             map_one&#x27; := <span class="kw">rfl</span>
+             map_mul&#x27; := <span class="kw">by</span> <span class="kw">intro</span> x y; <span class="kw">rfl</span> } : S.inverseLimit →* S.X i)</code></pre></section>
+    <section><div class="natural-text"><p>The closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup of a profinite inverse limit is the infimum of the pullbacks of the stagewise closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroups.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+    ext x
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.mem_closedCommutator_inverseLimit_iff">mem_closedCommutator_inverseLimit_iff</a> (S := S) hdir (x := x)]
+    <span class="kw">simp</span> only [InverseSystems.InverseSystem.projection_apply, Subgroup.mem_iInf, Subgroup.mem_comap,
+  MonoidHom.coe_mk, OneHom.coe_mk]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological abelianization as the quotient by the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. The quotient map kills commutators and is continuous, and any continuous homomorphism to a commutative \(T_1\) topological group descends because its kernel contains the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. Functoriality, Hom equivalences, category structure, and inverse-limit comparisons are checked on quotient representatives and by quotient extensionality.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups_inverseLimitKernel">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups_inverseLimitKernel">ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups_inverseLimitKernel</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L456">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> closedCommutatorCompatibleClosedNormalSubgroups_inverseLimitKernel
+      {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+      (S : InverseSystems.InverseSystem (I := I))
+      [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+      [∀ i, IsTopologicalGroup (S.X i)]
+      [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+      [∀ i, TotallyDisconnectedSpace (S.X i)]
+      (hdir : Directed (· ≤ ·) (id : I → I)) :
+      (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">closedCommutatorCompatibleClosedNormalSubgroups</a> S).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Quotients.html#decl-ProCGroups.InverseSystems.InverseSystem.CompatibleClosedNormalSubgroups.inverseLimitKernel">inverseLimitKernel</a> =
+        <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> S.inverseLimit</code></pre></section>
+    <section><div class="natural-text"><p>For the closed-<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, the generic quotient-limit kernel is the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup of the inverse limit.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  symm
+  simpa [<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">closedCommutatorCompatibleClosedNormalSubgroups</a>,
+    InverseSystems.InverseSystem.CompatibleClosedNormalSubgroups.inverseLimitKernel,
+    InverseSystems.projectionHom]
+    using <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutator_inverseLimit_eq_iInf_comap">closedCommutator_inverseLimit_eq_iInf_comap</a> (S := S) hdir</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological abelianization as the quotient by the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. The quotient map kills commutators and is continuous, and any continuous homomorphism to a commutative \(T_1\) topological group descends because its kernel contains the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. Functoriality, Hom equivalences, category structure, and inverse-limit comparisons are checked on quotient representatives and by quotient extensionality.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.closedCommutatorQuotientInverseLimitContinuousMulEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.closedCommutatorQuotientInverseLimitContinuousMulEquiv">ProCGroups.Abelian.closedCommutatorQuotientInverseLimitContinuousMulEquiv</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L473">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> closedCommutatorQuotientInverseLimitContinuousMulEquiv
+    {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I)) :
+    TopologicalAbelianization S.inverseLimit ≃ₜ*
+      (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">closedCommutatorCompatibleClosedNormalSubgroups</a> S).quotientInverseSystem.inverseLimit := <span class="kw">by</span>
+  <span class="kw">let</span> Q := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">closedCommutatorCompatibleClosedNormalSubgroups</a> S
+  <span class="kw">have</span> hkernel :
+      (<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> S.inverseLimit).map
+          (ContinuousMulEquiv.refl S.inverseLimit).toMulEquiv.toMonoidHom =
+        Q.inverseLimitKernel := <span class="kw">by</span>
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups_inverseLimitKernel">closedCommutatorCompatibleClosedNormalSubgroups_inverseLimitKernel</a> (S := S) hdir]
+    ext x
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hx
+      rcases hx <span class="kw">with</span> ⟨y, hy, hyx⟩
+      simpa using hyx ▸ hy
+    · <span class="kw">intro</span> hx
+      <span class="kw">exact</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+  <span class="kw">exact</span> (QuotientGroup.congrₜ
+    (<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> S.inverseLimit) Q.inverseLimitKernel
+    (ContinuousMulEquiv.refl S.inverseLimit) hkernel).trans
+      (Q.quotientInverseLimitContinuousMulEquiv hdir)</code></pre></section>
+    <section><div class="natural-text"><p>The generic quotient inverse-limit theorem specialized to the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> family.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.projection_closedCommutatorQuotientInverseLimitContinuousMulEquiv_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.projection_closedCommutatorQuotientInverseLimitContinuousMulEquiv_mk">ProCGroups.Abelian.projection_closedCommutatorQuotientInverseLimitContinuousMulEquiv_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L501">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> projection_closedCommutatorQuotientInverseLimitContinuousMulEquiv_mk
+    {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (i : I) (x : S.inverseLimit) :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">closedCommutatorCompatibleClosedNormalSubgroups</a> S).quotientInverseSystem.projection i
+        (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorQuotientInverseLimitContinuousMulEquiv">closedCommutatorQuotientInverseLimitContinuousMulEquiv</a> (S := S) hdir
+          (QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> S.inverseLimit) x)) =
+      QuotientGroup.mk&#x27;
+        ((<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">closedCommutatorCompatibleClosedNormalSubgroups</a> S).N i)
+        (S.projection i x)</code></pre></section>
+    <section><div class="natural-text"><p>The projection closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> quotient inverse limit continuous multiplicative equivalence <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianization.html#decl-ProCGroups.Abelian.TopologicalAbelianization.mk">mk</a> is <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with the profinite topology and gives the continuous map or equivalence determined by the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> Q := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">closedCommutatorCompatibleClosedNormalSubgroups</a> S
+  unfold <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorQuotientInverseLimitContinuousMulEquiv">closedCommutatorQuotientInverseLimitContinuousMulEquiv</a>
+  dsimp
+  change Q.quotientInverseSystem.projection i
+      (Q.quotientInverseLimitContinuousMulEquiv hdir
+        (QuotientGroup.mk&#x27; Q.inverseLimitKernel x)) =
+    QuotientGroup.mk&#x27; (Q.N i) (S.projection i x)
+  unfold InverseSystems.InverseSystem.CompatibleClosedNormalSubgroups.quotientInverseLimitContinuousMulEquiv
+  change Q.quotientInverseSystem.projection i
+      (Q.quotientInverseLimitComparison (QuotientGroup.mk&#x27; Q.inverseLimitKernel x)) =
+    QuotientGroup.mk&#x27; (Q.N i) (S.projection i x)
+  <span class="kw">exact</span> Q.projection_quotientInverseLimitComparison_mk i x</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological abelianization as the quotient by the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. The quotient map kills commutators and is continuous, and any continuous homomorphism to a commutative \(T_1\) topological group descends because its kernel contains the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. Functoriality, Hom equivalences, category structure, and inverse-limit comparisons are checked on quotient representatives and by quotient extensionality.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitContinuousMulEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitContinuousMulEquiv">ProCGroups.Abelian.topologicalAbelianizationInverseLimitContinuousMulEquiv</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L531">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> topologicalAbelianizationInverseLimitContinuousMulEquiv
+    {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I)) :
+    TopologicalAbelianization S.inverseLimit ≃ₜ*
+      (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).inverseLimit := <span class="kw">by</span>
+  <span class="kw">let</span> Q := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">closedCommutatorCompatibleClosedNormalSubgroups</a> S
+  <span class="kw">let</span> E : InverseSystems.InverseSystem.InverseSystemIso Q.quotientInverseSystem
+      (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S) :=
+    { stageEquiv := <span class="kw">fun</span> _ =&gt; ContinuousMulEquiv.refl _
+      comm := <span class="kw">by</span> <span class="kw">intro</span> i j hij x; <span class="kw">rfl</span> }
+  <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorQuotientInverseLimitContinuousMulEquiv">closedCommutatorQuotientInverseLimitContinuousMulEquiv</a> (S := S) hdir).trans
+    E.inverseLimitContinuousMulEquiv</code></pre></section>
+    <section><div class="natural-text"><p>Topological abelianization commutes with profinite inverse limits as a topological-group isomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitContinuousMulEquiv_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitContinuousMulEquiv_apply">ProCGroups.Abelian.topologicalAbelianizationInverseLimitContinuousMulEquiv_apply</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L549">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> topologicalAbelianizationInverseLimitContinuousMulEquiv_apply
+    {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (x : TopologicalAbelianization S.inverseLimit) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitContinuousMulEquiv">topologicalAbelianizationInverseLimitContinuousMulEquiv</a> (S := S) hdir x =
+      <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S x</code></pre></section>
+    <section><div class="natural-text"><p>The inverse-limit <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> for topological abelianization evaluates coordinatewise.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine Quotient.inductionOn&#x27; x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">apply</span> (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).ext
+  <span class="kw">intro</span> i
+  <span class="kw">let</span> Q := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorCompatibleClosedNormalSubgroups">closedCommutatorCompatibleClosedNormalSubgroups</a> S
+  <span class="kw">let</span> E : InverseSystems.InverseSystem.InverseSystemIso Q.quotientInverseSystem
+      (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S) :=
+    { stageEquiv := <span class="kw">fun</span> _ =&gt; ContinuousMulEquiv.refl _
+      comm := <span class="kw">by</span> <span class="kw">intro</span> i j hij x; <span class="kw">rfl</span> }
+  change (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i
+      (E.inverseLimitContinuousMulEquiv
+        ((<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorQuotientInverseLimitContinuousMulEquiv">closedCommutatorQuotientInverseLimitContinuousMulEquiv</a> (S := S) hdir)
+          (QuotientGroup.mk&#x27;
+            (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit)) g))) =
+    (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i
+      (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S
+        (QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit)) g))
+  change (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i
+      (Q.quotientInverseSystem.limMap E.toMorphism
+        ((<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorQuotientInverseLimitContinuousMulEquiv">closedCommutatorQuotientInverseLimitContinuousMulEquiv</a> (S := S) hdir)
+          (QuotientGroup.mk&#x27;
+            (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit)) g))) =
+    (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i
+      (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S
+        (QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit)) g))
+  <span class="kw">rw</span> [Q.quotientInverseSystem.π_limMap_apply E.toMorphism i]
+  change Q.quotientInverseSystem.projection i
+      ((<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.closedCommutatorQuotientInverseLimitContinuousMulEquiv">closedCommutatorQuotientInverseLimitContinuousMulEquiv</a> (S := S) hdir)
+        (QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit)) g)) =
+    (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.abelianizationInverseSystem">abelianizationInverseSystem</a> S).projection i
+      (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S
+        (QuotientGroup.mk&#x27;
+          (Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> S.inverseLimit)) g))
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.projection_closedCommutatorQuotientInverseLimitContinuousMulEquiv_mk">projection_closedCommutatorQuotientInverseLimitContinuousMulEquiv_mk</a>]
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian._u03c0_topologicalAbelianizationInverseLimitComparison_mk">π_topologicalAbelianizationInverseLimitComparison_mk</a>]
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological abelianization as the quotient by the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. The quotient map kills commutators and is continuous, and any continuous homomorphism to a commutative \(T_1\) topological group descends because its kernel contains the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. Functoriality, Hom equivalences, category structure, and inverse-limit comparisons are checked on quotient representatives and by quotient extensionality.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.injective_topologicalAbelianizationInverseLimitComparison">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.injective_topologicalAbelianizationInverseLimitComparison">ProCGroups.Abelian.injective_topologicalAbelianizationInverseLimitComparison</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L601">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> injective_topologicalAbelianizationInverseLimitComparison
+    {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I)) :
+    Function.Injective (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S)</code></pre></section>
+    <section><div class="natural-text"><p>The inverse-limit <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> is injective, as a corollary of the continuous equivalence.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> e := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitContinuousMulEquiv">topologicalAbelianizationInverseLimitContinuousMulEquiv</a> (S := S) hdir
+  <span class="kw">intro</span> x y hxy
+  <span class="kw">apply</span> e.injective
+  simpa [e] using hxy</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological abelianization as the quotient by the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. The quotient map kills commutators and is continuous, and any continuous homomorphism to a commutative \(T_1\) topological group descends because its kernel contains the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. Functoriality, Hom equivalences, category structure, and inverse-limit comparisons are checked on quotient representatives and by quotient extensionality.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.surjective_topologicalAbelianizationInverseLimitComparison">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.surjective_topologicalAbelianizationInverseLimitComparison">ProCGroups.Abelian.surjective_topologicalAbelianizationInverseLimitComparison</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#L616">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> surjective_topologicalAbelianizationInverseLimitComparison
+    {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, IsTopologicalGroup (S.X i)]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I)) :
+    Function.Surjective (<a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitComparison">topologicalAbelianizationInverseLimitComparison</a> S)</code></pre></section>
+    <section><div class="natural-text"><p>The inverse-limit <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> is surjective, as a corollary of the continuous equivalence.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> e := <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html#decl-ProCGroups.Abelian.topologicalAbelianizationInverseLimitContinuousMulEquiv">topologicalAbelianizationInverseLimitContinuousMulEquiv</a> (S := S) hdir
+  <span class="kw">intro</span> y
+  rcases e.surjective y <span class="kw">with</span> ⟨x, hx⟩
+  refine ⟨x, ?_⟩
+  simpa [e] using hx</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological abelianization as the quotient by the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. The quotient map kills commutators and is continuous, and any continuous homomorphism to a commutative \(T_1\) topological group descends because its kernel contains the closed <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. Functoriality, Hom equivalences, category structure, and inverse-limit comparisons are checked on quotient representatives and by quotient extensionality.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Abelian.TopologicalAbelianizationLimits"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

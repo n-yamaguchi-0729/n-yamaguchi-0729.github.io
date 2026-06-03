@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReidemeisterSchreier.Profinite.OpenSubgroups.MinimalPower | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">ReidemeisterSchreier.Profinite.OpenSubgroups.MinimalPower</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a><span class="sep">/</span><a href="../../../../library/ReidemeisterSchreier/Profinite.html">Profinite</a><span class="sep">/</span><a href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups.html">OpenSubgroups</a><span class="sep">/</span><span>MinimalPower</span></div>
+      <h1 class="module-title">ReidemeisterSchreier.Profinite.OpenSubgroups.MinimalPower</h1>
+      <div class="module-meta">7 Theorem</div>
+      <div class="module-overview"><p>This module develops the rewriting and basis constructions behind the subgroup calculations. It tracks words and relations through the chosen transversal to obtain the required presentation or basis statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/BasisFiniteRank.html">ReidemeisterSchreier.Profinite.OpenSubgroups.BasisFiniteRank</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a></li><li><a href="../../../../library/ReidemeisterSchreier/Profinite.html">ReidemeisterSchreier.Profinite</a></li><li><a href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups.html">ReidemeisterSchreier.Profinite.OpenSubgroups</a></li><li><a href="../../../../library/Yama2026_Sections_1_And_2_1/main.html">Yama2026_Sections_1_And_2_1.main</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.exists_compactPointedBasis_openSubgroup_of_minGeneratorPower">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.exists_compactPointedBasis_openSubgroup_of_minGeneratorPower">ReidemeisterSchreier.Profinite.exists_compactPointedBasis_openSubgroup_of_minGeneratorPower</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#L31">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_compactPointedBasis_openSubgroup_of_minGeneratorPower
+    (C : ProCGroups.FiniteGroupClass.{u})
+    (hForm : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hSub : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.SubgroupClosed">ProCGroups.FiniteGroupClass.SubgroupClosed</a> C)
+    (hIso : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.IsomClosed">ProCGroups.FiniteGroupClass.IsomClosed</a> C)
+    (hQuot : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.QuotientClosed">ProCGroups.FiniteGroupClass.QuotientClosed</a> C)
+    (hExt : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.ExtensionClosed">ProCGroups.FiniteGroupClass.ExtensionClosed</a> C)
+    {X : <span class="kw">Type</span> u}
+    [TopologicalSpace X] [DiscreteTopology X]
+    {F : <span class="kw">Type</span> u} [Group F] [TopologicalSpace F] [IsTopologicalGroup F]
+    {ι : X → F}
+    (hF : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.IsFreeProCGroupOnConvergingSet">IsFreeProCGroupOnConvergingSet</a>
+      (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C) X F ι)
+    (H : OpenSubgroup F) (x : X) {N : ℕ}
+    (hN : 0 &lt; N)
+    (hpow : (ι x) ^ N ∈ (H : Subgroup F))
+    (hmin : ∀ m : ℕ, 0 &lt; m → m &lt; N → (ι x) ^ m ∉ (H : Subgroup F)) :
+    ∃ κ : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.OpenSubgroupRightQuotient">OpenSubgroupRightQuotient</a> H × OnePoint X → ↥(H : Subgroup F),
+      Continuous κ ∧
+      (∀ q : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.OpenSubgroupRightQuotient">OpenSubgroupRightQuotient</a> H, κ (q, OnePoint.infty) = 1) ∧
+      κ (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H (1 : F), OnePoint.infty) = 1 ∧
+      (⟨(ι x) ^ N, hpow⟩ : ↥(H : Subgroup F)) ∈ Set.range κ ∧
+      <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature.IsCompact">IsCompact</a> (Set.range κ) ∧
+      IsClosed (Set.range κ) ∧
+      <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.IsPointedFreeProCGroupOn">IsPointedFreeProCGroupOn</a>
+        (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C)
+        (Set.range κ)
+        ⟨κ (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H (1 : F), OnePoint.infty),
+          ⟨(<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H (1 : F), OnePoint.infty), <span class="kw">rfl</span>⟩⟩
+        ↥(H : Subgroup F) Subtype.val</code></pre></section>
+    <section><div class="natural-text"><p>This is the pointed profinite Reidemeister--Schreier theorem over a converging-set basis, with a prescribed minimal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> power landing in the open subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">let</span> iInf : OnePoint X → F := <span class="kw">fun</span> z =&gt; z.elim 1 ι
+  <span class="kw">have</span> hιTendsto : Filter.Tendsto ι Filter.cofinite (𝓝 (1 : F)) := <span class="kw">by</span>
+    letI : CompactSpace F := IsProCGroup.compactSpace hF.isProC
+    letI : T2Space F := IsProCGroup.t2Space hF.isProC
+    letI : TotallyDisconnectedSpace F := IsProCGroup.totallyDisconnectedSpace hF.isProC
+    <span class="kw">rw</span> [Filter.tendsto_def]
+    <span class="kw">intro</span> s hs
+    rcases mem_nhds_iff.mp hs <span class="kw">with</span> ⟨W, hWs, hWopen, h1W⟩
+    rcases <a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/BasisAtOne.html#decl-ProCGroups.ProC.exists_openNormalSubgroup_sub_open_nhds_of_one">ProCGroups.ProC.exists_openNormalSubgroup_sub_open_nhds_of_one</a>
+        (G := F) hWopen h1W <span class="kw">with</span>
+      ⟨U, hUW⟩
+    <span class="kw">have</span> hfinite : {x : X | ι x ∉ (U : Set F)}.Finite :=
+      hF.convergesToOne U.toOpenSubgroup
+    <span class="kw">have</span> hcof : ∀ᶠ x : X <span class="kw">in</span> Filter.cofinite, ι x ∈ (U : Set F) :=
+      Filter.eventually_cofinite.2 hfinite
+    <span class="kw">exact</span> hcof.mono <span class="kw">fun</span> x hx =&gt; hWs (hUW hx)
+  <span class="kw">have</span> hPointed :
+      <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.IsPointedFreeProCGroupOn">IsPointedFreeProCGroupOn</a>
+        (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C)
+        (OnePoint X) OnePoint.infty F iInf := <span class="kw">by</span>
+    refine ⟨hF.isProC, ?_, <span class="kw">by</span> <span class="kw">simp</span> only [OnePoint.elim_infty, iInf], ?_, ?_⟩
+    · <span class="kw">rw</span> [OnePoint.continuous_iff_from_discrete]
+      simpa [iInf] using hιTendsto
+    · <span class="kw">have</span> hsub : Set.range ι ⊆ Set.range iInf := <span class="kw">by</span>
+        rintro y ⟨x, <span class="kw">rfl</span>⟩
+        <span class="kw">exact</span> ⟨(x : OnePoint X), <span class="kw">rfl</span>⟩
+      <span class="kw">exact</span> Generation.topologicallyGenerates_mono (G := F) hF.generates_range hsub
+    · <span class="kw">intro</span> G _ _ _ hG φ hφ hφ0 hgenφ
+      <span class="kw">let</span> ψ : X → G := <span class="kw">fun</span> x =&gt; φ x
+      <span class="kw">have</span> hψTendsto : Filter.Tendsto ψ Filter.cofinite (𝓝 (1 : G)) := <span class="kw">by</span>
+        <span class="kw">have</span> hraw := (OnePoint.continuous_iff_from_discrete (f := φ)).1 hφ
+        simpa [ψ, hφ0] using hraw
+      <span class="kw">have</span> hψconv : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.FamilyConvergesToOne">FamilyConvergesToOne</a> (G := G) ψ := <span class="kw">by</span>
+        <span class="kw">intro</span> U
+        <span class="kw">exact</span> Filter.eventually_cofinite.mp &lt;|
+          hψTendsto (U.isOpen&#x27;.mem_nhds U.one_mem&#x27;)
+      <span class="kw">have</span> hφrange : Set.range φ = Set.range ψ ∪ ({1} : Set G) := <span class="kw">by</span>
+        ext z
+        <span class="kw">constructor</span>
+        · rintro ⟨x, <span class="kw">rfl</span>⟩
+          refine OnePoint.rec ?_ ?_ x
+          · right
+            simpa [iInf] using hφ0
+          · <span class="kw">intro</span> y
+            left
+            <span class="kw">exact</span> ⟨y, <span class="kw">rfl</span>⟩
+        · <span class="kw">intro</span> hz
+          rcases hz <span class="kw">with</span> hz | hz
+          · rcases hz <span class="kw">with</span> ⟨y, <span class="kw">rfl</span>⟩
+            <span class="kw">exact</span> ⟨(y : OnePoint X), <span class="kw">rfl</span>⟩
+          · <span class="kw">exact</span> ⟨OnePoint.infty, hφ0.trans hz.symm⟩
+      <span class="kw">have</span> hψgen : Generation.TopologicallyGenerates (G := G) (Set.range ψ) := <span class="kw">by</span>
+        <span class="kw">have</span> hgenφ&#x27; :
+            Generation.TopologicallyGenerates (G := G) (Set.range ψ ∪ ({1} : Set G)) := <span class="kw">by</span>
+          simpa [hφrange] using hgenφ
+        <span class="kw">exact</span> (Generation.topologicallyGenerates_union_one_iff (G := G) (X := Set.range ψ)).1
+          hgenφ&#x27;
+      rcases hF.existsUnique_lift hG ψ hψconv hψgen <span class="kw">with</span> ⟨f, hf, huniq⟩
+      refine ⟨f, ⟨hf.1, ?_⟩, ?_⟩
+      · <span class="kw">intro</span> z
+        refine OnePoint.rec ?_ ?_ z
+        · <span class="kw">calc</span>
+            f (iInf OnePoint.infty) = f 1 := <span class="kw">rfl</span>
+            _ = 1 := <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a> f
+            _ = φ OnePoint.infty := hφ0.symm
+        · <span class="kw">intro</span> y
+          <span class="kw">exact</span> hf.2 y
+      · <span class="kw">intro</span> g hg
+        <span class="kw">apply</span> huniq g
+        refine ⟨hg.1, ?_⟩
+        <span class="kw">intro</span> y
+        simpa [iInf, ψ] using hg.2 (y : OnePoint X)
+  <span class="kw">let</span> x&#x27; : OnePoint X := x
+  <span class="kw">have</span> hpow&#x27; : (iInf x&#x27;) ^ N ∈ (H : Subgroup F) := <span class="kw">by</span>
+    simpa [iInf, x&#x27;] using hpow
+  <span class="kw">have</span> hmin&#x27; : ∀ m : ℕ, 0 &lt; m → m &lt; N → (iInf x&#x27;) ^ m ∉ (H : Subgroup F) := <span class="kw">by</span>
+    <span class="kw">intro</span> m hm hlt
+    simpa [iInf, x&#x27;] using hmin m hm hlt
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/ExactRightSchreierGeneration.html#decl-exists_pointedFreeRightSchreierGeneratorFamily_of_openSubgroup_of_minimalGeneratorPower">exists_pointedFreeRightSchreierGeneratorFamily_of_openSubgroup_of_minimalGeneratorPower</a>
+      (C := C) hForm hSub hIso hQuot hExt hPointed H x&#x27; hN hpow&#x27; hmin&#x27;</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. When a quotient map is present, both sides use the same image coset and the same rewritten letter, so the chosen-<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> equality descends to the quotient presentation. Finiteness is supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of Schreier generators used by the construction. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_openSubgroup_of_minimalGeneratorPower">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_openSubgroup_of_minimalGeneratorPower">ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_openSubgroup_of_minimalGeneratorPower</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#L148">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_finiteConvergingSetBasis_openSubgroup_of_minimalGeneratorPower
+    {C : ProCGroups.FiniteGroupClass.{u}}
+    (hForm : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hSub : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.SubgroupClosed">ProCGroups.FiniteGroupClass.SubgroupClosed</a> C)
+    (hIso : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.IsomClosed">ProCGroups.FiniteGroupClass.IsomClosed</a> C)
+    (hQuot : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.QuotientClosed">ProCGroups.FiniteGroupClass.QuotientClosed</a> C)
+    (hExt : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.ExtensionClosed">ProCGroups.FiniteGroupClass.ExtensionClosed</a> C)
+    {X : <span class="kw">Type</span> u} [Finite X]
+    {F : <span class="kw">Type</span> u} [Group F] [TopologicalSpace F] [IsTopologicalGroup F]
+    {ι : X → F}
+    [DiscreteTopology (Set.range ι)]
+    (hF : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.IsFreeProCGroupOnConvergingSet">IsFreeProCGroupOnConvergingSet</a>
+      (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C) X F ι)
+    (H : OpenSubgroup F) (x : X) {N : ℕ}
+    (hN : 0 &lt; N)
+    (hpow : (ι x) ^ N ∈ (H : Subgroup F))
+    (hpow_ne : (ι x) ^ N ≠ 1)
+    (hmin : ∀ m : ℕ, 0 &lt; m → m &lt; N → (ι x) ^ m ∉ (H : Subgroup F)) :
+    ∃ Fdata : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-FreeProCGroupOnConvergingSetData">FreeProCGroupOnConvergingSetData</a>
+        (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C),
+      ∃ e : Fdata.carrier ≃ₜ* ↥(H : Subgroup F),
+        (⟨(ι x) ^ N, hpow⟩ : ↥(H : Subgroup F)) ∈
+          Set.range (e ∘ Fdata.inclusion) ∧
+        Finite Fdata.basis</code></pre></section>
+    <section><div class="natural-text"><p>Finite-rank pointed control over a converging-set free pro-\(C\) group: if \(x^N\) is the first positive power of a basis element landing in \(H\), and this power is nontrivial, the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> converging-set basis model for \(H\) can be chosen so that \(x^N\) lies in the basis image.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  letI : CompactSpace F := IsProCGroup.compactSpace hF.isProC
+  letI : T2Space F := IsProCGroup.t2Space hF.isProC
+  letI : TopologicalSpace X := ⊥
+  letI : DiscreteTopology X := ⟨<span class="kw">rfl</span>⟩
+  letI : Fintype X := Fintype.ofFinite X
+  rcases
+      <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#decl-ReidemeisterSchreier.Profinite.exists_compactPointedBasis_openSubgroup_of_minGeneratorPower">exists_compactPointedBasis_openSubgroup_of_minGeneratorPower</a>
+        C hForm hSub hIso hQuot hExt hF H x hN hpow hmin <span class="kw">with</span>
+    ⟨κ, _hκcont, _hκbase, hκone, hxpowRange, _hκcompact, _hκclosed, hκfree⟩
+  letI : Finite (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.OpenSubgroupRightQuotient">OpenSubgroupRightQuotient</a> H) :=
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.finite_openSubgroupRightQuotient">finite_openSubgroupRightQuotient</a> (F := F) H
+  letI : Finite (OnePoint X) := Finite.of_fintype (OnePoint X)
+  letI : Finite (Set.range κ) := (Set.finite_range κ).to_subtype
+  <span class="kw">let</span> x0 : Set.range κ :=
+    ⟨κ (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H (1 : F), OnePoint.infty),
+      ⟨(<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H (1 : F), OnePoint.infty), <span class="kw">rfl</span>⟩⟩
+  letI : DiscreteTopology (Set.range κ) :=
+    DiscreteTopology.of_finite_of_isClosed_singleton <span class="kw">fun</span> _ =&gt; isClosed_singleton
+  <span class="kw">let</span> B : <span class="kw">Type</span> u := {y : Set.range κ // y ≠ x0}
+  <span class="kw">let</span> μ : B → ↥(H : Subgroup F) := <span class="kw">fun</span> y =&gt; y.1.1
+  <span class="kw">have</span> hμfree :
+      <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.IsFreeProCGroupOnConvergingSet">IsFreeProCGroupOnConvergingSet</a>
+        (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C) B ↥(H : Subgroup F) μ := <span class="kw">by</span>
+    simpa [B, μ, x0] using
+      <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-freeOnFinitePointedDiscreteSpace_has_convergingSetBasis">freeOnFinitePointedDiscreteSpace_has_convergingSetBasis</a>
+        (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C) hκfree
+  <span class="kw">let</span> Fdata : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-FreeProCGroupOnConvergingSetData">FreeProCGroupOnConvergingSetData</a>
+      (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C) :=
+    { basis := B
+      carrier := ↥(H : Subgroup F)
+      <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp.instGroup">instGroup</a> := inferInstance
+      <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp.instTopologicalSpace">instTopologicalSpace</a> := inferInstance
+      <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp.instIsTopologicalGroup">instIsTopologicalGroup</a> := inferInstance
+      inclusion := μ
+      isFree := hμfree }
+  <span class="kw">let</span> ypow : Set.range κ := ⟨⟨(ι x) ^ N, hpow⟩, hxpowRange⟩
+  <span class="kw">have</span> hypow_ne_x0 : ypow ≠ x0 := <span class="kw">by</span>
+    <span class="kw">intro</span> hEq
+    <span class="kw">apply</span> hpow_ne
+    <span class="kw">have</span> hval : (ypow : ↥(H : Subgroup F)) = (x0 : ↥(H : Subgroup F)) :=
+      congrArg Subtype.val hEq
+    <span class="kw">have</span> hx0val : (x0 : ↥(H : Subgroup F)) = 1 := <span class="kw">by</span>
+      simpa [x0] using hκone
+    simpa [ypow] using hval.trans hx0val
+  <span class="kw">let</span> bpow : B := ⟨ypow, hypow_ne_x0⟩
+  <span class="kw">have</span> hbpow : μ bpow = (⟨(ι x) ^ N, hpow⟩ : ↥(H : Subgroup F)) := <span class="kw">rfl</span>
+  refine ⟨Fdata, ContinuousMulEquiv.refl _, ?_, ?_⟩
+  · refine ⟨bpow, ?_⟩
+    simpa [Fdata, μ] using hbpow
+  · dsimp [Fdata, B]
+    infer_instance</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. When a quotient map is present, both sides use the same image coset and the same rewritten letter, so the chosen-<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> equality descends to the quotient presentation. Finiteness is supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of Schreier generators used by the construction. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.exists_basis_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.exists_basis_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower">ReidemeisterSchreier.Profinite.exists_basis_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#L228">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_basis_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower
+    (C : ProCGroups.FiniteGroupClass.{u})
+    (hVar : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Variety">ProCGroups.FiniteGroupClass.Variety</a> C)
+    (hIso : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.IsomClosed">ProCGroups.FiniteGroupClass.IsomClosed</a> C)
+    (hExt : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.ExtensionClosed">ProCGroups.FiniteGroupClass.ExtensionClosed</a> C)
+    (hcyc :
+      ∃ (A : <span class="kw">Type</span> u) (_ : Group A) (_ : Finite A),
+        C A ∧ IsCyclic A ∧ Nontrivial A)
+    {X : <span class="kw">Type</span> u} [Finite X]
+    {F : <span class="kw">Type</span> u} [Group F] [TopologicalSpace F] [IsTopologicalGroup F]
+    {ι : X → F}
+    [DiscreteTopology (Set.range ι)]
+    (hF : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.IsFreeProCGroupOnConvergingSet">IsFreeProCGroupOnConvergingSet</a>
+      (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C) X F ι)
+    (H : OpenSubgroup F) (x : X) {N : ℕ}
+    (hN : 0 &lt; N)
+    (hpow : (ι x) ^ N ∈ (H : Subgroup F))
+    (hpow_ne : (ι x) ^ N ≠ 1)
+    (hmin : ∀ m : ℕ, 0 &lt; m → m &lt; N → (ι x) ^ m ∉ (H : Subgroup F)) :
+    ∃ Fdata : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-FreeProCGroupOnConvergingSetData">FreeProCGroupOnConvergingSetData</a>
+        (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C),
+      ∃ e : Fdata.carrier ≃ₜ* ↥(H : Subgroup F),
+        (⟨(ι x) ^ N, hpow⟩ : ↥(H : Subgroup F)) ∈
+          Set.range (e ∘ Fdata.inclusion) ∧
+        Cardinal.mk Fdata.basis =
+          (_root_.ReidemeisterSchreier.Schreier.rankTransform (Nat.card X) (Nat.card (F ⧸ (H : Subgroup F))) :
+            Cardinal)</code></pre></section>
+    <section><div class="natural-text"><p>Finite-rank pointed profinite Reidemeister--Schreier theorem: if \(x^N\) is the first positive power of the chosen ambient basis element landing in \(H\), and this power is nontrivial, then <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> can choose a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-rank basis model of \(H\) whose basis image contains \(x^N\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  rcases hVar.closureBundle_of_isomClosed_extensionClosed hIso hExt <span class="kw">with</span>
+    ⟨hForm, hSub, hIso&#x27;, hQuot, hExt&#x27;⟩
+  rcases
+      <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#decl-ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_openSubgroup_of_minimalGeneratorPower">exists_finiteConvergingSetBasis_openSubgroup_of_minimalGeneratorPower</a>
+        (C := C) hForm hSub hIso&#x27; hQuot hExt&#x27; hF H x hN hpow hpow_ne hmin <span class="kw">with</span>
+    ⟨Fdata, eData, hxrange, hFin⟩
+  letI : Finite Fdata.basis := hFin
+  rcases <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/BasisFiniteRank.html#decl-ReidemeisterSchreier.Profinite.exists_basis_openSubgroup_of_extensionClosed_finiteRank">exists_basis_openSubgroup_of_extensionClosed_finiteRank</a>
+      (C := C) hVar hIso hExt hcyc hF H <span class="kw">with</span>
+    ⟨Fexact, hFexactEquiv, hExactCard⟩
+  <span class="kw">have</span> hFexactLt : Cardinal.mk Fexact.basis &lt; Cardinal.aleph0 := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      Cardinal.mk Fexact.basis =
+          (_root_.ReidemeisterSchreier.Schreier.rankTransform (Nat.card X) (Nat.card (F ⧸ (H : Subgroup F))) :
+            Cardinal) := hExactCard
+      _ &lt; Cardinal.aleph0 := Cardinal.natCast_lt_aleph0
+  letI : Finite Fexact.basis := Cardinal.lt_aleph0_iff_finite.mp hFexactLt
+  <span class="kw">have</span> hExactBasis :
+      Cardinal.mk Fexact.basis = Generation.topologicalRank Fexact.carrier :=
+    <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-basisCard_eq_topologicalRank_of_finiteBasis">basisCard_eq_topologicalRank_of_finiteBasis</a> C hQuot hcyc Fexact
+  <span class="kw">have</span> hDataBasis :
+      Cardinal.mk Fdata.basis = Generation.topologicalRank Fdata.carrier :=
+    <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-basisCard_eq_topologicalRank_of_finiteBasis">basisCard_eq_topologicalRank_of_finiteBasis</a> C hQuot hcyc Fdata
+  rcases hFexactEquiv <span class="kw">with</span> ⟨eExact⟩
+  <span class="kw">have</span> hExactProf : <a class="decl-ref" href="../../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">ProCGroups.IsProfiniteGroup</a> Fexact.carrier :=
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.isProfiniteGroup_of_finiteGroupClassProCPredicate">ProCGroups.ProC.isProfiniteGroup_of_finiteGroupClassProCPredicate</a> C Fexact.isFree.isProC
+  <span class="kw">have</span> hDataProf : <a class="decl-ref" href="../../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">ProCGroups.IsProfiniteGroup</a> Fdata.carrier :=
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.isProfiniteGroup_of_finiteGroupClassProCPredicate">ProCGroups.ProC.isProfiniteGroup_of_finiteGroupClassProCPredicate</a> C Fdata.isFree.isProC
+  <span class="kw">have</span> hRankEq :
+      Generation.topologicalRank Fexact.carrier =
+        Generation.topologicalRank Fdata.carrier := <span class="kw">by</span>
+    <span class="kw">exact</span> Generation.topologicalRank_eq_of_continuousMulEquiv
+      hExactProf hDataProf (eExact.trans eData.symm)
+  <span class="kw">have</span> hCard :
+      Cardinal.mk Fdata.basis =
+        (_root_.ReidemeisterSchreier.Schreier.rankTransform (Nat.card X) (Nat.card (F ⧸ (H : Subgroup F))) :
+          Cardinal) := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      Cardinal.mk Fdata.basis = Generation.topologicalRank Fdata.carrier := hDataBasis
+      _ = Generation.topologicalRank Fexact.carrier := hRankEq.symm
+      _ = Cardinal.mk Fexact.basis := hExactBasis.symm
+      _ = (_root_.ReidemeisterSchreier.Schreier.rankTransform (Nat.card X) (Nat.card (F ⧸ (H : Subgroup F))) :
+            Cardinal) := hExactCard
+  <span class="kw">exact</span> ⟨Fdata, eData, hxrange, hCard⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. Finiteness is supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of Schreier generators used by the construction. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_comap_openSubgroup_of_minimalGeneratorPower">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_comap_openSubgroup_of_minimalGeneratorPower">ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_comap_openSubgroup_of_minimalGeneratorPower</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#L302">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_finiteConvergingSetBasis_comap_openSubgroup_of_minimalGeneratorPower
+    {C : ProCGroups.FiniteGroupClass.{u}}
+    (hForm : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hSub : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.SubgroupClosed">ProCGroups.FiniteGroupClass.SubgroupClosed</a> C)
+    (hIso : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.IsomClosed">ProCGroups.FiniteGroupClass.IsomClosed</a> C)
+    (hQuot : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.QuotientClosed">ProCGroups.FiniteGroupClass.QuotientClosed</a> C)
+    (hExt : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.ExtensionClosed">ProCGroups.FiniteGroupClass.ExtensionClosed</a> C)
+    {X : <span class="kw">Type</span> u} [Finite X]
+    {F : <span class="kw">Type</span> u} [Group F] [TopologicalSpace F] [IsTopologicalGroup F]
+    {ι : X → F}
+    [DiscreteTopology (Set.range ι)]
+    (hF : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.IsFreeProCGroupOnConvergingSet">IsFreeProCGroupOnConvergingSet</a>
+      (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C) X F ι)
+    {Q : <span class="kw">Type</span> u} [Group Q] [TopologicalSpace Q]
+    (<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> : F →* Q) (hπcont : Continuous <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a>)
+    (H : OpenSubgroup Q) (x : X) {N : ℕ}
+    (hN : 0 &lt; N)
+    (hpow : (ι x) ^ N ∈ ((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F))
+    (hpow_ne : (ι x) ^ N ≠ 1)
+    (hmin :
+      ∀ m : ℕ, 0 &lt; m → m &lt; N →
+        (ι x) ^ m ∉ ((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F)) :
+    ∃ Fdata : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-FreeProCGroupOnConvergingSetData">FreeProCGroupOnConvergingSetData</a>
+        (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C),
+      ∃ e : Fdata.carrier ≃ₜ*
+          ↥((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F),
+        (⟨(ι x) ^ N, hpow⟩ :
+          ↥((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F)) ∈
+          Set.range (e ∘ Fdata.inclusion) ∧
+        Finite Fdata.basis</code></pre></section>
+    <section><div class="natural-text"><p>Preimage form of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> pointed-control theorem.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#decl-ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_openSubgroup_of_minimalGeneratorPower">exists_finiteConvergingSetBasis_openSubgroup_of_minimalGeneratorPower</a>
+      (C := C) hForm hSub hIso hQuot hExt hF
+      (OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H) x hN hpow hpow_ne hmin</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. When a quotient map is present, both sides use the same image coset and the same rewritten letter, so the chosen-<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> equality descends to the quotient presentation. Finiteness is supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of Schreier generators used by the construction. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.exists_basis_comap_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.exists_basis_comap_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower">ReidemeisterSchreier.Profinite.exists_basis_comap_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#L341">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_basis_comap_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower
+    (C : ProCGroups.FiniteGroupClass.{u})
+    (hVar : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Variety">ProCGroups.FiniteGroupClass.Variety</a> C)
+    (hIso : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.IsomClosed">ProCGroups.FiniteGroupClass.IsomClosed</a> C)
+    (hExt : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.ExtensionClosed">ProCGroups.FiniteGroupClass.ExtensionClosed</a> C)
+    (hcyc :
+      ∃ (A : <span class="kw">Type</span> u) (_ : Group A) (_ : Finite A),
+        C A ∧ IsCyclic A ∧ Nontrivial A)
+    {X : <span class="kw">Type</span> u} [Finite X]
+    {F : <span class="kw">Type</span> u} [Group F] [TopologicalSpace F] [IsTopologicalGroup F]
+    {ι : X → F}
+    [DiscreteTopology (Set.range ι)]
+    (hF : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.IsFreeProCGroupOnConvergingSet">IsFreeProCGroupOnConvergingSet</a>
+      (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C) X F ι)
+    {Q : <span class="kw">Type</span> u} [Group Q] [TopologicalSpace Q]
+    (<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> : F →* Q) (hπcont : Continuous <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a>) (hπsurj : Function.Surjective <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a>)
+    (H : OpenSubgroup Q) (x : X) {N : ℕ}
+    (hN : 0 &lt; N)
+    (hpow : (ι x) ^ N ∈ ((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F))
+    (hpow_ne : (ι x) ^ N ≠ 1)
+    (hmin :
+      ∀ m : ℕ, 0 &lt; m → m &lt; N →
+        (ι x) ^ m ∉ ((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F)) :
+    ∃ Fdata : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-FreeProCGroupOnConvergingSetData">FreeProCGroupOnConvergingSetData</a>
+        (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C),
+      ∃ e : Fdata.carrier ≃ₜ*
+          ↥((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F),
+        (⟨(ι x) ^ N, hpow⟩ :
+          ↥((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F)) ∈
+          Set.range (e ∘ Fdata.inclusion) ∧
+        Cardinal.mk Fdata.basis =
+          (_root_.ReidemeisterSchreier.Schreier.rankTransform (Nat.card X) (Nat.card (Q ⧸ (H : Subgroup Q))) :
+            Cardinal)</code></pre></section>
+    <section><div class="natural-text"><p>Preimage form of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-rank pointed Reidemeister--Schreier theorem. This is the version for \(\pi^{-1}(H)\), with the Schreier rank transform expressed using the quotient-side cardinality of \(Q/H\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  rcases <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#decl-ReidemeisterSchreier.Profinite.exists_basis_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower">exists_basis_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower</a>
+      (C := C) hVar hIso hExt hcyc hF
+      (OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H) x hN hpow hpow_ne hmin <span class="kw">with</span>
+    ⟨Fdata, e, hxNrange, hCard⟩
+  <span class="kw">have</span> hIndex :
+      Nat.card
+          (F ⧸ (((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F))) =
+        Nat.card (Q ⧸ (H : Subgroup Q)) := <span class="kw">by</span>
+    simpa [OpenSubgroup.comap] using
+      (Subgroup.index_comap_of_surjective (H := (H : Subgroup Q)) (f := <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a>) hπsurj)
+  refine ⟨Fdata, e, hxNrange, ?_⟩
+  <span class="kw">calc</span>
+    Cardinal.mk Fdata.basis =
+        (_root_.ReidemeisterSchreier.Schreier.rankTransform (Nat.card X)
+          (Nat.card
+            (F ⧸
+              (((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F)))) :
+          Cardinal) := hCard
+    _ = (_root_.ReidemeisterSchreier.Schreier.rankTransform (Nat.card X) (Nat.card (Q ⧸ (H : Subgroup Q))) :
+          Cardinal) := <span class="kw">by</span>
+      exact_mod_cast congrArg (_root_.ReidemeisterSchreier.Schreier.rankTransform (Nat.card X)) hIndex</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. When a quotient map is present, both sides use the same image coset and the same rewritten letter, so the chosen-<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> equality descends to the quotient presentation. Finiteness is supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of Schreier generators used by the construction. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_comap_openSubgroup_of_minimalRightCosetPower">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_comap_openSubgroup_of_minimalRightCosetPower">ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_comap_openSubgroup_of_minimalRightCosetPower</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#L399">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_finiteConvergingSetBasis_comap_openSubgroup_of_minimalRightCosetPower
+    {C : ProCGroups.FiniteGroupClass.{u}}
+    (hForm : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hSub : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.SubgroupClosed">ProCGroups.FiniteGroupClass.SubgroupClosed</a> C)
+    (hIso : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.IsomClosed">ProCGroups.FiniteGroupClass.IsomClosed</a> C)
+    (hQuot : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.QuotientClosed">ProCGroups.FiniteGroupClass.QuotientClosed</a> C)
+    (hExt : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.ExtensionClosed">ProCGroups.FiniteGroupClass.ExtensionClosed</a> C)
+    {X : <span class="kw">Type</span> u} [Finite X]
+    {F : <span class="kw">Type</span> u} [Group F] [TopologicalSpace F] [IsTopologicalGroup F]
+    {ι : X → F}
+    [DiscreteTopology (Set.range ι)]
+    (hF : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.IsFreeProCGroupOnConvergingSet">IsFreeProCGroupOnConvergingSet</a>
+      (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C) X F ι)
+    {Q : <span class="kw">Type</span> u} [Group Q] [TopologicalSpace Q]
+    (<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> : F →* Q) (hπcont : Continuous <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a>)
+    (H : OpenSubgroup Q) (x : X) {N : ℕ}
+    (hN : 0 &lt; N)
+    (hcosetPow :
+      <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H ((<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> (ι x)) ^ N) = <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H (1 : Q))
+    (hcosetMin :
+      ∀ m : ℕ, 0 &lt; m → m &lt; N →
+        <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H ((<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> (ι x)) ^ m) ≠ <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H (1 : Q))
+    (hpow_ne : (ι x) ^ N ≠ 1) :
+    ∃ Fdata : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-FreeProCGroupOnConvergingSetData">FreeProCGroupOnConvergingSetData</a>
+        (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C),
+      ∃ e : Fdata.carrier ≃ₜ*
+          ↥((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F),
+        (⟨(ι x) ^ N,
+          <span class="kw">by</span>
+            change <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> ((ι x) ^ N) ∈ (H : Subgroup Q)
+            <span class="kw">have</span> hmemQ : (<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> (ι x)) ^ N ∈ (H : Subgroup Q) :=
+              (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset_eq_basepoint_iff_mem">openSubgroupRightCoset_eq_basepoint_iff_mem</a> (H := H)).mp hcosetPow
+            simpa [map_pow] using hmemQ
+        ⟩ :
+          ↥((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F)) ∈
+          Set.range (e ∘ Fdata.inclusion) ∧
+        Finite Fdata.basis</code></pre></section>
+    <section><div class="natural-text"><p>This is the right-coset formulation of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> pointed-control theorem for preimages of open subgroups.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hpow :
+      (ι x) ^ N ∈ ((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F) := <span class="kw">by</span>
+    change <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> ((ι x) ^ N) ∈ (H : Subgroup Q)
+    <span class="kw">have</span> hmemQ : (<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> (ι x)) ^ N ∈ (H : Subgroup Q) :=
+      (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset_eq_basepoint_iff_mem">openSubgroupRightCoset_eq_basepoint_iff_mem</a> (H := H)).mp hcosetPow
+    simpa [map_pow] using hmemQ
+  <span class="kw">have</span> hmin :
+      ∀ m : ℕ, 0 &lt; m → m &lt; N →
+        (ι x) ^ m ∉ ((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F) := <span class="kw">by</span>
+    <span class="kw">intro</span> m hm hlt hmcomap
+    <span class="kw">have</span> hmemQ : (<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> (ι x)) ^ m ∈ (H : Subgroup Q) := <span class="kw">by</span>
+      change <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> ((ι x) ^ m) ∈ (H : Subgroup Q) at hmcomap
+      simpa [map_pow] using hmcomap
+    <span class="kw">exact</span> hcosetMin m hm hlt &lt;|
+      (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset_eq_basepoint_iff_mem">openSubgroupRightCoset_eq_basepoint_iff_mem</a> (H := H)).2 hmemQ
+  simpa [hpow] using
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#decl-ReidemeisterSchreier.Profinite.exists_finiteConvergingSetBasis_comap_openSubgroup_of_minimalGeneratorPower">exists_finiteConvergingSetBasis_comap_openSubgroup_of_minimalGeneratorPower</a>
+      (C := C) hForm hSub hIso hQuot hExt hF <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H x hN hpow hpow_ne hmin</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. When a quotient map is present, both sides use the same image coset and the same rewritten letter, so the chosen-<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> equality descends to the quotient presentation. Finiteness is supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of Schreier generators used by the construction. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.exists_basis_comap_openSubgroup_of_extensionClosed_finiteRank_of_minimalRightCosetPower">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.exists_basis_comap_openSubgroup_of_extensionClosed_finiteRank_of_minimalRightCosetPower">ReidemeisterSchreier.Profinite.exists_basis_comap_openSubgroup_of_extensionClosed_finiteRank_of_minimalRightCosetPower</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#L456">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_basis_comap_openSubgroup_of_extensionClosed_finiteRank_of_minimalRightCosetPower
+    (C : ProCGroups.FiniteGroupClass.{u})
+    (hVar : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Variety">ProCGroups.FiniteGroupClass.Variety</a> C)
+    (hIso : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.IsomClosed">ProCGroups.FiniteGroupClass.IsomClosed</a> C)
+    (hExt : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.ExtensionClosed">ProCGroups.FiniteGroupClass.ExtensionClosed</a> C)
+    (hcyc :
+      ∃ (A : <span class="kw">Type</span> u) (_ : Group A) (_ : Finite A),
+        C A ∧ IsCyclic A ∧ Nontrivial A)
+    {X : <span class="kw">Type</span> u} [Finite X]
+    {F : <span class="kw">Type</span> u} [Group F] [TopologicalSpace F] [IsTopologicalGroup F]
+    {ι : X → F}
+    [DiscreteTopology (Set.range ι)]
+    (hF : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.IsFreeProCGroupOnConvergingSet">IsFreeProCGroupOnConvergingSet</a>
+      (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C) X F ι)
+    {Q : <span class="kw">Type</span> u} [Group Q] [TopologicalSpace Q]
+    (<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> : F →* Q) (hπcont : Continuous <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a>) (hπsurj : Function.Surjective <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a>)
+    (H : OpenSubgroup Q) (x : X) {N : ℕ}
+    (hN : 0 &lt; N)
+    (hcosetPow :
+      <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H ((<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> (ι x)) ^ N) = <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H (1 : Q))
+    (hcosetMin :
+      ∀ m : ℕ, 0 &lt; m → m &lt; N →
+        <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H ((<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> (ι x)) ^ m) ≠ <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset">openSubgroupRightCoset</a> H (1 : Q))
+    (hpow_ne : (ι x) ^ N ≠ 1) :
+    ∃ Fdata : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-FreeProCGroupOnConvergingSetData">FreeProCGroupOnConvergingSetData</a>
+        (ProC := <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a> C),
+      ∃ e : Fdata.carrier ≃ₜ*
+          ↥((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F),
+        (⟨(ι x) ^ N,
+          <span class="kw">by</span>
+            change <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> ((ι x) ^ N) ∈ (H : Subgroup Q)
+            <span class="kw">have</span> hmemQ : (<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> (ι x)) ^ N ∈ (H : Subgroup Q) :=
+              (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset_eq_basepoint_iff_mem">openSubgroupRightCoset_eq_basepoint_iff_mem</a> (H := H)).mp hcosetPow
+            simpa [map_pow] using hmemQ
+        ⟩ :
+          ↥((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F)) ∈
+          Set.range (e ∘ Fdata.inclusion) ∧
+        Cardinal.mk Fdata.basis =
+          (_root_.ReidemeisterSchreier.Schreier.rankTransform (Nat.card X) (Nat.card (Q ⧸ (H : Subgroup Q))) :
+            Cardinal)</code></pre></section>
+    <section><div class="natural-text"><p>This is the right-coset formulation of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-rank theorem for preimages of open subgroups.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hpow :
+      (ι x) ^ N ∈ ((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F) := <span class="kw">by</span>
+    change <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> ((ι x) ^ N) ∈ (H : Subgroup Q)
+    <span class="kw">have</span> hmemQ : (<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> (ι x)) ^ N ∈ (H : Subgroup Q) :=
+      (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset_eq_basepoint_iff_mem">openSubgroupRightCoset_eq_basepoint_iff_mem</a> (H := H)).mp hcosetPow
+    simpa [map_pow] using hmemQ
+  <span class="kw">have</span> hmin :
+      ∀ m : ℕ, 0 &lt; m → m &lt; N →
+        (ι x) ^ m ∉ ((OpenSubgroup.comap <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont H : OpenSubgroup F) : Subgroup F) := <span class="kw">by</span>
+    <span class="kw">intro</span> m hm hlt hmcomap
+    <span class="kw">have</span> hmemQ : (<a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> (ι x)) ^ m ∈ (H : Subgroup Q) := <span class="kw">by</span>
+      change <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> ((ι x) ^ m) ∈ (H : Subgroup Q) at hmcomap
+      simpa [map_pow] using hmcomap
+    <span class="kw">exact</span> hcosetMin m hm hlt &lt;|
+      (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html#decl-ReidemeisterSchreier.Profinite.openSubgroupRightCoset_eq_basepoint_iff_mem">openSubgroupRightCoset_eq_basepoint_iff_mem</a> (H := H)).2 hmemQ
+  simpa [hpow] using
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/MinimalPower.html#decl-ReidemeisterSchreier.Profinite.exists_basis_comap_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower">exists_basis_comap_openSubgroup_of_extensionClosed_finiteRank_of_minimalGeneratorPower</a>
+      (C := C) hVar hIso hExt hcyc hF <a class="decl-ref" href="../../../../library/ProCGroups/Presentations/Profinite.html#decl-ProCGroups.IsFreePresentationOf._u03c0">π</a> hπcont hπsurj H x hN hpow hpow_ne hmin</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. When a quotient map is present, both sides use the same image coset and the same rewritten letter, so the chosen-<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> equality descends to the quotient presentation. Finiteness is supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient or <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of Schreier generators used by the construction. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ReidemeisterSchreier.Profinite.OpenSubgroups.MinimalPower"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

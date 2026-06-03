@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.ProC.GroupPredicates.Abelian | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.ProC.GroupPredicates.Abelian</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../../library/ProCGroups/ProC.html">ProC</a><span class="sep">/</span><a href="../../../../library/ProCGroups/ProC/GroupPredicates.html">GroupPredicates</a><span class="sep">/</span><span>Abelian</span></div>
+      <h1 class="module-title">ProCGroups.ProC.GroupPredicates.Abelian</h1>
+      <div class="module-meta">1 Theorem</div>
+      <div class="module-overview"><p>This module studies <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> for pro cgroups. Every pro-<a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> group is abelian.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ProCGroups/ProC/GroupPredicates/Standard.html">ProCGroups.ProC.GroupPredicates.Standard</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../../library/ProCGroups/FiniteStepSolvableQuotients/AbelianActions/SlimnessAndTorsion.html">ProCGroups.FiniteStepSolvableQuotients.AbelianActions.SlimnessAndTorsion</a></li><li><a href="../../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/Basic.html">ProCGroups.FiniteStepSolvableQuotients.Commutators.Basic</a></li><li><a href="../../../../library/ProCGroups/ProC.html">ProCGroups.ProC</a></li><li><a href="../../../../library/ProCGroups/ProC/GroupPredicates.html">ProCGroups.ProC.GroupPredicates</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ProCGroups.ProC.IsProabelianGroup.isAbelian">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.IsProabelianGroup.isAbelian">ProCGroups.ProC.IsProabelianGroup.isAbelian</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/GroupPredicates/Abelian.html#L33">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isAbelian (hG : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/InverseLimits/Predicates.html#decl-ProCGroups.ProC.IsProabelianGroup">IsProabelianGroup</a> G) : ∀ a b : G, a * b = b * a</code></pre></section>
+    <section><div class="natural-text"><p>Every pro-<a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.abelian">abelian</a> group is abelian.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : CompactSpace G := IsProCGroup.compactSpace hG
+  letI : T2Space G := IsProCGroup.t2Space hG
+  letI : TotallyDisconnectedSpace G := IsProCGroup.totallyDisconnectedSpace hG
+  <span class="kw">intro</span> a b
+  <span class="kw">have</span> hcomm_mem : ∀ U : OpenNormalSubgroup G, a * b * a⁻¹ * b⁻¹ ∈ (U : Subgroup G) := <span class="kw">by</span>
+    <span class="kw">intro</span> U
+    <span class="kw">have</span> hab :
+        QuotientGroup.mk&#x27; (U : Subgroup G) a * QuotientGroup.mk&#x27; (U : Subgroup G) b =
+          QuotientGroup.mk&#x27; (U : Subgroup G) b * QuotientGroup.mk&#x27; (U : Subgroup G) a :=
+      (hG.quotient_mem FiniteGroupClass.abelian_formation U).2 _ _
+    refine (QuotientGroup.eq_one_iff (N := (U : Subgroup G)) _).1 ?_
+    <span class="kw">have</span> h :=
+      congrArg (<span class="kw">fun</span> z : G ⧸ (U : Subgroup G) =&gt;
+        z * ((QuotientGroup.mk&#x27; (U : Subgroup G) a)⁻¹ *
+          (QuotientGroup.mk&#x27; (U : Subgroup G) b)⁻¹)) hab
+    simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, mul_assoc] using h
+  <span class="kw">have</span> hcomm_one : a * b * a⁻¹ * b⁻¹ = 1 := <span class="kw">by</span>
+    <span class="kw">apply</span> <a class="decl-ref" href="../../../../library/ProCGroups/Profinite/Basic.html#decl-IsProfiniteGroup.eq_one_of_mem_all_openNormalSubgroups">IsProfiniteGroup.eq_one_of_mem_all_openNormalSubgroups</a> (G := G)
+    <span class="kw">intro</span> U
+    <span class="kw">exact</span> hcomm_mem U
+  <span class="kw">have</span> h1 : a * b * a⁻¹ = b := <span class="kw">by</span>
+    <span class="kw">have</span> h := congrArg (<span class="kw">fun</span> x : G =&gt; x * b) hcomm_one
+    simpa [mul_assoc] using h
+  <span class="kw">have</span> h2 : a * b = b * a := <span class="kw">by</span>
+    <span class="kw">have</span> h := congrArg (<span class="kw">fun</span> x : G =&gt; x * a) h1
+    simpa [mul_assoc] using h
+  <span class="kw">exact</span> h2</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.ProC.GroupPredicates.Abelian"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

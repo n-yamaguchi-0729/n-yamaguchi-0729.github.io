@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CrowellExactSequence.Profinite.FiniteRank | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">CrowellExactSequence.Profinite.FiniteRank</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/CrowellExactSequence.html">CrowellExactSequence</a><span class="sep">/</span><a href="../../../library/CrowellExactSequence/Profinite.html">Profinite</a><span class="sep">/</span><span>FiniteRank</span></div>
+      <h1 class="module-title">CrowellExactSequence.Profinite.FiniteRank</h1>
+      <div class="module-meta">2 Theorem | 2 Definition</div>
+      <div class="module-overview"><p>This module develops the Crowell--Blanchfield--Lyndon exact sequence and its completed coordinate forms.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/CrowellExactSequence/Profinite/BlanchfieldLyndon.html">CrowellExactSequence.Profinite.BlanchfieldLyndon</a></li><li><a href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Abelianization.html">ProCGroups.FiniteStepSolvableQuotients.Abelianization</a></li><li><a href="../../../library/ProCGroups/ProC/GroupPredicates/Standard.html">ProCGroups.ProC.GroupPredicates.Standard</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/CrowellExactSequence/Profinite.html">CrowellExactSequence.Profinite</a></li><li><a href="../../../library/Yama2026_Sections_1_And_2_1/main.html">Yama2026_Sections_1_And_2_1.main</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-CrowellExactSequence.finiteRank_freeProCSourceData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.finiteRank_freeProCSourceData">CrowellExactSequence.finiteRank_freeProCSourceData</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/FiniteRank.html#L32">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> finiteRank_freeProCSourceData
+    {sigma : Set ℕ} {r : ℕ} (X : Fin r → F)
+    (hFree : ProCGroups.FreeProC.IsFreeProCGroupOnConvergingSet
+      (ProC := <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a>
+        (ProCGroups.FiniteGroupClass.sigmaGroup.{u} sigma))
+      (Fin r) F X) :
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FreeProCSourceData.html#decl-CrowellExactSequence.FreeProCSourceData">FreeProCSourceData</a> (ProCGroups.ProC.proSigmaProC.{u} sigma) <span class="kw">where</span>
+  basis := ULift.{u} (Fin r)
+  carrier := F
+  <a class="decl-ref" href="../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp.instGroup">instGroup</a> := inferInstance
+  <a class="decl-ref" href="../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp.instTopologicalSpace">instTopologicalSpace</a> := inferInstance
+  <a class="decl-ref" href="../../../library/ProCGroups/ProC/Category/Basic.html#decl-ProCGrp.instIsTopologicalGroup">instIsTopologicalGroup</a> := inferInstance
+  inclusion := <span class="kw">fun</span> i =&gt; X i.down
+  isFree := <span class="kw">by</span>
+    simpa [<a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Standard.html#decl-ProCGroups.ProC.proSigmaProC">ProCGroups.ProC.proSigmaProC</a>] using
+      hFree.precompEquiv (Equiv.ulift : ULift.{u} (Fin r) ≃ Fin r)
+  proCGroup := <span class="kw">by</span>
+    refine
+      { <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/FinitelyGenerated.html#decl-ProCGroups.FreeProC.FiniteRankData.isProC">isProC</a> := <span class="kw">by</span>
+          simpa [<a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Standard.html#decl-ProCGroups.ProC.proSigmaProC">ProCGroups.ProC.proSigmaProC</a>] using hFree.isProC
+        <a class="decl-ref" href="../../../library/ProCGroups/FreeProducts/Concrete.html#decl-isProCGroup">isProCGroup</a> := ?_ }
+    <span class="kw">exact</span> hFree.isProC.mono (D :=
+      (ProCGroups.ProC.proSigmaProC.{u} sigma).<a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finiteQuotientClass</a>) (<span class="kw">by</span>
+      <span class="kw">intro</span> Q _ hQ
+      letI : Finite Q := <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">ProCGroups.FiniteGroupClass.finite</a> hQ
+      <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Standard.html#decl-ProCGroups.ProC.proSigmaProC_finiteQuotientClass_iff">ProCGroups.ProC.proSigmaProC_finiteQuotientClass_iff</a>
+        (sigma := sigma) (Q := Q)).2 hQ)</code></pre></section>
+    <section><div class="natural-text"><p>Package a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-rank free pro-\(\Sigma\) group as CES free-source data.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.finiteRank_freeProCSourceData_basis_card">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.finiteRank_freeProCSourceData_basis_card">CrowellExactSequence.finiteRank_freeProCSourceData_basis_card</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/FiniteRank.html#L61">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> finiteRank_freeProCSourceData_basis_card
+    {sigma : Set ℕ} {r : ℕ} (X : Fin r → F)
+    (hFree : ProCGroups.FreeProC.IsFreeProCGroupOnConvergingSet
+      (ProC := <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a>
+        (ProCGroups.FiniteGroupClass.sigmaGroup.{u} sigma))
+      (Fin r) F X) :
+    Cardinal.mk (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FiniteRank.html#decl-CrowellExactSequence.finiteRank_freeProCSourceData">finiteRank_freeProCSourceData</a> (F := F) X hFree).basis = r</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-rank CES source data has the expected basis cardinality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FiniteRank.html#decl-CrowellExactSequence.finiteRank_freeProCSourceData">finiteRank_freeProCSourceData</a>, Cardinal.mk_fintype, Fintype.card_ulift,
+    Fintype.card_fin]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. The <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module terms are generated by the chosen basis elements, so equality on those generators determines each coordinate map. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage exactness assertions are stable under the <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> isomorphisms used to move between separated and unseparated coordinates. Consequently the completed sequence inherits the same exactness calculation. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-CrowellExactSequence.finiteRank_topologicalAbelianization_sepCoordinateMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.finiteRank_topologicalAbelianization_sepCoordinateMap">CrowellExactSequence.finiteRank_topologicalAbelianization_sepCoordinateMap</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/FiniteRank.html#L73">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> finiteRank_topologicalAbelianization_sepCoordinateMap
+    {sigma : Set ℕ} {r : ℕ} (X : Fin r → F)
+    (hFree : ProCGroups.FreeProC.IsFreeProCGroupOnConvergingSet
+      (ProC := <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a>
+        (ProCGroups.FiniteGroupClass.sigmaGroup.{u} sigma))
+      (Fin r) F X) :=
+  <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FreeExactness.html#decl-CrowellExactSequence.freeProCChosenULift_sepCoordinateMap">freeProCChosenULift_sepCoordinateMap</a>
+    (H := TopologicalAbelianization F)
+    (ProC := ProCGroups.ProC.proSigmaProC.{u} sigma)
+    (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FiniteRank.html#decl-CrowellExactSequence.finiteRank_freeProCSourceData">finiteRank_freeProCSourceData</a> (F := F) X hFree)
+    (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FiniteRank.html#decl-CrowellExactSequence.finiteRank_freeProCSourceData_basis_card">finiteRank_freeProCSourceData_basis_card</a> (F := F) X hFree)
+    (TopologicalAbelianization.mkₜ F)
+    (<span class="kw">by</span>
+      change Function.Surjective (TopologicalAbelianization.mk F)
+      <span class="kw">exact</span> TopologicalAbelianization.surjective_mk F)</code></pre></section>
+    <section><div class="natural-text"><p>The separated coordinate map for the topological abelianization of a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-rank free pro-\(\Sigma\) group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.mem_topDerivedTop_two_of_finiteRank_topologicalAbelianization_sepCoordinateMap_eq_zero">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.mem_topDerivedTop_two_of_finiteRank_topologicalAbelianization_sepCoordinateMap_eq_zero">CrowellExactSequence.mem_topDerivedTop_two_of_finiteRank_topologicalAbelianization_sepCoordinateMap_eq_zero</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/FiniteRank.html#L91">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_topDerivedTop_two_of_finiteRank_topologicalAbelianization_sepCoordinateMap_eq_zero
+    {sigma : Set ℕ} {r : ℕ} (X : Fin r → F)
+    (hFree : ProCGroups.FreeProC.IsFreeProCGroupOnConvergingSet
+      (ProC := <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.finiteGroupClassProCPredicate">ProCGroups.ProC.finiteGroupClassProCPredicate</a>
+        (ProCGroups.FiniteGroupClass.sigmaGroup.{u} sigma))
+      (Fin r) F X)
+    {a : F}
+    (haψ : TopologicalAbelianization.mkₜ F a = 1)
+    (hzero :
+      <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FiniteRank.html#decl-CrowellExactSequence.finiteRank_topologicalAbelianization_sepCoordinateMap">finiteRank_topologicalAbelianization_sepCoordinateMap</a> (F := F) X hFree
+        (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">FoxDifferential.zcSeparatedUniversalDifferential</a>
+          (ProCGroups.ProC.proSigmaProC.{u} sigma).<a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finiteQuotientClass</a>
+          (TopologicalAbelianization.mkₜ F).toMonoidHom a) = 0) :
+    a ∈ <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop">topDerivedTop</a> F 2</code></pre></section>
+    <section><div class="natural-text"><p>If the separated abelianized CES coordinate vector of a kernel element vanishes, the element lies in the second closed derived subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> sourceData := <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FiniteRank.html#decl-CrowellExactSequence.finiteRank_freeProCSourceData">finiteRank_freeProCSourceData</a> (F := F) (sigma := sigma) X hFree
+  <span class="kw">let</span> hbasis := <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FiniteRank.html#decl-CrowellExactSequence.finiteRank_freeProCSourceData_basis_card">finiteRank_freeProCSourceData_basis_card</a> (F := F) X hFree
+  <span class="kw">let</span> ProC := ProCGroups.ProC.proSigmaProC.{u} sigma
+  <span class="kw">let</span> ψ : F →ₜ* TopologicalAbelianization F := TopologicalAbelianization.mkₜ F
+  <span class="kw">have</span> hψsurj : Function.Surjective ψ := <span class="kw">by</span>
+    change Function.Surjective (TopologicalAbelianization.mk F)
+    <span class="kw">exact</span> TopologicalAbelianization.surjective_mk F
+  <span class="kw">let</span> htarget :=
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FreeExactness.html#decl-CrowellExactSequence.freeProCClosedGeneratedTarget_proC_of_surjective">freeProCClosedGeneratedTarget_proC_of_surjective</a>
+      (H := TopologicalAbelianization F) (ProC := ProC) sourceData hbasis ψ hψsurj
+  <span class="kw">have</span> hDzero :
+      <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/ContinuousMagnus/ClosedGeneratedVector.html#decl-CrowellExactSequence.freeProCCompletedFoxDerivativeVectorViaClosedGeneratedProCInteger">freeProCCompletedFoxDerivativeVectorViaClosedGeneratedProCInteger</a>
+        (H := TopologicalAbelianization F) (ProC := ProC) sourceData hbasis ψ htarget a = 0 := <span class="kw">by</span>
+    <span class="kw">have</span> happly := hzero
+    dsimp [<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FiniteRank.html#decl-CrowellExactSequence.finiteRank_topologicalAbelianization_sepCoordinateMap">finiteRank_topologicalAbelianization_sepCoordinateMap</a>, sourceData, hbasis, ProC, ψ] at happly
+    change
+      <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FreeExactness.html#decl-CrowellExactSequence.freeProCChosenULift_sepCoordinateMap">freeProCChosenULift_sepCoordinateMap</a>
+          (H := TopologicalAbelianization F) (ProC := ProC) sourceData hbasis ψ hψsurj
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">FoxDifferential.zcSeparatedUniversalDifferential</a> ProC.finiteQuotientClass
+            ψ.toMonoidHom a) = 0 at happly
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FreeExactness.html#decl-CrowellExactSequence.freeProCChosenULift_sepCoordinateMap_universal">freeProCChosenULift_sepCoordinateMap_universal</a>] at happly
+    simpa [<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/FiniteRank.html#decl-CrowellExactSequence.finiteRank_topologicalAbelianization_sepCoordinateMap">finiteRank_topologicalAbelianization_sepCoordinateMap</a>, sourceData, hbasis, ProC, ψ,
+      <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/ContinuousMagnus/ClosedGeneratedVector.html#decl-CrowellExactSequence.freeProCCompletedFoxDerivativeVectorViaClosedGeneratedProCInteger">freeProCCompletedFoxDerivativeVectorViaClosedGeneratedProCInteger</a>, htarget] using happly
+  <span class="kw">have</span> ha_closed :
+      (⟨a, haψ⟩ : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProCGroups.ProC.ProfiniteKernelSubgroup</a> ψ) ∈
+        <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProCGroups.ProC.ProfiniteKernelSubgroup</a> ψ) :=
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/ContinuousMagnus/KernelClosedCommutator.html#decl-CrowellExactSequence.freeProC_closedGeneratedFoxVector_kernel_le_closedCommutator">freeProC_closedGeneratedFoxVector_kernel_le_closedCommutator</a>
+      (H := TopologicalAbelianization F) (ProC := ProC) sourceData hbasis ψ hψsurj htarget
+      ⟨a, haψ⟩ hDzero
+  <span class="kw">exact</span>
+    (<a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Abelianization.html#decl-ProCGroups.FiniteStepSolvableQuotients.mem_topDerivedTop_two_iff_mem_closedCommutator_topologicalAbelianizationKernel">mem_topDerivedTop_two_iff_mem_closedCommutator_topologicalAbelianizationKernel</a>
+      (G := F) haψ).2 ha_closed</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="CrowellExactSequence.Profinite.FiniteRank"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

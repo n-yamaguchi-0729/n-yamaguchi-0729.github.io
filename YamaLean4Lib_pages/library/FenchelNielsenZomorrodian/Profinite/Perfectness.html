@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FenchelNielsenZomorrodian.Profinite.Perfectness | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">FenchelNielsenZomorrodian.Profinite.Perfectness</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/FenchelNielsenZomorrodian.html">FenchelNielsenZomorrodian</a><span class="sep">/</span><a href="../../../library/FenchelNielsenZomorrodian/Profinite.html">Profinite</a><span class="sep">/</span><span>Perfectness</span></div>
+      <h1 class="module-title">FenchelNielsenZomorrodian.Profinite.Perfectness</h1>
+      <div class="module-meta">5 Theorem</div>
+      <div class="module-overview"><p>This module develops Fenchel--Nielsen--Zomorrodian presentation reductions, period relations, reindexings, and quotient maps.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/FenchelNielsenZomorrodian/Discrete/Arithmetic/PrimeDivisors.html">FenchelNielsenZomorrodian.Discrete.Arithmetic.PrimeDivisors</a></li><li><a href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html">FenchelNielsenZomorrodian.Profinite.FGroup</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/FenchelNielsenZomorrodian/Profinite/DiscreteBridge.html">FenchelNielsenZomorrodian.Profinite.DiscreteBridge</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.commHom_inertia_pow_otherPeriodsLcm_eq_one_of_zeroGenus_noCusps">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.commHom_inertia_pow_otherPeriodsLcm_eq_one_of_zeroGenus_noCusps">FenchelNielsen.ProfiniteFGroup.commHom_inertia_pow_otherPeriodsLcm_eq_one_of_zeroGenus_noCusps</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/Perfectness.html#L27">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> commHom_inertia_pow_otherPeriodsLcm_eq_one_of_zeroGenus_noCusps
+    (Δ : ProfiniteFGroup.{u})
+    (hZero : Δ.signature.orbitGenus = 0)
+    (hNoCusps : Δ.signature.numCusps = 0)
+    {A : <span class="kw">Type</span> u} [CommGroup A]
+    (φ : Δ.carrier →* A) (i : Fin Δ.signature.numPeriods) :
+    φ (Δ.inertia i) ^ <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.otherPeriodsLcm">otherPeriodsLcm</a> Δ.signature i = 1</code></pre></section>
+    <section><div class="natural-text"><p>In a compact <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a>-genus no-cusp profinite Fenchel group, every commutative quotient kills the lcm power of the remaining inertia images.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> ξ : Fin Δ.signature.numPeriods → A := <span class="kw">fun</span> j =&gt; φ (Δ.inertia j)
+  <span class="kw">have</span> hpow : ∀ j : Fin Δ.signature.numPeriods,
+      ξ j ^ Δ.signature.periods j = 1 := <span class="kw">by</span>
+    <span class="kw">intro</span> j
+    <span class="kw">have</span> hsource : Δ.inertia j ^ Δ.signature.periods j = 1 := <span class="kw">by</span>
+      <span class="kw">rw</span> [← Δ.inertia_order j]
+      <span class="kw">exact</span> pow_orderOf_eq_one (Δ.inertia j)
+    simpa [ξ] using congrArg φ hsource
+  <span class="kw">have</span> hprodList :
+      ((List.finRange Δ.signature.numPeriods).map <span class="kw">fun</span> j =&gt; ξ j).prod = 1 := <span class="kw">by</span>
+    <span class="kw">have</span> hrel := congrArg φ Δ.presentation_relation
+    <span class="kw">have</span> hrelFull :
+        (List.map (<span class="kw">fun</span> i : Fin Δ.signature.orbitGenus =&gt;
+            φ ⁅Δ.surfaceA i, Δ.surfaceB i⁆)
+            (List.finRange Δ.signature.orbitGenus)).prod *
+          (List.map (<span class="kw">fun</span> j : Fin Δ.signature.numCusps =&gt; φ (Δ.cusp j))
+            (List.finRange Δ.signature.numCusps)).prod *
+            (List.map (<span class="kw">fun</span> k : Fin Δ.signature.numPeriods =&gt; φ (Δ.inertia k))
+              (List.finRange Δ.signature.numPeriods)).prod = 1 := <span class="kw">by</span>
+      simpa [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>, map_list_prod, Function.comp_def,
+        map_commutatorElement] using hrel
+    <span class="kw">have</span> hSurface :
+        (List.map (<span class="kw">fun</span> i : Fin Δ.signature.orbitGenus =&gt;
+            φ ⁅Δ.surfaceA i, Δ.surfaceB i⁆)
+            (List.finRange Δ.signature.orbitGenus)).prod = 1 := <span class="kw">by</span>
+      <span class="kw">apply</span> List.prod_eq_one
+      <span class="kw">intro</span> x hx
+      rcases List.mem_map.mp hx <span class="kw">with</span> ⟨j, _hj, <span class="kw">rfl</span>⟩
+      exfalso
+      <span class="kw">rw</span> [hZero] at j
+      <span class="kw">exact</span> Nat.not_lt_zero _ j.2
+    <span class="kw">have</span> hCusp :
+        (List.map (<span class="kw">fun</span> j : Fin Δ.signature.numCusps =&gt; φ (Δ.cusp j))
+            (List.finRange Δ.signature.numCusps)).prod = 1 := <span class="kw">by</span>
+      <span class="kw">apply</span> List.prod_eq_one
+      <span class="kw">intro</span> x hx
+      rcases List.mem_map.mp hx <span class="kw">with</span> ⟨j, _hj, <span class="kw">rfl</span>⟩
+      exfalso
+      <span class="kw">rw</span> [hNoCusps] at j
+      <span class="kw">exact</span> Nat.not_lt_zero _ j.2
+    <span class="kw">rw</span> [hSurface, hCusp, one_mul, one_mul] at hrelFull
+    simpa [ξ] using hrelFull
+  <span class="kw">have</span> hprod : ∏ j : Fin Δ.signature.numPeriods, ξ j = 1 := <span class="kw">by</span>
+    simpa [Fin.prod_univ_def] using hprodList
+  <span class="kw">let</span> L := <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.otherPeriodsLcm">otherPeriodsLcm</a> Δ.signature i
+  <span class="kw">have</span> hsplit&#x27; : ((Finset.univ.erase i).prod ξ) * ξ i = 1 := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      ((Finset.univ.erase i).prod ξ) * ξ i = ∏ j, ξ j := <span class="kw">by</span>
+        <span class="kw">exact</span> Finset.prod_erase_mul
+          (s := Finset.univ) (f := ξ) (a := i) (Finset.mem_univ i)
+      _ = 1 := hprod
+  <span class="kw">have</span> hsplit : ξ i * ((Finset.univ.erase i).prod ξ) = 1 := <span class="kw">by</span>
+    simpa [mul_comm] using hsplit&#x27;
+  <span class="kw">have</span> hOthers :
+      ((Finset.univ.erase i).prod ξ) ^ L = 1 := <span class="kw">by</span>
+    <span class="kw">rw</span> [← Finset.prod_pow]
+    refine Finset.prod_eq_one ?_
+    <span class="kw">intro</span> j hj
+    obtain ⟨m, hm⟩ :=
+      Finset.dvd_lcm (s := Finset.univ.erase i)
+        (f := Δ.signature.periods) hj
+    <span class="kw">rw</span> [<span class="kw">show</span> L = Δ.signature.periods j * m <span class="kw">by</span>
+        simpa [L, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.otherPeriodsLcm">otherPeriodsLcm</a>] using hm,
+      pow_mul, hpow j, one_pow]
+  <span class="kw">have</span> hPow : ξ i ^ L = 1 := <span class="kw">by</span>
+    <span class="kw">have</span> hsplitPow := congrArg (<span class="kw">fun</span> a : A =&gt; a ^ L) hsplit
+    <span class="kw">simp</span> only at hsplitPow
+    <span class="kw">rw</span> [mul_pow, hOthers, mul_one] at hsplitPow
+    simpa [L] using hsplitPow
+  simpa [ξ, L] using hPow</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.commHom_inertia_eq_one_of_charPerfectNumericalCondition">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.commHom_inertia_eq_one_of_charPerfectNumericalCondition">FenchelNielsen.ProfiniteFGroup.commHom_inertia_eq_one_of_charPerfectNumericalCondition</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/Perfectness.html#L107">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> commHom_inertia_eq_one_of_charPerfectNumericalCondition
+    (Δ : ProfiniteFGroup.{u})
+    (hChar : Δ.CharPerfectNumericalCondition)
+    {A : <span class="kw">Type</span> u} [CommGroup A]
+    (φ : Δ.carrier →* A)
+    (i : Fin Δ.signature.numPeriods) :
+    φ (Δ.inertia i) = 1</code></pre></section>
+    <section><div class="natural-text"><p>Under the characteristic perfect numerical condition, every commutative quotient kills each inertia image.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases hChar <span class="kw">with</span> ⟨hZero, hNoCusps, hPair⟩
+  <span class="kw">let</span> ξ : Fin Δ.signature.numPeriods → A := <span class="kw">fun</span> j =&gt; φ (Δ.inertia j)
+  <span class="kw">have</span> hpow : ξ i ^ Δ.signature.periods i = 1 := <span class="kw">by</span>
+    <span class="kw">have</span> hsource : Δ.inertia i ^ Δ.signature.periods i = 1 := <span class="kw">by</span>
+      <span class="kw">rw</span> [← Δ.inertia_order i]
+      <span class="kw">exact</span> pow_orderOf_eq_one (Δ.inertia i)
+    simpa [ξ] using congrArg φ hsource
+  <span class="kw">have</span> hPow : ξ i ^ <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.otherPeriodsLcm">otherPeriodsLcm</a> Δ.signature i = 1 :=
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/Perfectness.html#decl-FenchelNielsen.ProfiniteFGroup.commHom_inertia_pow_otherPeriodsLcm_eq_one_of_zeroGenus_noCusps">commHom_inertia_pow_otherPeriodsLcm_eq_one_of_zeroGenus_noCusps</a>
+      Δ hZero hNoCusps φ i
+  <span class="kw">have</span> hCoprimeProd :
+      Nat.Coprime (Δ.signature.periods i)
+        ((Finset.univ.erase i : Finset (Fin Δ.signature.numPeriods)).prod
+          Δ.signature.periods) := <span class="kw">by</span>
+    <span class="kw">rw</span> [Nat.coprime_prod_right_iff]
+    <span class="kw">intro</span> j hj
+    <span class="kw">exact</span> hPair i j (Finset.mem_erase.mp hj).1.symm
+  <span class="kw">have</span> hLDiv :
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.otherPeriodsLcm">otherPeriodsLcm</a> Δ.signature i ∣
+        (Finset.univ.erase i : Finset (Fin Δ.signature.numPeriods)).prod
+          Δ.signature.periods := <span class="kw">by</span>
+    dsimp [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.otherPeriodsLcm">otherPeriodsLcm</a>]
+    <span class="kw">exact</span> Finset.lcm_dvd (<span class="kw">fun</span> j hj =&gt; Finset.dvd_prod_of_mem _ hj)
+  <span class="kw">have</span> hCoprime :
+      Nat.Coprime (Δ.signature.periods i)
+        (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.otherPeriodsLcm">otherPeriodsLcm</a> Δ.signature i) :=
+    hCoprimeProd.of_dvd_right hLDiv
+  <span class="kw">have</span> hOrder : orderOf (ξ i) = 1 := <span class="kw">by</span>
+    <span class="kw">exact</span> Nat.eq_one_of_dvd_coprimes hCoprime
+      (orderOf_dvd_of_pow_eq_one hpow)
+      (orderOf_dvd_of_pow_eq_one hPow)
+  simpa [ξ] using orderOf_eq_one_iff.mp hOrder</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.isPerfect_of_charPerfectNumericalCondition">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.isPerfect_of_charPerfectNumericalCondition">FenchelNielsen.ProfiniteFGroup.isPerfect_of_charPerfectNumericalCondition</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/Perfectness.html#L148">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isPerfect_of_charPerfectNumericalCondition
+    (Δ : ProfiniteFGroup.{u})
+    (hChar : Δ.CharPerfectNumericalCondition) :
+    Δ.IsPerfect</code></pre></section>
+    <section><div class="natural-text"><p>The characteristic perfect numerical condition implies perfectness.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases hChar <span class="kw">with</span> ⟨hZero, hNoCusps, hPair⟩
+  <span class="kw">let</span> Q : <span class="kw">Type</span> u :=
+    <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.MaxSolvQuot">ProCGroups.FiniteStepSolvableQuotients.MaxSolvQuot</a> Δ.carrier 1
+  <span class="kw">let</span> q : Δ.carrier →ₜ* Q :=
+    <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.continuousToMaxSolvQuot">ProCGroups.FiniteStepSolvableQuotients.continuousToMaxSolvQuot</a>
+      Δ.carrier 1
+  <span class="kw">have</span> hComm : Std.Commutative (<span class="kw">fun</span> a b : Q =&gt; a * b) := <span class="kw">by</span>
+    refine (Subgroup.Normal.quotient_commutative_iff_commutator_le
+      (N := <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop">ProCGroups.FiniteStepSolvableQuotients.topDerivedTop</a>
+        Δ.carrier 1)).2 ?_
+    change
+      ⁅(⊤ : Subgroup Δ.carrier), (⊤ : Subgroup Δ.carrier)⁆ ≤
+        <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.topDerivedTop">ProCGroups.FiniteStepSolvableQuotients.topDerivedTop</a> Δ.carrier 1
+    change
+      ⁅(⊤ : Subgroup Δ.carrier), (⊤ : Subgroup Δ.carrier)⁆ ≤
+        (⁅(⊤ : Subgroup Δ.carrier), (⊤ : Subgroup Δ.carrier)⁆).<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.TopologicallyCharacteristic.topologicalClosure">topologicalClosure</a>
+    <span class="kw">exact</span> Subgroup.le_topologicalClosure
+      (s := ⁅(⊤ : Subgroup Δ.carrier), (⊤ : Subgroup Δ.carrier)⁆)
+  letI : CommGroup Q :=
+    { inferInstanceAs (Group Q) <span class="kw">with</span>
+      mul_comm := hComm.comm }
+  <span class="kw">have</span> hInertia :
+      ∀ i : Fin Δ.signature.numPeriods, q (Δ.inertia i) = 1 := <span class="kw">by</span>
+    <span class="kw">intro</span> i
+    <span class="kw">exact</span>
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/Perfectness.html#decl-FenchelNielsen.ProfiniteFGroup.commHom_inertia_eq_one_of_charPerfectNumericalCondition">commHom_inertia_eq_one_of_charPerfectNumericalCondition</a>
+        Δ ⟨hZero, hNoCusps, hPair⟩ q.toMonoidHom i
+  <span class="kw">have</span> hq_eq_one : q = 1 := <span class="kw">by</span>
+    <span class="kw">apply</span>
+      <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.continuousMonoidHom_ext_of_topologicallyGenerates">ProCGroups.Generation.continuousMonoidHom_ext_of_topologicallyGenerates</a>
+        Δ.presentation_generates
+    <span class="kw">intro</span> x hx
+    rcases hx <span class="kw">with</span> hxABC | hxInertia
+    · rcases hxABC <span class="kw">with</span> hxAB | hxCusp
+      · rcases hxAB <span class="kw">with</span> hxA | hxB
+        · rcases hxA <span class="kw">with</span> ⟨i, <span class="kw">rfl</span>⟩
+          exfalso
+          <span class="kw">rw</span> [hZero] at i
+          <span class="kw">exact</span> Nat.not_lt_zero _ i.2
+        · rcases hxB <span class="kw">with</span> ⟨i, <span class="kw">rfl</span>⟩
+          exfalso
+          <span class="kw">rw</span> [hZero] at i
+          <span class="kw">exact</span> Nat.not_lt_zero _ i.2
+      · rcases hxCusp <span class="kw">with</span> ⟨j, <span class="kw">rfl</span>⟩
+        exfalso
+        <span class="kw">rw</span> [hNoCusps] at j
+        <span class="kw">exact</span> Nat.not_lt_zero _ j.2
+    · rcases hxInertia <span class="kw">with</span> ⟨i, <span class="kw">rfl</span>⟩
+      simpa using hInertia i
+  <span class="kw">apply</span> le_antisymm
+  · <span class="kw">exact</span> le_top
+  · <span class="kw">intro</span> x _hx
+    <span class="kw">have</span> hxq : q x = 1 := <span class="kw">by</span>
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.closedDerivedSeries_succ">ProCGroups.FiniteStepSolvableQuotients.closedDerivedSeries_succ</a>,
+  <a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.closedDerivedSeries_zero">ProCGroups.FiniteStepSolvableQuotients.closedDerivedSeries_zero</a>, hq_eq_one, ContinuousMonoidHom.one_toFun]
+    <span class="kw">exact</span>
+      (<a class="decl-ref" href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html#decl-ProCGroups.FiniteStepSolvableQuotients.continuousToMaxSolvQuot_eq_one_iff">ProCGroups.FiniteStepSolvableQuotients.continuousToMaxSolvQuot_eq_one_iff</a>
+        (G := Δ.carrier) (m := 1) (x := x)).1 hxq</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For the Fenchel--Nielsen--Zomorrodian relations, the period calculation checks that each elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has image of the prescribed order, and the product relation is verified by multiplying the images in the stated order. Divisibility, lcm, or gcd hypotheses are used precisely to make the period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish in the target quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.exists_prime_dvd_two_periods_of_isNonPerfect_zeroGenus_noCusps">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.exists_prime_dvd_two_periods_of_isNonPerfect_zeroGenus_noCusps">FenchelNielsen.ProfiniteFGroup.exists_prime_dvd_two_periods_of_isNonPerfect_zeroGenus_noCusps</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/Perfectness.html#L215">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_prime_dvd_two_periods_of_isNonPerfect_zeroGenus_noCusps
+    (Δ : ProfiniteFGroup.{u})
+    (hNonPerfect : Δ.IsNonPerfect)
+    (hZero : Δ.signature.orbitGenus = 0)
+    (hNoCusps : Δ.signature.numCusps = 0) :
+    ∃ p : ℕ, p.Prime ∧
+      ∃ i j : Fin Δ.signature.numPeriods,
+        i ≠ j ∧ p ∣ Δ.signature.periods i ∧
+          p ∣ Δ.signature.periods j</code></pre></section>
+    <section><div class="natural-text"><p>Non-perfect compact <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a>-genus Fenchel groups have two periods with a common prime divisor. This numerical extraction is used directly by the compact discrete bridge, so the bridge does not need to prove non-perfectness again on the discrete presentation side.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Arithmetic/PrimeDivisors.html#decl-FenchelNielsen.not_pairwiseCoprimeFamily_iff_exists_prime_dvd_two">not_pairwiseCoprimeFamily_iff_exists_prime_dvd_two</a>
+      (periods := Δ.signature.periods)).mp
+      (<span class="kw">by</span>
+        <span class="kw">intro</span> hPair
+        <span class="kw">exact</span> hNonPerfect
+          (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/Perfectness.html#decl-FenchelNielsen.ProfiniteFGroup.isPerfect_of_charPerfectNumericalCondition">isPerfect_of_charPerfectNumericalCondition</a> Δ ⟨hZero, hNoCusps, hPair⟩))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.numPeriods_eq_two_of_isNonPerfect_zeroGenus_noCusps_not_three">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.numPeriods_eq_two_of_isNonPerfect_zeroGenus_noCusps_not_three">FenchelNielsen.ProfiniteFGroup.numPeriods_eq_two_of_isNonPerfect_zeroGenus_noCusps_not_three</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/Perfectness.html#L234">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> numPeriods_eq_two_of_isNonPerfect_zeroGenus_noCusps_not_three
+    (Δ : ProfiniteFGroup.{u})
+    (hNonPerfect : Δ.IsNonPerfect)
+    (hZero : Δ.signature.orbitGenus = 0)
+    (hNoCusps : Δ.signature.numCusps = 0)
+    (hNotThree : ¬ 3 ≤ Δ.signature.numPeriods) :
+    Δ.signature.numPeriods = 2</code></pre></section>
+    <section><div class="natural-text"><p>In the compact <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a>-genus non-perfect branch, fewer than three periods forces exactly two periods. This is the numerical boundary case used by the direct <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a> quotient construction.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/Perfectness.html#decl-FenchelNielsen.ProfiniteFGroup.exists_prime_dvd_two_periods_of_isNonPerfect_zeroGenus_noCusps">exists_prime_dvd_two_periods_of_isNonPerfect_zeroGenus_noCusps</a>
+      Δ hNonPerfect hZero hNoCusps <span class="kw">with</span>
+    ⟨_p, _hpPrime, i, j, hij, _hpi, _hpj⟩
+  <span class="kw">have</span> hvne : i.val ≠ j.val := <span class="kw">by</span>
+    <span class="kw">intro</span> h
+    <span class="kw">exact</span> hij (Fin.ext h)
+  <span class="kw">have</span> hi := i.2
+  <span class="kw">have</span> hj := j.2
+  omega</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FenchelNielsenZomorrodian.Profinite.Perfectness"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

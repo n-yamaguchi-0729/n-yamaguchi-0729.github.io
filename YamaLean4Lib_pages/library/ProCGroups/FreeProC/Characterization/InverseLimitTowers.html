@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.FreeProC.Characterization.InverseLimitTowers | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.FreeProC.Characterization.InverseLimitTowers</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../../library/ProCGroups/FreeProC.html">FreeProC</a><span class="sep">/</span><a href="../../../../library/ProCGroups/FreeProC/Characterization.html">Characterization</a><span class="sep">/</span><span>InverseLimitTowers</span></div>
+      <h1 class="module-title">ProCGroups.FreeProC.Characterization.InverseLimitTowers</h1>
+      <div class="module-meta">6 Theorem | 4 Definition | 1 Abbreviation | 2 Structure | 5 Instance</div>
+      <div class="module-overview"><p>This module supplies the topological part of the construction. It checks continuity and stagewise neighborhood properties so that the completed object inherits the required topology.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ProCGroups/FreeProC/Characterization/EmbeddingProblems.html">ProCGroups.FreeProC.Characterization.EmbeddingProblems</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ProCGroups/FreeProC.html">ProCGroups.FreeProC</a></li><li><a href="../../../../library/ProCGroups/FreeProC/Characterization.html">ProCGroups.FreeProC.Characterization</a></li><li><a href="../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a></li><li><a href="../../../../library/ReidemeisterSchreier/Profinite.html">ReidemeisterSchreier.Profinite</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl structure" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L31">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> CountableSurjectiveFreeProCSystem
+    (ProC : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicate.html#decl-ProCGroups.ProC.ProCGroupPredicate">ProCGroups.ProC.ProCGroupPredicate</a>) <span class="kw">where</span>
+  stage : ℕ → <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-FreeProCGroupOnConvergingSetData">FreeProCGroupOnConvergingSetData</a> (ProC := ProC)
+  transition :
+    ∀ {m n : ℕ}, m ≤ n → (stage n).carrier →* (stage m).carrier
+  continuous_transition :
+    ∀ {m n : ℕ} (hmn : m ≤ n), Continuous (transition hmn)
+  transition_id :
+    ∀ n : ℕ, transition (le_rfl : n ≤ n) = MonoidHom.id (stage n).carrier
+  transition_comp :
+    ∀ {l m n : ℕ} (hlm : l ≤ m) (hmn : m ≤ n),
+      (transition hlm).comp (transition hmn) = transition (hlm.trans hmn)
+  surjective_transition :
+    ∀ {m n : ℕ} (hmn : m ≤ n), Function.Surjective (transition hmn)</code></pre></section>
+    <section><div class="natural-text"><p>A countable surjective inverse system of free pro-\(C\) groups. This record stores the transition maps for all m \(\le\) n, together with the identity and composition laws. Its limit is the canonical <a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inverse limit supplied by InverseSystems.InverseSystem.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.bonding">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.bonding">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.bonding</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L51">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> bonding (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) (n : ℕ) :
+    (T.stage (n + 1)).carrier →* (T.stage n).carrier :=
+  T.transition (Nat.le_succ n)</code></pre></section>
+    <section><div class="natural-text"><p>The adjacent bonding map in the countable system.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.continuous_bonding">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.continuous_bonding">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.continuous_bonding</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L55">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_bonding (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) (n : ℕ) :
+    Continuous (T.bonding n)</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.bonding">bonding</a> map in the countable free pro-\(C\) system is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>T.continuous_transition (Nat.le_succ n)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Continuity is checked by composing with all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient projections; each composite is a continuous map between <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> or profinite quotient spaces. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For surjectivity, choose a <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of the target coordinate and lift it through the underlying surjective group, quotient, or coefficient map. The defining formula for the induced map sends the constructed preimage to the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> at every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, so inverse-limit extensionality gives the required global preimage.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.surjective_bonding">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.surjective_bonding">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.surjective_bonding</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L59">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> surjective_bonding (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) (n : ℕ) :
+    Function.Surjective (T.bonding n)</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.bonding">bonding</a> maps in the countable surjective free pro-\(C\) system are surjective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>T.surjective_transition (Nat.le_succ n)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For surjectivity, choose a <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of the target coordinate and lift it through the underlying surjective group, quotient, or coefficient map. The defining formula for the induced map sends the constructed preimage to the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> at every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, so inverse-limit extensionality gives the required global preimage. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.inverseSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.inverseSystem">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.inverseSystem</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L64">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> inverseSystem (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := ℕ) <span class="kw">where</span>
+  X := <span class="kw">fun</span> n =&gt; (T.stage n).carrier
+  topologicalSpace := <span class="kw">fun</span> n =&gt; inferInstance
+  map := <span class="kw">fun</span> {_m _n} hmn =&gt; T.transition hmn
+  continuous_map := <span class="kw">fun</span> {_m _n} hmn =&gt; T.continuous_transition hmn
+  map_id := <span class="kw">by</span>
+    <span class="kw">intro</span> n
+    funext x
+    simpa using congrArg (<span class="kw">fun</span> f : (T.stage n).carrier →* (T.stage n).carrier =&gt; f x)
+      (T.transition_id n)
+  map_comp := <span class="kw">by</span>
+    <span class="kw">intro</span> l m n hlm hmn
+    funext x
+    simpa [Function.comp, MonoidHom.comp_apply] using
+      congrArg (<span class="kw">fun</span> f : (T.stage n).carrier →* (T.stage l).carrier =&gt; f x)
+        (T.transition_comp hlm hmn)</code></pre></section>
+    <section><div class="natural-text"><p>The underlying inverse system associated to the countable tower data.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instGroupInverseSystemStage">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instGroupInverseSystemStage">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instGroupInverseSystemStage</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L82">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instGroupInverseSystemStage (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC)
+    (n : ℕ) : Group (T.inverseSystem.X n) := <span class="kw">by</span>
+  change Group (T.stage n).carrier
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>The constructed carrier inherits its group structure from the coordinatewise group structure of the construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instIsTopologicalGroupInverseSystemStage">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instIsTopologicalGroupInverseSystemStage">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instIsTopologicalGroupInverseSystemStage</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L87">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instIsTopologicalGroupInverseSystemStage (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC)
+    (n : ℕ) : IsTopologicalGroup (T.inverseSystem.X n) := <span class="kw">by</span>
+  change IsTopologicalGroup (T.stage n).carrier
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>The object is a topological group with the induced group operations and topology.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.isGroupSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.isGroupSystem">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.isGroupSystem</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L93">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> isGroupSystem (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.IsGroupSystem">IsGroupSystem</a> T.inverseSystem <span class="kw">where</span>
+  <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a> := <span class="kw">by</span>
+    <span class="kw">intro</span> m n hmn
+    <span class="kw">exact</span> (T.transition hmn).<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>
+  <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a> := <span class="kw">by</span>
+    <span class="kw">intro</span> m n hmn x y
+    <span class="kw">exact</span> (T.transition hmn).<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a> x y
+  map_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> m n hmn x
+    <span class="kw">exact</span> (T.transition hmn).map_inv x</code></pre></section>
+    <section><div class="natural-text"><p>The free pro-\(C\) construction forms a group system satisfying the corresponding universal or quotient-level property.</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.limitCarrier">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.limitCarrier">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.limitCarrier</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L106">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> limitCarrier (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) : <span class="kw">Type</span> u :=
+  T.inverseSystem.inverseLimit</code></pre></section>
+    <section><div class="natural-text"><p>The canonical inverse-limit carrier of a countable surjective free pro-\(C\) system.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instGroupLimitCarrier">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instGroupLimitCarrier">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instGroupLimitCarrier</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L109">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instGroupLimitCarrier (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) :
+    Group T.limitCarrier := <span class="kw">by</span>
+  letI : <a class="decl-ref" href="../../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.IsGroupSystem">IsGroupSystem</a> T.inverseSystem := T.isGroupSystem
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>The constructed carrier inherits its group structure from the coordinatewise group structure of the construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instTopologicalSpaceLimitCarrier">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instTopologicalSpaceLimitCarrier">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instTopologicalSpaceLimitCarrier</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L114">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instTopologicalSpaceLimitCarrier (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) :
+    TopologicalSpace T.limitCarrier := <span class="kw">by</span>
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>The constructed object carries the topological space structure inherited from its construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instIsTopologicalGroupLimitCarrier">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instIsTopologicalGroupLimitCarrier">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.instIsTopologicalGroupLimitCarrier</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L118">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instIsTopologicalGroupLimitCarrier (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) :
+    IsTopologicalGroup T.limitCarrier := <span class="kw">by</span>
+  letI : <a class="decl-ref" href="../../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.IsGroupSystem">IsGroupSystem</a> T.inverseSystem := T.isGroupSystem
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>The object is a topological group with the induced group operations and topology.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.projection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.projection">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.projection</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L124">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> projection (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) (n : ℕ) :
+    T.limitCarrier →* (T.stage n).carrier := <span class="kw">by</span>
+  letI : <a class="decl-ref" href="../../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.IsGroupSystem">IsGroupSystem</a> T.inverseSystem := T.isGroupSystem
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.projectionHom">projectionHom</a> (S := T.inverseSystem) n</code></pre></section>
+    <section><div class="natural-text"><p>The canonical projection homomorphism from the inverse limit to a stage.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.continuous_projection">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.continuous_projection">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.continuous_projection</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L129">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_projection (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) (n : ℕ) :
+    Continuous (T.projection n)</code></pre></section>
+    <section><div class="natural-text"><p>Each canonical projection from an inverse limit is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [projection, <a class="decl-ref" href="../../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.projectionHom">projectionHom</a>] using T.inverseSystem.continuous_projection n</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Continuity is checked by composing with all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient projections; each composite is a continuous map between <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> or profinite quotient spaces. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For surjectivity, choose a <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of the target coordinate and lift it through the underlying surjective group, quotient, or coefficient map. The defining formula for the induced map sends the constructed preimage to the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> at every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, so inverse-limit extensionality gives the required global preimage. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L133">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> compatible (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) (n : ℕ)
+    (x : T.limitCarrier) :
+    T.bonding n (T.projection (n + 1) x) = T.projection n x</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.bonding">bonding</a> maps in the countable surjective free pro-\(C\) system are compatible with the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient projections.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [<a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.bonding">bonding</a>, projection, <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.inverseSystem">inverseSystem</a>] using
+    T.inverseSystem.projection_compatible x n (n + 1) (Nat.le_succ n)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their compatible quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define compatible data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the compatible coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For surjectivity, choose a <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of the target coordinate and lift it through the underlying surjective group, quotient, or coefficient map. The defining formula for the induced map sends the constructed preimage to the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> at every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, so inverse-limit extensionality gives the required global preimage. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.isInverseLimit_projection">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.isInverseLimit_projection">ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.isInverseLimit_projection</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L140">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isInverseLimit_projection (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) :
+    T.inverseSystem.IsInverseLimit (<span class="kw">fun</span> n =&gt; T.projection n)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical projection family satisfies the inverse-limit universal property.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : <a class="decl-ref" href="../../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.IsGroupSystem">IsGroupSystem</a> T.inverseSystem := T.isGroupSystem
+  simpa [projection] using T.inverseSystem.isInverseLimit_projection</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Continuity is checked by composing with all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient projections; each composite is a continuous map between <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> or profinite quotient spaces. Kernel and image statements are verified after quotienting by sufficiently small open normal subgroups, where they become ordinary <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group calculations. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For surjectivity, choose a <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of the target coordinate and lift it through the underlying surjective group, quotient, or coefficient map. The defining formula for the induced map sends the constructed preimage to the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> at every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, so inverse-limit extensionality gives the required global preimage. Projection and transition formulas are proved at an arbitrary <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage. Both sides use the same quotient map on the support and the same coefficient map on the coefficient, so they agree on singleton basis elements; <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity extend the equality to the whole <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage group algebra.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl structure" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveSystemFreenessCriterion">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveSystemFreenessCriterion">ProCGroups.FreeProC.Characterization.CountableSurjectiveSystemFreenessCriterion</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L151">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> CountableSurjectiveSystemFreenessCriterion
+    {ProC : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicate.html#decl-ProCGroups.ProC.ProCGroupPredicate">ProCGroups.ProC.ProCGroupPredicate</a>}
+    (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC) : <span class="kw">Prop</span> <span class="kw">where</span>
+  free_limit_of_countable_generating_family :
+    Nonempty (<a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.ConvergingGeneratingMap">ConvergingGeneratingMap</a> ℕ T.limitCarrier) →
+      ∃ Fdata : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-FreeProCGroupOnConvergingSetData">FreeProCGroupOnConvergingSetData</a> (ProC := ProC),
+        Nonempty (Fdata.carrier ≃ₜ* T.limitCarrier)</code></pre></section>
+    <section><div class="natural-text"><p>External freeness input for countable surjective inverse systems. The inverse-system data now determines the limit object itself; this criterion only records the additional mathematical input needed to identify that canonical limit as a free pro-\(C\) group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveSystemFreenessCriterion.apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveSystemFreenessCriterion.apply">ProCGroups.FreeProC.Characterization.CountableSurjectiveSystemFreenessCriterion.apply</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#L162">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> <span class="kw">apply</span>
+    {ProC : <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicate.html#decl-ProCGroups.ProC.ProCGroupPredicate">ProCGroups.ProC.ProCGroupPredicate</a>}
+    (T : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem">CountableSurjectiveFreeProCSystem</a> ProC)
+    (hcrit : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveSystemFreenessCriterion">CountableSurjectiveSystemFreenessCriterion</a> T)
+    (hcount : Nonempty (<a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.ConvergingGeneratingMap">ConvergingGeneratingMap</a> ℕ T.limitCarrier)) :
+    ∃ Fdata : <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Basic.html#decl-FreeProCGroupOnConvergingSetData">FreeProCGroupOnConvergingSetData</a> (ProC := ProC),
+      Nonempty (Fdata.carrier ≃ₜ* T.limitCarrier)</code></pre></section>
+    <section><div class="natural-text"><p>Apply the freeness criterion to the canonical inverse limit of a countable system.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>hcrit.free_limit_of_countable_generating_family hcount</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For surjectivity, choose a <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of the target coordinate and lift it through the underlying surjective group, quotient, or coefficient map. The defining formula for the induced map sends the constructed preimage to the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> at every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, so inverse-limit extensionality gives the required global preimage. For equivalence and homeomorphism statements, the two <a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are composed in both orders and evaluated on the coordinates that determine the source. Each composite reduces to the identity transition or to the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> identity on <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages, so the algebraic inverse laws and the topological inverse laws follow simultaneously.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.FreeProC.Characterization.InverseLimitTowers"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

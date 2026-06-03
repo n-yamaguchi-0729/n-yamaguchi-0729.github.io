@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReidemeisterSchreier.Discrete.OpenSubgroups.Words.NielsenSchreierCompat | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../../download/index.html">Download</a></nav>
+  <div class="header-current">ReidemeisterSchreier.Discrete.OpenSubgroups.Words.NielsenSchreierCompat</div>
+  <form class="search-form" action="../../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a><span class="sep">/</span><a href="../../../../../library/ReidemeisterSchreier/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups.html">OpenSubgroups</a><span class="sep">/</span><a href="../../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Words.html">Words</a><span class="sep">/</span><span>NielsenSchreierCompat</span></div>
+      <h1 class="module-title">ReidemeisterSchreier.Discrete.OpenSubgroups.Words.NielsenSchreierCompat</h1>
+      <div class="module-meta">1 Lemma | 1 Definition</div>
+      <div class="module-overview"><p>This module develops the rewriting and basis constructions behind the subgroup calculations. It tracks words and relations through the chosen transversal to obtain the required presentation or basis statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../../library/ReidemeisterSchreier/Groupoid.html">ReidemeisterSchreier.Groupoid</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a></li><li><a href="../../../../../library/ReidemeisterSchreier/Discrete.html">ReidemeisterSchreier.Discrete</a></li><li><a href="../../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups.html">ReidemeisterSchreier.Discrete.OpenSubgroups</a></li><li><a href="../../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/PrefixTree.html">ReidemeisterSchreier.Discrete.OpenSubgroups.PrefixTree</a></li><li><a href="../../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Words.html">ReidemeisterSchreier.Discrete.OpenSubgroups.Words</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.FreeGroupBasis.actionGroupoidIsFree">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.FreeGroupBasis.actionGroupoidIsFree">ReidemeisterSchreier.Discrete.OpenSubgroups.FreeGroupBasis.actionGroupoidIsFree</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Words/NielsenSchreierCompat.html#L27">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> FreeGroupBasis.actionGroupoidIsFree
+    {ι G A : <span class="kw">Type</span> u} [Group G] [MulAction G A] (b : FreeGroupBasis ι G) :
+    IsFreeGroupoid (ActionCategory G A) <span class="kw">where</span>
+  quiverGenerators :=
+    ⟨<span class="kw">fun</span> a b&#x27; =&gt; { i : ι // b i • a.back = b&#x27;.back }⟩
+  of := <span class="kw">fun</span> (e : Subtype _) =&gt; ⟨b e, e.property⟩
+  unique_lift := <span class="kw">by</span>
+    <span class="kw">intro</span> X _ f
+    <span class="kw">let</span> f&#x27; : ι → (A → X) ⋊[mulAutArrow] G := <span class="kw">fun</span> i =&gt;
+      ⟨<span class="kw">fun</span> a =&gt;
+          @f ⟨(), (b i)⁻¹ • a⟩ ⟨(), a⟩
+            ⟨i, smul_inv_smul (b i) a⟩,
+        b i⟩
+    <span class="kw">let</span> F&#x27; : G →* (A → X) ⋊[mulAutArrow] G := b.lift f&#x27;
+    <span class="kw">have</span> hF&#x27; : ∀ i, F&#x27; (b i) = f&#x27; i := congrFun (b.lift.left_inv f&#x27;)
+    refine ⟨uncurry F&#x27; ?_, ?_, ?_⟩
+    · <span class="kw">intro</span> g
+      suffices SemidirectProduct.rightHom.comp F&#x27; = MonoidHom.id G <span class="kw">by</span>
+        <span class="kw">exact</span> DFunLike.ext_iff.mp this g
+      <span class="kw">apply</span> b.ext_hom
+      <span class="kw">intro</span> i
+      <span class="kw">rw</span> [MonoidHom.comp_apply, hF&#x27; i]
+      <span class="kw">rfl</span>
+    · rintro ⟨⟨⟩, a : A⟩ ⟨⟨⟩, b&#x27;⟩ ⟨i, h : b i • a = b&#x27;⟩
+      change (F&#x27; (b i)).left _ = _
+      <span class="kw">rw</span> [hF&#x27; i]
+      <span class="kw">cases</span> inv_smul_eq_iff.mpr h.symm
+      <span class="kw">rfl</span>
+    · <span class="kw">intro</span> E hE
+      <span class="kw">have</span> hcurried : curry E = F&#x27; := <span class="kw">by</span>
+        <span class="kw">apply</span> b.ext_hom
+        <span class="kw">intro</span> i
+        ext a
+        · convert hE ⟨(), (b i)⁻¹ • a⟩ ⟨(), a⟩ ⟨i, smul_inv_smul (b i) a⟩
+          <span class="kw">rw</span> [hF&#x27; i]
+        · <span class="kw">rw</span> [hF&#x27; i]
+          <span class="kw">rfl</span>
+      <span class="kw">apply</span> Functor.hext
+      · <span class="kw">intro</span>
+        <span class="kw">apply</span> Unit.ext
+      · refine ActionCategory.cases ?_
+        <span class="kw">intro</span> t g
+        <span class="kw">simp</span> only [← hcurried, uncurry_map, curry_apply_left, coe_back, homOfPair.val]
+        <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>An explicit free-group basis makes the corresponding action groupoid free with controlled <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> labels.</p></div></section>
+  </div>
+</section>
+<section class="decl lemma" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.actionCategory_eq_of_back_eq">
+  <div class="decl-head">
+    <span class="kind lemma">Lemma</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.actionCategory_eq_of_back_eq">ReidemeisterSchreier.Discrete.OpenSubgroups.actionCategory_eq_of_back_eq</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Words/NielsenSchreierCompat.html#L72">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">lemma</span> actionCategory_eq_of_back_eq {M X : <span class="kw">Type</span> u} [Monoid M] [MulAction M X]
+    {u v : ActionCategory M X} (h : u.back = v.back) : u = v</code></pre></section>
+    <section><div class="natural-text"><p>Two action-category objects are equal when their underlying points are equal.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">cases</span> u
+  <span class="kw">cases</span> v
+  <span class="kw">cases</span> h
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ReidemeisterSchreier.Discrete.OpenSubgroups.Words.NielsenSchreierCompat"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../../assets/site.js" data-root="../../../../../"></script>
+</body>
+</html>

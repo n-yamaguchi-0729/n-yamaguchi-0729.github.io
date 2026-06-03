@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FenchelNielsenZomorrodian.Profinite.PositiveGenusQuotient | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">FenchelNielsenZomorrodian.Profinite.PositiveGenusQuotient</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/FenchelNielsenZomorrodian.html">FenchelNielsenZomorrodian</a><span class="sep">/</span><a href="../../../library/FenchelNielsenZomorrodian/Profinite.html">Profinite</a><span class="sep">/</span><span>PositiveGenusQuotient</span></div>
+      <h1 class="module-title">FenchelNielsenZomorrodian.Profinite.PositiveGenusQuotient</h1>
+      <div class="module-meta">14 Theorem | 10 Definition | 2 Abbreviation | 3 Instance</div>
+      <div class="module-overview"><p>This module develops Fenchel--Nielsen--Zomorrodian presentation reductions, period relations, reindexings, and quotient maps.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html">FenchelNielsenZomorrodian.Discrete.Coordinates.FenchelPeriodCoordinate</a></li><li><a href="../../../library/FenchelNielsenZomorrodian/Discrete/GroupTheory/DerivedSeries.html">FenchelNielsenZomorrodian.Discrete.GroupTheory.DerivedSeries</a></li><li><a href="../../../library/FenchelNielsenZomorrodian/Profinite/SmoothQuotient.html">FenchelNielsenZomorrodian.Profinite.SmoothQuotient</a></li><li>Mathlib.GroupTheory.SemidirectProduct</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/FenchelNielsenZomorrodian/Profinite/MainTheorem.html">FenchelNielsenZomorrodian.Profinite.MainTheorem</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl abbrev" id="decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L26">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> PositiveGenusSmoothBase (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :=
+  Multiplicative (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.FenchelPeriodCoordinate">FenchelPeriodCoordinate</a> σ × <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.FenchelPeriodCoordinate">FenchelPeriodCoordinate</a> σ)</code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus smooth base packages the quotient data used for the smooth action construction.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSwap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSwap">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSwap</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L29">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> positiveGenusSmoothSwap
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    MulAut (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">PositiveGenusSmoothBase</a> σ) <span class="kw">where</span>
+  toFun x :=
+    Multiplicative.ofAdd
+      ((Multiplicative.toAdd x).2, (Multiplicative.toAdd x).1)
+  invFun x :=
+    Multiplicative.ofAdd
+      ((Multiplicative.toAdd x).2, (Multiplicative.toAdd x).1)
+  left_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">cases</span> x
+    <span class="kw">rfl</span>
+  right_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">cases</span> x
+    <span class="kw">rfl</span>
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">cases</span> x
+    <span class="kw">cases</span> y
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus smooth swap satisfies the defining <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> relations.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.zmod_two_eq_zero_or_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.zmod_two_eq_zero_or_one">FenchelNielsen.ProfiniteFGroup.zmod_two_eq_zero_or_one</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L52">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> zmod_two_eq_zero_or_one (z : ZMod 2) :
+    z = 0 ∨ z = 1</code></pre></section>
+    <section><div class="natural-text"><p>The zmod two equality <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> or <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> is equal to <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> after applying the defining relation or quotient formula in the Fenchel--Nielsen--Zomorrodian presentation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hzlt : z.val &lt; 2 := ZMod.val_lt z
+  <span class="kw">have</span> hval : z.val = 0 ∨ z.val = 1 := <span class="kw">by</span> omega
+  rcases hval <span class="kw">with</span> h | h
+  · left
+    <span class="kw">rw</span> [← ZMod.natCast_zmod_val z, h]
+    norm_num
+  · right
+    <span class="kw">rw</span> [← ZMod.natCast_zmod_val z, h]
+    norm_num</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Kernel and normal-closure claims are proved by showing that each rewritten relator lies in the generated normal subgroup and that the quotient map kills exactly those relations required by the presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothAction">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothAction">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothAction</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L64">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> positiveGenusSmoothAction
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    Multiplicative (ZMod 2) →* MulAut (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">PositiveGenusSmoothBase</a> σ) <span class="kw">where</span>
+  toFun t :=
+    <span class="kw">if</span> Multiplicative.toAdd t = (0 : ZMod 2) <span class="kw">then</span>
+      1
+    <span class="kw">else</span>
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSwap">positiveGenusSmoothSwap</a> σ
+  map_one&#x27; := <span class="kw">by</span> <span class="kw">simp</span> only [toAdd_one, ↓reduceIte]
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> a b
+    <span class="kw">have</span> ha := <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.zmod_two_eq_zero_or_one">zmod_two_eq_zero_or_one</a> (Multiplicative.toAdd a)
+    <span class="kw">have</span> hb := <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.zmod_two_eq_zero_or_one">zmod_two_eq_zero_or_one</a> (Multiplicative.toAdd b)
+    rcases ha <span class="kw">with</span> ha | ha &lt;;&gt; rcases hb <span class="kw">with</span> hb | hb
+    · ext x : 1
+      <span class="kw">cases</span> x
+      <span class="kw">simp</span> only [toAdd_mul, ha, hb, add_zero, ↓reduceIte, MulAut.one_apply, mul_one]
+    · ext x : 1
+      <span class="kw">cases</span> x
+      <span class="kw">simp</span> only [toAdd_mul, ha, hb, zero_add, one_ne_zero, ↓reduceIte, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSwap">positiveGenusSmoothSwap</a>, MulEquiv.coe_mk,
+  Equiv.coe_fn_mk, one_mul]
+    · ext x : 1
+      <span class="kw">cases</span> x
+      <span class="kw">simp</span> only [toAdd_mul, ha, hb, add_zero, one_ne_zero, ↓reduceIte, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSwap">positiveGenusSmoothSwap</a>, MulEquiv.coe_mk,
+  Equiv.coe_fn_mk, mul_one]
+    · <span class="kw">have</span> hsum : (1 : ZMod 2) + 1 = 0 := <span class="kw">by</span>
+        simpa using (ZMod.natCast_self 2)
+      ext x : 1
+      <span class="kw">cases</span> x
+      <span class="kw">simp</span> only [toAdd_mul, ha, hb, hsum, ↓reduceIte, MulAut.one_apply, one_ne_zero, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSwap">positiveGenusSmoothSwap</a>,
+  MulAut.mul_apply, MulEquiv.coe_mk, Equiv.coe_fn_mk, toAdd_ofAdd, Prod.mk.eta, ofAdd_toAdd]</code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus smooth action satisfies the defining <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> and relator relations.</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L96">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> PositiveGenusSmoothQuotient (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :=
+  <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">PositiveGenusSmoothBase</a> σ ⋊[<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothAction">positiveGenusSmoothAction</a> σ]
+    Multiplicative (ZMod 2)</code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus construction produces a smooth quotient for the profinite F-group.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-FenchelNielsen.ProfiniteFGroup.instTopologicalSpacePositiveGenusSmoothQuotient">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.instTopologicalSpacePositiveGenusSmoothQuotient">FenchelNielsen.ProfiniteFGroup.instTopologicalSpacePositiveGenusSmoothQuotient</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L100">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instTopologicalSpacePositiveGenusSmoothQuotient (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    TopologicalSpace (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) :=
+  ⊥</code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus smooth quotient carries the topology induced by its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-FenchelNielsen.ProfiniteFGroup.instDiscreteTopologyPositiveGenusSmoothQuotient">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.instDiscreteTopologyPositiveGenusSmoothQuotient">FenchelNielsen.ProfiniteFGroup.instDiscreteTopologyPositiveGenusSmoothQuotient</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L104">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instDiscreteTopologyPositiveGenusSmoothQuotient (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    DiscreteTopology (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) :=
+  ⟨<span class="kw">rfl</span>⟩</code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus smooth quotient carries the discrete topology at the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient stage.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L109">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> positiveGenusSmoothEllipticBase
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) (i : Fin σ.numPeriods) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">PositiveGenusSmoothBase</a> σ :=
+  Multiplicative.ofAdd
+    (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.fenchelPeriodBasisVector">fenchelPeriodBasisVector</a> σ i, -<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.fenchelPeriodBasisVector">fenchelPeriodBasisVector</a> σ i)</code></pre></section>
+    <section><div class="natural-text"><p>The base-coordinate value assigned to a positive-genus inertia generator.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSumBasis">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSumBasis">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSumBasis</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L116">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> positiveGenusSmoothSumBasis
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.FenchelPeriodCoordinate">FenchelPeriodCoordinate</a> σ :=
+  ∑ i : Fin σ.numPeriods, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.fenchelPeriodBasisVector">fenchelPeriodBasisVector</a> σ i</code></pre></section>
+    <section><div class="natural-text"><p>The sum of the period-coordinate basis vectors.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L122">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> positiveGenusSmoothEllipticProductBase
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">PositiveGenusSmoothBase</a> σ :=
+  Multiplicative.ofAdd
+    (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSumBasis">positiveGenusSmoothSumBasis</a> σ,
+      -<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSumBasis">positiveGenusSmoothSumBasis</a> σ)</code></pre></section>
+    <section><div class="natural-text"><p>The product of the base-coordinate values assigned to all inertia generators.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSurfaceBase">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSurfaceBase">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSurfaceBase</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L130">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> positiveGenusSmoothSurfaceBase
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">PositiveGenusSmoothBase</a> σ :=
+  Multiplicative.ofAdd (0, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSumBasis">positiveGenusSmoothSumBasis</a> σ)</code></pre></section>
+    <section><div class="natural-text"><p>The base-coordinate value used for the first positive-genus surface generator.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothTopGenerator">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothTopGenerator">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothTopGenerator</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L136">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> positiveGenusSmoothTopGenerator :
+    Multiplicative (ZMod 2) :=
+  Multiplicative.ofAdd (1 : ZMod 2)</code></pre></section>
+    <section><div class="natural-text"><p>The nontrivial top-coordinate <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> of the positive-genus quotient.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase_pow_period">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase_pow_period">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase_pow_period</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L141">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> positiveGenusSmoothEllipticBase_pow_period
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) (i : Fin σ.numPeriods) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> σ i ^ σ.periods i = 1</code></pre></section>
+    <section><div class="natural-text"><p>Each positive-genus inertia base value has exponent dividing its period.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a>, ← ofAdd_nsmul]
+  <span class="kw">apply</span> congrArg Multiplicative.ofAdd
+  ext j
+  · by_cases hji : j = i
+    · subst hji
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.fenchelPeriodBasisVector">fenchelPeriodBasisVector</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/ZModFamily.html#decl-FenchelNielsen.zmodBasisVector">zmodBasisVector</a>, Prod.smul_mk, nsmul_eq_mul, smul_neg, Pi.mul_apply,
+  Pi.natCast_apply, CharP.cast_eq_zero, Pi.single_eq_same, mul_one, Prod.fst_zero, Pi.zero_apply]
+    · <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.fenchelPeriodBasisVector">fenchelPeriodBasisVector</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/ZModFamily.html#decl-FenchelNielsen.zmodBasisVector">zmodBasisVector</a>, Prod.smul_mk, nsmul_eq_mul, smul_neg, Pi.mul_apply,
+  Pi.natCast_apply, ne_eq, hji, not_false_eq_true, Pi.single_eq_of_ne, mul_zero, Prod.fst_zero, Pi.zero_apply]
+  · by_cases hji : j = i
+    · subst hji
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.fenchelPeriodBasisVector">fenchelPeriodBasisVector</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/ZModFamily.html#decl-FenchelNielsen.zmodBasisVector">zmodBasisVector</a>, Prod.smul_mk, nsmul_eq_mul, smul_neg, Pi.neg_apply,
+  Pi.mul_apply, Pi.natCast_apply, CharP.cast_eq_zero, Pi.single_eq_same, mul_one, neg_zero, Prod.snd_zero,
+  Pi.zero_apply]
+    · <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.fenchelPeriodBasisVector">fenchelPeriodBasisVector</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/ZModFamily.html#decl-FenchelNielsen.zmodBasisVector">zmodBasisVector</a>, Prod.smul_mk, nsmul_eq_mul, smul_neg, Pi.neg_apply,
+  Pi.mul_apply, Pi.natCast_apply, ne_eq, hji, not_false_eq_true, Pi.single_eq_of_ne, mul_zero, neg_zero,
+  Prod.snd_zero, Pi.zero_apply]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase_eq_prod">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase_eq_prod">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase_eq_prod</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L163">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> positiveGenusSmoothEllipticProductBase_eq_prod
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    (∏ i : Fin σ.numPeriods, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> σ i) =
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase">positiveGenusSmoothEllipticProductBase</a> σ</code></pre></section>
+    <section><div class="natural-text"><p>The named elliptic product base is the product of the individual inertia base values.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">calc</span>
+    (∏ i : Fin σ.numPeriods, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> σ i)
+        =
+          Multiplicative.ofAdd
+            (∑ i : Fin σ.numPeriods,
+              (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.fenchelPeriodBasisVector">fenchelPeriodBasisVector</a> σ i, -<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.fenchelPeriodBasisVector">fenchelPeriodBasisVector</a> σ i)) := <span class="kw">by</span>
+          <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a>, ofAdd_sum]
+    _ = <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase">positiveGenusSmoothEllipticProductBase</a> σ := <span class="kw">by</span>
+          <span class="kw">apply</span> Multiplicative.ofAdd.injective
+          ext j &lt;;&gt;
+          <span class="kw">simp</span> only [ofAdd_sum, toAdd_ofAdd, toAdd_prod, Prod.fst_sum, Prod.snd_sum,
+            Finset.sum_apply, Pi.neg_apply, Finset.sum_neg_distrib,
+            <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase">positiveGenusSmoothEllipticProductBase</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSumBasis">positiveGenusSmoothSumBasis</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.list_finRange_prod_eq_single_zeroVal">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.list_finRange_prod_eq_single_zeroVal">FenchelNielsen.ProfiniteFGroup.list_finRange_prod_eq_single_zeroVal</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L181">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> list_finRange_prod_eq_single_zeroVal
+    {G : <span class="kw">Type</span>*} [Monoid G] {n : ℕ} (h : 1 ≤ n) (c : G) :
+    ((List.finRange n).map
+      (<span class="kw">fun</span> j : Fin n =&gt; <span class="kw">if</span> j.val = 0 <span class="kw">then</span> c <span class="kw">else</span> 1)).prod = c</code></pre></section>
+    <section><div class="natural-text"><p>The product over the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> range collapses to the value at the distinguished <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> index.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">cases</span> hn : n <span class="kw">with</span>
+  | <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> =&gt; omega
+  | succ k =&gt;
+      <span class="kw">rw</span> [List.finRange_succ]
+      <span class="kw">simp</span> only [List.map_cons, List.prod_cons]
+      <span class="kw">simp</span> only [Fin.val_zero, ↓reduceIte]
+      <span class="kw">have</span> htail&#x27; :
+          (List.map
+            (<span class="kw">fun</span> j : Fin (k + 1) =&gt; <span class="kw">if</span> j.val = 0 <span class="kw">then</span> c <span class="kw">else</span> 1)
+            (List.map Fin.succ (List.finRange k))).prod = 1 := <span class="kw">by</span>
+        <span class="kw">simp</span> only [Fin.val_eq_zero_iff, List.map_map, Function.comp_def, Fin.succ_ne_zero, ↓reduceIte,
+  List.map_const&#x27;, List.length_finRange, List.prod_replicate, one_pow]
+      <span class="kw">rw</span> [htail&#x27;, mul_one]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProduct_mul_surfaceCommutator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProduct_mul_surfaceCommutator">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProduct_mul_surfaceCommutator</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L200">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> positiveGenusSmoothEllipticProduct_mul_surfaceCommutator
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    (SemidirectProduct.inl (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase">positiveGenusSmoothEllipticProductBase</a> σ) :
+        <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) *
+      ⁅(SemidirectProduct.inl (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSurfaceBase">positiveGenusSmoothSurfaceBase</a> σ) :
+          <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ),
+        SemidirectProduct.inr <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothTopGenerator">positiveGenusSmoothTopGenerator</a>⁆ =
+      1</code></pre></section>
+    <section><div class="natural-text"><p>The elliptic product cancels the chosen surface <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> in the positive-genus quotient.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext &lt;;&gt;
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothAction">positiveGenusSmoothAction</a>, toAdd_eq_zero, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSwap">positiveGenusSmoothSwap</a>,
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase">positiveGenusSmoothEllipticProductBase</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSumBasis">positiveGenusSmoothSumBasis</a>,
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSurfaceBase">positiveGenusSmoothSurfaceBase</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothTopGenerator">positiveGenusSmoothTopGenerator</a>, commutatorElement_def,
+      SemidirectProduct.mul_left, SemidirectProduct.mul_right, SemidirectProduct.left_inl,
+      SemidirectProduct.left_inr, SemidirectProduct.right_inl, SemidirectProduct.right_inr,
+      one_mul, SemidirectProduct.inv_left, SemidirectProduct.inv_right, inv_one, mul_one,
+      mul_inv_cancel, toAdd_one, SemidirectProduct.one_left, SemidirectProduct.one_right,
+      ofAdd_eq_one, <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/Presentations/Relators.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorEquivalent.inv_eq_one">inv_eq_one</a>, one_ne_zero, ↓reduceIte, MulAut.one_apply, MulEquiv.coe_mk,
+      Equiv.coe_fn_mk, MonoidHom.coe_mk, OneHom.coe_mk, toAdd_mul, toAdd_inv, toAdd_ofAdd,
+      Prod.fst_add, Prod.snd_add, Prod.fst_neg, Prod.snd_neg, Prod.fst_zero, Prod.snd_zero,
+      Pi.add_apply, Pi.neg_apply, Pi.zero_apply, Finset.sum_apply, neg_zero, add_assoc,
+      neg_add_cancel, add_neg_cancel, zero_add, add_zero]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L222">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> positiveGenusGeneratorImageCore
+    (Δ : ProfiniteFGroup.{u}) :
+    ProfiniteFenchelGeneratorIndex.{u} Δ.signature →
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature
+  | ULift.up (.inertia i) =&gt;
+      SemidirectProduct.inl
+        (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> Δ.signature i)
+  | ULift.up (.surfaceA j) =&gt;
+      <span class="kw">if</span> j.val = 0 <span class="kw">then</span>
+        SemidirectProduct.inl
+          (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSurfaceBase">positiveGenusSmoothSurfaceBase</a> Δ.signature)
+      <span class="kw">else</span>
+        1
+  | ULift.up (.surfaceB j) =&gt;
+      <span class="kw">if</span> j.val = 0 <span class="kw">then</span>
+        SemidirectProduct.inr <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothTopGenerator">positiveGenusSmoothTopGenerator</a>
+      <span class="kw">else</span>
+        1
+  | ULift.up (.cusp _) =&gt; 1</code></pre></section>
+    <section><div class="natural-text"><p>The core positive-genus <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> image satisfies the required <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> relation.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L242">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> positiveGenusGeneratorImage
+    (Δ : ProfiniteFGroup.{u}) :
+    ProfiniteFenchelGeneratorIndex.{u} Δ.signature →
+      ULift.{u, 0} (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature) :=
+  <span class="kw">fun</span> x =&gt; ULift.up (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ x)</code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> image satisfies the required <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> relation.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenus_inertia_list_product">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenus_inertia_list_product">FenchelNielsen.ProfiniteFGroup.positiveGenus_inertia_list_product</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L248">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> positiveGenus_inertia_list_product
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    ((List.finRange σ.numPeriods).map <span class="kw">fun</span> i =&gt;
+        (SemidirectProduct.inl (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> σ i) :
+          <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ)).prod =
+      (SemidirectProduct.inl
+        (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase">positiveGenusSmoothEllipticProductBase</a> σ) :
+          <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ)</code></pre></section>
+    <section><div class="natural-text"><p>The product of the positive-genus inertia images is the required inertia-list product.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">calc</span>
+    (List.map
+        (<span class="kw">fun</span> i : Fin σ.numPeriods =&gt;
+          (SemidirectProduct.inl (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> σ i) :
+            <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ))
+        (List.finRange σ.numPeriods)).prod
+        =
+      SemidirectProduct.inl
+        ((List.map
+          (<span class="kw">fun</span> i : Fin σ.numPeriods =&gt;
+            <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> σ i)
+          (List.finRange σ.numPeriods)).prod) := <span class="kw">by</span>
+        simpa [List.map_map] using
+          (map_list_prod
+            (SemidirectProduct.inl :
+              <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">PositiveGenusSmoothBase</a> σ →*
+                <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ)
+            (List.map
+              (<span class="kw">fun</span> i : Fin σ.numPeriods =&gt;
+                <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> σ i)
+              (List.finRange σ.numPeriods))).symm
+    _ =
+      SemidirectProduct.inl
+        (∏ i : Fin σ.numPeriods,
+          <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> σ i) := <span class="kw">by</span>
+        <span class="kw">exact</span> congrArg SemidirectProduct.inl
+          ((Fin.prod_univ_def
+            (f := <span class="kw">fun</span> i : Fin σ.numPeriods =&gt;
+              <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> σ i)).symm)
+    _ =
+      SemidirectProduct.inl
+        (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase">positiveGenusSmoothEllipticProductBase</a> σ) := <span class="kw">by</span>
+        <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase_eq_prod">positiveGenusSmoothEllipticProductBase_eq_prod</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_total_relation">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_total_relation">FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_total_relation</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L290">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> positiveGenusGeneratorImage_total_relation
+    (Δ : ProfiniteFGroup.{u}) (hGenus : 1 ≤ Δ.signature.orbitGenus) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>
+        (<span class="kw">fun</span> i =&gt; <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.surfaceA i)))
+        (<span class="kw">fun</span> i =&gt; <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.surfaceB i)))
+        (<span class="kw">fun</span> j =&gt; <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.cusp j)))
+        (<span class="kw">fun</span> k =&gt; <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.inertia k))) = 1</code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy the total presentation relation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> e : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature :=
+    ((List.finRange Δ.signature.numPeriods).map <span class="kw">fun</span> i =&gt;
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+        (ULift.up (ProfiniteFenchelGenerator.inertia i))).prod
+  <span class="kw">let</span> c : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature :=
+    ((List.finRange Δ.signature.orbitGenus).map <span class="kw">fun</span> j =&gt;
+      ⁅<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.surfaceA j)),
+        <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.surfaceB j))⁆).prod
+  <span class="kw">have</span> he :
+      e =
+        (SemidirectProduct.inl
+          (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProductBase">positiveGenusSmoothEllipticProductBase</a> Δ.signature) :
+          <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature) := <span class="kw">by</span>
+    simpa [e, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a>] using
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenus_inertia_list_product">positiveGenus_inertia_list_product</a> Δ.signature
+  <span class="kw">have</span> hc :
+      c =
+        ⁅(SemidirectProduct.inl
+            (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSurfaceBase">positiveGenusSmoothSurfaceBase</a> Δ.signature) :
+            <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature),
+          SemidirectProduct.inr <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothTopGenerator">positiveGenusSmoothTopGenerator</a>⁆ := <span class="kw">by</span>
+    <span class="kw">let</span> c0 : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature :=
+      ⁅(SemidirectProduct.inl
+          (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothSurfaceBase">positiveGenusSmoothSurfaceBase</a> Δ.signature) :
+          <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature),
+        SemidirectProduct.inr <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothTopGenerator">positiveGenusSmoothTopGenerator</a>⁆
+    <span class="kw">have</span> hmap :
+        (<span class="kw">fun</span> j : Fin Δ.signature.orbitGenus =&gt;
+          ⁅<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+              (ULift.up (ProfiniteFenchelGenerator.surfaceA j)),
+            <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+              (ULift.up (ProfiniteFenchelGenerator.surfaceB j))⁆) =
+          <span class="kw">fun</span> j : Fin Δ.signature.orbitGenus =&gt;
+            <span class="kw">if</span> j.val = 0 <span class="kw">then</span> c0 <span class="kw">else</span> 1 := <span class="kw">by</span>
+      funext j
+      by_cases hj : j.val = 0
+      · <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a>, hj, ↓reduceIte, c0]
+      · <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a>, hj, ↓reduceIte, commutatorElement_self, c0]
+    dsimp [c]
+    <span class="kw">rw</span> [hmap]
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.list_finRange_prod_eq_single_zeroVal">list_finRange_prod_eq_single_zeroVal</a> hGenus c0
+  <span class="kw">have</span> hCusp :
+      ((List.finRange Δ.signature.numCusps).map <span class="kw">fun</span> j =&gt;
+        <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.cusp j))).prod = 1 := <span class="kw">by</span>
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a>, List.map_const&#x27;, List.length_finRange,
+      List.prod_replicate, one_pow]
+  <span class="kw">have</span> hec : e * c = 1 := <span class="kw">by</span>
+    <span class="kw">rw</span> [he, hc]
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticProduct_mul_surfaceCommutator">positiveGenusSmoothEllipticProduct_mul_surfaceCommutator</a>
+      Δ.signature
+  <span class="kw">have</span> hce : c * e = 1 := <span class="kw">by</span>
+    <span class="kw">have</span> h&#x27; := congrArg (<span class="kw">fun</span> x =&gt; e⁻¹ * x * e) hec
+    simpa [mul_assoc] using h&#x27;
+  dsimp [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>]
+  <span class="kw">rw</span> [hCusp]
+  simpa [e, c, mul_assoc] using hce</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Kernel and normal-closure claims are proved by showing that each rewritten relator lies in the generated normal subgroup and that the quotient map kills exactly those relations required by the presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_total_relation">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_total_relation">FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_total_relation</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L361">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> positiveGenusGeneratorImage_lifted_total_relation
+    (Δ : ProfiniteFGroup.{u}) (hGenus : 1 ≤ Δ.signature.orbitGenus) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>
+        (<span class="kw">fun</span> i =&gt; <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">positiveGenusGeneratorImage</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.surfaceA i)))
+        (<span class="kw">fun</span> i =&gt; <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">positiveGenusGeneratorImage</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.surfaceB i)))
+        (<span class="kw">fun</span> j =&gt; <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">positiveGenusGeneratorImage</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.cusp j)))
+        (<span class="kw">fun</span> k =&gt; <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">positiveGenusGeneratorImage</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.inertia k))) = 1</code></pre></section>
+    <section><div class="natural-text"><p>The lifted positive-genus <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy the total presentation relation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span>
+    (MulEquiv.ulift :
+      ULift.{u, 0} (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature) ≃*
+        <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature).injective
+  simpa [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">positiveGenusGeneratorImage</a>, <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/FGroup.html#decl-FenchelNielsen.profiniteFenchelTotalRelation">profiniteFenchelTotalRelation</a>,
+    map_list_prod, Function.comp_def, map_commutatorElement] using
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_total_relation">positiveGenusGeneratorImage_total_relation</a> Δ hGenus</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Kernel and normal-closure claims are proved by showing that each rewritten relator lies in the generated normal subgroup and that the quotient map kills exactly those relations required by the presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_period_relation">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_period_relation">FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_period_relation</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L380">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> positiveGenusGeneratorImage_period_relation
+    (Δ : ProfiniteFGroup.{u}) (k : Fin Δ.signature.numPeriods) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+        (ULift.up (ProfiniteFenchelGenerator.inertia k)) ^
+      Δ.signature.periods k = 1</code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> image satisfies each prescribed period relation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change
+    (SemidirectProduct.inl
+        (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> Δ.signature k) :
+        <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature) ^
+      Δ.signature.periods k = 1
+  <span class="kw">rw</span> [← map_pow
+    (SemidirectProduct.inl :
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">PositiveGenusSmoothBase</a> Δ.signature →*
+        <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature)]
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase_pow_period">positiveGenusSmoothEllipticBase_pow_period</a>, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the named period, <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-image, or quotient-data construction. Period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked by the prescribed orders of inertia or elliptic generators; total relations are checked by multiplying the displayed <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images; and data definitions follow by reading off the corresponding period family, index, or signature field.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_period_relation">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_period_relation">FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_period_relation</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L396">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> positiveGenusGeneratorImage_lifted_period_relation
+    (Δ : ProfiniteFGroup.{u}) (k : Fin Δ.signature.numPeriods) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">positiveGenusGeneratorImage</a> Δ
+        (ULift.up (ProfiniteFenchelGenerator.inertia k)) ^
+      Δ.signature.periods k = 1</code></pre></section>
+    <section><div class="natural-text"><p>The lifted positive-genus <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> image satisfies each prescribed period relation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span>
+    (MulEquiv.ulift :
+      ULift.{u, 0} (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature) ≃*
+        <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature).injective
+  simpa [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">positiveGenusGeneratorImage</a>] using
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_period_relation">positiveGenusGeneratorImage_period_relation</a> Δ k</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the named period, <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-image, or quotient-data construction. Period <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked by the prescribed orders of inertia or elliptic generators; total relations are checked by multiplying the displayed <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images; and data definitions follow by reading off the corresponding period family, index, or signature field.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_inertia_order">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_inertia_order">FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_inertia_order</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L408">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> positiveGenusGeneratorImage_inertia_order
+    (Δ : ProfiniteFGroup.{u}) (k : Fin Δ.signature.numPeriods) :
+    orderOf
+        (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImageCore">positiveGenusGeneratorImageCore</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.inertia k))) =
+      Δ.signature.periods k</code></pre></section>
+    <section><div class="natural-text"><p>The image of a positive-genus inertia <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has the prescribed order.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change
+    orderOf
+      ((SemidirectProduct.inl
+        (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> Δ.signature k)) :
+        <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature) =
+      Δ.signature.periods k
+  <span class="kw">rw</span> [orderOf_injective
+    (SemidirectProduct.inl :
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">PositiveGenusSmoothBase</a> Δ.signature →*
+        <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature)
+    SemidirectProduct.inl_injective
+    (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a> Δ.signature k)]
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothEllipticBase">positiveGenusSmoothEllipticBase</a>, orderOf_ofAdd_eq_addOrderOf]
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/ZModFamily.html#decl-FenchelNielsen.zmodBasisVector_pair_neg_addOrderOf">zmodBasisVector_pair_neg_addOrderOf</a> Δ.signature.periods k</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_inertia_order">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_inertia_order">FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_inertia_order</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L429">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> positiveGenusGeneratorImage_lifted_inertia_order
+    (Δ : ProfiniteFGroup.{u}) (k : Fin Δ.signature.numPeriods) :
+    orderOf
+        (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">positiveGenusGeneratorImage</a> Δ
+          (ULift.up (ProfiniteFenchelGenerator.inertia k))) =
+      Δ.signature.periods k</code></pre></section>
+    <section><div class="natural-text"><p>The lifted image of a positive-genus inertia <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has the prescribed order.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> horder :=
+    orderOf_injective
+      ((MulEquiv.ulift :
+        ULift.{u, 0} (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature) ≃*
+          <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature).toMonoidHom)
+      (MulEquiv.ulift :
+        ULift.{u, 0} (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature) ≃*
+          <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> Δ.signature).injective
+      (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">positiveGenusGeneratorImage</a> Δ
+        (ULift.up (ProfiniteFenchelGenerator.inertia k)))
+  <span class="kw">rw</span> [← horder]
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_inertia_order">positiveGenusGeneratorImage_inertia_order</a> Δ k</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotient_finite">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotient_finite">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotient_finite</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L449">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> positiveGenusSmoothQuotient_finite
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    Finite (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ)</code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus smooth quotient is finite.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  letI : Finite (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/FenchelPeriodCoordinate.html#decl-FenchelNielsen.FenchelPeriodCoordinate">FenchelPeriodCoordinate</a> σ) :=
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Coordinates/ZModFamily.html#decl-FenchelNielsen.zmodCoordinateFamily_finite">zmodCoordinateFamily_finite</a> σ.periods
+      (<span class="kw">fun</span> i =&gt; lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2) (σ.period_ge_two i))
+  haveI : Finite (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothBase">PositiveGenusSmoothBase</a> σ) := <span class="kw">by</span>
+    infer_instance
+  haveI : Finite (Multiplicative (ZMod 2)) := <span class="kw">by</span>
+    infer_instance
+  <span class="kw">exact</span> Finite.of_injective
+    (<span class="kw">fun</span> q : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ =&gt; (q.left, q.right))
+    (<span class="kw">by</span>
+      <span class="kw">intro</span> q r h
+      <span class="kw">exact</span> SemidirectProduct.ext
+        (congrArg Prod.fst h) (congrArg Prod.snd h))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotient_derivedSeries_two_eq_bot">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotient_derivedSeries_two_eq_bot">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotient_derivedSeries_two_eq_bot</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L468">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> positiveGenusSmoothQuotient_derivedSeries_two_eq_bot
+    (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    derivedSeries (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) 2 = ⊥</code></pre></section>
+    <section><div class="natural-text"><p>The positive-genus smooth quotient has derived length at most two.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> ρ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ →*
+      Multiplicative (ZMod 2) :=
+    SemidirectProduct.rightHom
+  <span class="kw">have</span> hfirst :
+      derivedSeries (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) 1 ≤ ρ.ker := <span class="kw">by</span>
+    <span class="kw">rw</span> [derivedSeries_one]
+    <span class="kw">exact</span> Abelianization.commutator_subset_ker ρ
+  <span class="kw">have</span> hkerComm :
+      ⁅ρ.ker, ρ.ker⁆ =
+        (⊥ : Subgroup (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ)) := <span class="kw">by</span>
+    <span class="kw">rw</span> [Subgroup.commutator_eq_bot_iff_le_centralizer]
+    <span class="kw">intro</span> x hx
+    <span class="kw">rw</span> [Subgroup.mem_centralizer_iff]
+    <span class="kw">intro</span> y hy
+    <span class="kw">have</span> hxright : x.right = 1 := <span class="kw">by</span>
+      simpa [ρ] using MonoidHom.mem_ker.mp hx
+    <span class="kw">have</span> hyright : y.right = 1 := <span class="kw">by</span>
+      simpa [ρ] using MonoidHom.mem_ker.mp hy
+    ext
+    · <span class="kw">simp</span> only [SemidirectProduct.mul_left, hyright, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, MulAut.one_apply,
+        mul_comm, toAdd_mul, Prod.fst_add, Pi.add_apply, hxright]
+    · <span class="kw">simp</span> only [SemidirectProduct.mul_left, hyright, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, MulAut.one_apply,
+        mul_comm, toAdd_mul, Prod.snd_add, Pi.add_apply, hxright]
+    · <span class="kw">simp</span> only [SemidirectProduct.mul_right, hyright, hxright, mul_one, toAdd_one]
+  <span class="kw">apply</span> le_antisymm
+  · <span class="kw">calc</span>
+      derivedSeries (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) 2 =
+          ⁅derivedSeries (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) 1,
+            derivedSeries (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) 1⁆ := <span class="kw">by</span>
+            change derivedSeries (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) (1 + 1) =
+              ⁅derivedSeries (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) 1,
+                derivedSeries (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) 1⁆
+            <span class="kw">rw</span> [derivedSeries_succ]
+      _ ≤ ⁅ρ.ker, ρ.ker⁆ := Subgroup.commutator_mono hfirst hfirst
+      _ = ⊥ := hkerComm
+  · <span class="kw">exact</span> bot_le</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Finiteness and cardinality estimates use the prescribed period data and the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient of the presentation determined by those periods. Because the <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-FenchelNielsen.ProfiniteFGroup.instFiniteULiftPositiveGenusSmoothQuotient">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.instFiniteULiftPositiveGenusSmoothQuotient">FenchelNielsen.ProfiniteFGroup.instFiniteULiftPositiveGenusSmoothQuotient</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L508">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">instance</span> instFiniteULiftPositiveGenusSmoothQuotient (σ : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature">FenchelSignature</a>) :
+    Finite (ULift.{u, 0} (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ)) := <span class="kw">by</span>
+  letI : Finite (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.PositiveGenusSmoothQuotient">PositiveGenusSmoothQuotient</a> σ) :=
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotient_finite">positiveGenusSmoothQuotient_finite</a> σ
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>The lifted positive-genus smooth quotient type is finite.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotientData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotientData">FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotientData</a>
+    <a class="source-link" href="../../../library/src/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#L514">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> positiveGenusSmoothQuotientData
+    (Δ : ProfiniteFGroup.{u}) (hGenus : 1 ≤ Δ.signature.orbitGenus) :
+    <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/SmoothQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.ProfiniteSmoothQuotientData">ProfiniteSmoothQuotientData</a> Δ 2 :=
+  ProfiniteSmoothQuotientData.ofPresentationLiftToFiniteOfRelationsOfDerivedSeries
+    Δ (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage">positiveGenusGeneratorImage</a> Δ)
+    (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_total_relation">positiveGenusGeneratorImage_lifted_total_relation</a> Δ hGenus)
+    (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_period_relation">positiveGenusGeneratorImage_lifted_period_relation</a> Δ)
+    (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/GroupTheory/DerivedSeries.html#decl-FenchelNielsen.derivedSeries_ulift_eq_bot_of">derivedSeries_ulift_eq_bot_of</a>
+      (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusSmoothQuotient_derivedSeries_two_eq_bot">positiveGenusSmoothQuotient_derivedSeries_two_eq_bot</a>
+        Δ.signature))
+    (<a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Profinite/PositiveGenusQuotient.html#decl-FenchelNielsen.ProfiniteFGroup.positiveGenusGeneratorImage_lifted_inertia_order">positiveGenusGeneratorImage_lifted_inertia_order</a> Δ)</code></pre></section>
+    <section><div class="natural-text"><p>The smooth quotient data for the positive-genus profinite F-group quotient.</p></div></section>
+  </div>
+</section></div></main>
+  <aside class="file-tree" data-active="FenchelNielsenZomorrodian.Profinite.PositiveGenusQuotient"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

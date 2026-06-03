@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Generation.GeneratingFamilies | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.Generation.GeneratingFamilies</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Generation.html">Generation</a><span class="sep">/</span><span>GeneratingFamilies</span></div>
+      <h1 class="module-title">ProCGroups.Generation.GeneratingFamilies</h1>
+      <div class="module-meta">1 Theorem | 1 Definition | 1 Structure | 1 Instance</div>
+      <div class="module-overview"><p>This module develops the rewriting and basis constructions behind the subgroup calculations. It tracks words and relations through the chosen transversal to obtain the required presentation or basis statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/FreeProC/Basic.html">ProCGroups.FreeProC.Basic</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/GeneratingFamilies.html">ReidemeisterSchreier.Profinite.OpenSubgroups.GeneratingFamilies</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl structure" id="decl-ProCGroups.Generation.TopologicalGeneratingFamily">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.TopologicalGeneratingFamily">ProCGroups.Generation.TopologicalGeneratingFamily</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Generation/GeneratingFamilies.html#L27">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> TopologicalGeneratingFamily
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] <span class="kw">where</span>
+  index : <span class="kw">Type</span> u
+  toFun : index → G
+  convergesToOne : _root_.ProCGroups.FreeProC.FamilyConvergesToOne (G := G) toFun
+  generates : <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.TopologicallyGenerates">TopologicallyGenerates</a> (G := G) (Set.range toFun)</code></pre></section>
+    <section><div class="natural-text"><p>An indexed topological generating family converging to \(1\). This is deliberately weaker than a free pro-\(C\) basis: it records only generation and convergence of the image.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.Generation.TopologicalGeneratingFamily.instCoeFunTopologicalGeneratingFamily">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.TopologicalGeneratingFamily.instCoeFunTopologicalGeneratingFamily">ProCGroups.Generation.TopologicalGeneratingFamily.instCoeFunTopologicalGeneratingFamily</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Generation/GeneratingFamilies.html#L38">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instCoeFunTopologicalGeneratingFamily :
+    CoeFun (<a class="decl-ref" href="../../../library/ProCGroups/Generation/GeneratingFamilies.html#decl-ProCGroups.Generation.TopologicalGeneratingFamily">TopologicalGeneratingFamily</a> G) (<span class="kw">fun</span> family =&gt; family.index → G) <span class="kw">where</span>
+  coe family := family.toFun</code></pre></section>
+    <section><div class="natural-text"><p>A topological generating family coerces to its underlying family map.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.TopologicalGeneratingFamily.toFun_eq_coe">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.TopologicalGeneratingFamily.toFun_eq_coe">ProCGroups.Generation.TopologicalGeneratingFamily.toFun_eq_coe</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Generation/GeneratingFamilies.html#L42">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> toFun_eq_coe (family : <a class="decl-ref" href="../../../library/ProCGroups/Generation/GeneratingFamilies.html#decl-ProCGroups.Generation.TopologicalGeneratingFamily">TopologicalGeneratingFamily</a> G) :
+    family.toFun = (family : family.index → G)</code></pre></section>
+    <section><div class="natural-text"><p>The underlying function of the bundled map is its coercion as a function.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Continuity is checked by composing with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient projections; each composite is a continuous map between <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> or profinite quotient spaces. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Generation.TopologicalGeneratingFamily.cardinal">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.TopologicalGeneratingFamily.cardinal">ProCGroups.Generation.TopologicalGeneratingFamily.cardinal</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Generation/GeneratingFamilies.html#L46">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> cardinal (family : <a class="decl-ref" href="../../../library/ProCGroups/Generation/GeneratingFamilies.html#decl-ProCGroups.Generation.TopologicalGeneratingFamily">TopologicalGeneratingFamily</a> G) : Cardinal :=
+  Cardinal.mk family.index</code></pre></section>
+    <section><div class="natural-text"><p>The pro-\(C\) cardinal invariant is controlled by the specified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient or neighborhood-basis data.</p></div></section>
+  </div>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Generation.GeneratingFamilies"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

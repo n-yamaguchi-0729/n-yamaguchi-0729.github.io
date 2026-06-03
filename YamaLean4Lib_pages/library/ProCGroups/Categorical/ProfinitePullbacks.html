@@ -1,0 +1,1528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Categorical.ProfinitePullbacks | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.Categorical.ProfinitePullbacks</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Categorical.html">Categorical</a><span class="sep">/</span><span>ProfinitePullbacks</span></div>
+      <h1 class="module-title">ProCGroups.Categorical.ProfinitePullbacks</h1>
+      <div class="module-meta">33 Theorem | 8 Definition | 1 Abbreviation</div>
+      <div class="module-overview"><p>This module develops the maps induced by continuous homomorphisms. It organizes the relevant quotient pullbacks and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage maps, then proves the compatibility statements needed for the completed construction.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html">ProCGroups.Categorical.AlgebraicPullbacks</a></li><li><a href="../../../library/ProCGroups/Profinite/Basic.html">ProCGroups.Profinite.Basic</a></li><li><a href="../../../library/ProCGroups/Topologies/ContinuousMulEquiv.html">ProCGroups.Topologies.ContinuousMulEquiv</a></li><li><a href="../../../library/ProCGroups/TopologicalGroups.html">ProCGroups.TopologicalGroups</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../library/ProCGroups/Categorical.html">ProCGroups.Categorical</a></li><li><a href="../../../library/ProCGroups/Categorical/PullbackComparison.html">ProCGroups.Categorical.PullbackComparison</a></li><li><a href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html">ProCGroups.Categorical.QuotientPullbackEquivalences</a></li><li><a href="../../../library/ProCGroups/ProC/Category/Pullbacks.html">ProCGroups.ProC.Category.Pullbacks</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl abbrev" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.carrier">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.carrier">ProCGroups.Categorical.TopologicalFiberProduct.carrier</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L33">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> TopologicalFiberProduct.carrier
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) :=
+  FiberProduct.carrier (β₁ : H₁ →* H) (β₂ : H₂ →* H)</code></pre></section>
+    <section><div class="natural-text"><p>Continuous pullback carrier attached to two continuous homomorphisms.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.fst">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.fst">ProCGroups.Categorical.TopologicalFiberProduct.fst</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L40">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> TopologicalFiberProduct.fst
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) :
+    TopologicalFiberProduct.carrier β₁ β₂ →ₜ* H₁ :=
+  { FiberProduct.fst (β₁ : H₁ →* H) (β₂ : H₂ →* H) <span class="kw">with</span>
+    continuous_toFun := continuous_fst.comp continuous_subtype_val }</code></pre></section>
+    <section><div class="natural-text"><p>The first projection from the continuous pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.snd">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.snd">ProCGroups.Categorical.TopologicalFiberProduct.snd</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L49">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> TopologicalFiberProduct.snd
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) :
+    TopologicalFiberProduct.carrier β₁ β₂ →ₜ* H₂ :=
+  { FiberProduct.snd (β₁ : H₁ →* H) (β₂ : H₂ →* H) <span class="kw">with</span>
+    continuous_toFun := continuous_snd.comp continuous_subtype_val }</code></pre></section>
+    <section><div class="natural-text"><p>The second projection from the continuous pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.hom_ext">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.hom_ext">ProCGroups.Categorical.TopologicalFiberProduct.hom_ext</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L58">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> TopologicalFiberProduct.hom_ext
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    {β₁ : H₁ →ₜ* H} {β₂ : H₂ →ₜ* H}
+    {ψ ψ&#x27; : K →ₜ* TopologicalFiberProduct.carrier β₁ β₂}
+    (h₁ : ∀ k, TopologicalFiberProduct.fst β₁ β₂ (ψ k) = TopologicalFiberProduct.fst β₁ β₂ (ψ&#x27; k))
+    (h₂ : ∀ k, TopologicalFiberProduct.snd β₁ β₂ (ψ k) = TopologicalFiberProduct.snd β₁ β₂ (ψ&#x27; k)) :
+    ψ = ψ&#x27;</code></pre></section>
+    <section><div class="natural-text"><p>Extensionality for continuous homomorphisms into the concrete profinite pullback.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> ContinuousMonoidHom.ext
+  <span class="kw">intro</span> k
+  <span class="kw">exact</span> Subtype.ext &lt;| Prod.ext (h₁ k) (h₂ k)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackFstCont_surjective_of_right_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackFstCont_surjective_of_right_surjective">ProCGroups.Categorical.pullbackFstCont_surjective_of_right_surjective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L71">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackFstCont_surjective_of_right_surjective
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (hβ₂ : Function.Surjective β₂) :
+    Function.Surjective (TopologicalFiberProduct.fst β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>If the right map in the pullback square is surjective, then the first projection from the continuous pullback is surjective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [TopologicalFiberProduct.fst, TopologicalFiberProduct.carrier] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackFst_surjective_of_right_surjective">pullbackFst_surjective_of_right_surjective</a>
+      (β₁ := (β₁ : H₁ →* H)) (β₂ := (β₂ : H₂ →* H)) hβ₂)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product. To prove surjectivity of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> coordinate projection, choose a preimage for the opposite coordinate using the assumed surjectivity, then use the pullback equation to build an element of the fiber product. The coordinate formula shows that the chosen element maps to the prescribed point.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackSndCont_surjective_of_left_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSndCont_surjective_of_left_surjective">ProCGroups.Categorical.pullbackSndCont_surjective_of_left_surjective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L82">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackSndCont_surjective_of_left_surjective
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (hβ₁ : Function.Surjective β₁) :
+    Function.Surjective (TopologicalFiberProduct.snd β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>If the left map in the pullback square is surjective, then the second projection from the continuous pullback is surjective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [TopologicalFiberProduct.snd, TopologicalFiberProduct.carrier] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSnd_surjective_of_left_surjective">pullbackSnd_surjective_of_left_surjective</a>
+      (β₁ := (β₁ : H₁ →* H)) (β₂ := (β₂ : H₂ →* H)) hβ₁)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product. To prove surjectivity of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> coordinate projection, choose a preimage for the opposite coordinate using the assumed surjectivity, then use the pullback equation to build an element of the fiber product. The coordinate formula shows that the chosen element maps to the prescribed point.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackFstCont_injective_of_right_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackFstCont_injective_of_right_injective">ProCGroups.Categorical.pullbackFstCont_injective_of_right_injective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L93">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackFstCont_injective_of_right_injective
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (hβ₂ : Function.Injective β₂) :
+    Function.Injective (TopologicalFiberProduct.fst β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>If \(\beta_2\) is injective, then the first continuous pullback projection is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [TopologicalFiberProduct.fst, TopologicalFiberProduct.carrier] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackFst_injective_of_right_injective">pullbackFst_injective_of_right_injective</a>
+      (β₁ := (β₁ : H₁ →* H)) (β₂ := (β₂ : H₂ →* H)) hβ₂)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackSndCont_injective_of_left_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSndCont_injective_of_left_injective">ProCGroups.Categorical.pullbackSndCont_injective_of_left_injective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L104">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackSndCont_injective_of_left_injective
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (hβ₁ : Function.Injective β₁) :
+    Function.Injective (TopologicalFiberProduct.snd β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>If \(\beta_1\) is injective, then the second continuous pullback projection is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [TopologicalFiberProduct.snd, TopologicalFiberProduct.carrier] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackSnd_injective_of_left_injective">pullbackSnd_injective_of_left_injective</a>
+      (β₁ := (β₁ : H₁ →* H)) (β₂ := (β₂ : H₂ →* H)) hβ₁)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.lift">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.lift">ProCGroups.Categorical.TopologicalFiberProduct.lift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L115">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> TopologicalFiberProduct.lift
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    K →ₜ* TopologicalFiberProduct.carrier β₁ β₂ :=
+  { FiberProduct.lift (β₁ : H₁ →* H) (β₂ : H₂ →* H)
+      (φ₁ : K →* H₁) (φ₂ : K →* H₂) h <span class="kw">with</span>
+    continuous_toFun := <span class="kw">by</span>
+      <span class="kw">exact</span> Continuous.subtype_mk
+        (φ₁.continuous_toFun.prodMk φ₂.continuous_toFun)
+        (<span class="kw">by</span>
+          <span class="kw">intro</span> k
+          <span class="kw">exact</span> h k) }</code></pre></section>
+    <section><div class="natural-text"><p>The canonical continuous map into the pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackFstCont_pullbackLiftCont">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackFstCont_pullbackLiftCont">ProCGroups.Categorical.pullbackFstCont_pullbackLiftCont</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L132">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackFstCont_pullbackLiftCont
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    (TopologicalFiberProduct.fst β₁ β₂).comp (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ h) = φ₁</code></pre></section>
+    <section><div class="natural-text"><p>Composing the first projection with the continuous pullback lift gives \(\varphi_1\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext k
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackSndCont_pullbackLiftCont">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSndCont_pullbackLiftCont">ProCGroups.Categorical.pullbackSndCont_pullbackLiftCont</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L143">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackSndCont_pullbackLiftCont
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    (TopologicalFiberProduct.snd β₁ β₂).comp (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ h) = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>Composing the second projection with the continuous pullback lift gives \(\varphi_2\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext k
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLiftCont_eta">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLiftCont_eta">ProCGroups.Categorical.pullbackLiftCont_eta</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L154">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackLiftCont_eta
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    {β₁ : H₁ →ₜ* H} {β₂ : H₂ →ₜ* H}
+    (ψ : K →ₜ* TopologicalFiberProduct.carrier β₁ β₂) :
+    TopologicalFiberProduct.lift β₁ β₂
+      ((TopologicalFiberProduct.fst β₁ β₂).comp ψ)
+      ((TopologicalFiberProduct.snd β₁ β₂).comp ψ)
+      (<span class="kw">fun</span> k =&gt; <span class="kw">by</span> <span class="kw">exact</span> (ψ k).2) = ψ</code></pre></section>
+    <section><div class="natural-text"><p>The continuous pullback is reconstructed from its two projections by the canonical lift.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> TopologicalFiberProduct.hom_ext
+  · <span class="kw">intro</span> k
+    <span class="kw">rfl</span>
+  · <span class="kw">intro</span> k
+    <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.cone">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.cone">ProCGroups.Categorical.TopologicalFiberProduct.cone</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L170">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> TopologicalFiberProduct.cone
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    [IsTopologicalGroup H] [IsTopologicalGroup H₁] [IsTopologicalGroup H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) :
+    PullbackCone (<a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.ofHom">TopGrp.ofHom</a> β₁) (<a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.ofHom">TopGrp.ofHom</a> β₂) :=
+  PullbackCone.mk
+    (<a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.ofHom">TopGrp.ofHom</a> (TopologicalFiberProduct.fst β₁ β₂))
+    (<a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.ofHom">TopGrp.ofHom</a> (TopologicalFiberProduct.snd β₁ β₂))
+    (<span class="kw">by</span>
+      <span class="kw">apply</span> <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.hom_ext">TopGrp.hom_ext</a>
+      ext x
+      <span class="kw">exact</span> x.2)</code></pre></section>
+    <section><div class="natural-text"><p>The concrete topological fiber product as a categorical pullback cone in TopGrp.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.isLimit">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.isLimit">ProCGroups.Categorical.TopologicalFiberProduct.isLimit</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L185">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> TopologicalFiberProduct.isLimit
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    [IsTopologicalGroup H] [IsTopologicalGroup H₁] [IsTopologicalGroup H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) :
+    IsLimit (TopologicalFiberProduct.cone β₁ β₂) := <span class="kw">by</span>
+  refine PullbackCone.IsLimit.mk (<span class="kw">by</span>
+    <span class="kw">apply</span> <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.hom_ext">TopGrp.hom_ext</a>
+    ext x
+    <span class="kw">exact</span> x.2) ?lift ?fac_left ?fac_right ?<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.uniq">uniq</a>
+  · <span class="kw">intro</span> s
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.ofHom">TopGrp.ofHom</a> &lt;|
+      TopologicalFiberProduct.lift β₁ β₂ s.fst.hom s.snd.hom (<span class="kw">fun</span> x =&gt; <span class="kw">by</span>
+        <span class="kw">have</span> hcondition :
+            (s.fst ≫ <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.ofHom">TopGrp.ofHom</a> β₁).hom =
+              (s.snd ≫ <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.ofHom">TopGrp.ofHom</a> β₂).hom :=
+          congrArg (<span class="kw">fun</span> f : s.pt ⟶ <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.of">TopGrp.of</a> H =&gt; f.hom) s.condition
+        <span class="kw">exact</span> DFunLike.congr_fun hcondition x)
+  · <span class="kw">intro</span> s
+    <span class="kw">apply</span> <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.hom_ext">TopGrp.hom_ext</a>
+    <span class="kw">rfl</span>
+  · <span class="kw">intro</span> s
+    <span class="kw">apply</span> <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.hom_ext">TopGrp.hom_ext</a>
+    <span class="kw">rfl</span>
+  · <span class="kw">intro</span> s m hfst hsnd
+    <span class="kw">apply</span> <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.hom_ext">TopGrp.hom_ext</a>
+    ext x
+    · <span class="kw">have</span> hfst&#x27; :
+          (m ≫ <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.ofHom">TopGrp.ofHom</a> (TopologicalFiberProduct.fst β₁ β₂)).hom = s.fst.hom :=
+        congrArg (<span class="kw">fun</span> f : s.pt ⟶ <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.of">TopGrp.of</a> H₁ =&gt; f.hom) hfst
+      <span class="kw">exact</span> DFunLike.congr_fun hfst&#x27; x
+    · <span class="kw">have</span> hsnd&#x27; :
+          (m ≫ <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.ofHom">TopGrp.ofHom</a> (TopologicalFiberProduct.snd β₁ β₂)).hom = s.snd.hom :=
+        congrArg (<span class="kw">fun</span> f : s.pt ⟶ <a class="decl-ref" href="../../../library/ProCGroups/TopologicalGroups.html#decl-TopGrp.of">TopGrp.of</a> H₂ =&gt; f.hom) hsnd
+      <span class="kw">exact</span> DFunLike.congr_fun hsnd&#x27; x</code></pre></section>
+    <section><div class="natural-text"><p>The concrete topological fiber product cone is a limit cone in TopGrp.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLiftCont_injective_of_left_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLiftCont_injective_of_left_injective">ProCGroups.Categorical.pullbackLiftCont_injective_of_left_injective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L224">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLiftCont_injective_of_left_injective
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k))
+    (hφ₁ : Function.Injective φ₁) :
+    Function.Injective (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ h)</code></pre></section>
+    <section><div class="natural-text"><p>If \(\varphi_1\) is injective, then the continuous canonical map into the profinite pullback is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [TopologicalFiberProduct.lift, TopologicalFiberProduct.carrier] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_injective_of_left_injective">pullbackLift_injective_of_left_injective</a>
+      (β₁ := (β₁ : H₁ →* H)) (β₂ := (β₂ : H₂ →* H))
+      (φ₁ := (φ₁ : K →* H₁)) (φ₂ := (φ₂ : K →* H₂))
+      h hφ₁)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLiftCont_injective_of_right_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLiftCont_injective_of_right_injective">ProCGroups.Categorical.pullbackLiftCont_injective_of_right_injective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L241">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLiftCont_injective_of_right_injective
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k))
+    (hφ₂ : Function.Injective φ₂) :
+    Function.Injective (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ h)</code></pre></section>
+    <section><div class="natural-text"><p>If \(\varphi_2\) is injective, then the continuous canonical map into the profinite pullback is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [TopologicalFiberProduct.lift, TopologicalFiberProduct.carrier] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_injective_of_right_injective">pullbackLift_injective_of_right_injective</a>
+      (β₁ := (β₁ : H₁ →* H)) (β₂ := (β₂ : H₂ →* H))
+      (φ₁ := (φ₁ : K →* H₁)) (φ₂ := (φ₂ : K →* H₂))
+      h hφ₂)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.HasTopologicalPullbackProperty">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.HasTopologicalPullbackProperty">ProCGroups.Categorical.HasTopologicalPullbackProperty</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L256">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> HasTopologicalPullbackProperty
+    [Group G] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (α₁ : G →ₜ* H₁) (α₂ : G →ₜ* H₂)
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) : <span class="kw">Prop</span> :=
+  β₁.comp α₁ = β₂.comp α₂ ∧
+    ∀ ⦃K : <span class="kw">Type</span> u⦄ [Group K] [TopologicalSpace K] [IsTopologicalGroup K],
+      ∀ (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂),
+      β₁.comp φ₁ = β₂.comp φ₂ →
+      ∃! φ : K →ₜ* G, α₁.comp φ = φ₁ ∧ α₂.comp φ = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>Continuous pullback <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> tested by all topological-group source objects.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.isTopologicalPullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.isTopologicalPullback">ProCGroups.Categorical.TopologicalFiberProduct.isTopologicalPullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L268">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> TopologicalFiberProduct.isTopologicalPullback
+    {H H₁ H₂ : <span class="kw">Type</span> u}
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasTopologicalPullbackProperty">HasTopologicalPullbackProperty</a> (TopologicalFiberProduct.fst β₁ β₂) (TopologicalFiberProduct.snd β₁ β₂)
+      β₁ β₂</code></pre></section>
+    <section><div class="natural-text"><p>The concrete continuous pullback satisfies the topological pullback universal property.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · ext x
+    <span class="kw">exact</span> x.2
+  · <span class="kw">intro</span> K _ _ _ φ₁ φ₂ hφ
+    <span class="kw">let</span> φ : K →ₜ* TopologicalFiberProduct.carrier β₁ β₂ :=
+      TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)
+    refine ⟨φ, ?_, ?_⟩
+    · <span class="kw">exact</span> ⟨<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackFstCont_pullbackLiftCont">pullbackFstCont_pullbackLiftCont</a> β₁ β₂ φ₁ φ₂
+        (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k),
+        <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackSndCont_pullbackLiftCont">pullbackSndCont_pullbackLiftCont</a> β₁ β₂ φ₁ φ₂
+          (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)⟩
+    · <span class="kw">intro</span> ψ hψ
+      <span class="kw">apply</span> TopologicalFiberProduct.hom_ext
+      · <span class="kw">intro</span> k
+        <span class="kw">calc</span>
+          TopologicalFiberProduct.fst β₁ β₂ (ψ k) = φ₁ k :=
+            congrArg (<span class="kw">fun</span> f : K →ₜ* H₁ =&gt; f k) hψ.1
+          _ = TopologicalFiberProduct.fst β₁ β₂ (φ k) := <span class="kw">by</span>
+            symm
+            <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →ₜ* H₁ =&gt; f k)
+              (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackFstCont_pullbackLiftCont">pullbackFstCont_pullbackLiftCont</a> β₁ β₂ φ₁ φ₂
+                (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k))
+      · <span class="kw">intro</span> k
+        <span class="kw">calc</span>
+          TopologicalFiberProduct.snd β₁ β₂ (ψ k) = φ₂ k :=
+            congrArg (<span class="kw">fun</span> f : K →ₜ* H₂ =&gt; f k) hψ.2
+          _ = TopologicalFiberProduct.snd β₁ β₂ (φ k) := <span class="kw">by</span>
+            symm
+            <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →ₜ* H₂ =&gt; f k)
+              (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackSndCont_pullbackLiftCont">pullbackSndCont_pullbackLiftCont</a> β₁ β₂ φ₁ φ₂
+                (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">ProCGroups.Categorical.HasProfiniteTestPullbackProperty</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L310">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> HasProfiniteTestPullbackProperty
+    [Group G] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (α₁ : G →ₜ* H₁) (α₂ : G →ₜ* H₂)
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) : <span class="kw">Prop</span> :=
+  β₁.comp α₁ = β₂.comp α₂ ∧
+    ∀ ⦃K : <span class="kw">Type</span> u⦄ [Group K] [TopologicalSpace K] [IsTopologicalGroup K],
+      <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> K →
+      ∀ (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂),
+      β₁.comp φ₁ = β₂.comp φ₂ →
+      ∃! φ : K →ₜ* G, α₁.comp φ = φ₁ ∧ α₂.comp φ = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>Continuous pullback <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> tested by profinite source objects. The <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> tests the square against profinite objects without requiring the four objects of the square themselves to be profinite.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.HasTopologicalPullbackProperty.hasProfiniteTestPullbackProperty">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.HasTopologicalPullbackProperty.hasProfiniteTestPullbackProperty">ProCGroups.Categorical.HasTopologicalPullbackProperty.hasProfiniteTestPullbackProperty</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L325">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hasProfiniteTestPullbackProperty
+    [Group G] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    {α₁ : G →ₜ* H₁} {α₂ : G →ₜ* H₂}
+    {β₁ : H₁ →ₜ* H} {β₂ : H₂ →ₜ* H}
+    (hpb : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasTopologicalPullbackProperty">HasTopologicalPullbackProperty</a> α₁ α₂ β₁ β₂) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a> α₁ α₂ β₁ β₂</code></pre></section>
+    <section><div class="natural-text"><p>A topological pullback square has the restricted profinite-source test property.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨hpb.1, ?_⟩
+  <span class="kw">intro</span> K _ _ _ _ φ₁ φ₂ hφ
+  <span class="kw">exact</span> hpb.2 φ₁ φ₂ hφ</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.isProfinitePullbackSquare_of_isTopologicalPullbackSquare">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.isProfinitePullbackSquare_of_isTopologicalPullbackSquare">ProCGroups.Categorical.isProfinitePullbackSquare_of_isTopologicalPullbackSquare</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L339">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isProfinitePullbackSquare_of_isTopologicalPullbackSquare
+    [Group G] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    {α₁ : G →ₜ* H₁} {α₂ : G →ₜ* H₂}
+    {β₁ : H₁ →ₜ* H} {β₂ : H₂ →ₜ* H}
+    (hpb : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasTopologicalPullbackProperty">HasTopologicalPullbackProperty</a> α₁ α₂ β₁ β₂)
+    (_hG : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G) (_hH₁ : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H₁)
+    (_hH₂ : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H₂) (_hH : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a> α₁ α₂ β₁ β₂</code></pre></section>
+    <section><div class="natural-text"><p>A topological pullback square between profinite groups is a profinite pullback square.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>hpb.hasProfiniteTestPullbackProperty</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.pullbackDescCont">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackDescCont">ProCGroups.Categorical.pullbackDescCont</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L351">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> pullbackDescCont
+    [Group G] [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    [TopologicalSpace K]
+    [IsTopologicalGroup K]
+    {α₁ : G →ₜ* H₁} {α₂ : G →ₜ* H₂}
+    {β₁ : H₁ →ₜ* H} {β₂ : H₂ →ₜ* H}
+    (hpb : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a> α₁ α₂ β₁ β₂)
+    (hK : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> K)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂) : K →ₜ* G :=
+  Classical.choose (ExistsUnique.exists (hpb.2 (K := K) hK φ₁ φ₂ hφ))</code></pre></section>
+    <section><div class="natural-text"><p>Chosen continuous morphism induced by the pullback universal property.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackDescCont_spec">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackDescCont_spec">ProCGroups.Categorical.pullbackDescCont_spec</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L365">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackDescCont_spec
+    [Group G] [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    [TopologicalSpace K]
+    [IsTopologicalGroup K]
+    {α₁ : G →ₜ* H₁} {α₂ : G →ₜ* H₂}
+    {β₁ : H₁ →ₜ* H} {β₂ : H₂ →ₜ* H}
+    (hpb : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a> α₁ α₂ β₁ β₂)
+    (hK : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> K)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂) :
+    α₁.comp (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackDescCont">pullbackDescCont</a> hpb hK φ₁ φ₂ hφ) = φ₁ ∧
+      α₂.comp (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackDescCont">pullbackDescCont</a> hpb hK φ₁ φ₂ hφ) = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>Specification of the chosen continuous pullback descent map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Classical.choose_spec (ExistsUnique.exists (hpb.2 (K := K) hK φ₁ φ₂ hφ))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackDescCont_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackDescCont_left">ProCGroups.Categorical.pullbackDescCont_left</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L381">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackDescCont_left
+    [Group G] [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    [TopologicalSpace K]
+    [IsTopologicalGroup K]
+    {α₁ : G →ₜ* H₁} {α₂ : G →ₜ* H₂}
+    {β₁ : H₁ →ₜ* H} {β₂ : H₂ →ₜ* H}
+    (hpb : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a> α₁ α₂ β₁ β₂)
+    (hK : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> K)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂) :
+    α₁.comp (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackDescCont">pullbackDescCont</a> hpb hK φ₁ φ₂ hφ) = φ₁</code></pre></section>
+    <section><div class="natural-text"><p>The left composite of the chosen continuous pullback descent map is the prescribed left leg.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>(<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackDescCont_spec">pullbackDescCont_spec</a> hpb hK φ₁ φ₂ hφ).1</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackDescCont_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackDescCont_right">ProCGroups.Categorical.pullbackDescCont_right</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L396">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackDescCont_right
+    [Group G] [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    [TopologicalSpace K]
+    [IsTopologicalGroup K]
+    {α₁ : G →ₜ* H₁} {α₂ : G →ₜ* H₂}
+    {β₁ : H₁ →ₜ* H} {β₂ : H₂ →ₜ* H}
+    (hpb : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a> α₁ α₂ β₁ β₂)
+    (hK : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> K)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂) :
+    α₂.comp (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackDescCont">pullbackDescCont</a> hpb hK φ₁ φ₂ hφ) = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>The right composite of the chosen continuous pullback descent map is the prescribed right leg.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>(<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackDescCont_spec">pullbackDescCont_spec</a> hpb hK φ₁ φ₂ hφ).2</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackDescCont_uniq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackDescCont_uniq">ProCGroups.Categorical.pullbackDescCont_uniq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L411">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackDescCont_uniq
+    [Group G] [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    [TopologicalSpace K]
+    [IsTopologicalGroup K]
+    {α₁ : G →ₜ* H₁} {α₂ : G →ₜ* H₂}
+    {β₁ : H₁ →ₜ* H} {β₂ : H₂ →ₜ* H}
+    (hpb : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a> α₁ α₂ β₁ β₂)
+    (hK : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> K)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (hφ : β₁.comp φ₁ = β₂.comp φ₂)
+    {ψ : K →ₜ* G}
+    (hψ : α₁.comp ψ = φ₁ ∧ α₂.comp ψ = φ₂) :
+    ψ = <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackDescCont">pullbackDescCont</a> hpb hK φ₁ φ₂ hφ</code></pre></section>
+    <section><div class="natural-text"><p>Uniqueness of the chosen continuous pullback descent map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases hpb.2 (K := K) hK φ₁ φ₂ hφ <span class="kw">with</span> ⟨u, hu, huuniq⟩
+  <span class="kw">have</span> hψ&#x27; : ψ = u := huuniq _ hψ
+  <span class="kw">have</span> hdesc : <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackDescCont">pullbackDescCont</a> hpb hK φ₁ φ₂ hφ = u :=
+    huuniq _ (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackDescCont_spec">pullbackDescCont_spec</a> hpb hK φ₁ φ₂ hφ)
+  <span class="kw">exact</span> hψ&#x27;.trans hdesc.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullback_isClosed">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullback_isClosed">ProCGroups.Categorical.pullback_isClosed</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L432">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullback_isClosed
+    {H H₁ H₂ : <span class="kw">Type</span> u}
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [T2Space H]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) :
+    IsClosed ((FiberProduct.subgroup (β₁ : H₁ →* H) (β₂ : H₂ →* H) : Subgroup (H₁ × H₂)) :
+      Set (H₁ × H₂))</code></pre></section>
+    <section><div class="natural-text"><p>The concrete pullback subgroup is closed in \(H_1 \times H_2\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change IsClosed { x : H₁ × H₂ | β₁ x.1 = β₂ x.2 }
+  <span class="kw">exact</span> isClosed_eq (β₁.continuous_toFun.comp continuous_fst)
+    (β₂.continuous_toFun.comp continuous_snd)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.isProfiniteGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.isProfiniteGroup">ProCGroups.Categorical.TopologicalFiberProduct.isProfiniteGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L444">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> TopologicalFiberProduct.isProfiniteGroup
+    {H H₁ H₂ : <span class="kw">Type</span> u}
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    [IsTopologicalGroup H₁] [IsTopologicalGroup H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (hH₁ : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H₁) (hH₂ : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H₂) (hH : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (TopologicalFiberProduct.carrier β₁ β₂)</code></pre></section>
+    <section><div class="natural-text"><p>The concrete pullback of continuous maps between profinite groups is again profinite.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : CompactSpace H := IsProfiniteGroup.compactSpace hH
+  letI : CompactSpace H₁ := IsProfiniteGroup.compactSpace hH₁
+  letI : CompactSpace H₂ := IsProfiniteGroup.compactSpace hH₂
+  letI : T2Space H := IsProfiniteGroup.t2Space hH
+  letI : T2Space H₁ := IsProfiniteGroup.t2Space hH₁
+  letI : T2Space H₂ := IsProfiniteGroup.t2Space hH₂
+  letI : TotallyDisconnectedSpace H := IsProfiniteGroup.totallyDisconnectedSpace hH
+  letI : TotallyDisconnectedSpace H₁ := IsProfiniteGroup.totallyDisconnectedSpace hH₁
+  letI : TotallyDisconnectedSpace H₂ := IsProfiniteGroup.totallyDisconnectedSpace hH₂
+  <span class="kw">have</span> hprod : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (H₁ × H₂) :=
+    ProCGroups.IsProfiniteGroup.prod (G := H₁) (H := H₂) hH₁ hH₂
+  simpa [TopologicalFiberProduct.carrier, FiberProduct.carrier] using
+    (ProCGroups.IsProfiniteGroup.of_isClosed_subgroup
+      (G := H₁ × H₂)
+      (hG := hprod)
+      (H := FiberProduct.subgroup (β₁ : H₁ →* H) (β₂ : H₂ →* H))
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullback_isClosed">pullback_isClosed</a> β₁ β₂))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.FiberProduct.isClosed">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.isClosed">ProCGroups.Categorical.FiberProduct.isClosed</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L473">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isClosed
+    {H H₁ H₂ : <span class="kw">Type</span> u}
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [T2Space H]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) :
+    IsClosed ((subgroup (β₁ : H₁ →* H) (β₂ : H₂ →* H) : Subgroup (H₁ × H₂)) :
+      Set (H₁ × H₂))</code></pre></section>
+    <section><div class="natural-text"><p>The concrete fiber-product subgroup of continuous maps is closed in the product.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullback_isClosed">pullback_isClosed</a> β₁ β₂</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.FiberProduct.isProfiniteGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.FiberProduct.isProfiniteGroup">ProCGroups.Categorical.FiberProduct.isProfiniteGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L483">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isProfiniteGroup
+    {H H₁ H₂ : <span class="kw">Type</span> u}
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    [IsTopologicalGroup H₁] [IsTopologicalGroup H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (hH₁ : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H₁) (hH₂ : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H₂) (hH : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (carrier (β₁ : H₁ →* H) (β₂ : H₂ →* H))</code></pre></section>
+    <section><div class="natural-text"><p>The concrete fiber product of continuous maps between profinite groups is profinite.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>TopologicalFiberProduct.isProfiniteGroup β₁ β₂ hH₁ hH₂ hH</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.hasProfiniteTestPullbackProperty">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.hasProfiniteTestPullbackProperty">ProCGroups.Categorical.TopologicalFiberProduct.hasProfiniteTestPullbackProperty</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L496">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> TopologicalFiberProduct.hasProfiniteTestPullbackProperty
+    {H H₁ H₂ : <span class="kw">Type</span> u}
+    [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a> (TopologicalFiberProduct.fst β₁ β₂) (TopologicalFiberProduct.snd β₁ β₂) β₁ β₂</code></pre></section>
+    <section><div class="natural-text"><p>A topological pullback square has the restricted profinite-source test property.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · ext x
+    <span class="kw">exact</span> x.2
+  · <span class="kw">intro</span> K _ _ _ hK φ₁ φ₂ hφ
+    refine ⟨TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k), ?_, ?_⟩
+    · <span class="kw">exact</span> ⟨<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackFstCont_pullbackLiftCont">pullbackFstCont_pullbackLiftCont</a> β₁ β₂ φ₁ φ₂
+        (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k),
+        <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackSndCont_pullbackLiftCont">pullbackSndCont_pullbackLiftCont</a> β₁ β₂ φ₁ φ₂
+          (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)⟩
+    · <span class="kw">intro</span> ψ hψ
+      <span class="kw">have</span> hfst :
+          (TopologicalFiberProduct.fst β₁ β₂).comp ψ =
+            (TopologicalFiberProduct.fst β₁ β₂).comp
+              (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)) := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          (TopologicalFiberProduct.fst β₁ β₂).comp ψ = φ₁ := hψ.1
+          _ =
+              (TopologicalFiberProduct.fst β₁ β₂).comp
+                (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)) := <span class="kw">by</span>
+              symm
+              <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackFstCont_pullbackLiftCont">pullbackFstCont_pullbackLiftCont</a> β₁ β₂ φ₁ φ₂
+                (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)
+      <span class="kw">have</span> hsnd :
+          (TopologicalFiberProduct.snd β₁ β₂).comp ψ =
+            (TopologicalFiberProduct.snd β₁ β₂).comp
+              (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)) := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          (TopologicalFiberProduct.snd β₁ β₂).comp ψ = φ₂ := hψ.2
+          _ =
+              (TopologicalFiberProduct.snd β₁ β₂).comp
+                (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)) := <span class="kw">by</span>
+              symm
+              <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackSndCont_pullbackLiftCont">pullbackSndCont_pullbackLiftCont</a> β₁ β₂ φ₁ φ₂
+                (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)
+      <span class="kw">exact</span> TopologicalFiberProduct.hom_ext
+        (<span class="kw">fun</span> k =&gt; <span class="kw">by</span>
+          <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →ₜ* H₁ =&gt; f k) hfst)
+        (<span class="kw">fun</span> k =&gt; <span class="kw">by</span>
+          <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →ₜ* H₂ =&gt; f k) hsnd)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.hasProfiniteTestPullbackProperty_of_bijective_toConcretePullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.hasProfiniteTestPullbackProperty_of_bijective_toConcretePullback">ProCGroups.Categorical.hasProfiniteTestPullbackProperty_of_bijective_toConcretePullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L547">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hasProfiniteTestPullbackProperty_of_bijective_toConcretePullback
+    {G H H₁ H₂ : <span class="kw">Type</span> u}
+    [Group G] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    [IsTopologicalGroup H₁] [IsTopologicalGroup H₂]
+    (α₁ : G →ₜ* H₁) (α₂ : G →ₜ* H₂)
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (hG : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G) (hH₁ : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H₁)
+    (hH₂ : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H₂) (hH : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> H)
+    (τ : G →ₜ* TopologicalFiberProduct.carrier β₁ β₂)
+    (hτ : Function.Bijective τ)
+    (h₁ : (TopologicalFiberProduct.fst β₁ β₂).comp τ = α₁)
+    (h₂ : (TopologicalFiberProduct.snd β₁ β₂).comp τ = α₂) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a> α₁ α₂ β₁ β₂</code></pre></section>
+    <section><div class="natural-text"><p>A profinite square with a bijective continuous <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map to the concrete pullback is a continuous pullback square.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · ext g
+    <span class="kw">have</span> hτ₁ : TopologicalFiberProduct.fst β₁ β₂ (τ g) = α₁ g := <span class="kw">by</span>
+      simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₁ =&gt; f g) h₁
+    <span class="kw">have</span> hτ₂ : TopologicalFiberProduct.snd β₁ β₂ (τ g) = α₂ g := <span class="kw">by</span>
+      simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₂ =&gt; f g) h₂
+    <span class="kw">calc</span>
+      β₁ (α₁ g) = β₁ (TopologicalFiberProduct.fst β₁ β₂ (τ g)) := <span class="kw">by</span> <span class="kw">rw</span> [← hτ₁]
+      _ = β₂ (TopologicalFiberProduct.snd β₁ β₂ (τ g)) := (τ g).2
+      _ = β₂ (α₂ g) := <span class="kw">by</span> <span class="kw">rw</span> [hτ₂]
+  · <span class="kw">intro</span> K _ _ _ hK φ₁ φ₂ hφ
+    <span class="kw">let</span> hP : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (TopologicalFiberProduct.carrier β₁ β₂) :=
+      TopologicalFiberProduct.isProfiniteGroup β₁ β₂ hH₁ hH₂ hH
+    letI : CompactSpace G := IsProfiniteGroup.compactSpace hG
+    letI : T2Space (TopologicalFiberProduct.carrier β₁ β₂) := IsProfiniteGroup.t2Space hP
+    <span class="kw">let</span> e : G ≃ₜ* TopologicalFiberProduct.carrier β₁ β₂ :=
+      ContinuousMulEquiv.ofBijectiveCompactToT2 τ τ.continuous_toFun hτ
+    <span class="kw">let</span> θ : K →ₜ* TopologicalFiberProduct.carrier β₁ β₂ :=
+      TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)
+    <span class="kw">have</span> hθ₁ : (TopologicalFiberProduct.fst β₁ β₂).comp θ = φ₁ := <span class="kw">by</span>
+      ext k
+      <span class="kw">rfl</span>
+    <span class="kw">have</span> hθ₂ : (TopologicalFiberProduct.snd β₁ β₂).comp θ = φ₂ := <span class="kw">by</span>
+      ext k
+      <span class="kw">rfl</span>
+    refine ⟨e.symm.toContinuousMonoidHom.comp θ, ?_, ?_⟩
+    · <span class="kw">constructor</span>
+      · ext k
+        <span class="kw">have</span> hτ₁ : TopologicalFiberProduct.fst β₁ β₂ (τ (e.symm (θ k))) = α₁ (e.symm (θ k)) := <span class="kw">by</span>
+          simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₁ =&gt; f (e.symm (θ k))) h₁
+        <span class="kw">have</span> hθ₁&#x27; : TopologicalFiberProduct.fst β₁ β₂ (θ k) = φ₁ k := <span class="kw">by</span>
+          simpa using congrArg (<span class="kw">fun</span> f : K →ₜ* H₁ =&gt; f k) hθ₁
+        <span class="kw">calc</span>
+          α₁ (e.symm (θ k)) = TopologicalFiberProduct.fst β₁ β₂ (τ (e.symm (θ k))) := <span class="kw">by</span>
+            simpa using hτ₁.symm
+          _ = TopologicalFiberProduct.fst β₁ β₂ (θ k) := <span class="kw">by</span>
+            <span class="kw">rw</span> [<span class="kw">show</span> τ (e.symm (θ k)) = θ k from e.apply_symm_apply (θ k)]
+          _ = φ₁ k := hθ₁&#x27;
+      · ext k
+        <span class="kw">have</span> hτ₂ : TopologicalFiberProduct.snd β₁ β₂ (τ (e.symm (θ k))) = α₂ (e.symm (θ k)) := <span class="kw">by</span>
+          simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₂ =&gt; f (e.symm (θ k))) h₂
+        <span class="kw">have</span> hθ₂&#x27; : TopologicalFiberProduct.snd β₁ β₂ (θ k) = φ₂ k := <span class="kw">by</span>
+          simpa using congrArg (<span class="kw">fun</span> f : K →ₜ* H₂ =&gt; f k) hθ₂
+        <span class="kw">calc</span>
+          α₂ (e.symm (θ k)) = TopologicalFiberProduct.snd β₁ β₂ (τ (e.symm (θ k))) := <span class="kw">by</span>
+            simpa using hτ₂.symm
+          _ = TopologicalFiberProduct.snd β₁ β₂ (θ k) := <span class="kw">by</span>
+            <span class="kw">rw</span> [<span class="kw">show</span> τ (e.symm (θ k)) = θ k from e.apply_symm_apply (θ k)]
+          _ = φ₂ k := hθ₂&#x27;
+    · <span class="kw">intro</span> ψ hψ
+      <span class="kw">have</span> hcoord : τ.comp ψ = θ := <span class="kw">by</span>
+        <span class="kw">apply</span> TopologicalFiberProduct.hom_ext
+        · <span class="kw">intro</span> k
+          <span class="kw">have</span> hτ₁ : TopologicalFiberProduct.fst β₁ β₂ (τ (ψ k)) = α₁ (ψ k) := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₁ =&gt; f (ψ k)) h₁
+          <span class="kw">have</span> hψ₁ : α₁ (ψ k) = φ₁ k := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : K →ₜ* H₁ =&gt; f k) hψ.1
+          <span class="kw">have</span> hθ₁&#x27; : TopologicalFiberProduct.fst β₁ β₂ (θ k) = φ₁ k := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : K →ₜ* H₁ =&gt; f k) hθ₁
+          <span class="kw">calc</span>
+            TopologicalFiberProduct.fst β₁ β₂ ((τ.comp ψ) k) = α₁ (ψ k) := <span class="kw">by</span>
+              simpa using hτ₁
+            _ = φ₁ k := hψ₁
+            _ = TopologicalFiberProduct.fst β₁ β₂ (θ k) := hθ₁&#x27;.symm
+        · <span class="kw">intro</span> k
+          <span class="kw">have</span> hτ₂ : TopologicalFiberProduct.snd β₁ β₂ (τ (ψ k)) = α₂ (ψ k) := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₂ =&gt; f (ψ k)) h₂
+          <span class="kw">have</span> hψ₂ : α₂ (ψ k) = φ₂ k := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : K →ₜ* H₂ =&gt; f k) hψ.2
+          <span class="kw">have</span> hθ₂&#x27; : TopologicalFiberProduct.snd β₁ β₂ (θ k) = φ₂ k := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : K →ₜ* H₂ =&gt; f k) hθ₂
+          <span class="kw">calc</span>
+            TopologicalFiberProduct.snd β₁ β₂ ((τ.comp ψ) k) = α₂ (ψ k) := <span class="kw">by</span>
+              simpa using hτ₂
+            _ = φ₂ k := hψ₂
+            _ = TopologicalFiberProduct.snd β₁ β₂ (θ k) := hθ₂&#x27;.symm
+      ext k
+      <span class="kw">apply</span> hτ.1
+      <span class="kw">calc</span>
+        τ (ψ k) = (τ.comp ψ) k := <span class="kw">by</span> <span class="kw">rfl</span>
+        _ = θ k := <span class="kw">by</span>
+          <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →ₜ* TopologicalFiberProduct.carrier β₁ β₂ =&gt; f k) hcoord
+        _ = τ ((e.symm.toContinuousMonoidHom.comp θ) k) := <span class="kw">by</span>
+          change θ k = τ (e.symm (θ k))
+          symm
+          <span class="kw">exact</span> e.apply_symm_apply (θ k)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.hasProfiniteTestPullbackProperty_of_equiv_toConcretePullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.hasProfiniteTestPullbackProperty_of_equiv_toConcretePullback">ProCGroups.Categorical.hasProfiniteTestPullbackProperty_of_equiv_toConcretePullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L652">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hasProfiniteTestPullbackProperty_of_equiv_toConcretePullback
+    [Group G] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace G] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (α₁ : G →ₜ* H₁) (α₂ : G →ₜ* H₂)
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (e : G ≃ₜ* TopologicalFiberProduct.carrier β₁ β₂)
+    (h₁ : (TopologicalFiberProduct.fst β₁ β₂).comp e.toContinuousMonoidHom = α₁)
+    (h₂ : (TopologicalFiberProduct.snd β₁ β₂).comp e.toContinuousMonoidHom = α₂) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a> α₁ α₂ β₁ β₂</code></pre></section>
+    <section><div class="natural-text"><p>Transport the continuous pullback universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> across a continuous multiplicative equivalence with the concrete pullback.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · ext g
+    <span class="kw">have</span> h₁g : TopologicalFiberProduct.fst β₁ β₂ (e g) = α₁ g := <span class="kw">by</span>
+      simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₁ =&gt; f g) h₁
+    <span class="kw">have</span> h₂g : TopologicalFiberProduct.snd β₁ β₂ (e g) = α₂ g := <span class="kw">by</span>
+      simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₂ =&gt; f g) h₂
+    <span class="kw">calc</span>
+      β₁ (α₁ g) = β₁ (TopologicalFiberProduct.fst β₁ β₂ (e g)) := <span class="kw">by</span> <span class="kw">rw</span> [← h₁g]
+      _ = β₂ (TopologicalFiberProduct.snd β₁ β₂ (e g)) := (e g).2
+      _ = β₂ (α₂ g) := <span class="kw">by</span> <span class="kw">rw</span> [h₂g]
+  · <span class="kw">intro</span> K _ _ _ hK φ₁ φ₂ hφ
+    <span class="kw">let</span> θ : K →ₜ* TopologicalFiberProduct.carrier β₁ β₂ :=
+      TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k)
+    refine ⟨e.symm.toContinuousMonoidHom.comp θ, ?_, ?_⟩
+    · <span class="kw">constructor</span>
+      · ext k
+        <span class="kw">have</span> h₁k : TopologicalFiberProduct.fst β₁ β₂ (e (e.symm (θ k))) = α₁ (e.symm (θ k)) := <span class="kw">by</span>
+          simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₁ =&gt; f (e.symm (θ k))) h₁
+        <span class="kw">calc</span>
+          α₁ ((e.symm.toContinuousMonoidHom.comp θ) k) = α₁ (e.symm (θ k)) := <span class="kw">rfl</span>
+          _ = TopologicalFiberProduct.fst β₁ β₂ (e (e.symm (θ k))) := <span class="kw">by</span>
+            simpa using h₁k.symm
+          _ = TopologicalFiberProduct.fst β₁ β₂ (θ k) := <span class="kw">by</span> <span class="kw">rw</span> [e.apply_symm_apply]
+          _ = φ₁ k := <span class="kw">by</span>
+            change
+              TopologicalFiberProduct.fst β₁ β₂
+                (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k) k) =
+                  φ₁ k
+            <span class="kw">rfl</span>
+      · ext k
+        <span class="kw">have</span> h₂k : TopologicalFiberProduct.snd β₁ β₂ (e (e.symm (θ k))) = α₂ (e.symm (θ k)) := <span class="kw">by</span>
+          simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₂ =&gt; f (e.symm (θ k))) h₂
+        <span class="kw">calc</span>
+          α₂ ((e.symm.toContinuousMonoidHom.comp θ) k) = α₂ (e.symm (θ k)) := <span class="kw">rfl</span>
+          _ = TopologicalFiberProduct.snd β₁ β₂ (e (e.symm (θ k))) := <span class="kw">by</span>
+            simpa using h₂k.symm
+          _ = TopologicalFiberProduct.snd β₁ β₂ (θ k) := <span class="kw">by</span> <span class="kw">rw</span> [e.apply_symm_apply]
+          _ = φ₂ k := <span class="kw">by</span>
+            change
+              TopologicalFiberProduct.snd β₁ β₂
+                (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k) k) =
+                  φ₂ k
+            <span class="kw">rfl</span>
+    · <span class="kw">intro</span> ψ hψ
+      <span class="kw">have</span> hcoord : e.toContinuousMonoidHom.comp ψ = θ := <span class="kw">by</span>
+        <span class="kw">apply</span> TopologicalFiberProduct.hom_ext
+        · <span class="kw">intro</span> k
+          <span class="kw">have</span> h₁ψ : TopologicalFiberProduct.fst β₁ β₂ (e (ψ k)) = α₁ (ψ k) := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₁ =&gt; f (ψ k)) h₁
+          <span class="kw">have</span> hψ₁ : α₁ (ψ k) = φ₁ k := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : K →ₜ* H₁ =&gt; f k) hψ.1
+          <span class="kw">calc</span>
+            TopologicalFiberProduct.fst β₁ β₂ ((e.toContinuousMonoidHom.comp ψ) k) = α₁ (ψ k) := <span class="kw">by</span>
+              simpa using h₁ψ
+            _ = φ₁ k := hψ₁
+            _ = TopologicalFiberProduct.fst β₁ β₂ (θ k) := <span class="kw">by</span>
+              change
+                φ₁ k =
+                  TopologicalFiberProduct.fst β₁ β₂
+                    (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k) k)
+              <span class="kw">rfl</span>
+        · <span class="kw">intro</span> k
+          <span class="kw">have</span> h₂ψ : TopologicalFiberProduct.snd β₁ β₂ (e (ψ k)) = α₂ (ψ k) := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : G →ₜ* H₂ =&gt; f (ψ k)) h₂
+          <span class="kw">have</span> hψ₂ : α₂ (ψ k) = φ₂ k := <span class="kw">by</span>
+            simpa using congrArg (<span class="kw">fun</span> f : K →ₜ* H₂ =&gt; f k) hψ.2
+          <span class="kw">calc</span>
+            TopologicalFiberProduct.snd β₁ β₂ ((e.toContinuousMonoidHom.comp ψ) k) = α₂ (ψ k) := <span class="kw">by</span>
+              simpa using h₂ψ
+            _ = φ₂ k := hψ₂
+            _ = TopologicalFiberProduct.snd β₁ β₂ (θ k) := <span class="kw">by</span>
+              change
+                φ₂ k =
+                  TopologicalFiberProduct.snd β₁ β₂
+                    (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> k =&gt; DFunLike.congr_fun hφ k) k)
+              <span class="kw">rfl</span>
+      ext k
+      <span class="kw">apply</span> e.injective
+      <span class="kw">calc</span>
+        e (ψ k) = (e.toContinuousMonoidHom.comp ψ) k := <span class="kw">by</span> <span class="kw">rfl</span>
+        _ = θ k := <span class="kw">by</span>
+          <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : K →ₜ* TopologicalFiberProduct.carrier β₁ β₂ =&gt; f k) hcoord
+        _ = e (e.symm (θ k)) := <span class="kw">by</span> <span class="kw">rw</span> [e.apply_symm_apply]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLiftCont_surjective_iff_ker_comp_le_sup_ker">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLiftCont_surjective_iff_ker_comp_le_sup_ker">ProCGroups.Categorical.pullbackLiftCont_surjective_iff_ker_comp_le_sup_ker</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L747">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLiftCont_surjective_iff_ker_comp_le_sup_ker
+    [Group A] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace A] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : A →ₜ* H₁) (φ₂ : A →ₜ* H₂)
+    (hφ₁ : Function.Surjective φ₁) (hφ₂ : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂) :
+    Function.Surjective (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂
+        (<span class="kw">fun</span> a =&gt; DFunLike.congr_fun hcomp a)) ↔
+      ((β₁.comp φ₁ : A →ₜ* H).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≤
+        ((φ₁ : A →ₜ* H₁).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ⊔
+          ((φ₂ : A →ₜ* H₂).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a></code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the continuous pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hcomp&#x27; :
+      ((β₁ : H₁ →* H).comp (φ₁ : A →* H₁)) =
+        ((β₂ : H₂ →* H).comp (φ₂ : A →* H₂)) := <span class="kw">by</span>
+    ext a
+    <span class="kw">exact</span> DFunLike.congr_fun hcomp a
+  simpa [TopologicalFiberProduct.lift, TopologicalFiberProduct.carrier] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_comp_le_sup_ker">pullbackLift_surjective_iff_ker_comp_le_sup_ker</a>
+      (β₁ := (β₁ : H₁ →* H)) (β₂ := (β₂ : H₂ →* H))
+      (φ₁ := (φ₁ : A →* H₁)) (φ₂ := (φ₂ : A →* H₂))
+      hφ₁ hφ₂ hcomp&#x27;)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackLiftCont_surjective_iff_ker_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackLiftCont_surjective_iff_ker_eq">ProCGroups.Categorical.pullbackLiftCont_surjective_iff_ker_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L771">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pullbackLiftCont_surjective_iff_ker_eq
+    [Group A] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace A] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : A →ₜ* H₁) (φ₂ : A →ₜ* H₂)
+    (hφ₁ : Function.Surjective φ₁) (hφ₂ : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂) :
+    Function.Surjective (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂
+        (<span class="kw">fun</span> a =&gt; DFunLike.congr_fun hcomp a)) ↔
+      ((β₁.comp φ₁ : A →ₜ* H).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> =
+        ((φ₁ : A →ₜ* H₁).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ⊔
+          ((φ₂ : A →ₜ* H₂).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a></code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the continuous pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hcomp&#x27; :
+      ((β₁ : H₁ →* H).comp (φ₁ : A →* H₁)) =
+        ((β₂ : H₂ →* H).comp (φ₂ : A →* H₂)) := <span class="kw">by</span>
+    ext a
+    <span class="kw">exact</span> DFunLike.congr_fun hcomp a
+  simpa [TopologicalFiberProduct.lift, TopologicalFiberProduct.carrier] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.pullbackLift_surjective_iff_ker_eq">pullbackLift_surjective_iff_ker_eq</a>
+      (β₁ := (β₁ : H₁ →* H)) (β₂ := (β₂ : H₂ →* H))
+      (φ₁ := (φ₁ : A →* H₁)) (φ₂ := (φ₂ : A →* H₂))
+      hφ₁ hφ₂ hcomp&#x27;)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.surjective_pullbackLiftCont_of_ker_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.surjective_pullbackLiftCont_of_ker_eq">ProCGroups.Categorical.surjective_pullbackLiftCont_of_ker_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L795">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> surjective_pullbackLiftCont_of_ker_eq
+    [Group A] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace A] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : A →ₜ* H₁) (φ₂ : A →ₜ* H₂)
+    (hφ₁ : Function.Surjective φ₁) (hφ₂ : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂)
+    (hker : ((β₁.comp φ₁ : A →ₜ* H).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> =
+      ((φ₁ : A →ₜ* H₁).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ⊔ ((φ₂ : A →ₜ* H₂).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>) :
+    Function.Surjective (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> a =&gt; <span class="kw">by</span>
+      <span class="kw">exact</span> DFunLike.congr_fun hcomp a))</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the continuous pullback lift is equivalent to the required kernel equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackLiftCont_surjective_iff_ker_eq">pullbackLiftCont_surjective_iff_ker_eq</a> β₁ β₂ φ₁ φ₂ hφ₁ hφ₂ hcomp).2 hker</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.bijective_pullbackLiftCont_of_left_injective_of_ker_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.bijective_pullbackLiftCont_of_left_injective_of_ker_eq">ProCGroups.Categorical.bijective_pullbackLiftCont_of_left_injective_of_ker_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L809">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> bijective_pullbackLiftCont_of_left_injective_of_ker_eq
+    [Group A] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace A] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : A →ₜ* H₁) (φ₂ : A →ₜ* H₂)
+    (hφ₁surj : Function.Surjective φ₁) (hφ₂surj : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂)
+    (hker : ((β₁.comp φ₁ : A →ₜ* H).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> =
+      ((φ₁ : A →ₜ* H₁).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ⊔ ((φ₂ : A →ₜ* H₂).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>)
+    (hφ₁inj : Function.Injective φ₁) :
+    Function.Bijective (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> a =&gt; <span class="kw">by</span>
+      <span class="kw">exact</span> DFunLike.congr_fun hcomp a))</code></pre></section>
+    <section><div class="natural-text"><p>The continuous pullback lift is bijective when the left map is injective and the required kernel equality holds.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackLiftCont_injective_of_left_injective">pullbackLiftCont_injective_of_left_injective</a> β₁ β₂ φ₁ φ₂
+      (<span class="kw">fun</span> a =&gt; DFunLike.congr_fun hcomp a) hφ₁inj
+  · <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.surjective_pullbackLiftCont_of_ker_eq">surjective_pullbackLiftCont_of_ker_eq</a> β₁ β₂ φ₁ φ₂
+      hφ₁surj hφ₂surj hcomp hker</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.bijective_pullbackLiftCont_of_right_injective_of_ker_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.bijective_pullbackLiftCont_of_right_injective_of_ker_eq">ProCGroups.Categorical.bijective_pullbackLiftCont_of_right_injective_of_ker_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L828">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> bijective_pullbackLiftCont_of_right_injective_of_ker_eq
+    [Group A] [Group H] [Group H₁] [Group H₂]
+    [TopologicalSpace A] [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : A →ₜ* H₁) (φ₂ : A →ₜ* H₂)
+    (hφ₁surj : Function.Surjective φ₁) (hφ₂surj : Function.Surjective φ₂)
+    (hcomp : β₁.comp φ₁ = β₂.comp φ₂)
+    (hker : ((β₁.comp φ₁ : A →ₜ* H).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> =
+      ((φ₁ : A →ₜ* H₁).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ⊔ ((φ₂ : A →ₜ* H₂).toMonoidHom).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>)
+    (hφ₂inj : Function.Injective φ₂) :
+    Function.Bijective (TopologicalFiberProduct.lift β₁ β₂ φ₁ φ₂ (<span class="kw">fun</span> a =&gt; <span class="kw">by</span>
+      <span class="kw">exact</span> DFunLike.congr_fun hcomp a))</code></pre></section>
+    <section><div class="natural-text"><p>The continuous pullback lift is bijective when the right map is injective and the required kernel equality holds.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackLiftCont_injective_of_right_injective">pullbackLiftCont_injective_of_right_injective</a> β₁ β₂ φ₁ φ₂
+      (<span class="kw">fun</span> a =&gt; DFunLike.congr_fun hcomp a) hφ₂inj
+  · <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.surjective_pullbackLiftCont_of_ker_eq">surjective_pullbackLiftCont_of_ker_eq</a> β₁ β₂ φ₁ φ₂
+      hφ₁surj hφ₂surj hcomp hker</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.fst_lift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.fst_lift">ProCGroups.Categorical.TopologicalFiberProduct.fst_lift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L849">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> fst_lift
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    (fst β₁ β₂).comp (lift β₁ β₂ φ₁ φ₂ h) = φ₁</code></pre></section>
+    <section><div class="natural-text"><p>Composing the first projection with a topological fiber-product lift gives the left map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackFstCont_pullbackLiftCont">pullbackFstCont_pullbackLiftCont</a> β₁ β₂ φ₁ φ₂ h</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.snd_lift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.snd_lift">ProCGroups.Categorical.TopologicalFiberProduct.snd_lift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L859">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> snd_lift
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) :
+    (snd β₁ β₂).comp (lift β₁ β₂ φ₁ φ₂ h) = φ₂</code></pre></section>
+    <section><div class="natural-text"><p>Composing the second projection with a topological fiber-product lift gives the right map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.pullbackSndCont_pullbackLiftCont">pullbackSndCont_pullbackLiftCont</a> β₁ β₂ φ₁ φ₂ h</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.fst_lift_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.fst_lift_apply">ProCGroups.Categorical.TopologicalFiberProduct.fst_lift_apply</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L868">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> fst_lift_apply
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) (k : K) :
+    fst β₁ β₂ (lift β₁ β₂ φ₁ φ₂ h k) = φ₁ k</code></pre></section>
+    <section><div class="natural-text"><p>The map is evaluated on an element by its defining coordinate formula.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.TopologicalFiberProduct.snd_lift_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.TopologicalFiberProduct.snd_lift_apply">ProCGroups.Categorical.TopologicalFiberProduct.snd_lift_apply</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/ProfinitePullbacks.html#L877">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> snd_lift_apply
+    [Group H] [Group H₁] [Group H₂] [Group K]
+    [TopologicalSpace H] [TopologicalSpace H₁] [TopologicalSpace H₂] [TopologicalSpace K]
+    (β₁ : H₁ →ₜ* H) (β₂ : H₂ →ₜ* H)
+    (φ₁ : K →ₜ* H₁) (φ₂ : K →ₜ* H₂)
+    (h : ∀ k, β₁ (φ₁ k) = β₂ (φ₂ k)) (k : K) :
+    snd β₁ β₂ (lift β₁ β₂ φ₁ φ₂ h k) = φ₂ k</code></pre></section>
+    <section><div class="natural-text"><p>The map is evaluated on an element by its defining coordinate formula.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Categorical.ProfinitePullbacks"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

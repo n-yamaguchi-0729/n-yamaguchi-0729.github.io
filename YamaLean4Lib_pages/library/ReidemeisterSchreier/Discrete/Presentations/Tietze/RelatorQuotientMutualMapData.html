@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReidemeisterSchreier.Discrete.Presentations.Tietze.RelatorQuotientMutualMapData | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../../download/index.html">Download</a></nav>
+  <div class="header-current">ReidemeisterSchreier.Discrete.Presentations.Tietze.RelatorQuotientMutualMapData</div>
+  <form class="search-form" action="../../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a><span class="sep">/</span><a href="../../../../../library/ReidemeisterSchreier/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations.html">Presentations</a><span class="sep">/</span><a href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze.html">Tietze</a><span class="sep">/</span><span>RelatorQuotientMutualMapData</span></div>
+      <h1 class="module-title">ReidemeisterSchreier.Discrete.Presentations.Tietze.RelatorQuotientMutualMapData</h1>
+      <div class="module-meta">1 Theorem | 8 Definition | 2 Structure</div>
+      <div class="module-overview"><p>This module develops the maps induced by continuous homomorphisms. It organizes the relevant quotient pullbacks and <a class="decl-ref" href="../../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage maps, then proves the compatibility statements needed for the completed construction.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Relators.html">ReidemeisterSchreier.Discrete.Presentations.Relators</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a></li><li><a href="../../../../../library/ReidemeisterSchreier/Discrete.html">ReidemeisterSchreier.Discrete</a></li><li><a href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations.html">ReidemeisterSchreier.Discrete.Presentations</a></li><li><a href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze.html">ReidemeisterSchreier.Discrete.Presentations.Tietze</a></li><li><a href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/GeneratorMap.html">ReidemeisterSchreier.Discrete.Presentations.Tietze.GeneratorMap</a></li><li><a href="../../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier.html">ReidemeisterSchreier.Discrete.ReidemeisterSchreier</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.quotientEquivOfRelatorsByMutualMaps">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.quotientEquivOfRelatorsByMutualMaps">ReidemeisterSchreier.Discrete.Presentations.quotientEquivOfRelatorsByMutualMaps</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L31">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> quotientEquivOfRelatorsByMutualMaps
+    (R : Set G) (S : Set H)
+    (f : G →* H) (g : H →* G)
+    (hR : ∀ r ∈ R, f r ∈ Subgroup.normalClosure S)
+    (hS : ∀ s ∈ S, g s ∈ Subgroup.normalClosure R)
+    (hgf : ∀ x : G, g (f x) * x⁻¹ ∈ Subgroup.normalClosure R)
+    (hfg : ∀ y : H, f (g y) * y⁻¹ ∈ Subgroup.normalClosure S) :
+    G ⧸ Subgroup.normalClosure R ≃* H ⧸ Subgroup.normalClosure S := <span class="kw">by</span>
+  <span class="kw">let</span> NR : Subgroup G := Subgroup.normalClosure R
+  <span class="kw">let</span> NS : Subgroup H := Subgroup.normalClosure S
+  <span class="kw">have</span> hfNR : NR ≤ Subgroup.comap f NS := <span class="kw">by</span>
+    <span class="kw">exact</span> Subgroup.normalClosure_le_normal hR
+  <span class="kw">have</span> hgNS : NS ≤ Subgroup.comap g NR := <span class="kw">by</span>
+    <span class="kw">exact</span> Subgroup.normalClosure_le_normal hS
+  <span class="kw">let</span> F : G ⧸ NR →* H ⧸ NS :=
+    QuotientGroup.lift NR ((QuotientGroup.mk&#x27; NS).comp f) (<span class="kw">by</span>
+      <span class="kw">intro</span> x hx
+      <span class="kw">rw</span> [MonoidHom.mem_ker]
+      <span class="kw">exact</span> (QuotientGroup.eq_one_iff (N := NS) (f x)).2 (hfNR hx))
+  <span class="kw">let</span> K : H ⧸ NS →* G ⧸ NR :=
+    QuotientGroup.lift NS ((QuotientGroup.mk&#x27; NR).comp g) (<span class="kw">by</span>
+      <span class="kw">intro</span> y hy
+      <span class="kw">rw</span> [MonoidHom.mem_ker]
+      <span class="kw">exact</span> (QuotientGroup.eq_one_iff (N := NR) (g y)).2 (hgNS hy))
+  refine
+    { toFun := F
+      invFun := K
+      left_inv := ?_
+      right_inv := ?_
+      map_mul&#x27; := <span class="kw">fun</span> a b =&gt; F.map_mul a b }
+  · <span class="kw">intro</span> x
+    rcases QuotientGroup.mk&#x27;_surjective NR x <span class="kw">with</span> ⟨x, <span class="kw">rfl</span>⟩
+    change K (F (QuotientGroup.mk&#x27; NR x)) = QuotientGroup.mk&#x27; NR x
+    <span class="kw">simp</span> only [QuotientGroup.mk&#x27;_apply]
+    <span class="kw">exact</span> (QuotientGroup.eq_iff_div_mem (N := NR) (x := g (f x)) (y := x)).2
+      (<span class="kw">by</span> simpa [NR, div_eq_mul_inv] using hgf x)
+  · <span class="kw">intro</span> y
+    rcases QuotientGroup.mk&#x27;_surjective NS y <span class="kw">with</span> ⟨y, <span class="kw">rfl</span>⟩
+    change F (K (QuotientGroup.mk&#x27; NS y)) = QuotientGroup.mk&#x27; NS y
+    <span class="kw">simp</span> only [QuotientGroup.mk&#x27;_apply]
+    <span class="kw">exact</span> (QuotientGroup.eq_iff_div_mem (N := NS) (x := f (g y)) (y := y)).2
+      (<span class="kw">by</span> simpa [NS, div_eq_mul_inv] using hfg y)</code></pre></section>
+    <section><div class="natural-text"><p>Mutual homomorphisms respecting <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> induce an isomorphism between the corresponding relator quotients.</p></div></section>
+  </div>
+</section>
+<section class="decl structure" id="decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L74">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> RelatorQuotientMutualMapData
+    (R : Set G) (S : Set H) <span class="kw">where</span>
+  toHom : G →* H
+  invHom : H →* G
+  mapsRelators : ∀ r ∈ R, toHom r ∈ Subgroup.normalClosure S
+  mapsTargetRelators : ∀ s ∈ S, invHom s ∈ Subgroup.normalClosure R
+  inv_toHom : ∀ x : G, invHom (toHom x) * x⁻¹ ∈ Subgroup.normalClosure R
+  to_invHom : ∀ y : H, toHom (invHom y) * y⁻¹ ∈ Subgroup.normalClosure S</code></pre></section>
+    <section><div class="natural-text"><p>Mutual relator-quotient map data records forward and inverse homomorphisms that are inverse modulo the two relator normal closures.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData.refl">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData.refl">ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData.refl</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L87">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> refl (R : Set G) :
+    <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">RelatorQuotientMutualMapData</a> R R <span class="kw">where</span>
+  toHom := MonoidHom.id G
+  invHom := MonoidHom.id G
+  mapsRelators := <span class="kw">by</span>
+    <span class="kw">intro</span> r hr
+    <span class="kw">exact</span> Subgroup.subset_normalClosure hr
+  mapsTargetRelators := <span class="kw">by</span>
+    <span class="kw">intro</span> r hr
+    <span class="kw">exact</span> Subgroup.subset_normalClosure hr
+  inv_toHom := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">simp</span> only [MonoidHom.id_apply, mul_inv_cancel, one_mem]
+  to_invHom := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">simp</span> only [MonoidHom.id_apply, mul_inv_cancel, one_mem]</code></pre></section>
+    <section><div class="natural-text"><p>The identity homomorphism gives reflexive mutual map data for a relator quotient.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData.symm">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData.symm">ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData.symm</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L104">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> symm
+    (D : <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">RelatorQuotientMutualMapData</a> R S) :
+    <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">RelatorQuotientMutualMapData</a> S R <span class="kw">where</span>
+  toHom := D.invHom
+  invHom := D.toHom
+  mapsRelators := D.mapsTargetRelators
+  mapsTargetRelators := D.mapsRelators
+  inv_toHom := D.to_invHom
+  to_invHom := D.inv_toHom</code></pre></section>
+    <section><div class="natural-text"><p>Swapping the forward and inverse homomorphisms gives the symmetric mutual map data.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData.trans">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData.trans">ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData.trans</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L114">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> trans
+    (D₁ : <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">RelatorQuotientMutualMapData</a> R S)
+    (D₂ : <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">RelatorQuotientMutualMapData</a> S T) :
+    <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">RelatorQuotientMutualMapData</a> R T <span class="kw">where</span>
+  toHom := D₂.toHom.comp D₁.toHom
+  invHom := D₁.invHom.comp D₂.invHom
+  mapsRelators := <span class="kw">by</span>
+    <span class="kw">intro</span> r hr
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Relators.html#decl-ReidemeisterSchreier.Discrete.Presentations.map_mem_normalClosure_of_relators">map_mem_normalClosure_of_relators</a> D₂.toHom D₂.mapsRelators
+      (D₁.mapsRelators r hr)
+  mapsTargetRelators := <span class="kw">by</span>
+    <span class="kw">intro</span> t ht
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Relators.html#decl-ReidemeisterSchreier.Discrete.Presentations.map_mem_normalClosure_of_relators">map_mem_normalClosure_of_relators</a> D₁.invHom D₁.mapsTargetRelators
+      (D₂.mapsTargetRelators t ht)
+  inv_toHom := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">let</span> y : H := D₁.toHom x
+    <span class="kw">have</span> h₂ :
+        D₂.invHom (D₂.toHom y) * y⁻¹ ∈ Subgroup.normalClosure S :=
+      D₂.inv_toHom y
+    <span class="kw">have</span> h₂map :
+        D₁.invHom (D₂.invHom (D₂.toHom y) * y⁻¹) ∈
+          Subgroup.normalClosure R :=
+      <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Relators.html#decl-ReidemeisterSchreier.Discrete.Presentations.map_mem_normalClosure_of_relators">map_mem_normalClosure_of_relators</a> D₁.invHom D₁.mapsTargetRelators h₂
+    <span class="kw">have</span> h₂map&#x27; :
+        D₁.invHom (D₂.invHom (D₂.toHom y)) *
+            (D₁.invHom y)⁻¹ ∈
+          Subgroup.normalClosure R := <span class="kw">by</span>
+      simpa using h₂map
+    <span class="kw">have</span> h₁ :
+        D₁.invHom y * x⁻¹ ∈ Subgroup.normalClosure R :=
+      D₁.inv_toHom x
+    <span class="kw">have</span> hprod := Subgroup.mul_mem (Subgroup.normalClosure R) h₂map&#x27; h₁
+    <span class="kw">have</span> hmul :
+        (D₁.invHom (D₂.invHom (D₂.toHom y)) *
+              (D₁.invHom y)⁻¹) *
+            (D₁.invHom y * x⁻¹) =
+          D₁.invHom (D₂.invHom (D₂.toHom y)) * x⁻¹ := <span class="kw">by</span>
+      group
+    simpa [MonoidHom.comp_apply, y, hmul] using hprod
+  to_invHom := <span class="kw">by</span>
+    <span class="kw">intro</span> z
+    <span class="kw">let</span> y : H := D₂.invHom z
+    <span class="kw">have</span> h₁ :
+        D₁.toHom (D₁.invHom y) * y⁻¹ ∈ Subgroup.normalClosure S :=
+      D₁.to_invHom y
+    <span class="kw">have</span> h₁map :
+        D₂.toHom (D₁.toHom (D₁.invHom y) * y⁻¹) ∈
+          Subgroup.normalClosure T :=
+      <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Relators.html#decl-ReidemeisterSchreier.Discrete.Presentations.map_mem_normalClosure_of_relators">map_mem_normalClosure_of_relators</a> D₂.toHom D₂.mapsRelators h₁
+    <span class="kw">have</span> h₁map&#x27; :
+        D₂.toHom (D₁.toHom (D₁.invHom y)) *
+            (D₂.toHom y)⁻¹ ∈
+          Subgroup.normalClosure T := <span class="kw">by</span>
+      simpa using h₁map
+    <span class="kw">have</span> h₂ :
+        D₂.toHom y * z⁻¹ ∈ Subgroup.normalClosure T :=
+      D₂.to_invHom z
+    <span class="kw">have</span> hprod := Subgroup.mul_mem (Subgroup.normalClosure T) h₁map&#x27; h₂
+    <span class="kw">have</span> hmul :
+        (D₂.toHom (D₁.toHom (D₁.invHom y)) *
+              (D₂.toHom y)⁻¹) *
+            (D₂.toHom y * z⁻¹) =
+          D₂.toHom (D₁.toHom (D₁.invHom y)) * z⁻¹ := <span class="kw">by</span>
+      group
+    simpa [MonoidHom.comp_apply, y, hmul] using hprod</code></pre></section>
+    <section><div class="natural-text"><p>Composing two pieces of mutual map data gives transitive mutual map data between relator quotients.</p></div></section>
+  </div>
+</section>
+<section class="decl structure" id="decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientForwardMapData">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientForwardMapData">ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientForwardMapData</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L183">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> RelatorQuotientForwardMapData
+    (R : Set G) (S : Set H) (invHom : H →* G) <span class="kw">where</span>
+  toHom : G →* H
+  mapsRelators : ∀ r ∈ R, toHom r ∈ Subgroup.normalClosure S
+  inv_toHom : ∀ x : G, invHom (toHom x) * x⁻¹ ∈ Subgroup.normalClosure R
+  to_invHom : ∀ y : H, toHom (invHom y) * y⁻¹ ∈ Subgroup.normalClosure S</code></pre></section>
+    <section><div class="natural-text"><p>Forward relator-quotient map data records a free-group homomorphism whose relator images lie in the target normal closure.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfForwardMapData">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfForwardMapData">ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfForwardMapData</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L190">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> relatorQuotientMutualMapDataOfForwardMapData
+    {R : Set G} {S : Set H} {invHom : H →* G}
+    (hTarget : ∀ s ∈ S, invHom s ∈ Subgroup.normalClosure R)
+    (D : <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientForwardMapData">RelatorQuotientForwardMapData</a> R S invHom) :
+    <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">RelatorQuotientMutualMapData</a> R S <span class="kw">where</span>
+  toHom := D.toHom
+  invHom := invHom
+  mapsRelators := D.mapsRelators
+  mapsTargetRelators := hTarget
+  inv_toHom := D.inv_toHom
+  to_invHom := D.to_invHom</code></pre></section>
+    <section><div class="natural-text"><p>Forward map data in both directions, together with inverse congruences modulo relator closures, yields mutual map data.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfNormalClosureEq">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfNormalClosureEq">ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfNormalClosureEq</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L202">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> relatorQuotientMutualMapDataOfNormalClosureEq
+    {R S : Set G}
+    (h : Subgroup.normalClosure R = Subgroup.normalClosure S) :
+    <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">RelatorQuotientMutualMapData</a> R S <span class="kw">where</span>
+  toHom := MonoidHom.id G
+  invHom := MonoidHom.id G
+  mapsRelators := <span class="kw">by</span>
+    <span class="kw">intro</span> r hr
+    <span class="kw">rw</span> [← h]
+    <span class="kw">exact</span> Subgroup.subset_normalClosure hr
+  mapsTargetRelators := <span class="kw">by</span>
+    <span class="kw">intro</span> s hs
+    <span class="kw">rw</span> [h]
+    <span class="kw">exact</span> Subgroup.subset_normalClosure hs
+  inv_toHom := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">simp</span> only [MonoidHom.id_apply, mul_inv_cancel, one_mem]
+  to_invHom := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">simp</span> only [MonoidHom.id_apply, mul_inv_cancel, one_mem]</code></pre></section>
+    <section><div class="natural-text"><p>Equal normal closures provide mutual relator-quotient map data using the identity maps.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfRelatorEquivalent">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfRelatorEquivalent">ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfRelatorEquivalent</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L223">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> relatorQuotientMutualMapDataOfRelatorEquivalent
+    {R S : Set G}
+    (hR_to_S : ∀ r ∈ R, <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Relators.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorEquivalent">RelatorEquivalent</a> S r 1)
+    (hS_to_R : ∀ s ∈ S, <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Relators.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorEquivalent">RelatorEquivalent</a> R s 1) :
+    <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">RelatorQuotientMutualMapData</a> R S :=
+  <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfNormalClosureEq">relatorQuotientMutualMapDataOfNormalClosureEq</a>
+    (<a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Relators.html#decl-ReidemeisterSchreier.Discrete.normalClosure_eq_of_relatorEquivalent">normalClosure_eq_of_relatorEquivalent</a> hR_to_S hS_to_R)</code></pre></section>
+    <section><div class="natural-text"><p>Relator-equivalent defining <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> give mutual map data between the relator quotients.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfNormalClosureMapEq">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfNormalClosureMapEq">ReidemeisterSchreier.Discrete.Presentations.relatorQuotientMutualMapDataOfNormalClosureMapEq</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L231">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> relatorQuotientMutualMapDataOfNormalClosureMapEq
+    (R : Set G) (S : Set H) (e : G ≃* H)
+    (hmap :
+      Subgroup.map e.toMonoidHom (Subgroup.normalClosure R) =
+        Subgroup.normalClosure S) :
+    <a class="decl-ref" href="../../../../../library/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#decl-ReidemeisterSchreier.Discrete.Presentations.RelatorQuotientMutualMapData">RelatorQuotientMutualMapData</a> R S <span class="kw">where</span>
+  toHom := e.toMonoidHom
+  invHom := e.symm.toMonoidHom
+  mapsRelators := <span class="kw">by</span>
+    <span class="kw">intro</span> r hr
+    <span class="kw">have</span> hrmap : e r ∈ Subgroup.map e.toMonoidHom (Subgroup.normalClosure R) :=
+      ⟨r, Subgroup.subset_normalClosure hr, <span class="kw">rfl</span>⟩
+    <span class="kw">rw</span> [← hmap]
+    <span class="kw">exact</span> hrmap
+  mapsTargetRelators := <span class="kw">by</span>
+    <span class="kw">intro</span> s hs
+    <span class="kw">have</span> hsmap : s ∈ Subgroup.map e.toMonoidHom (Subgroup.normalClosure R) := <span class="kw">by</span>
+      <span class="kw">rw</span> [hmap]
+      <span class="kw">exact</span> Subgroup.subset_normalClosure hs
+    rcases hsmap <span class="kw">with</span> ⟨r, hr, hrs⟩
+    simpa [← hrs] using hr
+  inv_toHom := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">simp</span> only [MulEquiv.toMonoidHom_eq_coe, MonoidHom.coe_coe, MulEquiv.symm_apply_apply, mul_inv_cancel, one_mem]
+  to_invHom := <span class="kw">by</span>
+    <span class="kw">intro</span> y
+    <span class="kw">simp</span> only [MulEquiv.toMonoidHom_eq_coe, MonoidHom.coe_coe, MulEquiv.apply_symm_apply, mul_inv_cancel, one_mem]</code></pre></section>
+    <section><div class="natural-text"><p>A multiplicative equivalence carrying <a class="decl-ref" href="../../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> normal closure to the other provides mutual relator-quotient map data.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.map_normalClosure_eq_of_mulEquiv_relator_images_mem_normalClosure">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.map_normalClosure_eq_of_mulEquiv_relator_images_mem_normalClosure">ReidemeisterSchreier.Discrete.Presentations.map_normalClosure_eq_of_mulEquiv_relator_images_mem_normalClosure</a>
+    <a class="source-link" href="../../../../../library/src/ReidemeisterSchreier/Discrete/Presentations/Tietze/RelatorQuotientMutualMapData.html#L259">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_normalClosure_eq_of_mulEquiv_relator_images_mem_normalClosure
+    (e : G ≃* H) (R : Set G) (S : Set H)
+    (hR_to_S : ∀ r ∈ R, e r ∈ Subgroup.normalClosure S)
+    (hS_to_R : ∀ s ∈ S, e.symm s ∈ Subgroup.normalClosure R) :
+    Subgroup.map e.toMonoidHom (Subgroup.normalClosure R) =
+      Subgroup.normalClosure S</code></pre></section>
+    <section><div class="natural-text"><p>A multiplicative equivalence identifies normal closures when the images of <a class="decl-ref" href="../../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> in both directions lie in the corresponding normal closures.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> le_antisymm
+  · <span class="kw">rw</span> [Subgroup.map_normalClosure _ e.toMonoidHom e.surjective]
+    refine Subgroup.normalClosure_le_normal ?_
+    rintro z ⟨r, hr, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> hR_to_S r hr
+  · <span class="kw">rw</span> [Subgroup.map_normalClosure _ e.toMonoidHom e.surjective]
+    refine Subgroup.normalClosure_le_normal ?_
+    <span class="kw">intro</span> s hs
+    <span class="kw">have</span> hsmap : s ∈ Subgroup.map e.toMonoidHom (Subgroup.normalClosure R) :=
+      ⟨e.symm s, hS_to_R s hs, <span class="kw">by</span> <span class="kw">simp</span> only [MulEquiv.toMonoidHom_eq_coe, MonoidHom.coe_coe, MulEquiv.apply_symm_apply]⟩
+    rwa [Subgroup.map_normalClosure _ e.toMonoidHom e.surjective] at hsmap</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the presented-group quotient and the relevant Tietze move. The forward and inverse maps are defined on generators, and the relator hypotheses say that each defining relation is sent into the normal closure generated by the target relators. Therefore the maps descend to the presented quotients, compose to the identity by relator-equivalence calculations, and preserve the presentation after adding, deleting, or replacing redundant generators and relators.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ReidemeisterSchreier.Discrete.Presentations.Tietze.RelatorQuotientMutualMapData"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../../assets/site.js" data-root="../../../../../"></script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FoxDifferential.Completed.Continuous.SemidirectKernelBasis | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">FoxDifferential.Completed.Continuous.SemidirectKernelBasis</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/FoxDifferential.html">FoxDifferential</a><span class="sep">/</span><a href="../../../../library/FoxDifferential/Completed.html">Completed</a><span class="sep">/</span><a href="../../../../library/FoxDifferential/Completed/Continuous.html">Continuous</a><span class="sep">/</span><span>SemidirectKernelBasis</span></div>
+      <h1 class="module-title">FoxDifferential.Completed.Continuous.SemidirectKernelBasis</h1>
+      <div class="module-meta">6 Theorem</div>
+      <div class="module-overview"><p>This module develops the Fox-differential part of the theory. It records the formulas that connect generators, boundaries, Jacobians, and completed coordinates.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/FoxDifferential/Completed/Continuous/Topology.html">FoxDifferential.Completed.Continuous.Topology</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/CrowellExactSequence/Profinite/Exactness.html">CrowellExactSequence.Profinite.Exactness</a></li><li><a href="../../../../library/FoxDifferential.html">FoxDifferential</a></li><li><a href="../../../../library/FoxDifferential/Completed.html">FoxDifferential.Completed</a></li><li><a href="../../../../library/FoxDifferential/Completed/Continuous.html">FoxDifferential.Completed.Continuous</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-FoxDifferential.finiteCoordinateZeroRectangularNeighbourhoods_pi">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.finiteCoordinateZeroRectangularNeighbourhoods_pi">FoxDifferential.finiteCoordinateZeroRectangularNeighbourhoods_pi</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#L40">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> finiteCoordinateZeroRectangularNeighbourhoods_pi :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/SemidirectKernelBasis.html#decl-HasFiniteCoordinateZeroRectangularNeighbourhoods">HasFiniteCoordinateZeroRectangularNeighbourhoods</a> (A := A) (X := X)</code></pre></section>
+    <section><div class="natural-text"><p>Finite-coordinate product neighborhoods in a function space contain coordinate rectangles. This is the generic topological input needed to pass from coefficient-kernel bases for \(\mathbb{Z}_C\llbracket H\rrbracket\) to coordinate-kernel bases for \(\mathbb{Z}_C\llbracket H\rrbracket^{X}\). It uses the product topology directly and keeps no algebraic assumptions.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> U hU hUzero
+  classical
+  rcases (isOpen_pi_iff.mp hU) (0 : X → A) hUzero <span class="kw">with</span> ⟨J, W, hW, hJU⟩
+  <span class="kw">let</span> V : X → Set A := <span class="kw">fun</span> x =&gt; <span class="kw">if</span> hx : x ∈ J <span class="kw">then</span> W x <span class="kw">else</span> Set.univ
+  refine ⟨V, ?_, ?_⟩
+  · <span class="kw">intro</span> x
+    by_cases hx : x ∈ J
+    · simpa [V, hx] using hW x hx
+    · <span class="kw">simp</span> only [dite_eq_ite, hx, ↓reduceIte, isOpen_univ, Set.mem_univ, and_self, V]
+  · <span class="kw">intro</span> v hv
+    <span class="kw">apply</span> hJU
+    <span class="kw">intro</span> x hx
+    <span class="kw">have</span> hvx := hv x
+    <span class="kw">have</span> hxJ : x ∈ J := <span class="kw">by</span>
+      simpa using hx
+    <span class="kw">have</span> hVx : V x = W x := <span class="kw">by</span>
+      <span class="kw">simp</span> only [dite_eq_ite, hxJ, ↓reduceIte, V]
+    rwa [hVx] at hvx</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work from the defining Fox differential and its crossed-derivation rule. The values on generators determine the map; the product rule gives \(d(xy)=d(x)+x d(y)\), and the inverse rule follows by applying the product rule to \(x x^{-1}=1\). At <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient or quotient stages, the source and target coordinates are obtained by applying the same quotient map to supports and the given coefficient map to coefficients. Kernel and <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-ideal statements use the Fox fundamental identity, which expresses an element minus its <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> in terms of the Fox derivatives of the chosen generators. Completed assertions are checked after projection to every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage; continuity and closure follow from the inverse-limit topology and the closedness of the coordinate conditions. Finiteness at a stage follows because the quotient group and coefficient ring at that stage are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so the group-algebra support space is finite. Since the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas determine the differential or homomorphism uniquely, equality of all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox coordinates proves the asserted completed identity. The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage verification is made before passing to completion, so no topological density argument changes the algebraic calculation. Each completed coefficient system is obtained as a <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and the quotient maps commute with the Fox differential by the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Thus the identity proved on generators persists under products, inverses, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> linear combinations, and finally under the inverse-limit passage. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.zcFreeFoxCoordinates_hasFiniteCoordinateZeroRectangularNeighbourhoods">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.zcFreeFoxCoordinates_hasFiniteCoordinateZeroRectangularNeighbourhoods">FoxDifferential.zcFreeFoxCoordinates_hasFiniteCoordinateZeroRectangularNeighbourhoods</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#L62">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> zcFreeFoxCoordinates_hasFiniteCoordinateZeroRectangularNeighbourhoods
+    (C : ProCGroups.FiniteGroupClass.{u}) (X H : <span class="kw">Type</span> u)
+    [Group H] [TopologicalSpace H] [IsTopologicalGroup H] :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/SemidirectKernelBasis.html#decl-HasFiniteCoordinateZeroRectangularNeighbourhoods">HasFiniteCoordinateZeroRectangularNeighbourhoods</a>
+      (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-FoxDifferential.ZCCompletedGroupAlgebra">ZCCompletedGroupAlgebra</a> C H) (X := X)</code></pre></section>
+    <section><div class="natural-text"><p>Standard product-topology coordinate rectangles for completed Fox-coordinate families.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#decl-FoxDifferential.finiteCoordinateZeroRectangularNeighbourhoods_pi">finiteCoordinateZeroRectangularNeighbourhoods_pi</a></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work from the defining Fox differential and its crossed-derivation rule. The values on generators determine the map; the product rule gives \(d(xy)=d(x)+x d(y)\), and the inverse rule follows by applying the product rule to \(x x^{-1}=1\). At <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient or quotient stages, the source and target coordinates are obtained by applying the same quotient map to supports and the given coefficient map to coefficients. Completed assertions are checked after projection to every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage; continuity and closure follow from the inverse-limit topology and the closedness of the coordinate conditions. Finiteness at a stage follows because the quotient group and coefficient ring at that stage are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so the group-algebra support space is finite. Since the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas determine the differential or homomorphism uniquely, equality of all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox coordinates proves the asserted completed identity. The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage verification is made before passing to completion, so no topological density argument changes the algebraic calculation. Each completed coefficient system is obtained as a <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and the quotient maps commute with the Fox differential by the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Thus the identity proved on generators persists under products, inverses, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> linear combinations, and finally under the inverse-limit passage. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-zcCompletedFoxSemidirect_hasRectangularIdentityNeighbourhoods">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-zcCompletedFoxSemidirect_hasRectangularIdentityNeighbourhoods">zcCompletedFoxSemidirect_hasRectangularIdentityNeighbourhoods</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#L81">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> zcCompletedFoxSemidirect_hasRectangularIdentityNeighbourhoods :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/SemidirectKernelBasis.html#decl-HasSemidirectRectangularIdentityNeighbourhoods">HasSemidirectRectangularIdentityNeighbourhoods</a>
+      (X := X) (H := H) C</code></pre></section>
+    <section><div class="natural-text"><p>In the standard topology on \(\mathbb{Z}_C\llbracket H\rrbracket^{X} \rtimes H\), every identity neighborhood contains a product rectangle around (0,1) in the coordinate and target components.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> U hU hUone
+  rcases isOpen_induced_iff.mp hU <span class="kw">with</span> ⟨V, hVopen, hVeq⟩
+  <span class="kw">have</span> hVone :
+      ((0 : <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> C (X := X) (H := H)), (1 : H)) ∈ V := <span class="kw">by</span>
+    <span class="kw">have</span> hpre :
+        (1 : <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Semidirect.html#decl-FoxDifferential.ZCCompletedFoxSemidirect">ZCCompletedFoxSemidirect</a> C X H) ∈
+          (<span class="kw">fun</span> a : <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Semidirect.html#decl-FoxDifferential.ZCCompletedFoxSemidirect">ZCCompletedFoxSemidirect</a> C X H =&gt; (a.left, a.right)) ⁻¹&#x27; V := <span class="kw">by</span>
+      simpa [hVeq]
+        using hUone
+    simpa using hpre
+  <span class="kw">have</span> hVnhds : V ∈ 𝓝 ((0 : <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> C (X := X) (H := H)), (1 : H)) :=
+    hVopen.mem_nhds hVone
+  rcases mem_nhds_prod_iff.mp hVnhds <span class="kw">with</span> ⟨UL₀, hUL₀, UR₀, hUR₀, hprod⟩
+  rcases mem_nhds_iff.mp hUL₀ <span class="kw">with</span> ⟨UL, hULsub, hULopen, hULzero⟩
+  rcases mem_nhds_iff.mp hUR₀ <span class="kw">with</span> ⟨UR, hURsub, hURopen, hURone⟩
+  refine ⟨UL, UR, hULopen, hULzero, hURopen, hURone, ?_⟩
+  <span class="kw">intro</span> y hyL hyR
+  <span class="kw">have</span> hyV : (y.left, y.right) ∈ V :=
+    hprod (<span class="kw">show</span> (y.left, y.right) ∈ UL₀ ×ˢ UR₀ from ⟨hULsub hyL, hURsub hyR⟩)
+  <span class="kw">have</span> hyUpre : y ∈
+      (<span class="kw">fun</span> a : <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Semidirect.html#decl-FoxDifferential.ZCCompletedFoxSemidirect">ZCCompletedFoxSemidirect</a> C X H =&gt; (a.left, a.right)) ⁻¹&#x27; V := hyV
+  simpa [hVeq] using hyUpre</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work from the defining Fox differential and its crossed-derivation rule. The values on generators determine the map; the product rule gives \(d(xy)=d(x)+x d(y)\), and the inverse rule follows by applying the product rule to \(x x^{-1}=1\). At <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient or quotient stages, the source and target coordinates are obtained by applying the same quotient map to supports and the given coefficient map to coefficients. Completed assertions are checked after projection to every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage; continuity and closure follow from the inverse-limit topology and the closedness of the coordinate conditions. Since the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas determine the differential or homomorphism uniquely, equality of all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox coordinates proves the asserted completed identity. The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage verification is made before passing to completion, so no topological density argument changes the algebraic calculation. Each completed coefficient system is obtained as a <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and the quotient maps commute with the Fox differential by the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Thus the identity proved on generators persists under products, inverses, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> linear combinations, and finally under the inverse-limit passage. The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage quotient maps preserve the chosen generators, so the crossed-derivation calculation does not depend on the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of a coset. Linearity over the completed coefficient ring is checked after projection to each coefficient stage. The completed identity is therefore the unique <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family whose coordinates are the verified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox identities. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-freeProCZCFoxSemiZCBifilteredStageMap_identity_basis_of_component_bases_standardTopology">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-freeProCZCFoxSemiZCBifilteredStageMap_identity_basis_of_component_bases_standardTopology">freeProCZCFoxSemiZCBifilteredStageMap_identity_basis_of_component_bases_standardTopology</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#L131">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeProCZCFoxSemiZCBifilteredStageMap_identity_basis_of_component_bases_standardTopology
+    (hdir : Directed (· ≤ ·) (id : J → J))
+    (hcoeff_mod : ∀ {i j : J} (hij : i ≤ j),
+      ∀ a : <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> (zcIndex j).1.modulus,
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a>
+            (n := nstage i) (m := (zcIndex i).1.modulus) (hmod i)
+            (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a>
+              (n := (zcIndex i).1.modulus) (m := (zcIndex j).1.modulus)
+              (hzcIndex hij).1 a) =
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a> (n := nstage i) (m := nstage j) (hn hij)
+            (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a>
+              (n := nstage j) (m := (zcIndex j).1.modulus) (hmod j) a))
+    (hqmap_transition : ∀ {i j : J} (hij : i ≤ j),
+      ∀ q : CompletedGroupAlgebraQuotientInClass H ProC.finiteQuotientClass (zcIndex j).2,
+        qmap i
+            ((OpenNormalSubgroupInClass.map
+              (C := ProC.finiteQuotientClass) (G := H)
+              (U := OrderDual.ofDual (zcIndex i).2)
+              (V := OrderDual.ofDual (zcIndex j).2)
+              (hzcIndex hij).2) q) =
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Naturality.html#decl-FoxDifferential.finiteFoxStageTargetQuotientMap">finiteFoxStageTargetQuotientMap</a> (X := X) (hN hij) (qmap j q))
+    (hleft_basis :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/SemidirectKernelBasis.html#decl-FoxDifferential.HasAdditiveIdentityQuotientKernelNeighbourhoodBasis">HasAdditiveIdentityQuotientKernelNeighbourhoodBasis</a>
+        (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> ProC.finiteQuotientClass (X := X) (H := H))
+        (<span class="kw">fun</span> j : J =&gt;
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/BifilteredCoefficientStageProjection.html#decl-FoxDifferential.zcFreeFoxCoordinatesBifilteredStageMap">zcFreeFoxCoordinatesBifilteredStageMap</a>
+            (ProC := ProC) (X := X) (H := H) Nstage nstage
+            (<span class="kw">fun</span> k =&gt; <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/ProCIntegerBifilteredStageProjection.html#decl-FoxDifferential.zcCompletedGroupAlgebraBifilteredStageCoeffMap">zcCompletedGroupAlgebraBifilteredStageCoeffMap</a>
+              (ProC := ProC) (X := X) (H := H) Nstage nstage zcIndex hmod qmap k) j))
+    (hright_basis :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/QuotientKernelBasis.html#decl-FoxDifferential.HasIdentityQuotientKernelNeighbourhoodBasis">HasIdentityQuotientKernelNeighbourhoodBasis</a>
+        (Y := H)
+        (<span class="kw">fun</span> j : J =&gt;
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/ProCIntegerBifilteredStageRightProjection.html#decl-FoxDifferential.zcCompletedGroupAlgebraBifilteredStageRightMap">zcCompletedGroupAlgebraBifilteredStageRightMap</a>
+            (ProC := ProC) (X := X) (H := H) Nstage zcIndex qmap j)) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/QuotientKernelBasis.html#decl-FoxDifferential.HasIdentityQuotientKernelNeighbourhoodBasis">HasIdentityQuotientKernelNeighbourhoodBasis</a>
+      (Y := <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Semidirect.html#decl-FoxDifferential.ZCCompletedFoxSemidirect">ZCCompletedFoxSemidirect</a> ProC.finiteQuotientClass X H)
+      (<span class="kw">fun</span> j : J =&gt;
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/ProCIntegerBifilteredStageRightProjection.html#decl-FoxDifferential.freeProCZCCompletedFoxSemidirectZCBifilteredStageMap">freeProCZCCompletedFoxSemidirectZCBifilteredStageMap</a>
+          (ProC := ProC) (X := X) (H := H) Nstage nstage zcIndex hmod qmap j)</code></pre></section>
+    <section><div class="natural-text"><p>Standard-topology form of the componentwise kernel-basis theorem for actual \(\mathbb{Z}_C\llbracket H\rrbracket\) bifiltered <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/SemidirectKernelBasis.html#decl-freeProCZCFoxSemiZCBifilteredStageMap_identity_basis_of_component_bases">freeProCZCFoxSemiZCBifilteredStageMap_identity_basis_of_component_bases</a>
+      (ProC := ProC) (X := X) (H := H) Nstage nstage hN hn zcIndex hzcIndex
+      hmod qmap
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#decl-zcCompletedFoxSemidirect_hasRectangularIdentityNeighbourhoods">zcCompletedFoxSemidirect_hasRectangularIdentityNeighbourhoods</a>
+        (C := ProC.finiteQuotientClass) X H)
+      hdir hcoeff_mod hqmap_transition hleft_basis hright_basis</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work from the defining Fox differential and its crossed-derivation rule. The values on generators determine the map; the product rule gives \(d(xy)=d(x)+x d(y)\), and the inverse rule follows by applying the product rule to \(x x^{-1}=1\). At <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient or quotient stages, the source and target coordinates are obtained by applying the same quotient map to supports and the given coefficient map to coefficients. Kernel and <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-ideal statements use the Fox fundamental identity, which expresses an element minus its <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> in terms of the Fox derivatives of the chosen generators. Completed assertions are checked after projection to every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage; continuity and closure follow from the inverse-limit topology and the closedness of the coordinate conditions. Finiteness at a stage follows because the quotient group and coefficient ring at that stage are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so the group-algebra support space is finite. Since the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas determine the differential or homomorphism uniquely, equality of all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox coordinates proves the asserted completed identity. The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage verification is made before passing to completion, so no topological density argument changes the algebraic calculation. Each completed coefficient system is obtained as a <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and the quotient maps commute with the Fox differential by the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Thus the identity proved on generators persists under products, inverses, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> linear combinations, and finally under the inverse-limit passage. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-zcFreeFoxCoordinatesBifilteredStageMap_additive_basis_of_coeff_basis_standardTopology">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-zcFreeFoxCoordinatesBifilteredStageMap_additive_basis_of_coeff_basis_standardTopology">zcFreeFoxCoordinatesBifilteredStageMap_additive_basis_of_coeff_basis_standardTopology</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#L186">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> zcFreeFoxCoordinatesBifilteredStageMap_additive_basis_of_coeff_basis_standardTopology
+    [Fintype X] [Nonempty J]
+    (hdir : Directed (· ≤ ·) (id : J → J))
+    (hcoeff_mod : ∀ {i j : J} (hij : i ≤ j),
+      ∀ a : <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> (zcIndex j).1.modulus,
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a>
+            (n := nstage i) (m := (zcIndex i).1.modulus) (hmod i)
+            (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a>
+              (n := (zcIndex i).1.modulus) (m := (zcIndex j).1.modulus)
+              (hzcIndex hij).1 a) =
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a> (n := nstage i) (m := nstage j) (hn hij)
+            (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a>
+              (n := nstage j) (m := (zcIndex j).1.modulus) (hmod j) a))
+    (hqmap_transition : ∀ {i j : J} (hij : i ≤ j),
+      ∀ q : CompletedGroupAlgebraQuotientInClass H ProC.finiteQuotientClass (zcIndex j).2,
+        qmap i
+            ((OpenNormalSubgroupInClass.map
+              (C := ProC.finiteQuotientClass) (G := H)
+              (U := OrderDual.ofDual (zcIndex i).2)
+              (V := OrderDual.ofDual (zcIndex j).2)
+              (hzcIndex hij).2) q) =
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Naturality.html#decl-FoxDifferential.finiteFoxStageTargetQuotientMap">finiteFoxStageTargetQuotientMap</a> (X := X) (hN hij) (qmap j q))
+    (hcoeff_basis :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/SemidirectKernelBasis.html#decl-FoxDifferential.HasAdditiveIdentityQuotientKernelNeighbourhoodBasis">HasAdditiveIdentityQuotientKernelNeighbourhoodBasis</a>
+        (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-FoxDifferential.ZCCompletedGroupAlgebra">ZCCompletedGroupAlgebra</a> ProC.finiteQuotientClass H)
+        (<span class="kw">fun</span> j : J =&gt;
+          (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/ProCIntegerBifilteredStageProjection.html#decl-FoxDifferential.zcCompletedGroupAlgebraBifilteredStageCoeffMap">zcCompletedGroupAlgebraBifilteredStageCoeffMap</a>
+            (ProC := ProC) (X := X) (H := H) Nstage nstage zcIndex hmod qmap j).toAddMonoidHom)) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/SemidirectKernelBasis.html#decl-FoxDifferential.HasAdditiveIdentityQuotientKernelNeighbourhoodBasis">HasAdditiveIdentityQuotientKernelNeighbourhoodBasis</a>
+      (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> ProC.finiteQuotientClass (X := X) (H := H))
+      (<span class="kw">fun</span> j : J =&gt;
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/BifilteredCoefficientStageProjection.html#decl-FoxDifferential.zcFreeFoxCoordinatesBifilteredStageMap">zcFreeFoxCoordinatesBifilteredStageMap</a>
+          (ProC := ProC) (X := X) (H := H) Nstage nstage
+          (<span class="kw">fun</span> k =&gt; <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/ProCIntegerBifilteredStageProjection.html#decl-FoxDifferential.zcCompletedGroupAlgebraBifilteredStageCoeffMap">zcCompletedGroupAlgebraBifilteredStageCoeffMap</a>
+            (ProC := ProC) (X := X) (H := H) Nstage nstage zcIndex hmod qmap k) j)</code></pre></section>
+    <section><div class="natural-text"><p>Standard-topology additive kernel basis for completed Fox coordinates, reduced to the coefficient-ring kernel basis. For <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox coordinate families, product neighborhoods give the coordinate rectangles needed for the coordinate-kernel theorem.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/SemidirectKernelBasis.html#decl-zcFreeFoxCoordinatesBifilteredStageMap_additive_basis_of_coeff_basis">zcFreeFoxCoordinatesBifilteredStageMap_additive_basis_of_coeff_basis</a>
+      (ProC := ProC) (X := X) (H := H) Nstage nstage hN hn zcIndex hzcIndex
+      hmod qmap
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#decl-FoxDifferential.zcFreeFoxCoordinates_hasFiniteCoordinateZeroRectangularNeighbourhoods">zcFreeFoxCoordinates_hasFiniteCoordinateZeroRectangularNeighbourhoods</a>
+        (C := ProC.finiteQuotientClass) X H)
+      hdir hcoeff_mod hqmap_transition hcoeff_basis</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work from the defining Fox differential and its crossed-derivation rule. The values on generators determine the map; the product rule gives \(d(xy)=d(x)+x d(y)\), and the inverse rule follows by applying the product rule to \(x x^{-1}=1\). At <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient or quotient stages, the source and target coordinates are obtained by applying the same quotient map to supports and the given coefficient map to coefficients. Kernel and <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-ideal statements use the Fox fundamental identity, which expresses an element minus its <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> in terms of the Fox derivatives of the chosen generators. Completed assertions are checked after projection to every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage; continuity and closure follow from the inverse-limit topology and the closedness of the coordinate conditions. Finiteness at a stage follows because the quotient group and coefficient ring at that stage are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so the group-algebra support space is finite. Since the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas determine the differential or homomorphism uniquely, equality of all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox coordinates proves the asserted completed identity. The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage verification is made before passing to completion, so no topological density argument changes the algebraic calculation. Each completed coefficient system is obtained as a <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and the quotient maps commute with the Fox differential by the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Thus the identity proved on generators persists under products, inverses, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> linear combinations, and finally under the inverse-limit passage. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-semiZCBiStageMap_identityBasis_of_coeff_rightBases">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-semiZCBiStageMap_identityBasis_of_coeff_rightBases">semiZCBiStageMap_identityBasis_of_coeff_rightBases</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#L234">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> semiZCBiStageMap_identityBasis_of_coeff_rightBases
+    [Fintype X] [Nonempty J]
+    (hdir : Directed (· ≤ ·) (id : J → J))
+    (hcoeff_mod : ∀ {i j : J} (hij : i ≤ j),
+      ∀ a : <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> (zcIndex j).1.modulus,
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a>
+            (n := nstage i) (m := (zcIndex i).1.modulus) (hmod i)
+            (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a>
+              (n := (zcIndex i).1.modulus) (m := (zcIndex j).1.modulus)
+              (hzcIndex hij).1 a) =
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a> (n := nstage i) (m := nstage j) (hn hij)
+            (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/CoeffMap.html#decl-FoxDifferential.modNCompletedCoeffMap">modNCompletedCoeffMap</a>
+              (n := nstage j) (m := (zcIndex j).1.modulus) (hmod j) a))
+    (hqmap_transition : ∀ {i j : J} (hij : i ≤ j),
+      ∀ q : CompletedGroupAlgebraQuotientInClass H ProC.finiteQuotientClass (zcIndex j).2,
+        qmap i
+            ((OpenNormalSubgroupInClass.map
+              (C := ProC.finiteQuotientClass) (G := H)
+              (U := OrderDual.ofDual (zcIndex i).2)
+              (V := OrderDual.ofDual (zcIndex j).2)
+              (hzcIndex hij).2) q) =
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Naturality.html#decl-FoxDifferential.finiteFoxStageTargetQuotientMap">finiteFoxStageTargetQuotientMap</a> (X := X) (hN hij) (qmap j q))
+    (hcoeff_basis :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/SemidirectKernelBasis.html#decl-FoxDifferential.HasAdditiveIdentityQuotientKernelNeighbourhoodBasis">HasAdditiveIdentityQuotientKernelNeighbourhoodBasis</a>
+        (A := <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-FoxDifferential.ZCCompletedGroupAlgebra">ZCCompletedGroupAlgebra</a> ProC.finiteQuotientClass H)
+        (<span class="kw">fun</span> j : J =&gt;
+          (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/ProCIntegerBifilteredStageProjection.html#decl-FoxDifferential.zcCompletedGroupAlgebraBifilteredStageCoeffMap">zcCompletedGroupAlgebraBifilteredStageCoeffMap</a>
+            (ProC := ProC) (X := X) (H := H) Nstage nstage zcIndex hmod qmap j).toAddMonoidHom))
+    (hright_basis :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/QuotientKernelBasis.html#decl-FoxDifferential.HasIdentityQuotientKernelNeighbourhoodBasis">HasIdentityQuotientKernelNeighbourhoodBasis</a>
+        (Y := H)
+        (<span class="kw">fun</span> j : J =&gt;
+          <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/ProCIntegerBifilteredStageRightProjection.html#decl-FoxDifferential.zcCompletedGroupAlgebraBifilteredStageRightMap">zcCompletedGroupAlgebraBifilteredStageRightMap</a>
+            (ProC := ProC) (X := X) (H := H) Nstage zcIndex qmap j)) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/QuotientKernelBasis.html#decl-FoxDifferential.HasIdentityQuotientKernelNeighbourhoodBasis">HasIdentityQuotientKernelNeighbourhoodBasis</a>
+      (Y := <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Semidirect.html#decl-FoxDifferential.ZCCompletedFoxSemidirect">ZCCompletedFoxSemidirect</a> ProC.finiteQuotientClass X H)
+      (<span class="kw">fun</span> j : J =&gt;
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FreeProC/ProCIntegerBifilteredStageRightProjection.html#decl-FoxDifferential.freeProCZCCompletedFoxSemidirectZCBifilteredStageMap">freeProCZCCompletedFoxSemidirectZCBifilteredStageMap</a>
+          (ProC := ProC) (X := X) (H := H) Nstage nstage zcIndex hmod qmap j)</code></pre></section>
+    <section><div class="natural-text"><p>The semidirect kernel basis for the standard topology from coefficient and target component bases. This is the componentwise kernel-basis theorem with the left coordinate basis built internally from the coefficient maps \(\mathbb{Z}_C\llbracket H\rrbracket \to (\mathbb{Z}/n_j\mathbb{Z})[F/N_j]\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#decl-freeProCZCFoxSemiZCBifilteredStageMap_identity_basis_of_component_bases_standardTopology">freeProCZCFoxSemiZCBifilteredStageMap_identity_basis_of_component_bases_standardTopology</a>
+      (ProC := ProC) (X := X) (H := H) Nstage nstage hN hn zcIndex hzcIndex
+      hmod qmap hdir hcoeff_mod hqmap_transition
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Continuous/SemidirectKernelBasis.html#decl-zcFreeFoxCoordinatesBifilteredStageMap_additive_basis_of_coeff_basis_standardTopology">zcFreeFoxCoordinatesBifilteredStageMap_additive_basis_of_coeff_basis_standardTopology</a>
+        (ProC := ProC) (X := X) (H := H) Nstage nstage hN hn zcIndex hzcIndex
+        hmod qmap hdir hcoeff_mod hqmap_transition hcoeff_basis)
+      hright_basis</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work from the defining Fox differential and its crossed-derivation rule. The values on generators determine the map; the product rule gives \(d(xy)=d(x)+x d(y)\), and the inverse rule follows by applying the product rule to \(x x^{-1}=1\). At <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient or quotient stages, the source and target coordinates are obtained by applying the same quotient map to supports and the given coefficient map to coefficients. Kernel and <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-ideal statements use the Fox fundamental identity, which expresses an element minus its <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> in terms of the Fox derivatives of the chosen generators. Completed assertions are checked after projection to every <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage; continuity and closure follow from the inverse-limit topology and the closedness of the coordinate conditions. Finiteness at a stage follows because the quotient group and coefficient ring at that stage are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so the group-algebra support space is finite. Since the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulas determine the differential or homomorphism uniquely, equality of all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox coordinates proves the asserted completed identity. The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage verification is made before passing to completion, so no topological density argument changes the algebraic calculation. Each completed coefficient system is obtained as a <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and the quotient maps commute with the Fox differential by the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formula. Thus the identity proved on generators persists under products, inverses, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> linear combinations, and finally under the inverse-limit passage. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FoxDifferential.Completed.Continuous.SemidirectKernelBasis"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

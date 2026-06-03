@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FoxDifferential.Completed.FiniteStage.MagnusQuotient | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">FoxDifferential.Completed.FiniteStage.MagnusQuotient</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/FoxDifferential.html">FoxDifferential</a><span class="sep">/</span><a href="../../../../library/FoxDifferential/Completed.html">Completed</a><span class="sep">/</span><a href="../../../../library/FoxDifferential/Completed/FiniteStage.html">FiniteStage</a><span class="sep">/</span><span>MagnusQuotient</span></div>
+      <h1 class="module-title">FoxDifferential.Completed.FiniteStage.MagnusQuotient</h1>
+      <div class="module-meta">14 Theorem | 1 Definition</div>
+      <div class="module-overview"><p>This module proves the universal-<a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> part of the construction. It packages <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage data into completed maps and shows the required <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Subgroups/Closed.html#decl-ProCGroups.ProC.IsProCGroup.extension">extension</a> and uniqueness statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Rules.html">FoxDifferential.Completed.FiniteStage.Stage.Derivative.Rules</a></li><li><a href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Relators.html">FoxDifferential.Completed.FiniteStage.Stage.Derivative.Relators</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/FoxDifferential/Completed.html">FoxDifferential.Completed</a></li><li><a href="../../../../library/FoxDifferential/Completed/Comparison/FiniteStage.html">FoxDifferential.Completed.Comparison.FiniteStage</a></li><li><a href="../../../../library/FoxDifferential/Completed/FiniteStage.html">FoxDifferential.Completed.FiniteStage</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-FoxDifferential.finiteFoxStageSemidirectReindexHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.finiteFoxStageSemidirectReindexHom">FoxDifferential.finiteFoxStageSemidirectReindexHom</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L34">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> finiteFoxStageSemidirectReindexHom
+    (e : X ≃ Y)
+    (N : Subgroup (FreeGroup X)) [N.Normal]
+    (M : Subgroup (FreeGroup Y)) [M.Normal]
+    (hM : N.map (FreeGroup.freeGroupCongr e).toMonoidHom = M)
+    (n : ℕ) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.FiniteFoxStageSemidirect">FiniteFoxStageSemidirect</a> (X := X) N n →*
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.FiniteFoxStageSemidirect">FiniteFoxStageSemidirect</a> (X := Y) M n := <span class="kw">by</span>
+  <span class="kw">let</span> φ : FreeGroup X ≃* FreeGroup Y := FreeGroup.freeGroupCongr e
+  <span class="kw">let</span> qXY :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.finiteFoxStageTargetQuotient">finiteFoxStageTargetQuotient</a> (X := X) N ≃*
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.finiteFoxStageTargetQuotient">finiteFoxStageTargetQuotient</a> (X := Y) M :=
+    QuotientGroup.congr N M φ hM
+  <span class="kw">exact</span>
+    { toFun := <span class="kw">fun</span> a =&gt;
+        { left := <span class="kw">fun</span> y =&gt;
+            MonoidAlgebra.mapDomainRingHom (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> n) qXY.toMonoidHom
+              (a.left (e.symm y))
+          right := qXY a.right }
+      map_one&#x27; := <span class="kw">by</span>
+        <span class="kw">apply</span> FiniteFoxStageSemidirect.ext
+        · funext y
+          <span class="kw">simp</span> only [MulEquiv.toMonoidHom_eq_coe, FiniteFoxStageSemidirect.one_left, Pi.zero_apply,
+  MonoidAlgebra.mapDomainRingHom_apply, MonoidHom.coe_coe, Finsupp.mapDomain_zero]
+        · <span class="kw">simp</span> only [FiniteFoxStageSemidirect.one_right, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>]
+      map_mul&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> a b
+        <span class="kw">apply</span> FiniteFoxStageSemidirect.ext
+        · funext y
+          <span class="kw">have</span> hright :
+              MonoidAlgebra.mapDomainRingHom (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> n) qXY.toMonoidHom
+                  (MonoidAlgebra.of (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> n)
+                    (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.finiteFoxStageTargetQuotient">finiteFoxStageTargetQuotient</a> (X := X) N) a.right) =
+                MonoidAlgebra.of (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> n)
+                  (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.finiteFoxStageTargetQuotient">finiteFoxStageTargetQuotient</a> (X := Y) M) (qXY a.right) := <span class="kw">by</span>
+            rcases QuotientGroup.mk&#x27;_surjective N a.right <span class="kw">with</span> ⟨w, hw⟩
+            <span class="kw">rw</span> [← hw]
+            <span class="kw">simp</span> only [MulEquiv.toMonoidHom_eq_coe, MonoidAlgebra.of, MonoidAlgebra.single, QuotientGroup.mk&#x27;_apply,
+  MonoidHom.coe_mk, OneHom.coe_mk, MonoidAlgebra.mapDomainRingHom_apply, MonoidHom.coe_coe, Finsupp.mapDomain_single]
+          <span class="kw">simp</span> only [MulEquiv.toMonoidHom_eq_coe, FiniteFoxStageSemidirect.mul_left, MonoidAlgebra.of_apply,
+  Pi.add_apply, Pi.smul_apply, smul_eq_mul, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>, MonoidAlgebra.mapDomainRingHom_apply, MonoidHom.coe_coe,
+  add_right_inj]
+          change
+            MonoidAlgebra.mapDomainRingHom (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> n) qXY.toMonoidHom
+                (MonoidAlgebra.of (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> n)
+                    (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.finiteFoxStageTargetQuotient">finiteFoxStageTargetQuotient</a> (X := X) N) a.right *
+                  b.left (e.symm y)) =
+              MonoidAlgebra.of (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> n)
+                  (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.finiteFoxStageTargetQuotient">finiteFoxStageTargetQuotient</a> (X := Y) M) (qXY a.right) *
+                MonoidAlgebra.mapDomainRingHom (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> n) qXY.toMonoidHom
+                  (b.left (e.symm y))
+          <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, hright]
+        · <span class="kw">simp</span> only [FiniteFoxStageSemidirect.mul_right, <a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, MulEquiv.toMonoidHom_eq_coe,
+  MonoidAlgebra.mapDomainRingHom_apply, MonoidHom.coe_coe]}</code></pre></section>
+    <section><div class="natural-text"><p>Reindex the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox semidirect target along an equivalence of free bases.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.finiteFoxStageSemidirectReindexHom_lift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.finiteFoxStageSemidirectReindexHom_lift">FoxDifferential.finiteFoxStageSemidirectReindexHom_lift</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L90">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> finiteFoxStageSemidirectReindexHom_lift
+    (e : X ≃ Y)
+    (N : Subgroup (FreeGroup X)) [N.Normal]
+    (M : Subgroup (FreeGroup Y)) [M.Normal]
+    (hM : N.map (FreeGroup.freeGroupCongr e).toMonoidHom = M)
+    (n : ℕ) (w : FreeGroup X) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-FoxDifferential.finiteFoxStageSemidirectReindexHom">finiteFoxStageSemidirectReindexHom</a> (X := X) (Y := Y) e N M hM n
+        (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a> (X := X) N n w) =
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a> (X := Y) M n ((FreeGroup.freeGroupCongr e) w)</code></pre></section>
+    <section><div class="natural-text"><p>The reindexing hom carries the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage lift to the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage lift.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> φ : FreeGroup X ≃* FreeGroup Y := FreeGroup.freeGroupCongr e
+  <span class="kw">let</span> qXY :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.finiteFoxStageTargetQuotient">finiteFoxStageTargetQuotient</a> (X := X) N ≃*
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.finiteFoxStageTargetQuotient">finiteFoxStageTargetQuotient</a> (X := Y) M :=
+    QuotientGroup.congr N M φ hM
+  <span class="kw">let</span> f₁ : FreeGroup X →* <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.FiniteFoxStageSemidirect">FiniteFoxStageSemidirect</a> (X := Y) M n :=
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-FoxDifferential.finiteFoxStageSemidirectReindexHom">finiteFoxStageSemidirectReindexHom</a> (X := X) (Y := Y) e N M hM n).comp
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a> (X := X) N n)
+  <span class="kw">let</span> f₂ : FreeGroup X →* <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.FiniteFoxStageSemidirect">FiniteFoxStageSemidirect</a> (X := Y) M n :=
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a> (X := Y) M n).comp φ.toMonoidHom
+  <span class="kw">have</span> hf : f₁ = f₂ := <span class="kw">by</span>
+    <span class="kw">apply</span> FreeGroup.ext_hom
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> FiniteFoxStageSemidirect.ext
+    · funext y
+      by_cases hy : y = e x
+      · subst hy
+        <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-FoxDifferential.finiteFoxStageSemidirectReindexHom">finiteFoxStageSemidirectReindexHom</a>, MulEquiv.toMonoidHom_eq_coe,
+  MonoidAlgebra.mapDomainRingHom_apply, MonoidHom.coe_coe, <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a>, QuotientGroup.mk&#x27;_apply,
+  MonoidHom.coe_comp, MonoidHom.coe_mk, OneHom.coe_mk, Function.comp_apply, FreeGroup.lift_apply_of,
+  QuotientGroup.congr_mk, FreeGroup.freeGroupCongr_apply, FreeGroup.map.of, Pi.single_eq_same, f₁, f₂, φ]
+        <span class="kw">rw</span> [e.symm_apply_apply, Pi.single_eq_same]
+        <span class="kw">simp</span> only [MonoidAlgebra.mapDomain_one]
+      · <span class="kw">have</span> hne : e.symm y ≠ x := <span class="kw">by</span>
+          <span class="kw">intro</span> h
+          <span class="kw">exact</span> hy ((e.apply_symm_apply y).symm.trans (<span class="kw">by</span> <span class="kw">simp</span> only [h]))
+        <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-FoxDifferential.finiteFoxStageSemidirectReindexHom">finiteFoxStageSemidirectReindexHom</a>, MulEquiv.toMonoidHom_eq_coe,
+  MonoidAlgebra.mapDomainRingHom_apply, MonoidHom.coe_coe, <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a>, QuotientGroup.mk&#x27;_apply,
+  MonoidHom.coe_comp, MonoidHom.coe_mk, OneHom.coe_mk, Function.comp_apply, FreeGroup.lift_apply_of,
+  QuotientGroup.congr_mk, FreeGroup.freeGroupCongr_apply, FreeGroup.map.of, Pi.single_eq_of_ne hne,
+  Finsupp.mapDomain_zero, Pi.single_eq_of_ne hy, f₁, f₂, φ]
+    · <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-FoxDifferential.finiteFoxStageSemidirectReindexHom">finiteFoxStageSemidirectReindexHom</a>, MulEquiv.toMonoidHom_eq_coe,
+  MonoidAlgebra.mapDomainRingHom_apply, MonoidHom.coe_coe, <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a>, QuotientGroup.mk&#x27;_apply,
+  MonoidHom.coe_comp, MonoidHom.coe_mk, OneHom.coe_mk, Function.comp_apply, FreeGroup.lift_apply_of,
+  QuotientGroup.congr_mk, FreeGroup.freeGroupCongr_apply, FreeGroup.map.of, f₁, f₂, φ]
+  <span class="kw">exact</span> congrArg (<span class="kw">fun</span> f : FreeGroup X →* <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Semidirect.html#decl-FoxDifferential.FiniteFoxStageSemidirect">FiniteFoxStageSemidirect</a> (X := Y) M n =&gt; f w) hf</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.finiteFoxStageDerivativeVector_reindex">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.finiteFoxStageDerivativeVector_reindex">FoxDifferential.finiteFoxStageDerivativeVector_reindex</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L137">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> finiteFoxStageDerivativeVector_reindex
+    (e : X ≃ Y)
+    (N : Subgroup (FreeGroup X)) [N.Normal]
+    (M : Subgroup (FreeGroup Y)) [M.Normal]
+    (hM : N.map (FreeGroup.freeGroupCongr e).toMonoidHom = M)
+    (n : ℕ) (w : FreeGroup X) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageDerivativeVector">finiteFoxStageDerivativeVector</a> (X := Y) M n ((FreeGroup.freeGroupCongr e) w) =
+      <span class="kw">fun</span> y =&gt;
+        MonoidAlgebra.mapDomainRingHom (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/CoefficientRings/CompletedGroupAlgebraModN/InClass/Basic.html#decl-FoxDifferential.ModNCompletedCoeff">ModNCompletedCoeff</a> n)
+          (QuotientGroup.congr N M (FreeGroup.freeGroupCongr e) hM).toMonoidHom
+          (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageDerivativeVector">finiteFoxStageDerivativeVector</a> (X := X) N n w (e.symm y))</code></pre></section>
+    <section><div class="natural-text"><p>Finite-stage Fox derivative vectors reindex along an equivalence of free bases.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> h :=
+    congrArg FiniteFoxStageSemidirect.left
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-FoxDifferential.finiteFoxStageSemidirectReindexHom_lift">finiteFoxStageSemidirectReindexHom_lift</a>
+        (X := X) (Y := Y) e N M hM n w)
+  simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageDerivativeVector">finiteFoxStageDerivativeVector</a>, <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-FoxDifferential.finiteFoxStageSemidirectReindexHom">finiteFoxStageSemidirectReindexHom</a>] using h.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.finiteFoxStageDerivativeVector_eq_zero_reindex">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.finiteFoxStageDerivativeVector_eq_zero_reindex">FoxDifferential.finiteFoxStageDerivativeVector_eq_zero_reindex</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L155">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> finiteFoxStageDerivativeVector_eq_zero_reindex
+    (e : X ≃ Y)
+    (N : Subgroup (FreeGroup X)) [N.Normal]
+    (M : Subgroup (FreeGroup Y)) [M.Normal]
+    (hM : N.map (FreeGroup.freeGroupCongr e).toMonoidHom = M)
+    (n : ℕ) {w : FreeGroup X}
+    (hw : <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageDerivativeVector">finiteFoxStageDerivativeVector</a> (X := X) N n w = 0) :
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageDerivativeVector">finiteFoxStageDerivativeVector</a> (X := Y) M n ((FreeGroup.freeGroupCongr e) w) = 0</code></pre></section>
+    <section><div class="natural-text"><p>Zero of a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox derivative vector is invariant under reindexing the free basis.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-FoxDifferential.finiteFoxStageDerivativeVector_reindex">finiteFoxStageDerivativeVector_reindex</a> (X := X) (Y := Y) e N M hM n w]
+  funext y
+  <span class="kw">simp</span> only [MulEquiv.toMonoidHom_eq_coe, hw, Pi.zero_apply, MonoidAlgebra.mapDomainRingHom_apply,
+  MonoidHom.coe_coe, Finsupp.mapDomain_zero]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-commutator_subtype_le_finiteFoxCommutatorPowerSubgroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-commutator_subtype_le_finiteFoxCommutatorPowerSubgroup">commutator_subtype_le_finiteFoxCommutatorPowerSubgroup</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L179">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> commutator_subtype_le_finiteFoxCommutatorPowerSubgroup
+    (N : Subgroup F) (n : ℕ) :
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> N).map N.subtype ≤ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := F) N n</code></pre></section>
+    <section><div class="natural-text"><p>The ordinary <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup of \(N\), mapped back to the ambient group, is contained in the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a>-power subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [Subgroup.map_subtype_commutator]
+  refine Subgroup.commutator_le.mpr ?_
+  <span class="kw">intro</span> a ha b hb
+  <span class="kw">exact</span> Subgroup.subset_normalClosure
+    (Or.inl ⟨a, ha, b, hb, <span class="kw">rfl</span>⟩)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-pow_mem_finiteFoxCommutatorPowerSubgroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-pow_mem_finiteFoxCommutatorPowerSubgroup">pow_mem_finiteFoxCommutatorPowerSubgroup</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L189">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> pow_mem_finiteFoxCommutatorPowerSubgroup
+    (N : Subgroup F) (n : ℕ) {a : F} (ha : a ∈ N) :
+    a ^ n ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := F) N n</code></pre></section>
+    <section><div class="natural-text"><p>Nth powers from N are defining <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> for the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a>-power subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Subgroup.subset_normalClosure (Or.inr ⟨a, ha, <span class="kw">rfl</span>⟩)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-mem_finiteFoxCommutatorPowerSubgroup_of_abelianization_eq_pow">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-mem_finiteFoxCommutatorPowerSubgroup_of_abelianization_eq_pow">mem_finiteFoxCommutatorPowerSubgroup_of_abelianization_eq_pow</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L196">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_finiteFoxCommutatorPowerSubgroup_of_abelianization_eq_pow
+    (N : Subgroup F) (n : ℕ) {w : F} (hw : w ∈ N) (a : N)
+    (hclass :
+      Abelianization.of ⟨w, hw⟩ = (Abelianization.of a) ^ n) :
+    w ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := F) N n</code></pre></section>
+    <section><div class="natural-text"><p>If the abelianization class of a kernel element is an \(n\)-th power, then the element lies in \([N,N]N^n\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hclass&#x27; :
+      Abelianization.of (a ^ n) = Abelianization.of ⟨w, hw⟩ := <span class="kw">by</span>
+    simpa using hclass.symm
+  <span class="kw">have</span> hcommN : (a ^ n)⁻¹ * ⟨w, hw⟩ ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> N :=
+    QuotientGroup.eq.mp hclass&#x27;
+  <span class="kw">have</span> hcommF :
+      ((a : F) ^ n)⁻¹ * w ∈
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := F) N n := <span class="kw">by</span>
+    <span class="kw">have</span> hmap :
+        (((a ^ n)⁻¹ * ⟨w, hw⟩ : N) : F) ∈ (<a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> N).map N.subtype :=
+      ⟨(a ^ n)⁻¹ * ⟨w, hw⟩, hcommN, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span>
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-commutator_subtype_le_finiteFoxCommutatorPowerSubgroup">commutator_subtype_le_finiteFoxCommutatorPowerSubgroup</a> (F := F) N n
+        (<span class="kw">by</span> simpa using hmap)
+  <span class="kw">have</span> hpowF :
+      (a : F) ^ n ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := F) N n :=
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-pow_mem_finiteFoxCommutatorPowerSubgroup">pow_mem_finiteFoxCommutatorPowerSubgroup</a> (F := F) N n a.2
+  <span class="kw">have</span> hmul :
+      (a : F) ^ n * (((a : F) ^ n)⁻¹ * w) ∈
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := F) N n :=
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := F) N n).mul_mem hpowF hcommF
+  simpa [mul_assoc] using hmul</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff_residue">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff_residue">ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff_residue</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L231">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff_residue
+    [DecidableEq X]
+    (N : Subgroup (FreeGroup X)) [N.Normal] (n : ℕ) :
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a> (X := X) N n).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≤
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := FreeGroup X) N n ↔
+      ∀ w : FreeGroup X,
+        w ∈ N →
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Residue/FreeGroup/Basic.html#decl-FoxDifferential.residueFreeGroupFoxDerivativeVector">residueFreeGroupFoxDerivativeVector</a> n (QuotientGroup.mk&#x27; N) w = 0 →
+          w ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := FreeGroup X) N n</code></pre></section>
+    <section><div class="natural-text"><p>Residue-Fox form of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Magnus reverse inclusion. The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage derivative is not a separate Fox theory: it is the residue free Fox derivative for the quotient map \(\mathrm{FreeGroup}(X) \to F/N\). This is the residue form of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Magnus reverse inclusion, expressed through the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage derivative.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Relators.html#decl-FoxDifferential.ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff">ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff</a>]
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> h w hwN hder
+    <span class="kw">exact</span> h w hwN (<span class="kw">by</span>
+      simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Rules.html#decl-FoxDifferential.finiteFoxStageDerivativeVector_eq_residueFreeGroupFoxDerivativeVector">finiteFoxStageDerivativeVector_eq_residueFreeGroupFoxDerivativeVector</a> (X := X) N n]
+        using hder)
+  · <span class="kw">intro</span> h w hwN hder
+    <span class="kw">exact</span> h w hwN (<span class="kw">by</span>
+      simpa [<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Rules.html#decl-FoxDifferential.finiteFoxStageDerivativeVector_eq_residueFreeGroupFoxDerivativeVector">finiteFoxStageDerivativeVector_eq_residueFreeGroupFoxDerivativeVector</a> (X := X) N n]
+        using hder)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff_residueUniversal">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff_residueUniversal">ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff_residueUniversal</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L256">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff_residueUniversal
+    [DecidableEq X] [Fintype X]
+    (N : Subgroup (FreeGroup X)) [N.Normal] (n : ℕ) :
+    (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a> (X := X) N n).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≤
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := FreeGroup X) N n ↔
+      ∀ w : FreeGroup X,
+        w ∈ N →
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Residue/Core.html#decl-FoxDifferential.residueUniversalDifferential">residueUniversalDifferential</a> n (QuotientGroup.mk&#x27; N) w = 0 →
+          w ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := FreeGroup X) N n</code></pre></section>
+    <section><div class="natural-text"><p>Residue-universal form of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Magnus reverse inclusion. With a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> free basis, the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage coordinate vector is equivalent to the residue universal differential, so the remaining theorem is a kernel statement in the residue universal module.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Relators.html#decl-FoxDifferential.ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff">ker_finiteFoxStageLift_le_finiteFoxCommutatorPowerSubgroup_iff</a>]
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> h w hwN hres
+    <span class="kw">exact</span> h w hwN
+      ((<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Rules.html#decl-FoxDifferential.finiteFoxStageDerivativeVector_eq_zero_iff_residueUniversalDifferential_eq_zero">finiteFoxStageDerivativeVector_eq_zero_iff_residueUniversalDifferential_eq_zero</a>
+        (X := X) N n w).2 hres)
+  · <span class="kw">intro</span> h w hwN hder
+    <span class="kw">exact</span> h w hwN
+      ((<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Rules.html#decl-FoxDifferential.finiteFoxStageDerivativeVector_eq_zero_iff_residueUniversalDifferential_eq_zero">finiteFoxStageDerivativeVector_eq_zero_iff_residueUniversalDifferential_eq_zero</a>
+        (X := X) N n w).1 hder)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_of_pow_eq_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_of_pow_eq_one">mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_of_pow_eq_one</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L282">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_of_pow_eq_one
+    (α : FreeGroup X →* Q) (β : Q →* H) (n : ℕ)
+    (hpow : ∀ k : β.ker, k ^ n = 1)
+    {w : FreeGroup X}
+    (hwker : w ∈ (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>)
+    (hw :
+      w ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a>
+        (F := FreeGroup X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> n) :
+    (⟨α w, <span class="kw">by</span>
+      change β (α w) = 1
+      simpa [MonoidHom.mem_ker, MonoidHom.comp_apply] using hwker⟩ : β.ker) ∈
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> β.ker</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a>-power subgroup maps into the ordinary <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup of a target kernel whenever the chosen exponent kills that kernel. This is the mathematical quotient bookkeeping needed after the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Magnus kernel theorem: the <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> map to commutators in kernel \(\beta\), while the power <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> map to \(1\) by the given exponent-killing hypothesis.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> K : Subgroup Q := β.ker
+  <span class="kw">let</span> S : Subgroup (FreeGroup X) := (⁅K, K⁆).comap α
+  <span class="kw">have</span> hSnormal : S.Normal := <span class="kw">by</span>
+    dsimp [S, K]
+    infer_instance
+  <span class="kw">have</span> hrel_le :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := FreeGroup X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> n ≤ S := <span class="kw">by</span>
+    refine Subgroup.normalClosure_le_normal ?_
+    <span class="kw">intro</span> g hg
+    rcases hg <span class="kw">with</span> ⟨a, ha, b, hb, <span class="kw">rfl</span>⟩ | ⟨a, ha, <span class="kw">rfl</span>⟩
+    · change α ⁅a, b⁆ ∈ ⁅K, K⁆
+      <span class="kw">rw</span> [map_commutatorElement]
+      <span class="kw">have</span> haK : α a ∈ K := <span class="kw">by</span>
+        change β (α a) = 1
+        simpa [MonoidHom.mem_ker, MonoidHom.comp_apply] using ha
+      <span class="kw">have</span> hbK : α b ∈ K := <span class="kw">by</span>
+        change β (α b) = 1
+        simpa [MonoidHom.mem_ker, MonoidHom.comp_apply] using hb
+      <span class="kw">exact</span> Subgroup.commutator_mem_commutator haK hbK
+    · change α (a ^ n) ∈ ⁅K, K⁆
+      <span class="kw">rw</span> [map_pow]
+      <span class="kw">have</span> haK : α a ∈ β.ker := <span class="kw">by</span>
+        change β (α a) = 1
+        simpa [MonoidHom.mem_ker, MonoidHom.comp_apply] using ha
+      <span class="kw">have</span> hpowQ : (α a) ^ n = 1 := <span class="kw">by</span>
+        simpa using congrArg Subtype.val (hpow ⟨α a, haK⟩)
+      <span class="kw">rw</span> [hpowQ]
+      <span class="kw">exact</span> (⁅K, K⁆).one_mem
+  <span class="kw">have</span> hQ : α w ∈ ⁅K, K⁆ := hrel_le hw
+  <span class="kw">have</span> hQmap : α w ∈ (<a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> β.ker).map β.ker.subtype := <span class="kw">by</span>
+    simpa [K, Subgroup.map_subtype_commutator] using hQ
+  rcases hQmap <span class="kw">with</span> ⟨c, hc, hcval⟩
+  <span class="kw">have</span> hc_eq :
+      c =
+        (⟨α w, <span class="kw">by</span>
+          change β (α w) = 1
+          simpa [MonoidHom.mem_ker, MonoidHom.comp_apply] using hwker⟩ : β.ker) := <span class="kw">by</span>
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">exact</span> hcval
+  simpa [hc_eq] using hc</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_card">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_card">mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_card</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L336">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_card
+    (α : FreeGroup X →* Q) (β : Q →* H) [Finite β.ker]
+    {w : FreeGroup X}
+    (hwker : w ∈ (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>)
+    (hw :
+      w ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a>
+        (F := FreeGroup X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> (Nat.card β.ker)) :
+    (⟨α w, <span class="kw">by</span>
+      change β (α w) = 1
+      simpa [MonoidHom.mem_ker, MonoidHom.comp_apply] using hwker⟩ : β.ker) ∈
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> β.ker</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-kernel cardinality version of the quotient bookkeeping lemma.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_of_pow_eq_one">mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_of_pow_eq_one</a>
+      (X := X) α β (Nat.card β.ker) (<span class="kw">fun</span> _ =&gt; pow_card_eq_one&#x27;) hwker hw</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-mem_commutator_ker_of_finiteFoxStageDerivativeVector_eq_zero_of_ker_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-mem_commutator_ker_of_finiteFoxStageDerivativeVector_eq_zero_of_ker_le">mem_commutator_ker_of_finiteFoxStageDerivativeVector_eq_zero_of_ker_le</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L356">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_commutator_ker_of_finiteFoxStageDerivativeVector_eq_zero_of_ker_le
+    [DecidableEq X]
+    (α : FreeGroup X →* Q) (β : Q →* H) (n : ℕ)
+    (hpow : ∀ k : β.ker, k ^ n = 1)
+    (hmag :
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a> (X := X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> n).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≤
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := FreeGroup X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> n)
+    {w : FreeGroup X}
+    (hwker : w ∈ (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>)
+    (hder :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageDerivativeVector">finiteFoxStageDerivativeVector</a> (X := X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> n w = 0) :
+    (⟨α w, <span class="kw">by</span>
+      change β (α w) = 1
+      simpa [MonoidHom.mem_ker, MonoidHom.comp_apply] using hwker⟩ : β.ker) ∈
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> β.ker</code></pre></section>
+    <section><div class="natural-text"><p>Finite quotient <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> conclusion from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Magnus reverse inclusion. Once the kernel of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage lift has been identified with \([N,N]N^m\), a <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage derivative for a <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> word gives the ordinary <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> conclusion in kernel \beta.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hwrel :
+      w ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a> (F := FreeGroup X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> n :=
+    hmag
+      ((<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Relators.html#decl-FoxDifferential.mem_ker_finiteFoxStageLift_iff">mem_ker_finiteFoxStageLift_iff</a> (X := X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> n).2
+        ⟨hwker, hder⟩)
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_of_pow_eq_one">mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_of_pow_eq_one</a>
+      (X := X) α β n hpow hwker hwrel</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-mem_commutator_ker_of_residueUniversalDifferential_eq_zero_of_kernel_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-mem_commutator_ker_of_residueUniversalDifferential_eq_zero_of_kernel_le">mem_commutator_ker_of_residueUniversalDifferential_eq_zero_of_kernel_le</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L382">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_commutator_ker_of_residueUniversalDifferential_eq_zero_of_kernel_le
+    [DecidableEq X] [Fintype X]
+    (α : FreeGroup X →* Q) (β : Q →* H) (n : ℕ)
+    (hpow : ∀ k : β.ker, k ^ n = 1)
+    (hmag :
+      ∀ w : FreeGroup X,
+        w ∈ (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> →
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Residue/Core.html#decl-FoxDifferential.residueUniversalDifferential">residueUniversalDifferential</a> n (QuotientGroup.mk&#x27; (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>) w = 0 →
+          w ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a>
+            (F := FreeGroup X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> n)
+    {w : FreeGroup X}
+    (hwker : w ∈ (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>)
+    (hder :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Residue/Core.html#decl-FoxDifferential.residueUniversalDifferential">residueUniversalDifferential</a> n (QuotientGroup.mk&#x27; (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>) w = 0) :
+    (⟨α w, <span class="kw">by</span>
+      change β (α w) = 1
+      simpa [MonoidHom.mem_ker, MonoidHom.comp_apply] using hwker⟩ : β.ker) ∈
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> β.ker</code></pre></section>
+    <section><div class="natural-text"><p>Finite quotient <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> conclusion from the residue-universal <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Magnus kernel statement.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_of_pow_eq_one">mem_commutator_ker_of_mem_finiteFoxCommutatorPowerSubgroup_of_pow_eq_one</a>
+      (X := X) α β n hpow hwker (hmag w hwker hder)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-mem_commutator_ker_of_finiteFoxStageDerivativeVector_eq_zero_of_ker_le_card">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-mem_commutator_ker_of_finiteFoxStageDerivativeVector_eq_zero_of_ker_le_card">mem_commutator_ker_of_finiteFoxStageDerivativeVector_eq_zero_of_ker_le_card</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L406">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_commutator_ker_of_finiteFoxStageDerivativeVector_eq_zero_of_ker_le_card
+    [DecidableEq X]
+    (α : FreeGroup X →* Q) (β : Q →* H) [Finite β.ker]
+    (hmag :
+      (<a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageLift">finiteFoxStageLift</a> (X := X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> (Nat.card β.ker)).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ≤
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a>
+          (F := FreeGroup X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> (Nat.card β.ker))
+    {w : FreeGroup X}
+    (hwker : w ∈ (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>)
+    (hder :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Stage/Derivative/Lift.html#decl-FoxDifferential.finiteFoxStageDerivativeVector">finiteFoxStageDerivativeVector</a> (X := X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> (Nat.card β.ker) w = 0) :
+    (⟨α w, <span class="kw">by</span>
+      change β (α w) = 1
+      simpa [MonoidHom.mem_ker, MonoidHom.comp_apply] using hwker⟩ : β.ker) ∈
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> β.ker</code></pre></section>
+    <section><div class="natural-text"><p>The cardinality-specialized <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> conclusion from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Magnus reverse inclusion.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-mem_commutator_ker_of_finiteFoxStageDerivativeVector_eq_zero_of_ker_le">mem_commutator_ker_of_finiteFoxStageDerivativeVector_eq_zero_of_ker_le</a>
+      (X := X) α β (Nat.card β.ker) (<span class="kw">fun</span> _ =&gt; pow_card_eq_one&#x27;) hmag hwker hder</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-mem_commutator_ker_of_residueUniversalDifferential_eq_zero_of_kernel_le_card">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-mem_commutator_ker_of_residueUniversalDifferential_eq_zero_of_kernel_le_card">mem_commutator_ker_of_residueUniversalDifferential_eq_zero_of_kernel_le_card</a>
+    <a class="source-link" href="../../../../library/src/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#L427">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_commutator_ker_of_residueUniversalDifferential_eq_zero_of_kernel_le_card
+    [DecidableEq X] [Fintype X]
+    (α : FreeGroup X →* Q) (β : Q →* H) [Finite β.ker]
+    (hmag :
+      ∀ w : FreeGroup X,
+        w ∈ (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> →
+        <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Residue/Core.html#decl-FoxDifferential.residueUniversalDifferential">residueUniversalDifferential</a> (Nat.card β.ker)
+            (QuotientGroup.mk&#x27; (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>) w = 0 →
+          w ∈ <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/Basic.html#decl-finiteFoxCommutatorPowerSubgroup">finiteFoxCommutatorPowerSubgroup</a>
+            (F := FreeGroup X) (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> (Nat.card β.ker))
+    {w : FreeGroup X}
+    (hwker : w ∈ (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>)
+    (hder :
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/Residue/Core.html#decl-FoxDifferential.residueUniversalDifferential">residueUniversalDifferential</a> (Nat.card β.ker)
+          (QuotientGroup.mk&#x27; (β.comp α).<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>) w = 0) :
+    (⟨α w, <span class="kw">by</span>
+      change β (α w) = 1
+      simpa [MonoidHom.mem_ker, MonoidHom.comp_apply] using hwker⟩ : β.ker) ∈
+      <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> β.ker</code></pre></section>
+    <section><div class="natural-text"><p>The cardinality-specialized <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> conclusion from the residue-universal <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Magnus kernel statement.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../../library/FoxDifferential/Completed/FiniteStage/MagnusQuotient.html#decl-mem_commutator_ker_of_residueUniversalDifferential_eq_zero_of_kernel_le">mem_commutator_ker_of_residueUniversalDifferential_eq_zero_of_kernel_le</a>
+      (X := X) α β (Nat.card β.ker) (<span class="kw">fun</span> _ =&gt; pow_card_eq_one&#x27;) hmag hwker hder</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work at the specified <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> Fox stage. The quotient group and coefficient ring are <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>, so all group-algebra expressions have <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and the formulas are checked on group-like basis elements. The crossed-differential rule gives the product, inverse, derivative, and boundary identities; coefficient maps, quotient maps, source/target refinements, relation submodules, and semidirect constructions are then verified coordinatewise and extended by linearity. For stage systems or limit-<a class="decl-ref" href="../../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> statements, compatibility under refinement and projection extensionality assemble the coordinate calculations.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FoxDifferential.Completed.FiniteStage.MagnusQuotient"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FoxDifferential.Common.CrossedDifferentialModule | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">FoxDifferential.Common.CrossedDifferentialModule</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/FoxDifferential.html">FoxDifferential</a><span class="sep">/</span><a href="../../../library/FoxDifferential/Common.html">Common</a><span class="sep">/</span><span>CrossedDifferentialModule</span></div>
+      <h1 class="module-title">FoxDifferential.Common.CrossedDifferentialModule</h1>
+      <div class="module-meta">19 Theorem | 9 Definition | 2 Abbreviation</div>
+      <div class="module-overview"><p>This module develops Fox differentials and completed Fox coordinates for free, profinite, and pro-\(C\) group constructions.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/FoxDifferential/Common/CrossedDifferential.html">FoxDifferential.Common.CrossedDifferential</a></li><li>Mathlib.Algebra.MonoidAlgebra.Basic</li><li>Mathlib.LinearAlgebra.Finsupp.LinearCombination</li><li>Mathlib.LinearAlgebra.Quotient.Basic</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/FoxDifferential.html">FoxDifferential</a></li><li><a href="../../../library/FoxDifferential/Common.html">FoxDifferential.Common</a></li><li><a href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html">FoxDifferential.Completed.ProCIntegerCoefficients.Core</a></li><li><a href="../../../library/FoxDifferential/Completed/Residue/Core.html">FoxDifferential.Completed.Residue.Core</a></li><li><a href="../../../library/FoxDifferential/Discrete/DifferentialModule/Basic.html">FoxDifferential.Discrete.DifferentialModule.Basic</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl abbrev" id="decl-FoxDifferential.CrossedDifferentialPreModule">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedDifferentialPreModule">FoxDifferential.CrossedDifferentialPreModule</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L26">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> CrossedDifferentialPreModule (R G : <span class="kw">Type</span>*) [Ring R] : <span class="kw">Type</span> _ :=
+  G →₀ R</code></pre></section>
+    <section><div class="natural-text"><p>The free \(R\)-module on the underlying set of a group \(G\).</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FoxDifferential.crossedDifferentialRelationElement">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialRelationElement">FoxDifferential.crossedDifferentialRelationElement</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L31">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> crossedDifferentialRelationElement (coeff : G →* R) (g₁ g₂ : G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialPreModule">CrossedDifferentialPreModule</a> R G :=
+  Finsupp.single (g₁ * g₂) 1 -
+    (Finsupp.single g₁ 1 + coeff g₁ • Finsupp.single g₂ 1)</code></pre></section>
+    <section><div class="natural-text"><p>The universal crossed-differential relation \(d(g_1g_2) = d(g_1) + \mathrm{coeff}(g_1) \cdot d(g_2)\) in the free pre-module.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FoxDifferential.crossedDifferentialRelationSubmodule">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialRelationSubmodule">FoxDifferential.crossedDifferentialRelationSubmodule</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L37">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> crossedDifferentialRelationSubmodule (coeff : G →* R) :
+    Submodule R (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialPreModule">CrossedDifferentialPreModule</a> R G) :=
+  Submodule.span R (Set.range <span class="kw">fun</span> p : G × G =&gt;
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationElement">crossedDifferentialRelationElement</a> coeff p.1 p.2)</code></pre></section>
+    <section><div class="natural-text"><p>The submodule generated by all universal crossed-differential relations.</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-FoxDifferential.CrossedDifferentialModule">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedDifferentialModule">FoxDifferential.CrossedDifferentialModule</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L44">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> CrossedDifferentialModule (coeff : G →* R) : <span class="kw">Type</span> _ :=
+  <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialPreModule">CrossedDifferentialPreModule</a> R G ⧸ <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff</code></pre></section>
+    <section><div class="natural-text"><p>The universal module representing crossed differentials with coefficient homomorphism \(\mathrm{coeff}:G\to R\), viewed multiplicatively.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FoxDifferential.universalCrossedDifferential">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.universalCrossedDifferential">FoxDifferential.universalCrossedDifferential</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L48">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> universalCrossedDifferential (coeff : G →* R) (g : G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> coeff :=
+  (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).mkQ (Finsupp.single g 1)</code></pre></section>
+    <section><div class="natural-text"><p>The universal crossed differential \(d_{\mathrm{coeff}} : G \to \mathrm{<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a>}(\mathrm{coeff})\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedDifferentialRelationElement_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialRelationElement_mem">FoxDifferential.crossedDifferentialRelationElement_mem</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L53">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> crossedDifferentialRelationElement_mem (coeff : G →* R) (g₁ g₂ : G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationElement">crossedDifferentialRelationElement</a> coeff g₁ g₂ ∈
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff</code></pre></section>
+    <section><div class="natural-text"><p>Every defining crossed-differential relation belongs to the relation submodule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> Submodule.subset_span ⟨(g₁, g₂), <span class="kw">rfl</span>⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.universalCrossedDifferential_mul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.universalCrossedDifferential_mul">FoxDifferential.universalCrossedDifferential_mul</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L59">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> universalCrossedDifferential_mul (coeff : G →* R) (g₁ g₂ : G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff (g₁ * g₂) =
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g₁ +
+        coeff g₁ • <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g₂</code></pre></section>
+    <section><div class="natural-text"><p>The universal crossed differential satisfies the crossed product rule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hzero :
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).mkQ
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationElement">crossedDifferentialRelationElement</a> coeff g₁ g₂) = 0 := <span class="kw">by</span>
+    <span class="kw">exact</span>
+      (Submodule.Quotient.mk_eq_zero
+        (p := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff)
+        (x := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationElement">crossedDifferentialRelationElement</a> coeff g₁ g₂)).2
+        (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationElement_mem">crossedDifferentialRelationElement_mem</a> coeff g₁ g₂)
+  <span class="kw">have</span> hzero&#x27; :
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff (g₁ * g₂) -
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g₁ +
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).mkQ
+              (coeff g₁ • Finsupp.single g₂ 1)) = 0 := <span class="kw">by</span>
+    simpa [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a>, <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationElement">crossedDifferentialRelationElement</a>] using hzero
+  <span class="kw">have</span> hsmul :
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).mkQ
+          (coeff g₁ • Finsupp.single g₂ 1) =
+        coeff g₁ • <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g₂ := <span class="kw">by</span>
+    simpa [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a>, Submodule.mkQ_apply] using
+      (Submodule.Quotient.mk_smul (p := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff)
+        (r := coeff g₁) (x := Finsupp.single g₂ 1))
+  <span class="kw">have</span> hzero&#x27;&#x27; :
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff (g₁ * g₂) -
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g₁ +
+            coeff g₁ • <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g₂) = 0 := <span class="kw">by</span>
+    <span class="kw">rw</span> [hsmul] at hzero&#x27;
+    <span class="kw">exact</span> hzero&#x27;
+  <span class="kw">exact</span> sub_eq_zero.mp hzero&#x27;&#x27;</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.universalCrossedDifferential_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.universalCrossedDifferential_one">FoxDifferential.universalCrossedDifferential_one</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L94">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> universalCrossedDifferential_one (coeff : G →* R) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff (1 : G) = 0</code></pre></section>
+    <section><div class="natural-text"><p>The universal crossed differential vanishes at the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> h := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential_mul">universalCrossedDifferential_mul</a> coeff (1 : G) (1 : G)
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, one_smul] at h
+  <span class="kw">have</span> h&#x27; := congrArg
+    (<span class="kw">fun</span> z : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> coeff =&gt; z - <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff (1 : G))
+    h
+  <span class="kw">have</span> hzero : 0 = <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff (1 : G) := <span class="kw">by</span>
+    simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using h&#x27;
+  simpa using hzero.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.universalCrossedDifferential_isCrossedDifferential">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.universalCrossedDifferential_isCrossedDifferential">FoxDifferential.universalCrossedDifferential_isCrossedDifferential</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L106">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> universalCrossedDifferential_isCrossedDifferential (coeff : G →* R) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential">IsCrossedDifferential</a> coeff (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff)</code></pre></section>
+    <section><div class="natural-text"><p>The universal crossed differential is itself a crossed differential.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> g₁ g₂
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential_mul">universalCrossedDifferential_mul</a> coeff g₁ g₂</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.crossedDifferentialModuleLiftLinear">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">FoxDifferential.crossedDifferentialModuleLiftLinear</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L116">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> crossedDifferentialModuleLiftLinear (delta : G → A) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialPreModule">CrossedDifferentialPreModule</a> R G →ₗ[R] A :=
+  Finsupp.linearCombination R delta</code></pre></section>
+    <section><div class="natural-text"><p>The linear <a class="decl-ref" href="../../../library/ProCGroups/ProC/Subgroups/Closed.html#decl-ProCGroups.ProC.IsProCGroup.extension">extension</a> of a map out of G to the free crossed-differential pre-module.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedDifferentialModuleLiftLinear_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialModuleLiftLinear_single">FoxDifferential.crossedDifferentialModuleLiftLinear_single</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L123">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> crossedDifferentialModuleLiftLinear_single (delta : G → A) (g : G) (r : R) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a> (R := R) delta (Finsupp.single g r) = r • delta g</code></pre></section>
+    <section><div class="natural-text"><p>The linear <a class="decl-ref" href="../../../library/ProCGroups/ProC/Subgroups/Closed.html#decl-ProCGroups.ProC.IsProCGroup.extension">extension</a> of a map evaluates on a single basis vector by scalar multiplication.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a>, Finsupp.linearCombination_single]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedDifferentialModuleLiftLinear_relationElement">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialModuleLiftLinear_relationElement">FoxDifferential.crossedDifferentialModuleLiftLinear_relationElement</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L128">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> crossedDifferentialModuleLiftLinear_relationElement
+    (coeff : G →* R) (delta : G → A)
+    (hdelta : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential">IsCrossedDifferential</a> coeff delta) (g₁ g₂ : G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a> (R := R) delta
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationElement">crossedDifferentialRelationElement</a> coeff g₁ g₂) = 0</code></pre></section>
+    <section><div class="natural-text"><p>A crossed differential kills each defining universal relation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a>, <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationElement">crossedDifferentialRelationElement</a>, Finsupp.smul_single,
+  smul_eq_mul, mul_one, map_sub, Finsupp.linearCombination_single, hdelta g₁ g₂, smul_add, one_smul, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>,
+  sub_self]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedDifferentialRelationSubmodule_le_ker">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialRelationSubmodule_le_ker">FoxDifferential.crossedDifferentialRelationSubmodule_le_ker</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L139">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> crossedDifferentialRelationSubmodule_le_ker
+    (coeff : G →* R) (delta : G → A)
+    (hdelta : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential">IsCrossedDifferential</a> coeff delta) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff ≤
+      LinearMap.ker (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a> (R := R) delta)</code></pre></section>
+    <section><div class="natural-text"><p>The relation submodule is contained in the kernel of the linear <a class="decl-ref" href="../../../library/ProCGroups/ProC/Subgroups/Closed.html#decl-ProCGroups.ProC.IsProCGroup.extension">extension</a> of a crossed differential.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine Submodule.span_le.2 ?_
+  rintro _ ⟨⟨g₁, g₂⟩, <span class="kw">rfl</span>⟩
+  simpa [LinearMap.mem_ker] using
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear_relationElement">crossedDifferentialModuleLiftLinear_relationElement</a>
+      (A := A) coeff delta hdelta g₁ g₂</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.crossedDifferentialModuleLift">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialModuleLift">FoxDifferential.crossedDifferentialModuleLift</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L151">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> crossedDifferentialModuleLift
+    (coeff : G →* R) (delta : G → A) (hdelta : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential">IsCrossedDifferential</a> coeff delta) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> coeff →ₗ[R] A :=
+  (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).liftQ
+    (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a> (R := R) delta)
+    (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule_le_ker">crossedDifferentialRelationSubmodule_le_ker</a> (A := A) coeff delta hdelta)</code></pre></section>
+    <section><div class="natural-text"><p>The universal linear map induced by a crossed differential.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedDifferentialModuleLift_mkQ">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialModuleLift_mkQ">FoxDifferential.crossedDifferentialModuleLift_mkQ</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L160">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> crossedDifferentialModuleLift_mkQ
+    (coeff : G →* R) (delta : G → A) (hdelta : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential">IsCrossedDifferential</a> coeff delta)
+    (x : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialPreModule">CrossedDifferentialPreModule</a> R G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift">crossedDifferentialModuleLift</a> (A := A) coeff delta hdelta
+        ((<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).mkQ x) =
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a> (R := R) delta x</code></pre></section>
+    <section><div class="natural-text"><p>The universal lift evaluated on a quotient <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> linear combination of the prescribed crossed differential on that representative.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift">crossedDifferentialModuleLift</a>, Submodule.mkQ_apply, Submodule.liftQ_apply]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedDifferentialModuleLift_universal">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialModuleLift_universal">FoxDifferential.crossedDifferentialModuleLift_universal</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L169">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> crossedDifferentialModuleLift_universal
+    (coeff : G →* R) (delta : G → A) (hdelta : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential">IsCrossedDifferential</a> coeff delta) (g : G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift">crossedDifferentialModuleLift</a> (A := A) coeff delta hdelta
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g) = delta g</code></pre></section>
+    <section><div class="natural-text"><p>The universal lift evaluates on \(d_{\mathrm{coeff}}(g)\) as the original crossed differential.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).liftQ
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a> (R := R) delta)
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule_le_ker">crossedDifferentialRelationSubmodule_le_ker</a> (A := A) coeff delta hdelta)
+          ((<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).mkQ (Finsupp.single g 1)) =
+        delta g
+  <span class="kw">rw</span> [Submodule.mkQ_apply, Submodule.liftQ_apply]
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear_single">crossedDifferentialModuleLiftLinear_single</a>, one_smul]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedDifferentialModuleHom_ext">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialModuleHom_ext">FoxDifferential.crossedDifferentialModuleHom_ext</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L185">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> crossedDifferentialModuleHom_ext
+    (coeff : G →* R) {f h : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> coeff →ₗ[R] A}
+    (hfh : ∀ g, f (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g) =
+      h (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g)) :
+    f = h</code></pre></section>
+    <section><div class="natural-text"><p>Linear maps out of the universal crossed-differential module are equal when they agree on all universal differentials.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Submodule.linearMap_qext _
+  <span class="kw">apply</span> Finsupp.lhom_ext
+  <span class="kw">intro</span> g r
+  <span class="kw">have</span> hsingle :
+      ((<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).mkQ (Finsupp.single g r) :
+          <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> coeff) =
+        r • <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g := <span class="kw">by</span>
+    <span class="kw">rw</span> [← Finsupp.smul_single_one]
+    <span class="kw">rfl</span>
+  change f ((<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).mkQ (Finsupp.single g r)) =
+    h ((<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> coeff).mkQ (Finsupp.single g r))
+  simpa [hsingle, <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.IsLinearSystem.map_smul">map_smul</a>] using congrArg (<span class="kw">fun</span> z =&gt; r • z) (hfh g)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedDifferentialModuleLift_unique">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialModuleLift_unique">FoxDifferential.crossedDifferentialModuleLift_unique</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L205">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> crossedDifferentialModuleLift_unique
+    (coeff : G →* R) (delta : G → A) (hdelta : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential">IsCrossedDifferential</a> coeff delta)
+    (f : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> coeff →ₗ[R] A)
+    (hf : ∀ g, f (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g) = delta g) :
+    f = <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift">crossedDifferentialModuleLift</a> (A := A) coeff delta hdelta</code></pre></section>
+    <section><div class="natural-text"><p>The universal lift is the unique linear map with prescribed values on universal differentials.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleHom_ext">crossedDifferentialModuleHom_ext</a> coeff
+  <span class="kw">intro</span> g
+  <span class="kw">rw</span> [hf g, <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift_universal">crossedDifferentialModuleLift_universal</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.existsUnique_crossedDifferentialModuleLift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.existsUnique_crossedDifferentialModuleLift">FoxDifferential.existsUnique_crossedDifferentialModuleLift</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L215">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> existsUnique_crossedDifferentialModuleLift
+    (coeff : G →* R) (delta : G → A) (hdelta : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential">IsCrossedDifferential</a> coeff delta) :
+    ∃! f : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> coeff →ₗ[R] A,
+      ∀ g, f (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g) = delta g</code></pre></section>
+    <section><div class="natural-text"><p>Existence and uniqueness of the linear map representing a crossed differential.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift">crossedDifferentialModuleLift</a> (A := A) coeff delta hdelta, ?_, ?_⟩
+  · <span class="kw">intro</span> g
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift_universal">crossedDifferentialModuleLift_universal</a> (A := A) coeff delta hdelta g
+  · <span class="kw">intro</span> f hf
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift_unique">crossedDifferentialModuleLift_unique</a> (A := A) coeff delta hdelta f hf</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.crossedDifferentialOfModuleLinearMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialOfModuleLinearMap">FoxDifferential.crossedDifferentialOfModuleLinearMap</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L226">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> crossedDifferentialOfModuleLinearMap
+    (coeff : G →* R) (f : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> coeff →ₗ[R] A) : G → A :=
+  <span class="kw">fun</span> g =&gt; f (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g)</code></pre></section>
+    <section><div class="natural-text"><p>The crossed differential induced by a linear map out of the universal module.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedDifferentialOfModuleLinearMap_isCrossedDifferential">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialOfModuleLinearMap_isCrossedDifferential">FoxDifferential.crossedDifferentialOfModuleLinearMap_isCrossedDifferential</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L231">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> crossedDifferentialOfModuleLinearMap_isCrossedDifferential
+    (coeff : G →* R) (f : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> coeff →ₗ[R] A) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential">IsCrossedDifferential</a> coeff (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialOfModuleLinearMap">crossedDifferentialOfModuleLinearMap</a> (A := A) coeff f)</code></pre></section>
+    <section><div class="natural-text"><p>A linear map out of the universal module induces a crossed differential.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> g₁ g₂
+  change
+    f (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff (g₁ * g₂)) =
+      f (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g₁) +
+        coeff g₁ • f (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> coeff g₂)
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential_mul">universalCrossedDifferential_mul</a>]
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>, <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.IsLinearSystem.map_smul">map_smul</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.crossedDifferentialModuleEquivLinearMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedDifferentialModuleEquivLinearMap">FoxDifferential.crossedDifferentialModuleEquivLinearMap</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L246">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> crossedDifferentialModuleEquivLinearMap (coeff : G →* R) :
+    {delta : G → A // <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential">IsCrossedDifferential</a> coeff delta} ≃
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> coeff →ₗ[R] A) <span class="kw">where</span>
+  toFun delta := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift">crossedDifferentialModuleLift</a> (A := A) coeff delta.1 delta.2
+  invFun f :=
+    ⟨<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialOfModuleLinearMap">crossedDifferentialOfModuleLinearMap</a> (A := A) coeff f,
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialOfModuleLinearMap_isCrossedDifferential">crossedDifferentialOfModuleLinearMap_isCrossedDifferential</a> (A := A) coeff f⟩
+  left_inv delta := <span class="kw">by</span>
+    <span class="kw">apply</span> Subtype.ext
+    funext g
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift_universal">crossedDifferentialModuleLift_universal</a> (A := A) coeff delta.1 delta.2 g
+  right_inv f := <span class="kw">by</span>
+    <span class="kw">apply</span> <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleHom_ext">crossedDifferentialModuleHom_ext</a> coeff
+    <span class="kw">intro</span> g
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift_universal">crossedDifferentialModuleLift_universal</a> (A := A) coeff
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialOfModuleLinearMap">crossedDifferentialOfModuleLinearMap</a> (A := A) coeff f)
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialOfModuleLinearMap_isCrossedDifferential">crossedDifferentialOfModuleLinearMap_isCrossedDifferential</a> (A := A) coeff f) g</code></pre></section>
+    <section><div class="natural-text"><p>Crossed differentials \(G \to A\) with coefficient homomorphism \(\mathrm{coeff}:G \to R\) are represented by \(R\)-linear maps out of the universal module \(\mathrm{<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a>}\,\mathrm{coeff}\).</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-monoidAlgebraToIdentityCrossedDifferentialModule">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L272">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> monoidAlgebraToIdentityCrossedDifferentialModule :
+    MonoidAlgebra S G →ₗ[S]
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> (MonoidAlgebra.of S G) :=
+  Finsupp.linearCombination S
+    (<span class="kw">fun</span> g : G =&gt; <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g)</code></pre></section>
+    <section><div class="natural-text"><p>The S-linear map from a group algebra to the identity crossed-differential module sending \([g]\) to the universal differential d g.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-monoidAlgebraToIdentityCrossedDifferentialModule_mul_sub_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-monoidAlgebraToIdentityCrossedDifferentialModule_mul_sub_one">monoidAlgebraToIdentityCrossedDifferentialModule_mul_sub_one</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L278">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> monoidAlgebraToIdentityCrossedDifferentialModule_mul_sub_one
+    (a : MonoidAlgebra S G) (g : G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a>
+        (a * (MonoidAlgebra.of S G g - 1)) =
+      a • <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g</code></pre></section>
+    <section><div class="natural-text"><p>The linear map from the group algebra to the identity crossed-differential module sends \(a([g]-1)\) to \(a\) acting on the universal differential of \(g\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine Finsupp.induction_linear a ?<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> ?<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.add">add</a> ?single
+  · <span class="kw">simp</span> only [MonoidAlgebra.of_apply, zero_mul, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>, zero_smul]
+  · <span class="kw">intro</span> a b ha hb
+    <span class="kw">rw</span> [add_mul, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>, ha, hb, add_smul]
+  · <span class="kw">intro</span> p c
+    <span class="kw">rw</span> [MonoidAlgebra.of_apply]
+    <span class="kw">rw</span> [mul_sub, mul_one, MonoidAlgebra.single_mul_single]
+    change
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a>
+          (Finsupp.single (p * g) (c * 1) - Finsupp.single p c) =
+        (MonoidAlgebra.single p c : MonoidAlgebra S G) •
+          <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g
+    <span class="kw">rw</span> [map_sub]
+    change
+      (Finsupp.linearCombination S
+          (<span class="kw">fun</span> g : G =&gt; <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g))
+          (Finsupp.single (p * g) (c * 1)) -
+        (Finsupp.linearCombination S
+          (<span class="kw">fun</span> g : G =&gt; <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g))
+          (Finsupp.single p c) =
+        (MonoidAlgebra.single p c : MonoidAlgebra S G) •
+          <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g
+    <span class="kw">rw</span> [Finsupp.linearCombination_single, Finsupp.linearCombination_single]
+    <span class="kw">simp</span> only [mul_one]
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential_mul">universalCrossedDifferential_mul</a>]
+    <span class="kw">rw</span> [smul_add, add_sub_cancel_left]
+    <span class="kw">rw</span> [MonoidAlgebra.of_apply]
+    <span class="kw">rw</span> [<span class="kw">show</span> (MonoidAlgebra.single p c : MonoidAlgebra S G) =
+        c • MonoidAlgebra.single p 1 <span class="kw">by</span>
+      <span class="kw">simp</span> only [MonoidAlgebra.smul_single, smul_eq_mul, mul_one]]
+    <span class="kw">exact</span> (smul_assoc c (MonoidAlgebra.single p 1 : MonoidAlgebra S G)
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g)).symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-identityCrossedDifferentialBoundary">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L317">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> identityCrossedDifferentialBoundary :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialModule">CrossedDifferentialModule</a> (MonoidAlgebra.of S G) →ₗ[MonoidAlgebra S G]
+      MonoidAlgebra S G :=
+  <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift">crossedDifferentialModuleLift</a>
+    (A := MonoidAlgebra S G)
+    (MonoidAlgebra.of S G)
+    (<span class="kw">fun</span> g : G =&gt; MonoidAlgebra.of S G g - 1)
+    (<span class="kw">by</span>
+      <span class="kw">intro</span> g h
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, MonoidAlgebra.of_apply, MonoidAlgebra.single_mul_single, mul_one, sub_eq_add_neg,
+  smul_eq_mul, mul_add, mul_neg, add_comm, add_assoc, neg_add_cancel_left])
+
+@[<span class="kw">simp</span>]</code></pre></section>
+    <section><div class="natural-text"><p>The identity crossed-differential boundary sends \(d g\) to \([g] - 1\) over a group algebra.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-identityCrossedDifferentialBoundary_universal">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-identityCrossedDifferentialBoundary_universal">identityCrossedDifferentialBoundary_universal</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L330">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> identityCrossedDifferentialBoundary_universal (g : G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+        (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g) =
+      MonoidAlgebra.of S G g - 1</code></pre></section>
+    <section><div class="natural-text"><p>The identity crossed-differential boundary sends the universal differential at \(g\) to the group-algebra element \([g]-1\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>, <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift_universal">crossedDifferentialModuleLift_universal</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-monoidAlgebraToIdentityCrossedDifferentialModule_comp_identityBoundary_mkQ">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-monoidAlgebraToIdentityCrossedDifferentialModule_comp_identityBoundary_mkQ">monoidAlgebraToIdentityCrossedDifferentialModule_comp_identityBoundary_mkQ</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L336">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> monoidAlgebraToIdentityCrossedDifferentialModule_comp_identityBoundary_mkQ
+    (x : <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.CrossedDifferentialPreModule">CrossedDifferentialPreModule</a> (MonoidAlgebra S G) G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a>
+        (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a>
+          (R := MonoidAlgebra S G)
+          (<span class="kw">fun</span> g : G =&gt; MonoidAlgebra.of S G g - 1) x) =
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)).mkQ x</code></pre></section>
+    <section><div class="natural-text"><p>Composing the identity-boundary map with the monoid-algebra <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> has the stated value on quotient generators.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine Finsupp.induction_linear x ?<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> ?<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.add">add</a> ?single
+  · <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a>, MonoidAlgebra.of_apply, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>]
+  · <span class="kw">intro</span> x y hx hy
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>]
+    <span class="kw">exact</span> congrArg₂ (· + ·)
+      (<span class="kw">by</span> simpa [MonoidAlgebra.of_apply] using hx)
+      (<span class="kw">by</span> simpa [MonoidAlgebra.of_apply] using hy)
+  · <span class="kw">intro</span> g a
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear_single">crossedDifferentialModuleLiftLinear_single</a>]
+    change
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a>
+          (a * (MonoidAlgebra.of S G g - 1)) =
+        (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)).mkQ
+          (Finsupp.single g a)
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule_mul_sub_one">monoidAlgebraToIdentityCrossedDifferentialModule_mul_sub_one</a>]
+    <span class="kw">rw</span> [← Finsupp.smul_single_one]
+    <span class="kw">exact</span>
+      (Submodule.Quotient.mk_smul
+        (p := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G))
+        (r := a) (x := Finsupp.single g 1)).symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the relevant Fox differential, quotient, or <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage map. The asserted formula is checked on group-ring generators or quotient classes; linearity, the crossed-derivation rule, and the defining <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>/kernel relations extend the calculation to the whole module.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-idCrossedDiffBoundary_monoidAlgebraToModule">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-idCrossedDiffBoundary_monoidAlgebraToModule">idCrossedDiffBoundary_monoidAlgebraToModule</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L366">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> idCrossedDiffBoundary_monoidAlgebraToModule
+    (a : MonoidAlgebra S G) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+        (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a> (S := S) (G := G) a) =
+      a -
+        MonoidAlgebra.single (1 : G)
+          ((MonoidAlgebra.lift S S G (1 : G →* S)) a)</code></pre></section>
+    <section><div class="natural-text"><p>The boundary of the additive lift \(\sum a_g [g] \mapsto \sum a_g d g\) is the <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> part of the group-algebra element.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine Finsupp.induction_linear a ?<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> ?<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.add">add</a> ?single
+  · <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a>, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>, Finsupp.single_zero, sub_self]
+  · <span class="kw">intro</span> x y hx hy
+    <span class="kw">rw</span> [<span class="kw">show</span>
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a> (S := S) (G := G) (x + y) =
+        <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a> x +
+          <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a> y <span class="kw">by</span>
+        <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>]]
+    <span class="kw">rw</span> [<span class="kw">show</span>
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a> x +
+            <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a> y) =
+        <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a> x) +
+          <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a> y) <span class="kw">by</span>
+        <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a>]]
+    <span class="kw">rw</span> [hx, hy]
+    <span class="kw">have</span> haug :
+        ((MonoidAlgebra.lift S S G (1 : G →* S)) (x + y : MonoidAlgebra S G)) =
+          ((MonoidAlgebra.lift S S G (1 : G →* S)) x) +
+            ((MonoidAlgebra.lift S S G (1 : G →* S)) y) := <span class="kw">by</span>
+      <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a> (MonoidAlgebra.lift S S G (1 : G →* S)) x y
+    <span class="kw">rw</span> [haug]
+    <span class="kw">simp</span> only [sub_eq_add_neg, add_left_comm, add_assoc, Finsupp.single_add, neg_add_rev, add_comm]
+  · <span class="kw">intro</span> g c
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a>]
+    <span class="kw">have</span> hlin :
+        (Finsupp.linearCombination S
+          (<span class="kw">fun</span> g : G =&gt; <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g))
+            (Finsupp.single g c) =
+          c • <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g := <span class="kw">by</span>
+      <span class="kw">exact</span> Finsupp.linearCombination_single
+        (R := S)
+        (v := <span class="kw">fun</span> g : G =&gt; <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g)
+        (c := c) (a := g)
+    <span class="kw">calc</span>
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+          ((Finsupp.linearCombination S
+            (<span class="kw">fun</span> g : G =&gt; <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g))
+              (Finsupp.single g c)) =
+        <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+          (c • <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.universalCrossedDifferential">universalCrossedDifferential</a> (MonoidAlgebra.of S G) g) := <span class="kw">by</span>
+          <span class="kw">exact</span> congrArg <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a> hlin
+      _ =
+        (MonoidAlgebra.single g c : MonoidAlgebra S G) -
+          MonoidAlgebra.single (1 : G)
+            ((MonoidAlgebra.lift S S G (1 : G →* S))
+              (Finsupp.single g c : MonoidAlgebra S G)) := <span class="kw">by</span>
+          <span class="kw">rw</span> [LinearMap.map_smul_of_tower,
+            <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary_universal">identityCrossedDifferentialBoundary_universal</a>]
+          <span class="kw">rw</span> [Algebra.smul_def, MonoidAlgebra.of_apply]
+          <span class="kw">rw</span> [<span class="kw">show</span> (algebraMap S (MonoidAlgebra S G)) c =
+            MonoidAlgebra.single (1 : G) c <span class="kw">by</span> <span class="kw">rfl</span>]
+          <span class="kw">rw</span> [mul_sub, mul_one, MonoidAlgebra.single_mul_single]
+          <span class="kw">simp</span> only [MonoidAlgebra.single, one_mul, mul_one, MonoidAlgebra.lift_single, MonoidHom.one_apply,
+  smul_eq_mul]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-idCrossedDiffBoundary_monoidAlgebraToModule_of_augmentation_eq_zero">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-idCrossedDiffBoundary_monoidAlgebraToModule_of_augmentation_eq_zero">idCrossedDiffBoundary_monoidAlgebraToModule_of_augmentation_eq_zero</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L433">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> idCrossedDiffBoundary_monoidAlgebraToModule_of_augmentation_eq_zero
+    {a : MonoidAlgebra S G}
+    (ha : (MonoidAlgebra.lift S S G (1 : G →* S)) a = 0) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+        (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule">monoidAlgebraToIdentityCrossedDifferentialModule</a> (S := S) (G := G) a) = a</code></pre></section>
+    <section><div class="natural-text"><p>On the <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal, the additive lift \(\sum a_g [g] \mapsto \sum a_g d g\) is a right inverse to the identity crossed-differential boundary.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-idCrossedDiffBoundary_monoidAlgebraToModule">idCrossedDiffBoundary_monoidAlgebraToModule</a>,
+    ha]
+  <span class="kw">simp</span> only [Finsupp.single_zero, sub_zero]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-identityCrossedDifferentialBoundary_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-identityCrossedDifferentialBoundary_injective">identityCrossedDifferentialBoundary_injective</a>
+    <a class="source-link" href="../../../library/src/FoxDifferential/Common/CrossedDifferentialModule.html#L444">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> identityCrossedDifferentialBoundary_injective :
+    Function.Injective (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a> (S := S) (G := G))</code></pre></section>
+    <section><div class="natural-text"><p>For the identity coefficient map into a group algebra, the boundary map sending \(d g\) to \([g] - 1\) is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x y hxy
+  revert y
+  refine Submodule.Quotient.induction_on
+    (p := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)) x ?_
+  <span class="kw">intro</span> x y hxy&#x27;
+  revert hxy&#x27;
+  refine Submodule.Quotient.induction_on
+    (p := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)) y ?_
+  <span class="kw">intro</span> y hxy&#x27;
+  <span class="kw">apply</span> (Submodule.Quotient.eq
+    (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G))).2
+  <span class="kw">have</span> hdiff :
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLiftLinear">crossedDifferentialModuleLiftLinear</a>
+          (R := MonoidAlgebra S G)
+          (<span class="kw">fun</span> g : G =&gt; MonoidAlgebra.of S G g - 1) (x - y) = 0 := <span class="kw">by</span>
+    <span class="kw">have</span> hboundary :
+        <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+            ((<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)).mkQ (x - y)) =
+          0 := <span class="kw">by</span>
+      <span class="kw">rw</span> [<span class="kw">show</span>
+        (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)).mkQ (x - y) =
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)).mkQ x -
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)).mkQ y <span class="kw">by</span>
+          <span class="kw">rw</span> [map_sub]]
+      <span class="kw">rw</span> [map_sub]
+      <span class="kw">have</span> hxy&#x27;&#x27; :
+          <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+              ((<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)).mkQ x) =
+            <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>
+              ((<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)).mkQ y) := <span class="kw">by</span>
+        simpa [Submodule.mkQ_apply] using hxy&#x27;
+      <span class="kw">rw</span> [hxy&#x27;&#x27;, sub_self]
+    simpa [<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-identityCrossedDifferentialBoundary">identityCrossedDifferentialBoundary</a>, <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialModuleLift_mkQ">crossedDifferentialModuleLift_mkQ</a>]
+      using hboundary
+  <span class="kw">have</span> hmk :
+      (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G)).mkQ (x - y) =
+        0 := <span class="kw">by</span>
+    <span class="kw">have</span> happ :=
+      <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-monoidAlgebraToIdentityCrossedDifferentialModule_comp_identityBoundary_mkQ">monoidAlgebraToIdentityCrossedDifferentialModule_comp_identityBoundary_mkQ</a>
+        (S := S) (G := G) (x - y)
+    <span class="kw">rw</span> [hdiff, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>] at happ
+    <span class="kw">exact</span> happ.symm
+  <span class="kw">exact</span>
+    (Submodule.Quotient.mk_eq_zero
+      (p := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferentialModule.html#decl-FoxDifferential.crossedDifferentialRelationSubmodule">crossedDifferentialRelationSubmodule</a> (MonoidAlgebra.of S G))
+      (x := x - y)).1 hmk</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the algebraic crossed-differential rule. The values on generators determine the map, and the product, inverse, quotient, and power formulas follow from the rule \(d(xy)=d(x)+x d(y)\) by induction and linearity. Universal-module and lift statements are checked on basis elements and then descend through the defining crossed-differential relations. Equality, naturality, and matrix formulas follow from <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or basis extensionality, while <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel claims use the Fox fundamental formula.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FoxDifferential.Common.CrossedDifferentialModule"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.NormalSubgroups.MaximalIntersectionsAndSimpleRanks | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.NormalSubgroups.MaximalIntersectionsAndSimpleRanks</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/NormalSubgroups.html">NormalSubgroups</a><span class="sep">/</span><span>MaximalIntersectionsAndSimpleRanks</span></div>
+      <h1 class="module-title">ProCGroups.NormalSubgroups.MaximalIntersectionsAndSimpleRanks</h1>
+      <div class="module-meta">1 Theorem</div>
+      <div class="module-overview"><p>This module sets up the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage and inverse-limit description of the construction. It records the stage maps, projections, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> lemmas used to pass back to the completed object.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/NormalSubgroups/Framework.html">ProCGroups.NormalSubgroups.Framework</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/NormalSubgroups.html">ProCGroups.NormalSubgroups</a></li><li><a href="../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a></li><li><a href="../../../library/ReidemeisterSchreier/Profinite.html">ReidemeisterSchreier.Profinite</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ProCGroups.NormalSubgroups.maximal_normal_intersection_simple_quotient">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.NormalSubgroups.maximal_normal_intersection_simple_quotient">ProCGroups.NormalSubgroups.maximal_normal_intersection_simple_quotient</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/NormalSubgroups/MaximalIntersectionsAndSimpleRanks.html#L26">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> maximal_normal_intersection_simple_quotient
+    {G : <span class="kw">Type</span> u} [Group G] (M : Subgroup G) [M.Normal]
+    (hproper : M ≠ ⊤)
+    (hmax : ∀ N : Subgroup G, N.Normal → M &lt; N → N = ⊤) :
+    IsSimpleGroup (G ⧸ M)</code></pre></section>
+    <section><div class="natural-text"><p>A maximal normal subgroup gives a simple quotient.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hnotTopLe : ¬ (⊤ : Subgroup G) ≤ M := <span class="kw">by</span>
+    <span class="kw">intro</span> hle
+    <span class="kw">exact</span> hproper (le_antisymm le_top hle)
+  rcases SetLike.not_le_iff_exists.mp hnotTopLe <span class="kw">with</span> ⟨g, _hgTop, hgM⟩
+  refine
+    { exists_pair_ne := ⟨QuotientGroup.mk&#x27; M g, 1, ?_⟩
+      eq_bot_or_eq_top_of_normal := ?_ }
+  · <span class="kw">intro</span> hg
+    <span class="kw">exact</span> hgM ((QuotientGroup.eq_one_iff g).mp (<span class="kw">by</span> simpa using hg))
+  · <span class="kw">intro</span> H hH
+    <span class="kw">let</span> N : Subgroup G := Subgroup.comap (QuotientGroup.mk&#x27; M) H
+    <span class="kw">have</span> hMN : M ≤ N := <span class="kw">by</span>
+      dsimp [N]
+      <span class="kw">exact</span> QuotientGroup.le_comap_mk&#x27; M H
+    <span class="kw">have</span> hNnormal : N.Normal := <span class="kw">by</span>
+      dsimp [N]
+      infer_instance
+    by_cases hNM : N = M
+    · left
+      <span class="kw">apply</span> Subgroup.comap_injective (QuotientGroup.mk&#x27;_surjective M)
+      dsimp [N] at hNM
+      <span class="kw">rw</span> [hNM]
+      ext x
+      <span class="kw">simp</span> only [MonoidHom.comap_bot, QuotientGroup.ker_mk&#x27;]
+    · right
+      <span class="kw">have</span> hMNlt : M &lt; N := lt_of_le_of_ne hMN (<span class="kw">by</span>
+        <span class="kw">intro</span> hMN&#x27;
+        <span class="kw">exact</span> hNM hMN&#x27;.symm)
+      <span class="kw">have</span> hNtop : N = ⊤ := hmax N hNnormal hMNlt
+      <span class="kw">apply</span> Subgroup.comap_injective (QuotientGroup.mk&#x27;_surjective M)
+      dsimp [N] at hNtop
+      <span class="kw">rw</span> [hNtop, Subgroup.comap_top]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Closed-subgroup and subgroup-permanence claims use ambient open-normal approximation: an open normal subgroup of the closed subgroup is refined by the intersection with an ambient open normal subgroup of \(G\). For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.NormalSubgroups.MaximalIntersectionsAndSimpleRanks"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

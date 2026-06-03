@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CompletedGroupAlgebra.InClassFunctoriality.Maps | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">CompletedGroupAlgebra.InClassFunctoriality.Maps</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/CompletedGroupAlgebra.html">CompletedGroupAlgebra</a><span class="sep">/</span><a href="../../../library/CompletedGroupAlgebra/InClassFunctoriality.html">InClassFunctoriality</a><span class="sep">/</span><span>Maps</span></div>
+      <h1 class="module-title">CompletedGroupAlgebra.InClassFunctoriality.Maps</h1>
+      <div class="module-meta">12 Theorem | 2 Definition</div>
+      <div class="module-overview"><p>Completed Group Algebra / Functoriality Within a Class / Maps.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html">CompletedGroupAlgebra.InClassFunctoriality.StageMaps</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/CompletedGroupAlgebra.html">CompletedGroupAlgebra</a></li><li><a href="../../../library/CompletedGroupAlgebra/InClassFunctoriality.html">CompletedGroupAlgebra.InClassFunctoriality</a></li><li><a href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/GroupLike.html">CompletedGroupAlgebra.InClassFunctoriality.GroupLike</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">CompletedGroupAlgebra.completedGroupAlgebraMapInClass</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L37">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraMapInClass
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (R : <span class="kw">Type</span> u) [CommRing R] [TopologicalSpace R] [IsTopologicalRing R]
+    (φ : G →* H) (hφ : Continuous φ) :
+    CompletedGroupAlgebraInClass C hC R G →+* CompletedGroupAlgebraInClass C hC R H <span class="kw">where</span>
+  toFun x := ⟨<span class="kw">fun</span> V =&gt;
+      <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+        (G := G) (H := H) C hHer (R := R) φ hφ V
+        (completedGroupAlgebraProjectionInClass C hC R G
+          (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x), <span class="kw">by</span>
+    <span class="kw">intro</span> V W hVW
+    change completedGroupAlgebraTransitionInClass C R H hVW
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+          (G := G) (H := H) C hHer (R := R) φ hφ W
+          (completedGroupAlgebraProjectionInClass C hC R G
+            (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ W) x)) =
+      <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+        (G := G) (H := H) C hHer (R := R) φ hφ V
+        (completedGroupAlgebraProjectionInClass C hC R G
+          (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x)
+    <span class="kw">have</span> hcomp := congrFun
+      (congrArg DFunLike.coe
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass_transition">completedGroupAlgebraFunctorialStageMapInClass_transition</a>
+          (R := R) (G := G) (H := H) C hHer φ hφ hVW))
+      (completedGroupAlgebraProjectionInClass C hC R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ W) x)
+    <span class="kw">rw</span> [RingHom.comp_apply, RingHom.comp_apply] at hcomp
+    <span class="kw">rw</span> [← <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/Basic/InClass/Projection.html#decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionInClass_compatible">completedGroupAlgebraProjectionInClass_compatible</a>
+      (R := R) (G := G) C hC
+      (completedGroupAlgebraComapIndexInClass_mono
+        (G := G) (H := H) C hHer φ hφ hVW) x]
+    <span class="kw">exact</span> hcomp⟩
+  map_zero&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> (completedGroupAlgebraSystemInClass C hC R H).ext
+    <span class="kw">intro</span> V
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a> (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+      (G := G) (H := H) C hHer (R := R) φ hφ V)
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> (completedGroupAlgebraSystemInClass C hC R H).ext
+    <span class="kw">intro</span> V
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a> (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+      (G := G) (H := H) C hHer (R := R) φ hφ V)
+  map_add&#x27; x y := <span class="kw">by</span>
+    <span class="kw">apply</span> (completedGroupAlgebraSystemInClass C hC R H).ext
+    <span class="kw">intro</span> V
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_add">map_add</a> (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+      (G := G) (H := H) C hHer (R := R) φ hφ V)
+      (completedGroupAlgebraProjectionInClass C hC R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x)
+      (completedGroupAlgebraProjectionInClass C hC R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) y)
+  map_mul&#x27; x y := <span class="kw">by</span>
+    <span class="kw">apply</span> (completedGroupAlgebraSystemInClass C hC R H).ext
+    <span class="kw">intro</span> V
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a> (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+      (G := G) (H := H) C hHer (R := R) φ hφ V)
+      (completedGroupAlgebraProjectionInClass C hC R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x)
+      (completedGroupAlgebraProjectionInClass C hC R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) y)</code></pre></section>
+    <section><div class="natural-text"><p>A continuous homomorphism of groups induces a ring homomorphism on \(C\)-indexed completed group algebras, when \(C\) is hereditary.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionInClass_map">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionInClass_map">CompletedGroupAlgebra.completedGroupAlgebraProjectionInClass_map</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L101">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraProjectionInClass_map
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ)
+    (V : CompletedGroupAlgebraIndexInClass H C) (x : CompletedGroupAlgebraInClass C hC R G) :
+    completedGroupAlgebraProjectionInClass C hC R H V
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ x) =
+      <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+        (G := G) (H := H) C hHer (R := R) φ hφ V
+        (completedGroupAlgebraProjectionInClass C hC R G
+          (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x)</code></pre></section>
+    <section><div class="natural-text"><p>The in-class completed group-algebra map is characterized by its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, quotient maps move the support from <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> coset space to another, while coefficient maps act only on coefficients; therefore the relevant formula is checked on singleton basis functions and then extended by additivity and multiplicativity. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Continuity is checked by the initial topology of the inverse limit: after composing with every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the resulting map is a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or a composition of such homomorphisms. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. Projection and transition formulas are proved at an arbitrary <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage. Both sides use the same quotient map on the support and the same coefficient map on the coefficient, so they agree on singleton basis elements; <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> support and linearity extend the equality to the whole <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage group algebra. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass">CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L115">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraMapAlgHomInClass
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (R : <span class="kw">Type</span> u) [CommRing R] [TopologicalSpace R] [IsTopologicalRing R]
+    (φ : G →* H) (hφ : Continuous φ) :
+    CompletedGroupAlgebraInClass C hC R G →ₐ[R] CompletedGroupAlgebraInClass C hC R H <span class="kw">where</span>
+  toRingHom := <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ
+  commutes&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> r
+    <span class="kw">apply</span> (completedGroupAlgebraSystemInClass C hC R H).ext
+    <span class="kw">intro</span> V
+    change <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+        (G := G) (H := H) C hHer (R := R) φ hφ V
+        (algebraMap R
+          (CompletedGroupAlgebraStageInClass C R G
+            (completedGroupAlgebraComapIndexInClass
+              (G := G) (H := H) C hHer φ hφ V)) r) =
+      algebraMap R (CompletedGroupAlgebraStageInClass C R H V) r
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass_algebraMap">completedGroupAlgebraFunctorialStageMapInClass_algebraMap</a>
+      (R := R) (G := G) (H := H) C hHer φ hφ V r</code></pre></section>
+    <section><div class="natural-text"><p>Coefficient change is performed stagewise: each coefficient is transported by the given ring homomorphism while the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient support is left unchanged.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_apply">CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_apply</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L138">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapAlgHomInClass_apply
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ) (x : CompletedGroupAlgebraInClass C hC R G) :
+    <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass">completedGroupAlgebraMapAlgHomInClass</a> (G := G) (H := H) C hC hHer R φ hφ x =
+      <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ x</code></pre></section>
+    <section><div class="natural-text"><p>The bundled algebra homomorphism has the same underlying function as the coordinatewise construction.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, the coordinate operations are those of the ordinary group algebra; checking <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a>, addition, multiplication, scalar action, or evaluation after projection is therefore a direct coordinatewise calculation. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Continuity is checked by the initial topology of the inverse limit: after composing with every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the resulting map is a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or a composition of such homomorphisms. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. Coefficient and scalar compatibility is verified without changing the support in the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient: only coefficients are transported by the given ring homomorphism or scalar action. Linearity, multiplicativity, and the algebra-map identities then extend the singleton computation to arbitrary <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> sums. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass">CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L147">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_completedGroupAlgebraMapInClass
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ) :
+    Continuous (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ)</code></pre></section>
+    <section><div class="natural-text"><p>The induced \(C\)-indexed completed-group-algebra map is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> A := CompletedGroupAlgebraInClass C hC R G
+  <span class="kw">let</span> S := completedGroupAlgebraSystemInClass C hC R H
+  letI : ∀ V : CompletedGroupAlgebraIndexInClass H C,
+      TopologicalSpace (CompletedGroupAlgebraStageInClass C R H V) :=
+    <span class="kw">fun</span> V =&gt; S.topologicalSpace V
+  <span class="kw">have</span> hval : Continuous <span class="kw">fun</span> x : A =&gt;
+      ((<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ x) :
+        (V : CompletedGroupAlgebraIndexInClass H C) → S.X V) := <span class="kw">by</span>
+    change Continuous <span class="kw">fun</span> x : A =&gt;
+      <span class="kw">fun</span> V : CompletedGroupAlgebraIndexInClass H C =&gt;
+        <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+          (G := G) (H := H) C hHer (R := R) φ hφ V
+          (completedGroupAlgebraProjectionInClass C hC R G
+            (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x)
+    <span class="kw">apply</span> continuous_pi
+    <span class="kw">intro</span> V
+    letI : TopologicalSpace
+        (CompletedGroupAlgebraStageInClass C R G
+          (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V)) :=
+      (completedGroupAlgebraSystemInClass C hC R G).topologicalSpace
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V)
+    <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraFunctorialStageMapInClass">continuous_completedGroupAlgebraFunctorialStageMapInClass</a>
+      (R := R) (G := G) (H := H) C hC hHer φ hφ V).comp
+        ((completedGroupAlgebraSystemInClass C hC R G).continuous_projection
+          (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V))
+  <span class="kw">exact</span> Continuous.subtype_mk hval <span class="kw">fun</span> x =&gt;
+    (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ x).2</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, quotient maps move the support from <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> coset space to another, while coefficient maps act only on coefficients; therefore the relevant formula is checked on singleton basis functions and then extended by additivity and multiplicativity. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Continuity is checked by the initial topology of the inverse limit: after composing with every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the resulting map is a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or a composition of such homomorphisms. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L181">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ) :
+    (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ).comp
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G) =
+      (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R H).comp
+        (MonoidAlgebra.mapDomainRingHom R φ)</code></pre></section>
+    <section><div class="natural-text"><p>The in-class completed group-algebra map composes with the dense abstract map as expected.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> RingHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">apply</span> (completedGroupAlgebraSystemInClass C hC R H).ext
+  <span class="kw">intro</span> V
+  <span class="kw">have</span> hstage := congrFun
+    (congrArg DFunLike.coe
+      (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass_comp_stageMap">completedGroupAlgebraFunctorialStageMapInClass_comp_stageMap</a>
+        (R := R) (G := G) (H := H) C hHer φ hφ V))
+    x
+  change <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraFunctorialStageMapInClass">completedGroupAlgebraFunctorialStageMapInClass</a>
+      (G := G) (H := H) C hHer (R := R) φ hφ V
+      (completedGroupAlgebraStageMapInClass C R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x) =
+    completedGroupAlgebraStageMapInClass C R H V (MonoidAlgebra.mapDomainRingHom R φ x)
+  <span class="kw">exact</span> hstage</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, quotient maps move the support from <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> coset space to another, while coefficient maps act only on coefficients; therefore the relevant formula is checked on singleton basis functions and then extended by additivity and multiplicativity. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Continuity is checked by the initial topology of the inverse limit: after composing with every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the resulting map is a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or a composition of such homomorphisms. For dense-image and closure arguments, the equality is first established on the abstract group algebra and then passed to the completed object using <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage separation and closedness in the profinite topology. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. Coefficient and scalar compatibility is verified without changing the support in the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient: only coefficients are transported by the given ring homomorphism or scalar action. Linearity, multiplicativity, and the algebra-map identities then extend the singleton computation to arbitrary <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> sums.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_surjective_of_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_surjective_of_surjective">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_surjective_of_surjective</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L207">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapInClass_surjective_of_surjective
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hForm : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (hR : <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/ProfiniteModules/Basic/Definitions.html#decl-CompletedGroupAlgebra.IsProfiniteRing">IsProfiniteRing</a> R) (hH : IsProCGroup C H)
+    (φ : G →* H) (hφ : Continuous φ) (hφsurj : Function.Surjective φ) :
+    Function.Surjective
+      (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ)</code></pre></section>
+    <section><div class="natural-text"><p>A surjective continuous homomorphism onto a pro-\(C\) group induces a surjective map on \(C\)-indexed completed group algebras.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> f := <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ
+  letI : CompactSpace (CompletedGroupAlgebraInClass C hC R G) :=
+    <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/Basic/InClass/Topology.html#decl-CompletedGroupAlgebra.completedGroupAlgebraInClass_compactSpace">completedGroupAlgebraInClass_compactSpace</a> (R := R) (G := G) C hC hR
+  letI : T2Space (CompletedGroupAlgebraInClass C hC R H) :=
+    <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/Basic/InClass/Topology.html#decl-CompletedGroupAlgebra.completedGroupAlgebraInClass_t2Space">completedGroupAlgebraInClass_t2Space</a> (R := R) (G := H) C hC hR
+  <span class="kw">have</span> hfcont : Continuous f :=
+    <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass">continuous_completedGroupAlgebraMapInClass</a> (R := R) (G := G) (H := H)
+      C hC hHer φ hφ
+  <span class="kw">have</span> hclosed : IsClosed (Set.range f) := (isCompact_range hfcont).isClosed
+  <span class="kw">have</span> hdense : DenseRange (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R H) := <span class="kw">by</span>
+    change DenseRange (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClass">toCompletedGroupAlgebraInClass</a> C hC R H)
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.denseRange_toCompletedGroupAlgebraInClass">denseRange_toCompletedGroupAlgebraInClass</a> (R := R) (G := H) C hC hForm hH
+  <span class="kw">have</span> hcanonical_subset :
+      Set.range (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R H) ⊆ Set.range f := <span class="kw">by</span>
+    <span class="kw">intro</span> y hy
+    rcases hy <span class="kw">with</span> ⟨a, <span class="kw">rfl</span>⟩
+    rcases (<span class="kw">show</span> Function.Surjective (MonoidAlgebra.mapDomainRingHom R φ) from <span class="kw">by</span>
+      simpa [MonoidAlgebra.mapDomainRingHom_apply] using
+        (Finsupp.mapDomain_surjective (M := R) hφsurj)) a <span class="kw">with</span>
+      ⟨b, hb⟩
+    refine ⟨<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G b, ?_⟩
+    <span class="kw">have</span> hcomp := congrFun
+      (congrArg DFunLike.coe
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass</a>
+          (R := R) (G := G) (H := H) C hC hHer φ hφ))
+      b
+    simpa [f, RingHom.comp_apply, hb] using hcomp
+  <span class="kw">intro</span> y
+  <span class="kw">have</span> hycanonical :
+      y ∈ closure (Set.range (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R H)) := <span class="kw">by</span>
+    <span class="kw">rw</span> [hdense.closure_range]
+    <span class="kw">exact</span> Set.mem_univ y
+  <span class="kw">have</span> hyf : y ∈ closure (Set.range f) :=
+    closure_mono hcanonical_subset hycanonical
+  <span class="kw">exact</span> hclosed.closure_subset_iff.2 (<span class="kw">fun</span> z hz =&gt; hz) hyf</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, the coordinate operations are those of the ordinary group algebra; checking <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a>, addition, multiplication, scalar action, or evaluation after projection is therefore a direct coordinatewise calculation. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. Surjectivity is obtained by lifting a <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> through the underlying surjective quotient or group homomorphism and then checking the defining <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage formula. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Continuity is checked by the initial topology of the inverse limit: after composing with every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the resulting map is a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or a composition of such homomorphisms. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. For surjectivity, choose a <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of the target coordinate and lift it through the underlying surjective group, quotient, or coefficient map. The defining formula for the induced map sends the constructed preimage to the chosen <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> at every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, so inverse-limit extensionality gives the required global preimage.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted">CompletedGroupAlgebra.completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L253">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hForm : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hR : <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/ProfiniteModules/Basic/Definitions.html#decl-CompletedGroupAlgebra.IsProfiniteRing">IsProfiniteRing</a> R) (hG : IsProCGroup C G)
+    {f g : CompletedGroupAlgebraInClass C hC R G →+*
+      CompletedGroupAlgebraInClass C hC R H}
+    (hf : Continuous f) (hg : Continuous g)
+    (hfg : f.comp (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G) =
+      g.comp (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G)) :
+    f = g</code></pre></section>
+    <section><div class="natural-text"><p>Continuous ring homomorphisms out of \(\widehat{R[G]}_C\) are determined by their values on the dense abstract group algebra.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : T2Space (CompletedGroupAlgebraInClass C hC R H) :=
+    <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/Basic/InClass/Topology.html#decl-CompletedGroupAlgebra.completedGroupAlgebraInClass_t2Space">completedGroupAlgebraInClass_t2Space</a> (R := R) (G := H) C hC hR
+  <span class="kw">have</span> hdense : DenseRange (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G) := <span class="kw">by</span>
+    change DenseRange (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClass">toCompletedGroupAlgebraInClass</a> C hC R G)
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.denseRange_toCompletedGroupAlgebraInClass">denseRange_toCompletedGroupAlgebraInClass</a> (R := R) (G := G) C hC hForm hG
+  <span class="kw">have</span> hcomp : (f : CompletedGroupAlgebraInClass C hC R G →
+        CompletedGroupAlgebraInClass C hC R H) ∘
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G) =
+      (g : CompletedGroupAlgebraInClass C hC R G →
+        CompletedGroupAlgebraInClass C hC R H) ∘
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G) := <span class="kw">by</span>
+    funext x
+    <span class="kw">exact</span> congrFun (congrArg DFunLike.coe hfg) x
+  <span class="kw">have</span> hfun : (f : CompletedGroupAlgebraInClass C hC R G →
+        CompletedGroupAlgebraInClass C hC R H) = g :=
+    DenseRange.equalizer hdense hf hg hcomp
+  <span class="kw">exact</span> RingHom.ext <span class="kw">fun</span> x =&gt; congrFun hfun x</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, quotient maps move the support from <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> coset space to another, while coefficient maps act only on coefficients; therefore the relevant formula is checked on singleton basis functions and then extended by additivity and multiplicativity. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Continuity is checked by the initial topology of the inverse limit: after composing with every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the resulting map is a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or a composition of such homomorphisms. For dense-image and closure arguments, the equality is first established on the abstract group algebra and then passed to the completed object using <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage separation and closedness in the profinite topology. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_id">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_id">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_id</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L282">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapInClass_id
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hForm : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (hR : <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/ProfiniteModules/Basic/Definitions.html#decl-CompletedGroupAlgebra.IsProfiniteRing">IsProfiniteRing</a> R) (hG : IsProCGroup C G) :
+    <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := G) C hC hHer R
+        (MonoidHom.id G) continuous_id =
+      RingHom.id (CompletedGroupAlgebraInClass C hC R G)</code></pre></section>
+    <section><div class="natural-text"><p>Identity law for the \(C\)-indexed completed-group-algebra functor.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted">completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted</a>
+    (R := R) (G := G) (H := G) C hC hForm hR hG
+  · <span class="kw">exact</span> <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass">continuous_completedGroupAlgebraMapInClass</a> (R := R) (G := G) (H := G)
+      C hC hHer (MonoidHom.id G) continuous_id
+  · <span class="kw">exact</span> continuous_id
+  · <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass</a>,
+      <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/ProfiniteModules/FiniteGroupAlgebra/Functoriality.html#decl-CompletedGroupAlgebra.finiteGroupAlgebra_mapDomainRingHom_id">finiteGroupAlgebra_mapDomainRingHom_id</a>]
+    <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, quotient maps move the support from <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> coset space to another, while coefficient maps act only on coefficients; therefore the relevant formula is checked on singleton basis functions and then extended by additivity and multiplicativity. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. Every equality used in the completed algebra is therefore an equality of <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> families. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage maps respect refinement because they are induced by the same quotient homomorphisms of groups and the same coefficient homomorphisms. This also handles definitions and bundled structures: the data are first built at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, then the compatibility equations show that the family lies in the inverse limit. Consequently the coordinate calculation uniquely determines the completed object and verifies the required algebraic or topological property. Coefficient and scalar compatibility is verified without changing the support in the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient: only coefficients are transported by the given ring homomorphism or scalar action. Linearity, multiplicativity, and the algebra-map identities then extend the singleton computation to arbitrary <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> sums.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_id">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_id">CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_id</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L301">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapAlgHomInClass_id
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hForm : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (hR : <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/ProfiniteModules/Basic/Definitions.html#decl-CompletedGroupAlgebra.IsProfiniteRing">IsProfiniteRing</a> R) (hG : IsProCGroup C G) :
+    <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass">completedGroupAlgebraMapAlgHomInClass</a> (G := G) (H := G) C hC hHer R
+        (MonoidHom.id G) continuous_id =
+      AlgHom.id R (CompletedGroupAlgebraInClass C hC R G)</code></pre></section>
+    <section><div class="natural-text"><p>Identity law for the \(C\)-indexed completed-group-algebra functor, as an \(R\)-algebra homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> AlgHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">have</span> h := congrFun
+    (congrArg DFunLike.coe
+      (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_id">completedGroupAlgebraMapInClass_id</a> (R := R) (G := G) C hC hForm hHer hR hG))
+    x
+  simpa using h</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, quotient maps move the support from <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> coset space to another, while coefficient maps act only on coefficients; therefore the relevant formula is checked on singleton basis functions and then extended by additivity and multiplicativity. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. Every equality used in the completed algebra is therefore an equality of <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> families. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage maps respect refinement because they are induced by the same quotient homomorphisms of groups and the same coefficient homomorphisms. This also handles definitions and bundled structures: the data are first built at each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, then the compatibility equations show that the family lies in the inverse limit. Consequently the coordinate calculation uniquely determines the completed object and verifies the required algebraic or topological property. Coefficient and scalar compatibility is verified without changing the support in the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient: only coefficients are transported by the given ring homomorphism or scalar action. Linearity, multiplicativity, and the algebra-map identities then extend the singleton computation to arbitrary <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> sums.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L318">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapInClass_comp
+    {K : <span class="kw">Type</span> v} [Group K] [TopologicalSpace K] [IsTopologicalGroup K]
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hForm : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (hR : <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/ProfiniteModules/Basic/Definitions.html#decl-CompletedGroupAlgebra.IsProfiniteRing">IsProfiniteRing</a> R) (hG : IsProCGroup C G)
+    (φ : G →* H) (hφ : Continuous φ) (ψ : H →* K) (hψ : Continuous ψ) :
+    (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := H) (H := K) C hC hHer R ψ hψ).comp
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ) =
+      <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := K) C hC hHer R
+        (ψ.comp φ) (hψ.comp hφ)</code></pre></section>
+    <section><div class="natural-text"><p>Composition law for the \(C\)-indexed completed-group-algebra functor.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted">completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted</a>
+    (R := R) (G := G) (H := K) C hC hForm hR hG
+  · <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass">continuous_completedGroupAlgebraMapInClass</a> (R := R) (G := H) (H := K)
+      C hC hHer ψ hψ).comp
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass">continuous_completedGroupAlgebraMapInClass</a> (R := R) (G := G) (H := H)
+          C hC hHer φ hφ)
+  · <span class="kw">exact</span> <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass">continuous_completedGroupAlgebraMapInClass</a> (R := R) (G := G) (H := K)
+      C hC hHer (ψ.comp φ) (hψ.comp hφ)
+  · <span class="kw">apply</span> RingHom.ext
+    <span class="kw">intro</span> x
+    <span class="kw">have</span> hφdense := congrFun
+      (congrArg DFunLike.coe
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass</a>
+          (R := R) (G := G) (H := H) C hC hHer φ hφ))
+      x
+    <span class="kw">have</span> hψdense := congrFun
+      (congrArg DFunLike.coe
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass</a>
+          (R := R) (G := H) (H := K) C hC hHer ψ hψ))
+      (MonoidAlgebra.mapDomainRingHom R φ x)
+    <span class="kw">have</span> hdomain := congrFun
+      (congrArg DFunLike.coe
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/ProfiniteModules/FiniteGroupAlgebra/Functoriality.html#decl-CompletedGroupAlgebra.finiteGroupAlgebra_mapDomainRingHom_comp">finiteGroupAlgebra_mapDomainRingHom_comp</a> R G H K φ ψ))
+      x
+    <span class="kw">have</span> hcompdense := congrFun
+      (congrArg DFunLike.coe
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass</a>
+          (R := R) (G := G) (H := K) C hC hHer (ψ.comp φ) (hψ.comp hφ)))
+      x
+    <span class="kw">calc</span>
+      (((<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := H) (H := K) C hC hHer R ψ hψ).comp
+          (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ)).comp
+          (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G)) x
+          =
+        <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := H) (H := K) C hC hHer R ψ hψ
+          (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ
+            (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G x)) := <span class="kw">rfl</span>
+      _ =
+        <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := H) (H := K) C hC hHer R ψ hψ
+          (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R H
+            (MonoidAlgebra.mapDomainRingHom R φ x)) := <span class="kw">by</span>
+          <span class="kw">have</span> hφdense&#x27; :
+              <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ
+                  (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G x) =
+                <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R H
+                  (MonoidAlgebra.mapDomainRingHom R φ x) := <span class="kw">by</span>
+            simpa [RingHom.comp_apply] using hφdense
+          <span class="kw">exact</span> congrArg (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := H) (H := K)
+            C hC hHer R ψ hψ) hφdense&#x27;
+      _ =
+        <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R K
+          (MonoidAlgebra.mapDomainRingHom R ψ (MonoidAlgebra.mapDomainRingHom R φ x)) := <span class="kw">by</span>
+          simpa [RingHom.comp_apply] using hψdense
+      _ =
+        <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R K
+          (MonoidAlgebra.mapDomainRingHom R (ψ.comp φ) x) := <span class="kw">by</span>
+          <span class="kw">exact</span> congrArg (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R K) (<span class="kw">by</span>
+            change (MonoidAlgebra.mapDomainRingHom R ψ)
+                ((MonoidAlgebra.mapDomainRingHom R φ) x) =
+              (MonoidAlgebra.mapDomainRingHom R (ψ.comp φ)) x at hdomain
+            <span class="kw">exact</span> hdomain)
+      _ =
+        ((<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := K) C hC hHer R
+          (ψ.comp φ) (hψ.comp hφ)).comp
+          (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClassRingHom">toCompletedGroupAlgebraInClassRingHom</a> C hC R G)) x := <span class="kw">by</span>
+          simpa [RingHom.comp_apply] using hcompdense.symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, quotient maps move the support from <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> coset space to another, while coefficient maps act only on coefficients; therefore the relevant formula is checked on singleton basis functions and then extended by additivity and multiplicativity. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Continuity is checked by the initial topology of the inverse limit: after composing with every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the resulting map is a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or a composition of such homomorphisms. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. Coefficient and scalar compatibility is verified without changing the support in the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient: only coefficients are transported by the given ring homomorphism or scalar action. Linearity, multiplicativity, and the algebra-map identities then extend the singleton computation to arbitrary <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> sums. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_comp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_comp">CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_comp</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L398">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapAlgHomInClass_comp
+    {K : <span class="kw">Type</span> v} [Group K] [TopologicalSpace K] [IsTopologicalGroup K]
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hForm : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (hR : <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/ProfiniteModules/Basic/Definitions.html#decl-CompletedGroupAlgebra.IsProfiniteRing">IsProfiniteRing</a> R) (hG : IsProCGroup C G)
+    (φ : G →* H) (hφ : Continuous φ) (ψ : H →* K) (hψ : Continuous ψ) :
+    (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass">completedGroupAlgebraMapAlgHomInClass</a> (G := H) (H := K) C hC hHer R ψ hψ).comp
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass">completedGroupAlgebraMapAlgHomInClass</a> (G := G) (H := H) C hC hHer R φ hφ) =
+      <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass">completedGroupAlgebraMapAlgHomInClass</a> (G := G) (H := K) C hC hHer R
+        (ψ.comp φ) (hψ.comp hφ)</code></pre></section>
+    <section><div class="natural-text"><p>Composition law for the \(C\)-indexed completed-group-algebra functor, as an \(R\)-algebra homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> AlgHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">have</span> h := congrFun
+    (congrArg DFunLike.coe
+      (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp">completedGroupAlgebraMapInClass_comp</a> (R := R) (G := G) (H := H) (K := K)
+        C hC hForm hHer hR hG φ hφ ψ hψ))
+    x
+  simpa using h</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, quotient maps move the support from <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> coset space to another, while coefficient maps act only on coefficients; therefore the relevant formula is checked on singleton basis functions and then extended by additivity and multiplicativity. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Continuity is checked by the initial topology of the inverse limit: after composing with every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the resulting map is a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or a composition of such homomorphisms. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. Coefficient and scalar compatibility is verified without changing the support in the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient: only coefficients are transported by the given ring homomorphism or scalar action. Linearity, multiplicativity, and the algebra-map identities then extend the singleton computation to arbitrary <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> sums. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L420">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ) (g : G) :
+    <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClass">toCompletedGroupAlgebraInClass</a> C hC R G (MonoidAlgebra.of R G g)) =
+      <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClass">toCompletedGroupAlgebraInClass</a> C hC R H (MonoidAlgebra.of R H (φ g))</code></pre></section>
+    <section><div class="natural-text"><p>The in-class completed group-algebra map sends group-like elements to group-like elements.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> h := congrFun
+    (congrArg DFunLike.coe
+      (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass</a>
+        (R := R) (G := G) (H := H) C hC hHer φ hφ))
+    (MonoidAlgebra.of R G g)
+  simpa [RingHom.comp_apply, <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/ProfiniteModules/FiniteGroupAlgebra/Functoriality.html#decl-CompletedGroupAlgebra.finiteGroupAlgebra_mapDomainRingHom_of">finiteGroupAlgebra_mapDomainRingHom_of</a>] using h</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, the coordinate operations are those of the ordinary group algebra; checking <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a>, addition, multiplication, scalar action, or evaluation after projection is therefore a direct coordinatewise calculation. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Continuity is checked by the initial topology of the inverse limit: after composing with every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the resulting map is a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or a composition of such homomorphisms. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. Coefficient and scalar compatibility is verified without changing the support in the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient: only coefficients are transported by the given ring homomorphism or scalar action. Linearity, multiplicativity, and the algebra-map identities then extend the singleton computation to arbitrary <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> sums. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_sub_one_of">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_sub_one_of">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_sub_one_of</a>
+    <a class="source-link" href="../../../library/src/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#L436">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_sub_one_of
+    (C : ProCGroups.FiniteGroupClass.{v}) (hC : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.FiniteOnly">ProCGroups.FiniteGroupClass.FiniteOnly</a> C)
+    (hHer : <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ) (g : G) :
+    <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">completedGroupAlgebraMapInClass</a> (G := G) (H := H) C hC hHer R φ hφ
+        (<a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClass">toCompletedGroupAlgebraInClass</a> C hC R G (MonoidAlgebra.of R G g) - 1) =
+      <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html#decl-CompletedGroupAlgebra.toCompletedGroupAlgebraInClass">toCompletedGroupAlgebraInClass</a> C hC R H (MonoidAlgebra.of R H (φ g)) - 1</code></pre></section>
+    <section><div class="natural-text"><p>The in-class completed group-algebra map sends group-like <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> generators to their images.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [map_sub, <a class="decl-ref" href="../../../library/CompletedGroupAlgebra/InClassFunctoriality/Maps.html#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of">completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of</a>, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Let \(U\) range over the open normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-index subgroups of \(G\), and write the completed group algebra as the inverse limit \(\widehat{R[G]}=\varprojlim_U R[G/U]\). An element or morphism of the completed algebra is determined by its composites with all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections, so the proof is reduced to ordinary group-algebra calculations at the stages \(R[G/U]\). At a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage, the coordinate operations are those of the ordinary group algebra; checking <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a>, addition, multiplication, scalar action, or evaluation after projection is therefore a direct coordinatewise calculation. Coefficient-change assertions hold because each singleton coefficient is transported by the chosen ring homomorphism and the quotient support is left unchanged. For <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> claims, the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> sends every group-like basis element to \(1\) and a singleton coefficient to that coefficient, so the <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal is exactly the kernel described by the equation \(\varepsilon(x)=0\). Finiteness is reduced to the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient set together with the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coefficient data, so the relevant <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage function space or quotient object is finite. Continuity is checked by the initial topology of the inverse limit: after composing with every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the resulting map is a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or a composition of such homomorphisms. Compatibility under refinement of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients ensures that the verified <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage identities form a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family, and inverse-limit extensionality then proves the claimed completed statement. For the <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> part, each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group-algebra <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> sends a group-like basis element to \(1\) and a singleton coefficient to that coefficient. Therefore membership in the <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> ideal is rewritten as a vanishing condition under \(\varepsilon\), and the kernel computation becomes the two inclusions between that vanishing locus and the image or <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> described in the statement.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="CompletedGroupAlgebra.InClassFunctoriality.Maps"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

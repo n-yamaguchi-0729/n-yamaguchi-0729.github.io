@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReidemeisterSchreier.Discrete.OpenSubgroups.Generators | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">ReidemeisterSchreier.Discrete.OpenSubgroups.Generators</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a><span class="sep">/</span><a href="../../../../library/ReidemeisterSchreier/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups.html">OpenSubgroups</a><span class="sep">/</span><span>Generators</span></div>
+      <h1 class="module-title">ReidemeisterSchreier.Discrete.OpenSubgroups.Generators</h1>
+      <div class="module-meta">18 Theorem | 5 Definition | 1 Abbreviation</div>
+      <div class="module-overview"><p>This module develops the rewriting and basis constructions behind the subgroup calculations. It tracks words and relations through the chosen transversal to obtain the required presentation or basis statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html">ReidemeisterSchreier.Discrete.OpenSubgroups.Transversals</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a></li><li><a href="../../../../library/ReidemeisterSchreier/Discrete.html">ReidemeisterSchreier.Discrete</a></li><li><a href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups.html">ReidemeisterSchreier.Discrete.OpenSubgroups</a></li><li><a href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/PrefixTree.html">ReidemeisterSchreier.Discrete.OpenSubgroups.PrefixTree</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierTransversalRightCosetAction">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierTransversalRightCosetAction">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierTransversalRightCosetAction</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L26">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> schreierTransversalRightCosetAction {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T) :
+    MulAction (FreeGroup X) T := <span class="kw">by</span>
+  letI : MulAction (FreeGroup X) (Quotient (QuotientGroup.rightRel L)) :=
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.rightCosetLeftMulActionByInverse">rightCosetLeftMulActionByInverse</a> L
+  <span class="kw">let</span> e : T ≃ Quotient (QuotientGroup.rightRel L) := hT.1.rightQuotientEquiv.symm
+  refine
+    { smul := <span class="kw">fun</span> g t =&gt; e.symm (g • e t)
+      one_smul := <span class="kw">by</span>
+        <span class="kw">intro</span> t
+        change e.symm (1 • e t) = t
+        <span class="kw">rw</span> [one_smul]
+        <span class="kw">exact</span> e.left_inv t
+      mul_smul := <span class="kw">by</span>
+        <span class="kw">intro</span> g h t
+        change e.symm ((g * h) • e t) = e.symm (g • e (e.symm (h • e t)))
+        <span class="kw">rw</span> [mul_smul, e.apply_symm_apply] }</code></pre></section>
+    <section><div class="natural-text"><p>The Schreier transversal itself carries the same right-coset action, transported along the equivalence with right cosets.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L46">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> schreierRepresentative {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T) :
+    FreeGroup X → T :=
+  hT.1.toRightFun</code></pre></section>
+    <section><div class="natural-text"><p>The chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of a right coset attached to a right Schreier transversal.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L52">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> schreierRepresentative_eq_of_mem {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {t : FreeGroup X} (ht : t ∈ T) :
+  <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">schreierRepresentative</a> (X := X) hT t = ⟨t, ht⟩</code></pre></section>
+    <section><div class="natural-text"><p>The Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is the chosen transversal element determined by the stated subgroup-membership condition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> (Subgroup.isComplement_iff_existsUnique_mul_inv_mem.mp hT.1 t).unique
+  · <span class="kw">exact</span> hT.1.mul_inv_toRightFun_mem t
+  · <span class="kw">simp</span> only [mul_inv_cancel, SetLike.mem_coe, one_mem]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_one_of_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_one_of_mem">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_one_of_mem</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L61">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> schreierRepresentative_eq_one_of_mem {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {g : FreeGroup X} (hg : g ∈ L) :
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">schreierRepresentative</a> (X := X) hT g = ⟨1, hT.2.1⟩</code></pre></section>
+    <section><div class="natural-text"><p>The Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is the chosen transversal element determined by the stated subgroup-membership condition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> (Subgroup.isComplement_iff_existsUnique_mul_inv_mem.mp hT.1 g).unique
+  · <span class="kw">exact</span> hT.1.mul_inv_toRightFun_mem g
+  · simpa using hg</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem_mul_inv_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem_mul_inv_mem">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem_mul_inv_mem</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L70">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> schreierRepresentative_eq_of_mem_mul_inv_mem {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {g t : FreeGroup X} (ht : t ∈ T) (hgt : g * t⁻¹ ∈ L) :
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">schreierRepresentative</a> (X := X) hT g = ⟨t, ht⟩</code></pre></section>
+    <section><div class="natural-text"><p>The Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is the chosen transversal element determined by the stated subgroup-membership condition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> (Subgroup.isComplement_iff_existsUnique_mul_inv_mem.mp hT.1 g).unique
+  · <span class="kw">exact</span> hT.1.mul_inv_toRightFun_mem g
+  · <span class="kw">exact</span> hgt</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. Relator and normal-closure claims follow because rewriting the defining <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> gives the subgroup presentation <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, and conjugating by transversal representatives stays inside the generated normal closure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.prefixParent_mem_of_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.prefixParent_mem_of_mem">ReidemeisterSchreier.Discrete.OpenSubgroups.prefixParent_mem_of_mem</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L79">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> prefixParent_mem_of_mem {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {t : FreeGroup X} (ht : t ∈ T) :
+    FreeGroup.prefixParent t ∈ T</code></pre></section>
+    <section><div class="natural-text"><p>Membership of a word in the prefix tree implies membership of its prefix parent.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine hT.2.2 ht ?_
+  refine ⟨(FreeGroup.toWord t).length - 1, Nat.sub_le (FreeGroup.toWord t).length 1, ?_⟩
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.FreeGroup.prefixParent">prefixParent</a>, List.dropLast_eq_take]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. Relator and normal-closure claims follow because rewriting the defining <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> gives the subgroup presentation <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, and conjugating by transversal representatives stays inside the generated normal closure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. The Reidemeister--Schreier step tracks the transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> before and after each letter. Trivial Schreier generators are removed when the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is unchanged, while nontrivial generators record exactly the subgroup correction; products of these corrections reconstruct the original word inside the subgroup presentation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierTransversalRightCosetAction_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierTransversalRightCosetAction_smul">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierTransversalRightCosetAction_smul</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L88">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> schreierTransversalRightCosetAction_smul {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    (g : FreeGroup X) (t : T) :
+    letI</code></pre></section>
+    <section><div class="natural-text"><p>The right-coset action updates a Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> by multiplying on the right and then choosing the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of the resulting coset.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierTransversalRightCosetAction">schreierTransversalRightCosetAction</a> (X := X) hT
+    g • t = <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">schreierRepresentative</a> (X := X) hT ((t : FreeGroup X) * g⁻¹) := <span class="kw">by</span>
+  <span class="kw">let</span> e : T ≃ Quotient (QuotientGroup.rightRel L) := hT.1.rightQuotientEquiv.symm
+  <span class="kw">have</span> ht : e t = Quotient.mk&#x27;&#x27; (t : FreeGroup X) := <span class="kw">by</span>
+    simpa [e] using hT.1.mk&#x27;&#x27;_rightQuotientEquiv (e t)
+  change
+      hT.1.rightQuotientEquiv (g • hT.1.rightQuotientEquiv.symm t) =
+        hT.1.rightQuotientEquiv (Quotient.mk&#x27;&#x27; ((t : FreeGroup X) * g⁻¹))
+  <span class="kw">rw</span> [ht, <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.rightCosetLeftMulActionByInverse_mk_smul">rightCosetLeftMulActionByInverse_mk_smul</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the right-coset action and the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> function. The action formula is obtained by multiplying the chosen <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> by the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> and then applying the transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> map to the resulting right coset.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L103">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> schreierGenerator {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T) (t : FreeGroup X) (x : X) : L := <span class="kw">by</span>
+  refine
+    ⟨t * FreeGroup.of x *
+        ((<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">schreierRepresentative</a> (X := X) hT (t * FreeGroup.of x) : T) : FreeGroup X)⁻¹, ?_⟩
+  <span class="kw">exact</span> hT.1.mul_inv_toRightFun_mem (t * FreeGroup.of x)</code></pre></section>
+    <section><div class="natural-text"><p>The Schreier expression attached to any word \(t\) and basis element \(x\).</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.NontrivialSchreierPair">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.NontrivialSchreierPair">ReidemeisterSchreier.Discrete.OpenSubgroups.NontrivialSchreierPair</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L114">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> NontrivialSchreierPair {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T) : <span class="kw">Type</span> u :=
+  {p : T × X // schreierGenerator (X := X) hT ((p.1 : T) : FreeGroup X) p.2 ≠ 1}</code></pre></section>
+    <section><div class="natural-text"><p>The canonical index type for the nontrivial Schreier generators attached to a right Schreier transversal. This pair-indexed type is the preferred basis index; the value-set Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> set records the same nontrivial generators by their subgroup values.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.nontrivialSchreierPairGenerator">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.nontrivialSchreierPairGenerator">ReidemeisterSchreier.Discrete.OpenSubgroups.nontrivialSchreierPairGenerator</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L120">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> nontrivialSchreierPairGenerator {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T) :
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.NontrivialSchreierPair">NontrivialSchreierPair</a> (X := X) hT → L :=
+  <span class="kw">fun</span> p =&gt; schreierGenerator (X := X) hT ((p.1.1 : T) : FreeGroup X) p.1.2</code></pre></section>
+    <section><div class="natural-text"><p>The Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> value represented by a nontrivial Schreier pair.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.nontrivialSchreierPairGenerator_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.nontrivialSchreierPairGenerator_apply">ReidemeisterSchreier.Discrete.OpenSubgroups.nontrivialSchreierPairGenerator_apply</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L126">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> nontrivialSchreierPairGenerator_apply {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    (p : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.NontrivialSchreierPair">NontrivialSchreierPair</a> (X := X) hT) :
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.nontrivialSchreierPairGenerator">nontrivialSchreierPairGenerator</a> (X := X) hT p =
+      schreierGenerator (X := X) hT ((p.1.1 : T) : FreeGroup X) p.1.2</code></pre></section>
+    <section><div class="natural-text"><p>The Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or pair map is evaluated by the chosen section and coset representative.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L136">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> schreierGeneratorSet {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T) : Set L :=
+  {z | ∃ t ∈ T, ∃ x : X, z = schreierGenerator (X := X) hT t x ∧ z ≠ 1}</code></pre></section>
+    <section><div class="natural-text"><p>The classical Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> value set attached to a right Schreier transversal. This value set records the resulting Schreier generators, while the nontrivial Schreier pairs provide the preferred basis index.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.mem_schreierGeneratorSet_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.mem_schreierGeneratorSet_iff">ReidemeisterSchreier.Discrete.OpenSubgroups.mem_schreierGeneratorSet_iff</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L141">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> mem_schreierGeneratorSet_iff {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T) {z : L} :
+    z ∈ <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">schreierGeneratorSet</a> (X := X) hT ↔
+      ∃ t ∈ T, ∃ x : X, z = schreierGenerator (X := X) hT t x ∧ z ≠ 1</code></pre></section>
+    <section><div class="natural-text"><p>Membership in the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> set is equivalent to the displayed <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> condition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Iff.rfl</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. Relator and normal-closure claims follow because rewriting the defining <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> gives the subgroup presentation <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, and conjugating by transversal representatives stays inside the generated normal closure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. The Reidemeister--Schreier step tracks the transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> before and after each letter. Trivial Schreier generators are removed when the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is unchanged, while nontrivial generators record exactly the subgroup correction; products of these corrections reconstruct the original word inside the subgroup presentation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_mem_schreierGeneratorSet_of_mem_of_ne_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_mem_schreierGeneratorSet_of_mem_of_ne_one">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_mem_schreierGeneratorSet_of_mem_of_ne_one</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L148">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> schreierGenerator_mem_schreierGeneratorSet_of_mem_of_ne_one
+    {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {t : FreeGroup X} (ht : t ∈ T) (x : X)
+    (hne : schreierGenerator (X := X) hT t x ≠ 1) :
+    schreierGenerator (X := X) hT t x ∈ <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">schreierGeneratorSet</a> (X := X) hT</code></pre></section>
+    <section><div class="natural-text"><p>A nontrivial Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> associated to an element of the transversal lies in the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> set.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>⟨t, ht, x, <span class="kw">rfl</span>, hne⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. Relator and normal-closure claims follow because rewriting the defining <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> gives the subgroup presentation <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, and conjugating by transversal representatives stays inside the generated normal closure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. The Reidemeister--Schreier step tracks the transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> before and after each letter. Trivial Schreier generators are removed when the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> is unchanged, while nontrivial generators record exactly the subgroup correction; products of these corrections reconstruct the original word inside the subgroup presentation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_mem_schreierGeneratorSet_of_ne_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_mem_schreierGeneratorSet_of_ne_one">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_mem_schreierGeneratorSet_of_ne_one</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L157">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> schreierGenerator_mem_schreierGeneratorSet_of_ne_one
+    {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    (t : T) (x : X)
+    (hne : schreierGenerator (X := X) hT (t : FreeGroup X) x ≠ 1) :
+    schreierGenerator (X := X) hT (t : FreeGroup X) x ∈
+      <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">schreierGeneratorSet</a> (X := X) hT</code></pre></section>
+    <section><div class="natural-text"><p>A nontrivial Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> belongs to the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> set.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_mem_schreierGeneratorSet_of_mem_of_ne_one">schreierGenerator_mem_schreierGeneratorSet_of_mem_of_ne_one</a>
+    (X := X) hT t.property x hne</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. Relator and normal-closure claims follow because rewriting the defining <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> gives the subgroup presentation <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, and conjugating by transversal representatives stays inside the generated normal closure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. Functoriality and naturality are proved by comparing the two composites after projection to an arbitrary target stage. The source stage is the pullback or refined quotient required by the construction, and both composites are induced by the same quotient homomorphism together with the same coefficient map; hence the coordinate maps agree and so do the completed maps.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet_eq_range_nontrivialSchreierPairGenerator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet_eq_range_nontrivialSchreierPairGenerator">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet_eq_range_nontrivialSchreierPairGenerator</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L169">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> schreierGeneratorSet_eq_range_nontrivialSchreierPairGenerator
+    {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T) :
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGeneratorSet">schreierGeneratorSet</a> (X := X) hT =
+      Set.range (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.nontrivialSchreierPairGenerator">nontrivialSchreierPairGenerator</a> (X := X) hT)</code></pre></section>
+    <section><div class="natural-text"><p>The value-set formulation is precisely the range of the pair-indexed <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext z
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hz
+    rcases hz <span class="kw">with</span> ⟨t, ht, x, hz, hne⟩
+    refine ⟨⟨(⟨t, ht⟩, x), ?_⟩, ?_⟩
+    · simpa [hz] using hne
+    · <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.nontrivialSchreierPairGenerator">nontrivialSchreierPairGenerator</a>, hz]
+  · rintro ⟨p, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_mem_schreierGeneratorSet_of_ne_one">schreierGenerator_mem_schreierGeneratorSet_of_ne_one</a>
+      (X := X) hT p.1.1 p.1.2 p.2</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_mem">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_mem</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L186">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> schreierGenerator_eq_one_of_mem {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {t : FreeGroup X} {x : X}
+    (htx : t * FreeGroup.of x ∈ T) :
+    schreierGenerator (X := X) hT t x = 1</code></pre></section>
+    <section><div class="natural-text"><p>The Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> is trivial exactly in the corresponding subgroup-membership case.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">simp</span> only [schreierGenerator, <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem">schreierRepresentative_eq_of_mem</a> (X := X) hT htx, mul_inv_rev, mul_assoc,
+  mul_inv_cancel_left, mul_inv_cancel, OneMemClass.coe_one]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_of_mul_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_of_mul_mem">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_of_mul_mem</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L196">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> schreierGenerator_eq_of_mul_mem {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {t : FreeGroup X} {x : X}
+    (htx : t * FreeGroup.of x ∈ L) :
+    schreierGenerator (X := X) hT t x = ⟨t * FreeGroup.of x, htx⟩</code></pre></section>
+    <section><div class="natural-text"><p>If the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a>-<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> product lies in the subgroup, the corresponding Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> is the represented subgroup element.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">simp</span> only [schreierGenerator, <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_one_of_mem">schreierRepresentative_eq_one_of_mem</a> (X := X) hT htx, inv_one, mul_one]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_iff">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_iff</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L205">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> schreierGenerator_eq_one_iff {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    {hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T}
+    {t : FreeGroup X} {x : X} :
+    schreierGenerator (X := X) hT t x = 1 ↔
+      ((<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">schreierRepresentative</a> (X := X) hT (t * FreeGroup.of x) : T) : FreeGroup X) =
+        t * FreeGroup.of x</code></pre></section>
+    <section><div class="natural-text"><p>The Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> is trivial exactly under the corresponding coset condition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> h
+    <span class="kw">have</span> hval : t * FreeGroup.of x *
+        (((<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">schreierRepresentative</a> (X := X) hT (t * FreeGroup.of x) : T) : FreeGroup X))⁻¹ = 1 := <span class="kw">by</span>
+      <span class="kw">exact</span> congrArg Subtype.val h
+    <span class="kw">have</span> hmul := congrArg
+      (<span class="kw">fun</span> g : FreeGroup X =&gt;
+        g * ((<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">schreierRepresentative</a> (X := X) hT (t * FreeGroup.of x) : T) : FreeGroup X)) hval
+    simpa [mul_assoc] using hmul.symm
+  · <span class="kw">intro</span> hrep
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">simp</span> only [schreierGenerator, hrep, mul_inv_rev, mul_assoc, mul_inv_cancel_left, mul_inv_cancel,
+  OneMemClass.coe_one]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.exists_rightSchreierTransversal_of_minimalGeneratorPower">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.exists_rightSchreierTransversal_of_minimalGeneratorPower">ReidemeisterSchreier.Discrete.OpenSubgroups.exists_rightSchreierTransversal_of_minimalGeneratorPower</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L230">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_rightSchreierTransversal_of_minimalGeneratorPower
+    {X : <span class="kw">Type</span> u} [DecidableEq X] {L : Subgroup (FreeGroup X)} (x : X) {N : ℕ}
+    (hN : 0 &lt; N)
+    (hpow : (FreeGroup.of x) ^ N ∈ L)
+    (hmin : ∀ m : ℕ, 0 &lt; m → m &lt; N → (FreeGroup.of x) ^ m ∉ L) :
+    ∃ T : Set (FreeGroup X), ∃ hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T,
+      (FreeGroup.of x) ^ (N - 1) ∈ T ∧
+        schreierGenerator (X := X) hT ((FreeGroup.of x) ^ (N - 1)) x =
+          ⟨(FreeGroup.of x) ^ N, hpow⟩</code></pre></section>
+    <section><div class="natural-text"><p>Pointed discrete Reidemeister--Schreier statement: if \(x^N\) is the first positive power of a free <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> landing in \(L\), <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> may choose a right Schreier transversal whose distinguished Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> is exactly \(x^N\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> T₀ : Set (FreeGroup X) := Set.range <span class="kw">fun</span> i : Fin N =&gt; (FreeGroup.of x) ^ (i : ℕ)
+  <span class="kw">have</span> hT₀ : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightPartialSchreierTransversal">IsRightPartialSchreierTransversal</a> (X := X) L T₀ :=
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.isRightPartialSchreierTransversal_generatorPowers_of_minimalPower">isRightPartialSchreierTransversal_generatorPowers_of_minimalPower</a>
+      (X := X) (L := L) x hN hmin
+  rcases <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.exists_rightSchreierTransversal_of_partial">exists_rightSchreierTransversal_of_partial</a> (X := X) (L := L) hT₀ <span class="kw">with</span>
+    ⟨T, hsub, hT⟩
+  <span class="kw">have</span> hpred : (FreeGroup.of x) ^ (N - 1) ∈ T := <span class="kw">by</span>
+    <span class="kw">apply</span> hsub
+    <span class="kw">exact</span> ⟨⟨N - 1, Nat.pred_lt (Nat.ne_of_gt hN)⟩, <span class="kw">rfl</span>⟩
+  <span class="kw">have</span> hmul :
+      (FreeGroup.of x) ^ (N - 1) * FreeGroup.of x = (FreeGroup.of x) ^ N := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      (FreeGroup.of x) ^ (N - 1) * FreeGroup.of x = (FreeGroup.of x) ^ ((N - 1).succ) := <span class="kw">by</span>
+        <span class="kw">rw</span> [pow_succ]
+      _ = (FreeGroup.of x) ^ N := <span class="kw">by</span>
+        simpa using congrArg (<span class="kw">fun</span> n : ℕ =&gt; (FreeGroup.of x) ^ n) (Nat.succ_pred_eq_of_pos hN)
+  <span class="kw">have</span> hmul_mem : (FreeGroup.of x) ^ (N - 1) * FreeGroup.of x ∈ L := <span class="kw">by</span>
+    <span class="kw">rw</span> [hmul]
+    <span class="kw">exact</span> hpow
+  refine ⟨T, hT, hpred, ?_⟩
+  <span class="kw">calc</span>
+    schreierGenerator (X := X) hT ((FreeGroup.of x) ^ (N - 1)) x =
+        ⟨(FreeGroup.of x) ^ (N - 1) * FreeGroup.of x, hmul_mem⟩ := <span class="kw">by</span>
+          <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_of_mul_mem">schreierGenerator_eq_of_mul_mem</a> (X := X) hT hmul_mem
+    _ = ⟨(FreeGroup.of x) ^ N, hpow⟩ := <span class="kw">by</span>
+      <span class="kw">apply</span> Subtype.ext
+      <span class="kw">exact</span> hmul</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_prefixParent_of_cancels">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_prefixParent_of_cancels">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_prefixParent_of_cancels</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L267">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> schreierRepresentative_eq_prefixParent_of_cancels {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {t : FreeGroup X} {x : X}
+    (ht : t ∈ T) (hw : FreeGroup.toWord t ≠ [])
+    (hlast : (FreeGroup.toWord t).getLast hw = (x, false)) :
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">schreierRepresentative</a> (X := X) hT (t * FreeGroup.of x) =
+      ⟨FreeGroup.prefixParent t, <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.prefixParent_mem_of_mem">prefixParent_mem_of_mem</a> (X := X) hT ht⟩</code></pre></section>
+    <section><div class="natural-text"><p>If the last letter of a transversal word cancels with x, the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of t x is the prefix parent of t.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [Internal.FreeGroupWord.FreeGroup.mul_of_eq_prefixParent_of_cancels t x hw hlast]
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem">schreierRepresentative_eq_of_mem</a> (X := X) hT (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.prefixParent_mem_of_mem">prefixParent_mem_of_mem</a> (X := X) hT ht)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_prefixParent_last_pos">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_prefixParent_last_pos">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_prefixParent_last_pos</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L278">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> schreierRepresentative_eq_of_prefixParent_last_pos {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {t : FreeGroup X} (ht : t ∈ T) {x : X}
+    (hw : FreeGroup.toWord t ≠ [])
+    (hlast : (FreeGroup.toWord t).getLast hw = (x, true)) :
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative">schreierRepresentative</a> (X := X) hT (FreeGroup.prefixParent t * FreeGroup.of x) = ⟨t, ht⟩</code></pre></section>
+    <section><div class="natural-text"><p>If a transversal word ends in x, the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> of its prefix parent multiplied by x is the original word.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [Internal.FreeGroupWord.FreeGroup.prefixParent_mul_of_of_last_pos t x hw hlast]
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierRepresentative_eq_of_mem">schreierRepresentative_eq_of_mem</a> (X := X) hT ht</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_cancels">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_cancels">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_cancels</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L288">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> schreierGenerator_eq_one_of_cancels {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {t : FreeGroup X} {x : X}
+    (ht : t ∈ T) (hw : FreeGroup.toWord t ≠ [])
+    (hlast : (FreeGroup.toWord t).getLast hw = (x, false)) :
+    schreierGenerator (X := X) hT t x = 1</code></pre></section>
+    <section><div class="natural-text"><p>If the last letter of a transversal word cancels with x, the corresponding Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> is trivial.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_mem">schreierGenerator_eq_one_of_mem</a> (X := X) hT
+  <span class="kw">rw</span> [Internal.FreeGroupWord.FreeGroup.mul_of_eq_prefixParent_of_cancels t x hw hlast]
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.prefixParent_mem_of_mem">prefixParent_mem_of_mem</a> (X := X) hT ht</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_prefixParent_last_pos">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_prefixParent_last_pos">ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_prefixParent_last_pos</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#L299">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> schreierGenerator_eq_one_of_prefixParent_last_pos {X : <span class="kw">Type</span> u} [DecidableEq X]
+    {L : Subgroup (FreeGroup X)} {T : Set (FreeGroup X)}
+    (hT : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Transversals.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.IsRightSchreierTransversal">IsRightSchreierTransversal</a> (X := X) L T)
+    {t : FreeGroup X} (ht : t ∈ T) {x : X}
+    (hw : FreeGroup.toWord t ≠ [])
+    (hlast : (FreeGroup.toWord t).getLast hw = (x, true)) :
+    schreierGenerator (X := X) hT (FreeGroup.prefixParent t) x = 1</code></pre></section>
+    <section><div class="natural-text"><p>If a transversal word ends in x, the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> attached to its prefix parent and x is trivial.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/Generators.html#decl-ReidemeisterSchreier.Discrete.OpenSubgroups.schreierGenerator_eq_one_of_mem">schreierGenerator_eq_one_of_mem</a> (X := X) hT
+  <span class="kw">rw</span> [Internal.FreeGroupWord.FreeGroup.prefixParent_mul_of_of_last_pos t x hw hlast]
+  <span class="kw">exact</span> ht</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Fix the chosen Schreier transversal and write each group element as a transversal <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> multiplied by an element of the subgroup. The rewriting map is computed letter by letter: after reading a letter, the current coset <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determines the Schreier <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> supplies the correction term. The formula is first verified on a single letter and then extended to words by induction on the word list, using concatenation compatibility of the rewriting procedure. The resulting identity in chosen coset representatives is independent of the chosen word presentation after passing through the normal-closure relations, giving the claimed Reidemeister--Schreier formula. At each induction step the current <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> and the next <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> determine exactly <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> Schreier generator. The correction terms telescope over a concatenated word, leaving the expected subgroup element at the end of the rewriting. Therefore equality in the subgroup presentation follows from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list of rewritten generators and <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a>, not from any additional relation. The quotient presentation is generated by the Schreier generators, so equality of rewritten <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images determines the induced homomorphism. The normal-closure argument shows that replacing a word by an equivalent word in the original presentation does not change its rewritten image. This supplies the required presentation-level equality. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ReidemeisterSchreier.Discrete.OpenSubgroups.Generators"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

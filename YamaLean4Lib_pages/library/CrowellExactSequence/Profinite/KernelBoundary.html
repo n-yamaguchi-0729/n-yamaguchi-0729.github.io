@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CrowellExactSequence.Profinite.KernelBoundary | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">CrowellExactSequence.Profinite.KernelBoundary</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/CrowellExactSequence.html">CrowellExactSequence</a><span class="sep">/</span><a href="../../../library/CrowellExactSequence/Profinite.html">Profinite</a><span class="sep">/</span><span>KernelBoundary</span></div>
+      <h1 class="module-title">CrowellExactSequence.Profinite.KernelBoundary</h1>
+      <div class="module-meta">14 Theorem | 2 Definition | 1 Abbreviation</div>
+      <div class="module-overview"><p>This module develops the Crowell--Blanchfield--Lyndon exact sequence and its completed coordinate forms.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html">CrowellExactSequence.Profinite.SequenceMaps</a></li><li><a href="../../../library/ProCGroups/ProC/Kernels.html">ProCGroups.ProC.Kernels</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/CrowellExactSequence/Profinite/KernelInjectivity.html">CrowellExactSequence.Profinite.KernelInjectivity</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-CrowellExactSequence.completedKernelBoundaryProCInteger">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">CrowellExactSequence.completedKernelBoundaryProCInteger</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L34">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedKernelBoundaryProCInteger
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H) :
+    psi.toMonoidHom.ker →*
+      Multiplicative (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom) <span class="kw">where</span>
+  toFun n := Multiplicative.ofAdd
+    (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1)
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> Multiplicative.toAdd.injective
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential_one">zcUniversalDifferential_one</a> C psi.toMonoidHom
+  map_mul&#x27; n₁ n₂ := <span class="kw">by</span>
+    <span class="kw">apply</span> Multiplicative.toAdd.injective
+    <span class="kw">have</span> hmul := <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential_mul">zcUniversalDifferential_mul</a> C psi.toMonoidHom n₁.1 n₂.1
+    <span class="kw">have</span> hpsi : psi n₁.1 = 1 := n₁.2
+    <span class="kw">have</span> hcoef :
+        <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcGroupLike">zcGroupLike</a> C H (psi n₁.1) = 1 := <span class="kw">by</span>
+      <span class="kw">rw</span> [hpsi]
+      <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a> (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcGroupLike">zcGroupLike</a> C H)
+    <span class="kw">have</span> hadd :
+        <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom ((n₁ * n₂ : psi.toMonoidHom.ker).1) =
+          <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n₁.1 +
+            <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n₂.1 := <span class="kw">by</span>
+      simpa [<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcCompletedGroupAlgebraScalar_apply">zcCompletedGroupAlgebraScalar_apply</a>, hpsi, hcoef, one_smul] using hmul
+    simpa using hadd</code></pre></section>
+    <section><div class="natural-text"><p>Kernel elements map multiplicatively to the Fox completed differential module.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L59">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> separatedCompletedKernelBoundaryProCInteger
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H) :
+    psi.toMonoidHom.ker →*
+      Multiplicative (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.ZCSeparatedCompletedDifferentialModule">ZCSeparatedCompletedDifferentialModule</a> C psi.toMonoidHom) <span class="kw">where</span>
+  toFun n := Multiplicative.ofAdd
+    (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">zcSeparatedUniversalDifferential</a> C psi.toMonoidHom n.1)
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> Multiplicative.toAdd.injective
+    change <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">zcSeparatedUniversalDifferential</a> C psi.toMonoidHom 1 = 0
+    <span class="kw">rw</span> [← <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcCompletedDifferentialModuleToSeparated_universal">zcCompletedDifferentialModuleToSeparated_universal</a>
+      (C := C) (ψ := psi.toMonoidHom) (g := 1),
+      <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential_one">zcUniversalDifferential_one</a>]
+    <span class="kw">simp</span> only [ContinuousMonoidHom.coe_toMonoidHom, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>]
+  map_mul&#x27; n₁ n₂ := <span class="kw">by</span>
+    <span class="kw">apply</span> Multiplicative.toAdd.injective
+    <span class="kw">have</span> hmul := <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential_mul">zcSeparatedUniversalDifferential_mul</a> C psi.toMonoidHom n₁.1 n₂.1
+    <span class="kw">have</span> hpsi : psi n₁.1 = 1 := n₁.2
+    <span class="kw">have</span> hcoef :
+        <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcGroupLike">zcGroupLike</a> C H (psi n₁.1) = 1 := <span class="kw">by</span>
+      <span class="kw">rw</span> [hpsi]
+      <span class="kw">exact</span> <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a> (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcGroupLike">zcGroupLike</a> C H)
+    <span class="kw">have</span> hadd :
+        <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">zcSeparatedUniversalDifferential</a> C psi.toMonoidHom ((n₁ * n₂ : psi.toMonoidHom.ker).1) =
+          <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">zcSeparatedUniversalDifferential</a> C psi.toMonoidHom n₁.1 +
+            <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">zcSeparatedUniversalDifferential</a> C psi.toMonoidHom n₂.1 := <span class="kw">by</span>
+      simpa [<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcCompletedGroupAlgebraScalar_apply">zcCompletedGroupAlgebraScalar_apply</a>, hpsi, hcoef, one_smul] using hmul
+    simpa using hadd</code></pre></section>
+    <section><div class="natural-text"><p>Kernel elements map multiplicatively to the separated completed differential module.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger_mem_ker_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger_mem_ker_iff">CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger_mem_ker_iff</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L88">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> separatedCompletedKernelBoundaryProCInteger_mem_ker_iff
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H)
+    (n : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi) :
+    n ∈ (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">separatedCompletedKernelBoundaryProCInteger</a>
+        (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> ↔
+      ∀ i : <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/FiniteStage.html#decl-FoxDifferential.ZCCompletedDifferentialModuleIndex">ZCCompletedDifferentialModuleIndex</a> C psi.toMonoidHom,
+        <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/FiniteStage.html#decl-FoxDifferential.zcCompletedDifferentialModuleStageDifferential">zcCompletedDifferentialModuleStageDifferential</a> C psi.toMonoidHom i n.1 = 0</code></pre></section>
+    <section><div class="natural-text"><p>Membership in the separated completed kernel-boundary kernel is equivalent to vanishing of the corresponding <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hn i
+    <span class="kw">have</span> hsep :
+        <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">zcSeparatedUniversalDifferential</a> C psi.toMonoidHom n.1 = 0 := <span class="kw">by</span>
+      change
+        Multiplicative.ofAdd
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">zcSeparatedUniversalDifferential</a> C psi.toMonoidHom n.1) =
+          (1 : Multiplicative
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.ZCSeparatedCompletedDifferentialModule">ZCSeparatedCompletedDifferentialModule</a> C psi.toMonoidHom)) at hn
+      simpa using
+        congrArg
+          (<span class="kw">fun</span> x : Multiplicative
+              (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.ZCSeparatedCompletedDifferentialModule">ZCSeparatedCompletedDifferentialModule</a> C psi.toMonoidHom) =&gt;
+            Multiplicative.toAdd x) hn
+    simpa using congrArg
+      (<span class="kw">fun</span> x : <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.ZCSeparatedCompletedDifferentialModule">ZCSeparatedCompletedDifferentialModule</a> C psi.toMonoidHom =&gt;
+        <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedCompletedDifferentialModuleStageProjectionAdd">zcSeparatedCompletedDifferentialModuleStageProjectionAdd</a> C psi.toMonoidHom i x) hsep
+  · <span class="kw">intro</span> hstage
+    <span class="kw">have</span> hsep :
+        <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">zcSeparatedUniversalDifferential</a> C psi.toMonoidHom n.1 = 0 :=
+      <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedCompletedDifferentialModuleStageProjectionsSeparate">zcSeparatedCompletedDifferentialModuleStageProjectionsSeparate</a>
+        C psi.toMonoidHom
+        (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">zcSeparatedUniversalDifferential</a> C psi.toMonoidHom n.1)
+        (<span class="kw">by</span> <span class="kw">intro</span> i; simpa using hstage i)
+    change
+      Multiplicative.ofAdd
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.zcSeparatedUniversalDifferential">zcSeparatedUniversalDifferential</a> C psi.toMonoidHom n.1) =
+        (1 : Multiplicative
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.ZCSeparatedCompletedDifferentialModule">ZCSeparatedCompletedDifferentialModule</a> C psi.toMonoidHom))
+    simpa [hsep]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. Linear equivalences preserve exactness because composing with an isomorphism does not change kernels or images after transporting them along the equivalence. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.isClosed_separatedCompletedKernelBoundaryProCInteger_ker">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.isClosed_separatedCompletedKernelBoundaryProCInteger_ker">CrowellExactSequence.isClosed_separatedCompletedKernelBoundaryProCInteger_ker</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L128">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isClosed_separatedCompletedKernelBoundaryProCInteger_ker
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H) :
+    IsClosed
+      (((<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">separatedCompletedKernelBoundaryProCInteger</a>
+          (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> :
+        Subgroup (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) :
+          Set (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi))</code></pre></section>
+    <section><div class="natural-text"><p>The separated kernel boundary has closed kernel, because <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> can be tested at every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage and each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage boundary is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hker_set :
+      (((<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">separatedCompletedKernelBoundaryProCInteger</a>
+          (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> :
+        Subgroup (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) :
+          Set (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) =
+        ⋂ i : <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/FiniteStage.html#decl-FoxDifferential.ZCCompletedDifferentialModuleIndex">ZCCompletedDifferentialModuleIndex</a> C psi.toMonoidHom,
+          (<span class="kw">fun</span> n : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi =&gt;
+            <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/FiniteStage.html#decl-FoxDifferential.zcCompletedDifferentialModuleStageDifferential">zcCompletedDifferentialModuleStageDifferential</a> C psi.toMonoidHom i n.1) ⁻¹&#x27;
+              ({0} : Set (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/FiniteStage.html#decl-FoxDifferential.ZCCompletedDifferentialModuleStage">ZCCompletedDifferentialModuleStage</a> C psi.toMonoidHom i)) := <span class="kw">by</span>
+    ext n
+    <span class="kw">simp</span> only [Set.mem_iInter, Set.mem_preimage, Set.mem_singleton_iff]
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger_mem_ker_iff">separatedCompletedKernelBoundaryProCInteger_mem_ker_iff</a>
+      (G := G) (H := H) C psi n
+  <span class="kw">rw</span> [hker_set]
+  refine isClosed_iInter <span class="kw">fun</span> i =&gt; ?_
+  <span class="kw">exact</span>
+    (isClosed_singleton (x := (0 : <a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/FiniteStage.html#decl-FoxDifferential.ZCCompletedDifferentialModuleStage">ZCCompletedDifferentialModuleStage</a> C psi.toMonoidHom i))).preimage
+      ((<a class="decl-ref" href="../../../library/FoxDifferential/Completed/Continuous/Universal/NaturalTopology.html#decl-FoxDifferential.continuous_zcCompletedDifferentialModuleStageDifferential">continuous_zcCompletedDifferentialModuleStageDifferential</a> C psi.toMonoidHom i).comp
+        continuous_subtype_val)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger_commutator_le_ker">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger_commutator_le_ker">CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger_commutator_le_ker</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L158">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> separatedCompletedKernelBoundaryProCInteger_commutator_le_ker
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi) &lt;=
+      (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">separatedCompletedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a></code></pre></section>
+    <section><div class="natural-text"><p>Algebraic part of well-definedness for the separated boundary: ordinary commutators already map to zero.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine Subgroup.commutator_le.mpr ?_
+  <span class="kw">intro</span> a _ha b _hb
+  change (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">separatedCompletedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi) ⁅a, b⁆ = 1
+  <span class="kw">rw</span> [map_commutatorElement]
+  <span class="kw">exact</span> commutatorElement_eq_one_iff_mul_comm.2
+    (mul_comm
+      (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">separatedCompletedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi a)
+      (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">separatedCompletedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi b))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.separatedBoundaryKillsTopologicalCommutatorProCInteger">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.separatedBoundaryKillsTopologicalCommutatorProCInteger">CrowellExactSequence.separatedBoundaryKillsTopologicalCommutatorProCInteger</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L173">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> separatedBoundaryKillsTopologicalCommutatorProCInteger
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H) :
+    Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) &lt;=
+      (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">separatedCompletedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a></code></pre></section>
+    <section><div class="natural-text"><p>The separated kernel boundary kills \(\overline{[N,N]}\) without assuming algebraic closedness of the raw crossed-differential relation submodule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Subgroup.topologicalClosure_minimal
+    (s := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi))
+    (t := (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger">separatedCompletedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>)
+    (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.separatedCompletedKernelBoundaryProCInteger_commutator_le_ker">separatedCompletedKernelBoundaryProCInteger_commutator_le_ker</a>
+      (G := G) (H := H) C psi)
+    (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.isClosed_separatedCompletedKernelBoundaryProCInteger_ker">isClosed_separatedCompletedKernelBoundaryProCInteger_ker</a>
+      (G := G) (H := H) C psi)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuous">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuous">CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuous</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L185">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuous
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H)
+    [TopologicalSpace (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom)]
+    [T1Space (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom)]
+    (hcont :
+      Continuous (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi)) :
+    Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) &lt;=
+      (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a></code></pre></section>
+    <section><div class="natural-text"><p>The Crowell--Blanchfield coordinate formula agrees with the quotient-level construction after passage to the separated or completed module.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : T1Space (Multiplicative (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom)) := <span class="kw">by</span>
+    change T1Space (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom)
+    infer_instance
+  <span class="kw">let</span> f : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi →ₜ*
+      Multiplicative (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom) :=
+    { toMonoidHom := <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi
+      continuous_toFun := hcont }
+  <span class="kw">intro</span> x hx
+  <span class="kw">have</span> hxmk :
+      <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianization.html#decl-ProCGroups.Abelian.TopologicalAbelianization.mk">ProCGroups.Abelian.TopologicalAbelianization.mk</a>
+          (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi) x = 1 :=
+    ProCGroups.Abelian.TopologicalAbelianization.mk_eq_one_iff.2 hx
+  <span class="kw">have</span> hkill :=
+    congrArg (<span class="kw">fun</span> y =&gt; <a class="decl-ref" href="../../../library/ProCGroups/Abelian/TopologicalAbelianization.html#decl-ProCGroups.Abelian.TopologicalAbelianization.lift">ProCGroups.Abelian.TopologicalAbelianization.lift</a> f y) hxmk
+  simpa [f, MonoidHom.mem_ker] using hkill</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl abbrev" id="decl-CrowellExactSequence.CompletedBoundaryKillsTopologicalCommutatorProCInteger">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.CompletedBoundaryKillsTopologicalCommutatorProCInteger">CrowellExactSequence.CompletedBoundaryKillsTopologicalCommutatorProCInteger</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L210">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> CompletedBoundaryKillsTopologicalCommutatorProCInteger
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H) : <span class="kw">Prop</span> :=
+  Subgroup.topologicalClosure (<a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) &lt;=
+    (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a></code></pre></section>
+    <section><div class="natural-text"><p>Correct topological boundary factorization condition for the genuine \(N^{\mathrm{ab}}(C)\) map.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuousBoundary">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuousBoundary">CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuousBoundary</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L215">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuousBoundary
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H)
+    [TopologicalSpace (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom)]
+    [T1Space (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom)]
+    (hcont :
+      Continuous (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi)) :
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.CompletedBoundaryKillsTopologicalCommutatorProCInteger">CompletedBoundaryKillsTopologicalCommutatorProCInteger</a> (G := G) (H := H) C psi</code></pre></section>
+    <section><div class="natural-text"><p>The Crowell--Blanchfield coordinate formula agrees with the quotient-level construction after passage to the separated or completed module.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuous">completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuous</a>
+    (G := G) (H := H) C psi hcont</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.completedKernelBoundaryProCInteger_commutator_le_ker">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.completedKernelBoundaryProCInteger_commutator_le_ker">CrowellExactSequence.completedKernelBoundaryProCInteger_commutator_le_ker</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L229">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedKernelBoundaryProCInteger_commutator_le_ker
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H) :
+    <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi) &lt;=
+      (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a></code></pre></section>
+    <section><div class="natural-text"><p>Algebraic part of well-definedness: the kernel boundary kills the ordinary <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup of the profinite kernel. The remaining topological step is to pass from the <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup to its closure.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine Subgroup.commutator_le.mpr ?_
+  <span class="kw">intro</span> a _ha b _hb
+  change (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi) ⁅a, b⁆ = 1
+  <span class="kw">rw</span> [map_commutatorElement]
+  <span class="kw">exact</span> commutatorElement_eq_one_iff_mul_comm.2
+    (mul_comm
+      (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi a)
+      (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi b))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_closed_ker">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_closed_ker">CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_closed_ker</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L243">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedBoundaryKillsTopologicalCommutatorProCInteger_of_closed_ker
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H)
+    (hclosed :
+      IsClosed
+        (((<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> :
+          Subgroup (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) : Set (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi))) :
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.CompletedBoundaryKillsTopologicalCommutatorProCInteger">CompletedBoundaryKillsTopologicalCommutatorProCInteger</a> (G := G) (H := H) C psi</code></pre></section>
+    <section><div class="natural-text"><p>Topological form of well-definedness from closedness of the kernel of the boundary map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Subgroup.topologicalClosure_minimal
+    (s := <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi))
+    (t := (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>)
+    (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger_commutator_le_ker">completedKernelBoundaryProCInteger_commutator_le_ker</a>
+      (G := G) (H := H) C psi)
+    hclosed</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.continuous_completedKernelBoundaryZC_of_continuous_zcUnivDiff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.continuous_completedKernelBoundaryZC_of_continuous_zcUnivDiff">CrowellExactSequence.continuous_completedKernelBoundaryZC_of_continuous_zcUnivDiff</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L260">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_completedKernelBoundaryZC_of_continuous_zcUnivDiff
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H)
+    [TopologicalSpace (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom)]
+    (hD : Continuous (<span class="kw">fun</span> g : G =&gt; <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom g)) :
+    Continuous (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi)</code></pre></section>
+    <section><div class="natural-text"><p>Continuity of the kernel boundary follows from continuity of the universal completed differential on the ambient group.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change Continuous <span class="kw">fun</span> n : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi =&gt;
+    Multiplicative.ofAdd (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1)
+  <span class="kw">exact</span> continuous_ofAdd.comp (hD.comp continuous_subtype_val)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_zcUnivDiff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_zcUnivDiff">CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_zcUnivDiff</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L271">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedBoundaryKillsTopCommZC_of_continuous_zcUnivDiff
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H)
+    [TopologicalSpace (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom)]
+    [T1Space (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom)]
+    (hD : Continuous (<span class="kw">fun</span> g : G =&gt; <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom g)) :
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.CompletedBoundaryKillsTopologicalCommutatorProCInteger">CompletedBoundaryKillsTopologicalCommutatorProCInteger</a> (G := G) (H := H) C psi</code></pre></section>
+    <section><div class="natural-text"><p>Well-definedness of \(d_N\) from continuity of the universal completed differential on the ambient group.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuousBoundary">completedBoundaryKillsTopologicalCommutatorProCInteger_of_continuousBoundary</a>
+    (G := G) (H := H) C psi
+    (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.continuous_completedKernelBoundaryZC_of_continuous_zcUnivDiff">continuous_completedKernelBoundaryZC_of_continuous_zcUnivDiff</a>
+      (G := G) (H := H) C psi hD)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords_fintype">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords_fintype">CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords_fintype</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L288">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords_fintype
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H)
+    {X : <span class="kw">Type</span> u} [Fintype X] [DecidableEq X] (family : X → G)
+    (hbasis_A :
+      <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.IsPresentedCompletedDifferentialFamilyBasisProCInteger">IsPresentedCompletedDifferentialFamilyBasisProCInteger</a>
+        (G := G) (H := H) C psi family)
+    [T1Space (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> C (X := X) (H := H))]
+    (Dcoords : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi →
+      <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> C (X := X) (H := H))
+    (hDcoords_continuous : Continuous Dcoords)
+    (hDcoords :
+      ∀ n : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi,
+        Dcoords n =
+          <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.presentedCompletedDifferentialFamilyCoordinatesProCInteger">presentedCompletedDifferentialFamilyCoordinatesProCInteger</a>
+            (G := G) (H := H) C psi family hbasis_A
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1)) :
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.CompletedBoundaryKillsTopologicalCommutatorProCInteger">CompletedBoundaryKillsTopologicalCommutatorProCInteger</a> (G := G) (H := H) C psi</code></pre></section>
+    <section><div class="natural-text"><p>Finite-coordinate form of the topological well-definedness step for \(d_N\). If a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coordinate system on \(A_{\psi}(C)\) identifies the universal differential on the kernel with a continuous coordinate-valued map, then the ordinary <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a>-killing identity extends to \(\overline{[N,N]}\). In paper language, this is the passage from a continuous coordinate formula for \(D|_N\) to the well-defined map \(N^{\mathrm{ab}}(C) \to A_{\psi}(C)\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_closed_ker">completedBoundaryKillsTopologicalCommutatorProCInteger_of_closed_ker</a>
+      (G := G) (H := H) C psi ?_
+  <span class="kw">have</span> hclosed_zero :
+      IsClosed ({0} : Set (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> C (X := X) (H := H))) :=
+    isClosed_singleton
+  <span class="kw">have</span> hclosed_preimage :
+      IsClosed
+        (Dcoords ⁻¹&#x27; ({0} : Set (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> C (X := X) (H := H)))) :=
+    hclosed_zero.preimage hDcoords_continuous
+  <span class="kw">have</span> hker_set :
+      (((<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> :
+          Subgroup (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) : Set (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) =
+        Dcoords ⁻¹&#x27; ({0} : Set (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> C (X := X) (H := H))) := <span class="kw">by</span>
+    ext n
+    change
+      <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi n = 1 ↔
+        Dcoords n = 0
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hn
+      <span class="kw">have</span> hDzero : <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1 = 0 := <span class="kw">by</span>
+        change Multiplicative.ofAdd
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1) = 1 at hn
+        simpa using
+          congrArg
+            (<span class="kw">fun</span> x : Multiplicative (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom) =&gt;
+              Multiplicative.toAdd x) hn
+      <span class="kw">rw</span> [hDcoords n, hDzero]
+      <span class="kw">simp</span> only [ContinuousMonoidHom.coe_toMonoidHom, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>]
+    · <span class="kw">intro</span> hn
+      <span class="kw">have</span> hcoords_zero :
+          <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.presentedCompletedDifferentialFamilyCoordinatesProCInteger">presentedCompletedDifferentialFamilyCoordinatesProCInteger</a>
+              (G := G) (H := H) C psi family hbasis_A
+              (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1) = 0 := <span class="kw">by</span>
+        <span class="kw">rw</span> [← hDcoords n]
+        <span class="kw">exact</span> hn
+      <span class="kw">have</span> hDzero : <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1 = 0 := <span class="kw">by</span>
+        <span class="kw">apply</span>
+          (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.presentedCompletedDifferentialFamilyCoordinatesProCInteger">presentedCompletedDifferentialFamilyCoordinatesProCInteger</a>
+            (G := G) (H := H) C psi family hbasis_A).injective
+        simpa using hcoords_zero
+      change Multiplicative.ofAdd
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1) =
+        (1 : Multiplicative (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom))
+      simpa [hDzero]
+  <span class="kw">rw</span> [hker_set]
+  <span class="kw">exact</span> hclosed_preimage</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords">CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L354">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H)
+    {r : Nat} (family : Fin r → G)
+    (hbasis_A :
+      <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.IsPresentedCompletedDifferentialFamilyBasisProCInteger">IsPresentedCompletedDifferentialFamilyBasisProCInteger</a>
+        (G := G) (H := H) C psi family)
+    [T1Space (Fin r → <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-FoxDifferential.ZCCompletedGroupAlgebra">ZCCompletedGroupAlgebra</a> C H)]
+    (Dcoords : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi → Fin r → <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-FoxDifferential.ZCCompletedGroupAlgebra">ZCCompletedGroupAlgebra</a> C H)
+    (hDcoords_continuous : Continuous Dcoords)
+    (hDcoords :
+      ∀ n : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi,
+        Dcoords n =
+          <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.presentedCompletedDifferentialFamilyCoordinatesProCInteger">presentedCompletedDifferentialFamilyCoordinatesProCInteger</a>
+            (G := G) (H := H) C psi family hbasis_A
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1)) :
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.CompletedBoundaryKillsTopologicalCommutatorProCInteger">CompletedBoundaryKillsTopologicalCommutatorProCInteger</a> (G := G) (H := H) C psi</code></pre></section>
+    <section><div class="natural-text"><p>Fin-indexed <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-coordinate form of the topological well-definedness step for \(d_N\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedBoundaryKillsTopologicalCommutatorProCInteger_of_closed_ker">completedBoundaryKillsTopologicalCommutatorProCInteger_of_closed_ker</a>
+      (G := G) (H := H) C psi ?_
+  <span class="kw">have</span> hclosed_zero :
+      IsClosed ({0} : Set (Fin r → <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-FoxDifferential.ZCCompletedGroupAlgebra">ZCCompletedGroupAlgebra</a> C H)) :=
+    isClosed_singleton
+  <span class="kw">have</span> hclosed_preimage :
+      IsClosed (Dcoords ⁻¹&#x27; ({0} : Set (Fin r → <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-FoxDifferential.ZCCompletedGroupAlgebra">ZCCompletedGroupAlgebra</a> C H))) :=
+    hclosed_zero.preimage hDcoords_continuous
+  <span class="kw">have</span> hker_set :
+      (((<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> :
+          Subgroup (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) : Set (<a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi)) =
+        Dcoords ⁻¹&#x27; ({0} : Set (Fin r → <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-FoxDifferential.ZCCompletedGroupAlgebra">ZCCompletedGroupAlgebra</a> C H)) := <span class="kw">by</span>
+    ext n
+    change
+      <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedKernelBoundaryProCInteger">completedKernelBoundaryProCInteger</a> (G := G) (H := H) C psi n = 1 ↔
+        Dcoords n = 0
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hn
+      <span class="kw">have</span> hDzero : <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1 = 0 := <span class="kw">by</span>
+        change Multiplicative.ofAdd
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1) = 1 at hn
+        simpa using
+          congrArg
+            (<span class="kw">fun</span> x : Multiplicative (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom) =&gt;
+              Multiplicative.toAdd x) hn
+      <span class="kw">rw</span> [hDcoords n, hDzero]
+      <span class="kw">simp</span> only [ContinuousMonoidHom.coe_toMonoidHom, <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_zero">map_zero</a>]
+    · <span class="kw">intro</span> hn
+      <span class="kw">have</span> hcoords_zero :
+          <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.presentedCompletedDifferentialFamilyCoordinatesProCInteger">presentedCompletedDifferentialFamilyCoordinatesProCInteger</a>
+              (G := G) (H := H) C psi family hbasis_A
+              (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1) = 0 := <span class="kw">by</span>
+        <span class="kw">rw</span> [← hDcoords n]
+        <span class="kw">exact</span> hn
+      <span class="kw">have</span> hDzero : <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1 = 0 := <span class="kw">by</span>
+        <span class="kw">apply</span>
+          (<a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.presentedCompletedDifferentialFamilyCoordinatesProCInteger">presentedCompletedDifferentialFamilyCoordinatesProCInteger</a>
+            (G := G) (H := H) C psi family hbasis_A).injective
+        simpa using hcoords_zero
+      change Multiplicative.ofAdd
+          (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1) =
+        (1 : Multiplicative (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-ZCCompletedDifferentialModule">ZCCompletedDifferentialModule</a> C psi.toMonoidHom))
+      simpa [hDzero]
+  <span class="kw">rw</span> [hker_set]
+  <span class="kw">exact</span> hclosed_preimage</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_ambient_familyCoords_fintype">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_ambient_familyCoords_fintype">CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_ambient_familyCoords_fintype</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L421">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedBoundaryKillsTopCommZC_of_continuous_ambient_familyCoords_fintype
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H)
+    {X : <span class="kw">Type</span> u} [Fintype X] [DecidableEq X] (family : X → G)
+    (hbasis_A :
+      <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.IsPresentedCompletedDifferentialFamilyBasisProCInteger">IsPresentedCompletedDifferentialFamilyBasisProCInteger</a>
+        (G := G) (H := H) C psi family)
+    [T1Space (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> C (X := X) (H := H))]
+    (Dcoords : G → <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/FreeGroup/Derivative.html#decl-FoxDifferential.ZCFreeFoxCoordinates">ZCFreeFoxCoordinates</a> C (X := X) (H := H))
+    (hDcoords_continuous : Continuous Dcoords)
+    (hDcoords :
+      ∀ n : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi,
+        Dcoords n.1 =
+          <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.presentedCompletedDifferentialFamilyCoordinatesProCInteger">presentedCompletedDifferentialFamilyCoordinatesProCInteger</a>
+            (G := G) (H := H) C psi family hbasis_A
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1)) :
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.CompletedBoundaryKillsTopologicalCommutatorProCInteger">CompletedBoundaryKillsTopologicalCommutatorProCInteger</a> (G := G) (H := H) C psi</code></pre></section>
+    <section><div class="natural-text"><p>Finite-coordinate ambient version of the completed-boundary theorem killing the top <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup. This is the form used when a continuous Fox-coordinate formula is constructed on the whole source and then restricted to \(\<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> \psi\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords_fintype">completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords_fintype</a>
+      (G := G) (H := H) C psi family hbasis_A
+      (<span class="kw">fun</span> n : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi =&gt; Dcoords n.1)
+      (hDcoords_continuous.comp continuous_subtype_val)
+      hDcoords</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_ambient_familyCoords">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_ambient_familyCoords">CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_ambient_familyCoords</a>
+    <a class="source-link" href="../../../library/src/CrowellExactSequence/Profinite/KernelBoundary.html#L446">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedBoundaryKillsTopCommZC_of_continuous_ambient_familyCoords
+    (C : ProCGroups.FiniteGroupClass.{u}) (psi : ContinuousMonoidHom G H)
+    {r : Nat} (family : Fin r → G)
+    (hbasis_A :
+      <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.IsPresentedCompletedDifferentialFamilyBasisProCInteger">IsPresentedCompletedDifferentialFamilyBasisProCInteger</a>
+        (G := G) (H := H) C psi family)
+    [T1Space (Fin r → <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-FoxDifferential.ZCCompletedGroupAlgebra">ZCCompletedGroupAlgebra</a> C H)]
+    (Dcoords : G → Fin r → <a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-FoxDifferential.ZCCompletedGroupAlgebra">ZCCompletedGroupAlgebra</a> C H)
+    (hDcoords_continuous : Continuous Dcoords)
+    (hDcoords :
+      ∀ n : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi,
+        Dcoords n.1 =
+          <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/SequenceMaps.html#decl-CrowellExactSequence.presentedCompletedDifferentialFamilyCoordinatesProCInteger">presentedCompletedDifferentialFamilyCoordinatesProCInteger</a>
+            (G := G) (H := H) C psi family hbasis_A
+            (<a class="decl-ref" href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/Core.html#decl-zcUniversalDifferential">zcUniversalDifferential</a> C psi.toMonoidHom n.1)) :
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.CompletedBoundaryKillsTopologicalCommutatorProCInteger">CompletedBoundaryKillsTopologicalCommutatorProCInteger</a> (G := G) (H := H) C psi</code></pre></section>
+    <section><div class="natural-text"><p>\(\operatorname{Fin}\)-indexed ambient-coordinate version of the completed-boundary theorem killing the top <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.commutator">commutator</a> subgroup for continuous kernel-family coordinates.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    <a class="decl-ref" href="../../../library/CrowellExactSequence/Profinite/KernelBoundary.html#decl-CrowellExactSequence.completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords">completedBoundaryKillsTopCommZC_of_continuous_kernel_familyCoords</a>
+      (G := G) (H := H) C psi family hbasis_A
+      (<span class="kw">fun</span> n : <a class="decl-ref" href="../../../library/ProCGroups/ProC/Kernels.html#decl-ProCGroups.ProC.ProfiniteKernelSubgroup">ProfiniteKernelSubgroup</a> psi =&gt; Dcoords n.1)
+      (hDcoords_continuous.comp continuous_subtype_val)
+      hDcoords</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Crowell--Blanchfield--Lyndon complex with its <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> module, Fox differential, and boundary maps. The proof evaluates the relevant boundary, coordinate, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map on the canonical generators and extends the calculation by linearity. The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage Fox fundamental formula identifies the boundary terms with the corresponding <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a>-kernel terms, so the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> map is the image of the preceding map. For separated or completed versions, each map is compared after all <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projections; those projections separate points and commute with the sequence maps. The passage from <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages to the profinite object uses the inverse-limit topology, so compatibility of all coordinates gives a continuous completed map. Thus the coordinate calculation supplies the displayed injectivity, kernel--image, or surjectivity assertion for the completed Crowell sequence. The <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps in the sequence are determined by their values on the free generators and by the module structure. After applying a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the completed boundary map becomes the ordinary Fox boundary map in a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group algebra. Since these <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> calculations are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with all transition maps, the same kernel, image, and coordinate identities hold in the completed sequence. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="CrowellExactSequence.Profinite.KernelBoundary"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.InverseSystems.FiniteStageFactorization | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.InverseSystems.FiniteStageFactorization</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/InverseSystems.html">InverseSystems</a><span class="sep">/</span><span>FiniteStageFactorization</span></div>
+      <h1 class="module-title">ProCGroups.InverseSystems.FiniteStageFactorization</h1>
+      <div class="module-meta">3 Theorem | 3 Definition | 3 Instance</div>
+      <div class="module-overview"><p>This module supplies the topological part of the construction. It checks continuity and stagewise neighborhood properties so that the completed object inherits the required topology.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/InverseSystems/ProfiniteSpace.html">ProCGroups.InverseSystems.ProfiniteSpace</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/CompletedGroupAlgebra/ProfiniteModules/Basic/Definitions.html">CompletedGroupAlgebra.ProfiniteModules.Basic.Definitions</a></li><li><a href="../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../library/ProCGroups/InverseSystems.html">ProCGroups.InverseSystems</a></li><li><a href="../../../library/ProCGroups/Order/Basic.html">ProCGroups.Order.Basic</a></li><li><a href="../../../library/ProCGroups/ProC/InverseLimits/Limits.html">ProCGroups.ProC.InverseLimits.Limits</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph">ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/FiniteStageFactorization.html#L25">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">def</span> additiveMultiplicativeHomeomorph (A : <span class="kw">Type</span>*) [TopologicalSpace A] :
+    A ≃ₜ Multiplicative A <span class="kw">where</span>
+  toEquiv := Multiplicative.ofAdd
+  continuous_toFun := continuous_id
+  continuous_invFun := continuous_id</code></pre></section>
+    <section><div class="natural-text"><p>The additive-multiplicative homeomorphism is <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with the profinite topology and is determined by <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.finiteSubsetProductSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem">ProCGroups.InverseSystems.finiteSubsetProductSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/FiniteStageFactorization.html#L33">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> finiteSubsetProductSystem {α : <span class="kw">Type</span> u} (X : α → <span class="kw">Type</span> v)
+    [∀ a, TopologicalSpace (X a)] : InverseSystem.{u, max u v} (I := Finset α) <span class="kw">where</span>
+  X := <span class="kw">fun</span> F =&gt; ∀ a : F, X a.1
+  topologicalSpace := <span class="kw">fun</span> _ =&gt; inferInstance
+  map := <span class="kw">fun</span> {F G} hFG x a =&gt; x ⟨a.1, hFG a.2⟩
+  continuous_map := <span class="kw">fun</span> {F G} hFG =&gt; <span class="kw">by</span>
+    <span class="kw">exact</span> continuous_pi <span class="kw">fun</span> a =&gt; continuous_apply (⟨a.1, hFG a.2⟩ : G)
+  map_id := <span class="kw">fun</span> F =&gt; <span class="kw">by</span>
+    funext x a
+    <span class="kw">rfl</span>
+  map_comp := <span class="kw">fun</span> {F G H} hFG hGH =&gt; <span class="kw">by</span>
+    funext x a
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The inverse system whose stage at \(F\) is the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> subproduct over the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> subset \(F\).</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.homeomorph_inverseLimit_finiteSubsetProductSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.homeomorph_inverseLimit_finiteSubsetProductSystem">ProCGroups.InverseSystems.homeomorph_inverseLimit_finiteSubsetProductSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/FiniteStageFactorization.html#L48">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> homeomorph_inverseLimit_finiteSubsetProductSystem {α : <span class="kw">Type</span> u} (X : α → <span class="kw">Type</span> v)
+    [∀ a, TopologicalSpace (X a)] :
+    (∀ a, X a) ≃ₜ (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem">finiteSubsetProductSystem</a> X).inverseLimit := <span class="kw">by</span>
+  <span class="kw">let</span> S : InverseSystem.{u, max u v} (I := Finset α) := <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem">finiteSubsetProductSystem</a> X
+  <span class="kw">let</span> toS : (∀ a, X a) → S.inverseLimit := <span class="kw">fun</span> x =&gt;
+    ⟨<span class="kw">fun</span> F a =&gt; x a.1, <span class="kw">by</span>
+      <span class="kw">intro</span> F G hFG
+      funext a
+      <span class="kw">rfl</span>⟩
+  <span class="kw">let</span> fromS : S.inverseLimit → (∀ a, X a) :=
+    <span class="kw">fun</span> y a =&gt; S.projection ({a} : Finset α) y ⟨a, <span class="kw">by</span> <span class="kw">simp</span> only [Finset.mem_singleton]⟩
+  <span class="kw">have</span> hleft : Function.LeftInverse fromS toS := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    funext a
+    <span class="kw">rfl</span>
+  <span class="kw">have</span> hright : Function.RightInverse fromS toS := <span class="kw">by</span>
+    <span class="kw">intro</span> y
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> F
+    funext a
+    change fromS y a.1 = S.projection F y a
+    <span class="kw">have</span> hs : ({a.1} : Finset α) ≤ F := <span class="kw">by</span>
+      <span class="kw">intro</span> b hb
+      <span class="kw">have</span> hb&#x27; : b = a.1 := <span class="kw">by</span> simpa using hb
+      <span class="kw">exact</span> hb&#x27; ▸ a.2
+    <span class="kw">have</span> hcompat := congrFun (y.2 ({a.1} : Finset α) F hs) ⟨a.1, <span class="kw">by</span> <span class="kw">simp</span> only [Finset.mem_singleton]⟩
+    simpa [fromS, S, <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem">finiteSubsetProductSystem</a>] using hcompat.symm
+  <span class="kw">have</span> hcontinuous_toS : Continuous toS := <span class="kw">by</span>
+    <span class="kw">exact</span> Continuous.subtype_mk
+      (<span class="kw">by</span>
+        refine continuous_pi <span class="kw">fun</span> F =&gt; ?_
+        refine continuous_pi <span class="kw">fun</span> a =&gt; ?_
+        <span class="kw">exact</span> continuous_apply a.1)
+      (<span class="kw">fun</span> x F G hFG =&gt; <span class="kw">by</span>
+        funext a
+        <span class="kw">rfl</span>)
+  <span class="kw">have</span> hcontinuous_fromS : Continuous fromS := <span class="kw">by</span>
+    refine continuous_pi <span class="kw">fun</span> a =&gt; ?_
+    <span class="kw">exact</span> (continuous_apply ⟨a, <span class="kw">by</span> <span class="kw">simp</span> only [Finset.mem_singleton]⟩).comp (S.continuous_projection ({a} : Finset α))
+  <span class="kw">exact</span>
+    { toFun := toS
+      invFun := fromS
+      left_inv := hleft
+      right_inv := hright
+      continuous_toFun := hcontinuous_toS
+      continuous_invFun := hcontinuous_fromS }</code></pre></section>
+    <section><div class="natural-text"><p>An arbitrary product is homeomorphic to the inverse limit of its <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> subproducts.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite">ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/FiniteStageFactorization.html#L97">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.factors_through_projection_finite
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) [Nonempty I]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [∀ i, TotallyDisconnectedSpace (S.X i)] (hdir : Directed (· ≤ ·) (id : I → I))
+    {Y : <span class="kw">Type</span> w} [TopologicalSpace Y] [Finite Y] [Nonempty Y] [DiscreteTopology Y]
+    (ρ : S.inverseLimit → Y) (hρ : Continuous ρ) :
+    ∃ k : I, ∃ ρ&#x27; : S.X k → Y, Continuous ρ&#x27; ∧ ρ = ρ&#x27; ∘ S.projection k</code></pre></section>
+    <section><div class="natural-text"><p>A continuous map from a profinite inverse limit to a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete space factors through <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  letI : Fintype Y := Fintype.ofFinite Y
+  letI : CompactSpace S.inverseLimit := inferInstance
+  <span class="kw">let</span> Uy : Y → Set S.inverseLimit := <span class="kw">fun</span> y =&gt; ρ ⁻¹&#x27; ({y} : Set Y)
+  <span class="kw">have</span> hUy_clopen : ∀ y, IsClopen (Uy y) := <span class="kw">by</span>
+    <span class="kw">intro</span> y
+    refine ⟨?_, ?_⟩
+    · simpa [Uy] using (isClosed_discrete ({y} : Set Y)).preimage hρ
+    · simpa [Uy] using (isOpen_discrete ({y} : Set Y)).preimage hρ
+  <span class="kw">have</span> hlocal :
+      ∀ y (x : S.inverseLimit), x ∈ Uy y →
+        ∃ i, ∃ V : Set (S.X i), IsClopen V ∧ S.projection i x ∈ V ∧ S.projection i ⁻¹&#x27; V ⊆ Uy y := <span class="kw">by</span>
+    <span class="kw">intro</span> y x hx
+    rcases S.exists_projection_preimage_subset hdir (hUy_clopen y).2 hx <span class="kw">with</span>
+      ⟨i, W, hWopen, hxW, hWU⟩
+    rcases <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteSpace.html#decl-ProCGroups.InverseSystems.exists_clopen_subset_of_mem_open">exists_clopen_subset_of_mem_open</a> (X := S.X i) hWopen hxW <span class="kw">with</span> ⟨V, hVclopen, hxV, hVW⟩
+    <span class="kw">exact</span> ⟨i, V, hVclopen, hxV, (Set.preimage_mono hVW).trans hWU⟩
+  choose ix V hVclopen hxV hVsub using hlocal
+  <span class="kw">have</span> hsubcover :
+      ∀ y, ∃ t : Finset ↥(Uy y), Uy y ⊆ ⋃ x ∈ t, S.projection (ix y x.1 x.2) ⁻¹&#x27; V y x.1 x.2 := <span class="kw">by</span>
+    <span class="kw">intro</span> y
+    <span class="kw">have</span> hcompactUy : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature.IsCompact">IsCompact</a> (Uy y) := (hUy_clopen y).1.isCompact
+    simpa using hcompactUy.elim_nhds_subcover&#x27;
+      (U := <span class="kw">fun</span> x hx =&gt; S.projection (ix y x hx) ⁻¹&#x27; V y x hx)
+      (hU := <span class="kw">fun</span> x hx =&gt;
+        ((hVclopen y x hx).2.preimage (S.continuous_projection (ix y x hx))).mem_nhds (hxV y x hx))
+  choose t htcover using hsubcover
+  <span class="kw">let</span> i0 : I := Classical.choice ‹Nonempty I›
+  <span class="kw">let</span> used : Finset I :=
+    (Finset.univ.biUnion <span class="kw">fun</span> y : Y =&gt; (t y).image (<span class="kw">fun</span> x =&gt; ix y x.1 x.2)) ∪ {i0}
+  <span class="kw">have</span> hused_nonempty : used.Nonempty := ⟨i0, <span class="kw">by</span> <span class="kw">simp</span> only [Finset.union_singleton, Finset.mem_insert, Finset.mem_biUnion, Finset.mem_univ, Finset.mem_image,
+  Subtype.exists, true_and, true_or, used]⟩
+  rcases <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Utilities.html#decl-ProCGroups.InverseSystems.exists_upperBound_finset">exists_upperBound_finset</a> (I := I) hdir used hused_nonempty <span class="kw">with</span> ⟨k, hk⟩
+  <span class="kw">have</span> hix_le_k : ∀ y (x : ↥(Uy y)) (hx : x ∈ t y), ix y x.1 x.2 ≤ k := <span class="kw">by</span>
+    <span class="kw">intro</span> y x hx
+    <span class="kw">apply</span> hk
+    <span class="kw">apply</span> Finset.mem_union.mpr
+    left
+    <span class="kw">apply</span> Finset.mem_biUnion.mpr
+    refine ⟨y, Finset.mem_univ y, ?_⟩
+    <span class="kw">apply</span> Finset.mem_image.mpr
+    <span class="kw">exact</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+  <span class="kw">let</span> B : Y → Set (S.X k) := <span class="kw">fun</span> y =&gt;
+    ⋃ x ∈ (Finset.univ : Finset ↥(t y)),
+      S.map (hix_le_k y x.1 x.2) ⁻¹&#x27; V y x.1.1 x.1.2
+  <span class="kw">have</span> hBclopen : ∀ y, IsClopen (B y) := <span class="kw">by</span>
+    <span class="kw">intro</span> y
+    refine ⟨?_, ?_⟩
+    · simpa [B] using
+        isClosed_biUnion_finset (s := (Finset.univ : Finset ↥(t y))) <span class="kw">fun</span> x hx =&gt;
+          (hVclopen y x.1.1 x.1.2).1.preimage (S.continuous_map (hix_le_k y x.1 x.2))
+    · simpa [B] using
+        isOpen_biUnion (s := (((Finset.univ : Finset ↥(t y)) : Set ↥(t y)))) <span class="kw">fun</span> x hx =&gt;
+          (hVclopen y x.1.1 x.1.2).2.preimage (S.continuous_map (hix_le_k y x.1 x.2))
+  <span class="kw">have</span> hUy_eq : ∀ y, Uy y = S.projection k ⁻¹&#x27; B y := <span class="kw">by</span>
+    <span class="kw">intro</span> y
+    ext z
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hz
+      <span class="kw">have</span> hzcover := htcover y hz
+      rcases mem_iUnion.1 hzcover <span class="kw">with</span> ⟨x, hxcover⟩
+      rcases mem_iUnion.1 hxcover <span class="kw">with</span> ⟨hx, hzV⟩
+      change S.projection k z ∈ B y
+      refine mem_iUnion.2 ⟨⟨x, hx⟩, ?_⟩
+      refine mem_iUnion.2 ⟨Finset.mem_univ _, ?_⟩
+      change S.map (hix_le_k y x hx) (S.projection k z) ∈ V y x.1 x.2
+      <span class="kw">rw</span> [S.projection_compatible z (ix y x.1 x.2) k (hix_le_k y x hx)]
+      <span class="kw">exact</span> hzV
+    · <span class="kw">intro</span> hz
+      <span class="kw">have</span> hzB : S.projection k z ∈ B y := hz
+      rcases mem_iUnion.1 hzB <span class="kw">with</span> ⟨x, hxB⟩
+      rcases mem_iUnion.1 hxB <span class="kw">with</span> ⟨_hxuniv, hzV⟩
+      <span class="kw">have</span> hzV&#x27; : S.projection (ix y x.1.1 x.1.2) z ∈ V y x.1.1 x.1.2 := <span class="kw">by</span>
+        change S.map (hix_le_k y x.1 x.2) (S.projection k z) ∈ V y x.1.1 x.1.2 at hzV
+        <span class="kw">rw</span> [S.projection_compatible z (ix y x.1.1 x.1.2) k (hix_le_k y x.1 x.2)] at hzV
+        <span class="kw">exact</span> hzV
+      <span class="kw">exact</span> hVsub y x.1.1 x.1.2 (<span class="kw">by</span> simpa using hzV&#x27;)
+  <span class="kw">have</span> hRangeClosed : IsClosed (Set.range (S.projection k)) := <span class="kw">by</span>
+    <span class="kw">exact</span> (isCompact_range (S.continuous_projection k)).isClosed
+  <span class="kw">let</span> Z : Y → Set (S.X k) := <span class="kw">fun</span> y =&gt; B y ∩ Set.range (S.projection k)
+  <span class="kw">have</span> hZclosed : ∀ y, IsClosed (Z y) := <span class="kw">by</span>
+    <span class="kw">intro</span> y
+    <span class="kw">exact</span> (hBclopen y).1.inter hRangeClosed
+  <span class="kw">have</span> hZdisj : Set.univ.PairwiseDisjoint Z := <span class="kw">by</span>
+    <span class="kw">intro</span> y _ y&#x27; _ hyy&#x27;
+    change Disjoint (Z y) (Z y&#x27;)
+    <span class="kw">rw</span> [Set.disjoint_left]
+    <span class="kw">intro</span> z hz hz&#x27;
+    rcases hz.2 <span class="kw">with</span> ⟨x, <span class="kw">rfl</span>⟩
+    <span class="kw">have</span> hx : x ∈ Uy y := <span class="kw">by</span>
+      <span class="kw">rw</span> [hUy_eq y]
+      <span class="kw">exact</span> hz.1
+    <span class="kw">have</span> hx&#x27; : x ∈ Uy y&#x27; := <span class="kw">by</span>
+      <span class="kw">rw</span> [hUy_eq y&#x27;]
+      <span class="kw">exact</span> hz&#x27;.1
+    <span class="kw">have</span> hxy : ρ x = y := <span class="kw">by</span> simpa [Uy] using hx
+    <span class="kw">have</span> hxy&#x27; : ρ x = y&#x27; := <span class="kw">by</span> simpa [Uy] using hx&#x27;
+    <span class="kw">exact</span> hyy&#x27; (hxy.symm.trans hxy&#x27;)
+  rcases exists_clopen_partition_of_clopen_cover
+    (X := S.X k) (I := Y)
+    (Z_closed := <span class="kw">fun</span> y =&gt; hZclosed y)
+    (D_clopen := <span class="kw">fun</span> _ =&gt; isClopen_univ)
+    (Z_subset_D := <span class="kw">fun</span> _ =&gt; <span class="kw">by</span> <span class="kw">simp</span> only [subset_univ, Z])
+    (Z_disj := hZdisj) <span class="kw">with</span> ⟨C, hCclopen, hZsubsetC, _hCsubsetD, hcoverC, hCdisj⟩
+  <span class="kw">have</span> hcoverC&#x27; : (Set.univ : Set (S.X k)) ⊆ ⋃ y, C y := <span class="kw">by</span>
+    simpa using hcoverC
+  <span class="kw">have</span> huniqC : ∀ z : S.X k, ∃! y, z ∈ C y := <span class="kw">by</span>
+    <span class="kw">intro</span> z
+    <span class="kw">have</span> hz : z ∈ ⋃ y, C y := hcoverC&#x27; (<span class="kw">by</span> <span class="kw">simp</span> only [mem_univ])
+    rcases mem_iUnion.1 hz <span class="kw">with</span> ⟨y, hy⟩
+    refine ⟨y, hy, ?_⟩
+    <span class="kw">intro</span> y&#x27; hy&#x27;
+    by_contra hne
+    <span class="kw">have</span> hne&#x27; : y ≠ y&#x27; := <span class="kw">by</span> simpa [eq_comm] using hne
+    <span class="kw">have</span> hdisj : Disjoint (C y) (C y&#x27;) := hCdisj (<span class="kw">by</span> <span class="kw">simp</span> only [mem_univ]) (<span class="kw">by</span> <span class="kw">simp</span> only [mem_univ]) hne&#x27;
+    <span class="kw">exact</span> (Set.disjoint_left.1 hdisj) hy hy&#x27;
+  <span class="kw">let</span> ρ&#x27; : S.X k → Y := <span class="kw">fun</span> z =&gt; Classical.choose (huniqC z)
+  <span class="kw">have</span> hρ&#x27; : Continuous ρ&#x27; := <span class="kw">by</span>
+    <span class="kw">rw</span> [continuous_discrete_rng]
+    <span class="kw">intro</span> y
+    <span class="kw">have</span> hpre : ρ&#x27; ⁻¹&#x27; ({y} : Set Y) = C y := <span class="kw">by</span>
+      ext z
+      <span class="kw">constructor</span>
+      · <span class="kw">intro</span> hz
+        <span class="kw">have</span> hz&#x27; : z ∈ C (ρ&#x27; z) := (Classical.choose_spec (huniqC z)).1
+        simpa [Set.mem_preimage, Set.mem_singleton_iff.mp hz] using hz&#x27;
+      · <span class="kw">intro</span> hz
+        <span class="kw">have</span> hchoose_eq : y = ρ&#x27; z := (Classical.choose_spec (huniqC z)).2 y hz
+        <span class="kw">simp</span> only [hchoose_eq, mem_preimage, mem_singleton_iff]
+    simpa [hpre] using (hCclopen y).2
+  refine ⟨k, ρ&#x27;, hρ&#x27;, ?_⟩
+  funext x
+  change ρ x = ρ&#x27; (S.projection k x)
+  <span class="kw">have</span> hxUy : x ∈ Uy (ρ x) := <span class="kw">by</span>
+    <span class="kw">simp</span> only [mem_preimage, mem_singleton_iff, Uy]
+  <span class="kw">have</span> hxB : S.projection k x ∈ B (ρ x) := <span class="kw">by</span>
+    <span class="kw">have</span> : x ∈ S.projection k ⁻¹&#x27; B (ρ x) := <span class="kw">by</span>
+      <span class="kw">rw</span> [← hUy_eq (ρ x)]
+      <span class="kw">exact</span> hxUy
+    <span class="kw">exact</span> this
+  <span class="kw">have</span> hxZ : S.projection k x ∈ Z (ρ x) := ⟨hxB, ⟨x, <span class="kw">rfl</span>⟩⟩
+  <span class="kw">have</span> hxC : S.projection k x ∈ C (ρ x) := hZsubsetC (ρ x) hxZ
+  <span class="kw">have</span> hchoose_eq : ∀ y, S.projection k x ∈ C y → y = ρ&#x27; (S.projection k x) :=
+    (Classical.choose_spec (huniqC (S.projection k x))).2
+  <span class="kw">exact</span> hchoose_eq (ρ x) hxC</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.finiteSubsetProductSystem_instGroup">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem_instGroup">ProCGroups.InverseSystems.finiteSubsetProductSystem_instGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/FiniteStageFactorization.html#L257">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> finiteSubsetProductSystem_instGroup {α : <span class="kw">Type</span> u} (X : α → <span class="kw">Type</span> v)
+    [∀ a, TopologicalSpace (X a)] [∀ a, Group (X a)] :
+    ∀ s, Group ((<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem">finiteSubsetProductSystem</a> X).X s) := <span class="kw">by</span>
+  <span class="kw">intro</span> s
+  classical
+  dsimp [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem">finiteSubsetProductSystem</a>]
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>Finite-subset product stages inherit their product group structures.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.finiteSubsetProductSystem_instIsTopologicalGroup">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem_instIsTopologicalGroup">ProCGroups.InverseSystems.finiteSubsetProductSystem_instIsTopologicalGroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/FiniteStageFactorization.html#L266">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> finiteSubsetProductSystem_instIsTopologicalGroup {α : <span class="kw">Type</span> u} (X : α → <span class="kw">Type</span> v)
+    [∀ a, TopologicalSpace (X a)] [∀ a, Group (X a)] [∀ a, IsTopologicalGroup (X a)] :
+    ∀ s, IsTopologicalGroup ((<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem">finiteSubsetProductSystem</a> X).X s) := <span class="kw">by</span>
+  <span class="kw">intro</span> s
+  classical
+  dsimp [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem">finiteSubsetProductSystem</a>]
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>Finite-subset product stages inherit their product topological group structures.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.finiteSubsetProductSystem_instIsGroupSystem">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem_instIsGroupSystem">ProCGroups.InverseSystems.finiteSubsetProductSystem_instIsGroupSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/FiniteStageFactorization.html#L275">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> finiteSubsetProductSystem_instIsGroupSystem {α : <span class="kw">Type</span> u} (X : α → <span class="kw">Type</span> v)
+    [∀ a, TopologicalSpace (X a)] [∀ a, Group (X a)] :
+    <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.IsGroupSystem">IsGroupSystem</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.finiteSubsetProductSystem">finiteSubsetProductSystem</a> X) <span class="kw">where</span>
+  <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a> := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext a
+    <span class="kw">rfl</span>
+  <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a> := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij x y
+    funext a
+    <span class="kw">rfl</span>
+  map_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij x
+    funext a
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-subset product system is a group-valued inverse system.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite_group_hom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite_group_hom">ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite_group_hom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/FiniteStageFactorization.html#L293">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.factors_through_projection_finite_group_hom [Nonempty I]
+    [∀ i, Group (S.X i)] [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.IsGroupSystem">IsGroupSystem</a> S] [∀ i, IsTopologicalGroup (S.X i)]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    {H : <span class="kw">Type</span> w} [Group H] [TopologicalSpace H] [Finite H] [DiscreteTopology H]
+    (β : S.inverseLimit →* H) (_hβ : Continuous β) :
+    ∃ k : I, ∃ βk : S.X k →* H, Continuous βk ∧ β = βk ∘ S.projection k</code></pre></section>
+    <section><div class="natural-text"><p>A continuous homomorphism from an inverse limit of profinite groups to a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete group factors through <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> of the projections.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">let</span> rangeβ : S.inverseLimit → Set.range β := <span class="kw">fun</span> x =&gt; ⟨β x, ⟨x, <span class="kw">rfl</span>⟩⟩
+  letI : Nonempty (Set.range β) := ⟨⟨β 1, ⟨1, <span class="kw">rfl</span>⟩⟩⟩
+  <span class="kw">have</span> hrangeβ_continuous : Continuous rangeβ := <span class="kw">by</span>
+    <span class="kw">exact</span> Continuous.subtype_mk _hβ <span class="kw">fun</span> x =&gt; ⟨x, <span class="kw">rfl</span>⟩
+  rcases S.factors_through_projection_finite hdir rangeβ hrangeβ_continuous <span class="kw">with</span>
+      ⟨i0, β0range, hβ0range_continuous, hβ0range_fac⟩
+  <span class="kw">let</span> β0 : S.X i0 → H := <span class="kw">fun</span> x =&gt; (β0range x).1
+  <span class="kw">have</span> hβ0_continuous : Continuous β0 := continuous_subtype_val.comp hβ0range_continuous
+  <span class="kw">have</span> hβ0_fac : β = β0 ∘ S.projection i0 := <span class="kw">by</span>
+    funext x
+    <span class="kw">exact</span> congrArg Subtype.val (congrFun hβ0range_fac x)
+  <span class="kw">let</span> J : Set I := {i | i0 ≤ i}
+  <span class="kw">have</span> hdirJ : Directed (· ≤ ·) (id : J → J) := <span class="kw">by</span>
+    <span class="kw">intro</span> i j
+    rcases hdir i.1 j.1 <span class="kw">with</span> ⟨k, hik, hjk⟩
+    <span class="kw">exact</span> ⟨⟨k, i.2.trans hik⟩, hik, hjk⟩
+  <span class="kw">have</span> hcofinal : ∀ i : I, ∃ j : J, i ≤ j.1 := <span class="kw">by</span>
+    <span class="kw">intro</span> i
+    rcases hdir i i0 <span class="kw">with</span> ⟨k, hik, hi0k⟩
+    <span class="kw">exact</span> ⟨⟨k, hi0k⟩, hik⟩
+  <span class="kw">let</span> βJ : ∀ j : J, S.X j.1 → H := <span class="kw">fun</span> j =&gt; β0 ∘ S.map j.2
+  <span class="kw">have</span> hβJ_continuous : ∀ j : J, Continuous (βJ j) := <span class="kw">by</span>
+    <span class="kw">intro</span> j
+    dsimp [βJ]
+    <span class="kw">exact</span> hβ0_continuous.comp (S.continuous_map j.2)
+  <span class="kw">have</span> hβJ_map : ∀ {i j : J} (hij : i ≤ j) (x : S.X j.1), βJ i (S.map hij x) = βJ j x := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij x
+    dsimp [βJ, β0]
+    <span class="kw">calc</span>
+      (β0range (S.map i.2 (S.map hij x))).1 = (β0range (S.map (i.2.trans hij) x)).1 := <span class="kw">by</span>
+        <span class="kw">rw</span> [S.map_comp_apply i.2 hij]
+      _ = (β0range (S.map j.2 x)).1 := <span class="kw">by</span>
+        <span class="kw">have</span> hproof : i.2.trans hij = j.2 := Subsingleton.elim _ _
+        <span class="kw">rw</span> [hproof]
+  <span class="kw">have</span> hβJ_fac : ∀ j : J, β = βJ j ∘ S.projection j.1 := <span class="kw">by</span>
+    <span class="kw">intro</span> j
+    funext x
+    <span class="kw">calc</span>
+      β x = β0 (S.projection i0 x) := <span class="kw">by</span>
+        simpa [β0] using congrArg Subtype.val (congrFun hβ0range_fac x)
+      _ = β0 (S.map j.2 (S.projection j.1 x)) := <span class="kw">by</span> <span class="kw">rw</span> [S.projection_compatible x i0 j.1 j.2]
+      _ = βJ j (S.projection j.1 x) := <span class="kw">rfl</span>
+  <span class="kw">let</span> η : S.inverseLimit × S.inverseLimit → H × H := <span class="kw">fun</span> xy =&gt;
+    (β xy.1 * β xy.2, β (xy.1 * xy.2))
+  <span class="kw">let</span> Δ : Set (H × H) := {z | z.1 = z.2}
+  <span class="kw">have</span> hη_delta : Set.range η ⊆ Δ := <span class="kw">by</span>
+    <span class="kw">intro</span> z hz
+    rcases hz <span class="kw">with</span> ⟨xy, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> (β.map_mul xy.1 xy.2).symm
+  <span class="kw">let</span> E : J → Set (H × H) := <span class="kw">fun</span> j =&gt;
+    Set.range <span class="kw">fun</span> xy : S.X j.1 × S.X j.1 =&gt; (βJ j xy.1 * βJ j xy.2, βJ j (xy.1 * xy.2))
+  <span class="kw">have</span> hE_mono : ∀ {i j : J}, i ≤ j → E j ⊆ E i := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij z hz
+    rcases hz <span class="kw">with</span> ⟨xy, <span class="kw">rfl</span>⟩
+    refine ⟨(S.map hij xy.1, S.map hij xy.2), ?_⟩
+    <span class="kw">have</span> h1 : βJ i (S.map hij xy.1) = βJ j xy.1 := hβJ_map hij xy.1
+    <span class="kw">have</span> h2 : βJ i (S.map hij xy.2) = βJ j xy.2 := hβJ_map hij xy.2
+    <span class="kw">have</span> h3 : βJ i (S.map hij xy.1 * S.map hij xy.2) = βJ j (xy.1 * xy.2) := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        βJ i (S.map hij xy.1 * S.map hij xy.2)
+            = βJ i (S.map hij (xy.1 * xy.2)) := <span class="kw">by</span>
+                <span class="kw">rw</span> [IsGroupSystem.map_mul (S := S) hij xy.1 xy.2]
+        _ = βJ j (xy.1 * xy.2) := hβJ_map hij (xy.1 * xy.2)
+    <span class="kw">apply</span> Prod.ext
+    · change βJ i (S.map hij xy.1) * βJ i (S.map hij xy.2) =
+        βJ j xy.1 * βJ j xy.2
+      <span class="kw">rw</span> [h1, h2]
+    · <span class="kw">exact</span> h3
+  <span class="kw">have</span> hrange_eta_subset_iInter : Set.range η ⊆ ⋂ j, E j := <span class="kw">by</span>
+    <span class="kw">intro</span> z hz
+    rcases hz <span class="kw">with</span> ⟨xy, <span class="kw">rfl</span>⟩
+    <span class="kw">rw</span> [Set.mem_iInter]
+    <span class="kw">intro</span> j
+    refine ⟨(S.projection j.1 xy.1, S.projection j.1 xy.2), ?_⟩
+    <span class="kw">apply</span> Prod.ext
+    · <span class="kw">have</span> hx : β xy.1 = βJ j (S.projection j.1 xy.1) :=
+        congrFun (hβJ_fac j) xy.1
+      <span class="kw">have</span> hy : β xy.2 = βJ j (S.projection j.1 xy.2) :=
+        congrFun (hβJ_fac j) xy.2
+      change βJ j (S.projection j.1 xy.1) * βJ j (S.projection j.1 xy.2) =
+        β xy.1 * β xy.2
+      <span class="kw">rw</span> [← hx, ← hy]
+    · <span class="kw">calc</span>
+        βJ j (S.projection j.1 xy.1 * S.projection j.1 xy.2)
+            = βJ j (S.projection j.1 (xy.1 * xy.2)) := <span class="kw">by</span>
+                <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.projection_mul">projection_mul</a> (S := S) j.1 xy.1 xy.2]
+        _ = β (xy.1 * xy.2) := <span class="kw">by</span>
+          simpa [Function.comp] using (congrFun (hβJ_fac j) (xy.1 * xy.2)).symm
+  <span class="kw">have</span> hiInter_E_subset_range : (⋂ j, E j) ⊆ Set.range η := <span class="kw">by</span>
+    <span class="kw">intro</span> z hz
+    <span class="kw">let</span> Yset : ∀ j : J, Set (S.X j.1 × S.X j.1) := <span class="kw">fun</span> j =&gt;
+      {xy | (βJ j xy.1 * βJ j xy.2, βJ j (xy.1 * xy.2)) = z}
+    <span class="kw">have</span> hYclosed : ∀ j : J, IsClosed (Yset j) := <span class="kw">by</span>
+      <span class="kw">intro</span> j
+      <span class="kw">have</span> hleft :
+          Continuous <span class="kw">fun</span> xy : S.X j.1 × S.X j.1 =&gt; βJ j xy.1 * βJ j xy.2 :=
+        ((hβJ_continuous j).comp continuous_fst).mul ((hβJ_continuous j).comp continuous_snd)
+      <span class="kw">have</span> hright :
+          Continuous <span class="kw">fun</span> xy : S.X j.1 × S.X j.1 =&gt; βJ j (xy.1 * xy.2) :=
+        (hβJ_continuous j).comp continuous_mul
+      <span class="kw">exact</span> isClosed_singleton.preimage (hleft.prodMk hright)
+    <span class="kw">let</span> T : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := J) := {
+      X := <span class="kw">fun</span> j =&gt; Yset j
+      topologicalSpace := <span class="kw">fun</span> _ =&gt; inferInstance
+      map := <span class="kw">fun</span> {i j} hij xy =&gt;
+        ⟨(S.map hij xy.1.1, S.map hij xy.1.2), <span class="kw">by</span>
+          <span class="kw">have</span> h1 : βJ i (S.map hij xy.1.1) = βJ j xy.1.1 := hβJ_map hij xy.1.1
+          <span class="kw">have</span> h2 : βJ i (S.map hij xy.1.2) = βJ j xy.1.2 := hβJ_map hij xy.1.2
+          <span class="kw">have</span> h3 : βJ i (S.map hij xy.1.1 * S.map hij xy.1.2) = βJ j (xy.1.1 * xy.1.2) := <span class="kw">by</span>
+            <span class="kw">calc</span>
+              βJ i (S.map hij xy.1.1 * S.map hij xy.1.2)
+                  = βJ i (S.map hij (xy.1.1 * xy.1.2)) := <span class="kw">by</span>
+                      <span class="kw">rw</span> [IsGroupSystem.map_mul (S := S) hij xy.1.1 xy.1.2]
+              _ = βJ j (xy.1.1 * xy.1.2) := hβJ_map hij (xy.1.1 * xy.1.2)
+          <span class="kw">have</span> hxy : (βJ j xy.1.1 * βJ j xy.1.2, βJ j (xy.1.1 * xy.1.2)) = z := <span class="kw">by</span>
+            change (βJ j xy.1.1 * βJ j xy.1.2, βJ j (xy.1.1 * xy.1.2)) = z
+            <span class="kw">exact</span> xy.2
+          change
+            (βJ i (S.map hij xy.1.1) * βJ i (S.map hij xy.1.2),
+              βJ i (S.map hij xy.1.1 * S.map hij xy.1.2)) = z
+          <span class="kw">rw</span> [h1, h2, h3]
+          <span class="kw">exact</span> hxy⟩
+      continuous_map := <span class="kw">fun</span> {i j} hij =&gt;
+        Continuous.subtype_mk
+          (((S.continuous_map hij).comp (continuous_fst.comp continuous_subtype_val)).prodMk
+            ((S.continuous_map hij).comp (continuous_snd.comp continuous_subtype_val)))
+          (<span class="kw">fun</span> xy =&gt; <span class="kw">by</span>
+            <span class="kw">have</span> h1 : βJ i (S.map hij xy.1.1) = βJ j xy.1.1 := hβJ_map hij xy.1.1
+            <span class="kw">have</span> h2 : βJ i (S.map hij xy.1.2) = βJ j xy.1.2 := hβJ_map hij xy.1.2
+            <span class="kw">have</span> h3 : βJ i (S.map hij xy.1.1 * S.map hij xy.1.2) = βJ j (xy.1.1 * xy.1.2) := <span class="kw">by</span>
+              <span class="kw">calc</span>
+                βJ i (S.map hij xy.1.1 * S.map hij xy.1.2)
+                    = βJ i (S.map hij (xy.1.1 * xy.1.2)) := <span class="kw">by</span>
+                        <span class="kw">rw</span> [IsGroupSystem.map_mul (S := S) hij xy.1.1 xy.1.2]
+                _ = βJ j (xy.1.1 * xy.1.2) := hβJ_map hij (xy.1.1 * xy.1.2)
+            <span class="kw">have</span> hxy : (βJ j xy.1.1 * βJ j xy.1.2, βJ j (xy.1.1 * xy.1.2)) = z := <span class="kw">by</span>
+              change (βJ j xy.1.1 * βJ j xy.1.2, βJ j (xy.1.1 * xy.1.2)) = z
+              <span class="kw">exact</span> xy.2
+            change
+              (βJ i (S.map hij xy.1.1) * βJ i (S.map hij xy.1.2),
+                βJ i (S.map hij xy.1.1 * S.map hij xy.1.2)) = z
+            <span class="kw">rw</span> [h1, h2, h3]
+            <span class="kw">exact</span> hxy)
+      map_id := <span class="kw">fun</span> j =&gt; <span class="kw">by</span>
+        funext xy
+        <span class="kw">apply</span> Subtype.ext
+        <span class="kw">apply</span> Prod.ext
+        · <span class="kw">exact</span> S.map_id_apply j.1 xy.1.1
+        · <span class="kw">exact</span> S.map_id_apply j.1 xy.1.2
+      map_comp := <span class="kw">fun</span> {i j k} hij hjk =&gt; <span class="kw">by</span>
+        funext xy
+        <span class="kw">apply</span> Subtype.ext
+        <span class="kw">apply</span> Prod.ext
+        · <span class="kw">exact</span> S.map_comp_apply hij hjk xy.1.1
+        · <span class="kw">exact</span> S.map_comp_apply hij hjk xy.1.2 }
+    <span class="kw">have</span> hzall : ∀ j : J, z ∈ E j := <span class="kw">by</span>
+      <span class="kw">rw</span> [Set.mem_iInter] at hz
+      <span class="kw">exact</span> hz
+    <span class="kw">have</span> hnonemptyT : ∀ j : J, Nonempty (T.X j) := <span class="kw">by</span>
+      <span class="kw">intro</span> j
+      rcases hzall j <span class="kw">with</span> ⟨xy, hxy⟩
+      <span class="kw">exact</span> ⟨⟨xy, hxy⟩⟩
+    letI : ∀ j : J, Nonempty (T.X j) := hnonemptyT
+    letI : ∀ j : J, CompactSpace (T.X j) := <span class="kw">fun</span> j =&gt; <span class="kw">by</span>
+      simpa [T] using (isCompact_iff_compactSpace.mp (hYclosed j).isCompact)
+    letI : ∀ j : J, T2Space (T.X j) := <span class="kw">fun</span> _ =&gt; inferInstance
+    rcases T.nonempty_inverseLimit hdirJ <span class="kw">with</span> ⟨u⟩
+    <span class="kw">let</span> xlim : (S.restrict J).inverseLimit := <span class="kw">by</span>
+      refine ⟨<span class="kw">fun</span> j =&gt; (u.1 j).1.1, ?_⟩
+      <span class="kw">intro</span> i j hij
+      <span class="kw">exact</span> congrArg Prod.fst (congrArg Subtype.val (u.2 i j hij))
+    <span class="kw">let</span> ylim : (S.restrict J).inverseLimit := <span class="kw">by</span>
+      refine ⟨<span class="kw">fun</span> j =&gt; (u.1 j).1.2, ?_⟩
+      <span class="kw">intro</span> i j hij
+      <span class="kw">exact</span> congrArg Prod.snd (congrArg Subtype.val (u.2 i j hij))
+    letI : ∀ j : J, Group ((S.restrict J).X j) := <span class="kw">fun</span> j =&gt; <span class="kw">by</span>
+      change Group (S.X j.1)
+      infer_instance
+    <span class="kw">let</span> e := S.homeomorph_restrict_cofinal J hdirJ hcofinal
+    <span class="kw">let</span> j0 : J := ⟨i0, le_rfl⟩
+    <span class="kw">have</span> hu0 :
+        (βJ j0 ((u.1 j0).1.1) * βJ j0 ((u.1 j0).1.2),
+          βJ j0 (((u.1 j0).1.1) * ((u.1 j0).1.2))) = z := <span class="kw">by</span>
+      <span class="kw">exact</span> (u.1 j0).2
+    <span class="kw">have</span> hπx : (S.restrict J).projection j0 xlim = S.projection j0.1 (e.symm xlim) := <span class="kw">by</span>
+      simpa [e, xlim] using
+        congrFun (S.π_comp_homeomorph_restrict_cofinal J hdirJ hcofinal j0) (e.symm xlim)
+    <span class="kw">have</span> hπy : (S.restrict J).projection j0 ylim = S.projection j0.1 (e.symm ylim) := <span class="kw">by</span>
+      simpa [e, ylim] using
+        congrFun (S.π_comp_homeomorph_restrict_cofinal J hdirJ hcofinal j0) (e.symm ylim)
+    refine ⟨(e.symm xlim, e.symm ylim), ?_⟩
+    <span class="kw">apply</span> Prod.ext
+    · <span class="kw">calc</span>
+        β (e.symm xlim) * β (e.symm ylim)
+            = βJ j0 ((S.restrict J).projection j0 xlim) * βJ j0 ((S.restrict J).projection j0 ylim) := <span class="kw">by</span>
+                <span class="kw">have</span> hxβ : β (e.symm xlim) = βJ j0 ((S.restrict J).projection j0 xlim) := <span class="kw">by</span>
+                  <span class="kw">calc</span>
+                    β (e.symm xlim) = βJ j0 (S.projection j0.1 (e.symm xlim)) := <span class="kw">by</span>
+                      simpa [Function.comp] using congrFun (hβJ_fac j0) (e.symm xlim)
+                    _ = βJ j0 ((S.restrict J).projection j0 xlim) := <span class="kw">by</span> <span class="kw">rw</span> [← hπx]
+                <span class="kw">have</span> hyβ : β (e.symm ylim) = βJ j0 ((S.restrict J).projection j0 ylim) := <span class="kw">by</span>
+                  <span class="kw">calc</span>
+                    β (e.symm ylim) = βJ j0 (S.projection j0.1 (e.symm ylim)) := <span class="kw">by</span>
+                      simpa [Function.comp] using congrFun (hβJ_fac j0) (e.symm ylim)
+                    _ = βJ j0 ((S.restrict J).projection j0 ylim) := <span class="kw">by</span> <span class="kw">rw</span> [← hπy]
+                <span class="kw">rw</span> [hxβ, hyβ]
+        _ = z.1 := <span class="kw">by</span> simpa [xlim, ylim] using congrArg Prod.fst hu0
+    · <span class="kw">calc</span>
+        β (e.symm xlim * e.symm ylim)
+            = βJ j0 (S.projection j0.1 (e.symm xlim * e.symm ylim)) := <span class="kw">by</span>
+                simpa [Function.comp] using congrFun (hβJ_fac j0) (e.symm xlim * e.symm ylim)
+        _ = βJ j0 (S.projection j0.1 (e.symm xlim) * S.projection j0.1 (e.symm ylim)) := <span class="kw">by</span>
+              <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.projection_mul">projection_mul</a> (S := S) j0.1 (e.symm xlim) (e.symm ylim)]
+        _ = βJ j0 ((S.restrict J).projection j0 xlim * (S.restrict J).projection j0 ylim) := <span class="kw">by</span>
+              <span class="kw">rw</span> [← hπx, ← hπy]
+        _ = z.2 := <span class="kw">by</span> simpa [xlim, ylim] using congrArg Prod.snd hu0
+  <span class="kw">have</span> hnot_iInter : ∀ {t : H × H}, t ∉ Set.range η → ∃ j : J, t ∉ E j := <span class="kw">by</span>
+    <span class="kw">intro</span> t ht
+    by_contra hno
+    <span class="kw">apply</span> ht
+    <span class="kw">apply</span> hiInter_E_subset_range
+    <span class="kw">rw</span> [Set.mem_iInter]
+    <span class="kw">intro</span> j
+    by_contra htj
+    <span class="kw">exact</span> hno ⟨j, htj⟩
+  <span class="kw">let</span> j0 : J := ⟨i0, le_rfl⟩
+  <span class="kw">let</span> jchoose : ∀ t : H × H, t ∉ Set.range η → J := <span class="kw">fun</span> t ht =&gt; Classical.choose (hnot_iInter ht)
+  <span class="kw">have</span> hjchoose : ∀ t ht, t ∉ E (jchoose t ht) := <span class="kw">by</span>
+    <span class="kw">intro</span> t ht
+    <span class="kw">exact</span> Classical.choose_spec (hnot_iInter ht)
+  letI : Fintype H := Fintype.ofFinite H
+  letI : Fintype (H × H) := Fintype.ofFinite (H × H)
+  <span class="kw">let</span> used : Finset J := Finset.univ.image <span class="kw">fun</span> t : H × H =&gt;
+    <span class="kw">if</span> ht : t ∈ Set.range η <span class="kw">then</span> j0 <span class="kw">else</span> jchoose t ht
+  <span class="kw">have</span> hused_nonempty : used.Nonempty := <span class="kw">by</span>
+    refine ⟨<span class="kw">if</span> h : ((1 : H), (1 : H)) ∈ Set.range η <span class="kw">then</span> j0 <span class="kw">else</span> jchoose ((1 : H), (1 : H)) h, ?_⟩
+    refine Finset.mem_image.mpr ?_
+    <span class="kw">exact</span> ⟨((1 : H), (1 : H)), Finset.mem_univ _, <span class="kw">by</span> split_ifs &lt;;&gt; <span class="kw">rfl</span>⟩
+  rcases <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Utilities.html#decl-ProCGroups.InverseSystems.exists_upperBound_finset">exists_upperBound_finset</a> (I := J) hdirJ used hused_nonempty <span class="kw">with</span> ⟨k, hk⟩
+  <span class="kw">have</span> hrange_eta_subset_Ek : Set.range η ⊆ E k := <span class="kw">by</span>
+    <span class="kw">intro</span> t ht
+    <span class="kw">have</span> hmem : t ∈ ⋂ j, E j := hrange_eta_subset_iInter ht
+    <span class="kw">rw</span> [Set.mem_iInter] at hmem
+    <span class="kw">exact</span> hmem k
+  <span class="kw">have</span> hEk_subset_range_eta : E k ⊆ Set.range η := <span class="kw">by</span>
+    <span class="kw">intro</span> t ht
+    by_cases htr : t ∈ Set.range η
+    · <span class="kw">exact</span> htr
+    · <span class="kw">have</span> hmem_used : (<span class="kw">if</span> ht&#x27; : t ∈ Set.range η <span class="kw">then</span> j0 <span class="kw">else</span> jchoose t ht&#x27;) ∈ used := <span class="kw">by</span>
+        refine Finset.mem_image.mpr ?_
+        <span class="kw">exact</span> ⟨t, Finset.mem_univ _, <span class="kw">by</span> split_ifs; <span class="kw">rfl</span>⟩
+      <span class="kw">have</span> hle : (<span class="kw">if</span> ht&#x27; : t ∈ Set.range η <span class="kw">then</span> j0 <span class="kw">else</span> jchoose t ht&#x27;) ≤ k := hk _ hmem_used
+      <span class="kw">have</span> ht&#x27; : t ∈ E (<span class="kw">if</span> ht&#x27; : t ∈ Set.range η <span class="kw">then</span> j0 <span class="kw">else</span> jchoose t ht&#x27;) := hE_mono hle ht
+      <span class="kw">simp</span> only [htr, ↓reduceDIte, hjchoose] at ht&#x27;
+  <span class="kw">have</span> hEk_subset_delta : E k ⊆ Δ := <span class="kw">by</span>
+    <span class="kw">intro</span> t ht
+    <span class="kw">exact</span> hη_delta (hEk_subset_range_eta ht)
+  <span class="kw">let</span> βkFun : S.X k.1 → H := βJ k
+  <span class="kw">have</span> hβk_mul : ∀ x y : S.X k.1, βkFun (x * y) = βkFun x * βkFun y := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">have</span> hxy : (βkFun x * βkFun y, βkFun (x * y)) ∈ E k := ⟨(x, y), <span class="kw">rfl</span>⟩
+    <span class="kw">have</span> hxyΔ : (βkFun x * βkFun y, βkFun (x * y)) ∈ Δ := hEk_subset_delta hxy
+    simpa [Δ] using hxyΔ.symm
+  <span class="kw">have</span> hβk_one : βkFun 1 = 1 := <span class="kw">by</span>
+    <span class="kw">have</span> h := hβk_mul 1 1
+    <span class="kw">have</span> h&#x27; := congrArg (<span class="kw">fun</span> t : H =&gt; t * (βkFun 1)⁻¹) h
+    simpa [mul_assoc] using h&#x27;.symm
+  <span class="kw">let</span> βk : S.X k.1 →* H :=
+    { toFun := βkFun
+      map_one&#x27; := hβk_one
+      map_mul&#x27; := hβk_mul }
+  <span class="kw">have</span> hβk_continuous : Continuous βk := <span class="kw">by</span>
+    change Continuous βkFun
+    <span class="kw">exact</span> hβJ_continuous k
+  refine ⟨k.1, βk, hβk_continuous, ?_⟩
+  <span class="kw">exact</span> hβJ_fac k</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite_addMonoidHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite_addMonoidHom">ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite_addMonoidHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/FiniteStageFactorization.html#L581">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.factors_through_projection_finite_addMonoidHom [Nonempty I]
+    [∀ i, AddCommGroup (S.X i)] [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.IsAddGroupSystem">IsAddGroupSystem</a> S] [∀ i, IsTopologicalAddGroup (S.X i)]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    {H : <span class="kw">Type</span> w} [AddCommGroup H] [TopologicalSpace H] [Finite H] [DiscreteTopology H]
+    (β : S.inverseLimit →+ H) (hβ : Continuous β) :
+    ∃ k : I, ∃ βk : S.X k →+ H, Continuous βk ∧ β = βk ∘ S.projection k</code></pre></section>
+    <section><div class="natural-text"><p>A continuous additive homomorphism from an inverse limit of profinite additive groups to a <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete additive group factors through <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">let</span> T : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I) :=
+    { X := <span class="kw">fun</span> i =&gt; Multiplicative (S.X i)
+      topologicalSpace := <span class="kw">fun</span> _ =&gt; inferInstance
+      map := <span class="kw">fun</span> {i j} hij x =&gt; Multiplicative.ofAdd (S.map hij x.toAdd)
+      continuous_map := <span class="kw">fun</span> {i j} hij =&gt; <span class="kw">by</span>
+        <span class="kw">let</span> ei := <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph">additiveMultiplicativeHomeomorph</a> (S.X i)
+        <span class="kw">let</span> ej := <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph">additiveMultiplicativeHomeomorph</a> (S.X j)
+        <span class="kw">exact</span> ei.continuous_toFun.comp ((S.continuous_map hij).comp ej.continuous_invFun)
+      map_id := <span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+        funext x
+        <span class="kw">apply</span> Multiplicative.ext
+        change S.map (le_rfl : i ≤ i) x.toAdd = x.toAdd
+        <span class="kw">exact</span> S.map_id_apply i x.toAdd
+      map_comp := <span class="kw">fun</span> {i j k} hij hjk =&gt; <span class="kw">by</span>
+        funext x
+        <span class="kw">apply</span> Multiplicative.ext
+        change S.map hij (S.map hjk x.toAdd) = S.map (hij.trans hjk) x.toAdd
+        <span class="kw">exact</span> S.map_comp_apply hij hjk x.toAdd }
+  letI : ∀ i, Group (T.X i) := <span class="kw">fun</span> _ =&gt; inferInstance
+  letI : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.IsGroupSystem">IsGroupSystem</a> T :=
+    { <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a> := <span class="kw">by</span>
+        <span class="kw">intro</span> i j hij
+        <span class="kw">apply</span> Multiplicative.ext
+        <span class="kw">exact</span> IsAddGroupSystem.map_zero (S := S) hij
+      <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a> := <span class="kw">by</span>
+        <span class="kw">intro</span> i j hij x y
+        <span class="kw">apply</span> Multiplicative.ext
+        <span class="kw">exact</span> IsAddGroupSystem.map_add (S := S) hij x.toAdd y.toAdd
+      map_inv := <span class="kw">by</span>
+        <span class="kw">intro</span> i j hij x
+        <span class="kw">apply</span> Multiplicative.ext
+        <span class="kw">exact</span> IsAddGroupSystem.map_neg (S := S) hij x.toAdd }
+  letI : ∀ i, IsTopologicalGroup (T.X i) := <span class="kw">fun</span> _ =&gt; inferInstance
+  letI : ∀ i, CompactSpace (T.X i) := <span class="kw">fun</span> _ =&gt; inferInstance
+  letI : ∀ i, T2Space (T.X i) := <span class="kw">fun</span> i =&gt;
+    (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph">additiveMultiplicativeHomeomorph</a> (S.X i)).t2Space
+  letI : ∀ i, TotallyDisconnectedSpace (T.X i) := <span class="kw">fun</span> i =&gt;
+    (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph">additiveMultiplicativeHomeomorph</a> (S.X i)).totallyDisconnectedSpace
+  <span class="kw">let</span> toAddLimit : T.inverseLimit → S.inverseLimit := <span class="kw">fun</span> x =&gt;
+    ⟨<span class="kw">fun</span> i =&gt; (T.projection i x).toAdd, <span class="kw">by</span>
+      <span class="kw">intro</span> i j hij
+      change S.map hij ((T.projection j x).toAdd) = (T.projection i x).toAdd
+      <span class="kw">exact</span> congrArg Multiplicative.toAdd (T.projection_compatible x i j hij)⟩
+  <span class="kw">let</span> toMulLimit : S.inverseLimit → T.inverseLimit := <span class="kw">fun</span> x =&gt;
+    ⟨<span class="kw">fun</span> i =&gt; Multiplicative.ofAdd (S.projection i x), <span class="kw">by</span>
+      <span class="kw">intro</span> i j hij
+      <span class="kw">apply</span> Multiplicative.ext
+      change S.map hij (S.projection j x) = S.projection i x
+      <span class="kw">exact</span> S.projection_compatible x i j hij⟩
+  <span class="kw">let</span> toAddLimitMulHom : T.inverseLimit →* Multiplicative S.inverseLimit :=
+    { toFun := <span class="kw">fun</span> x =&gt; Multiplicative.ofAdd (toAddLimit x)
+      map_one&#x27; := <span class="kw">by</span>
+        <span class="kw">apply</span> Multiplicative.ext
+        <span class="kw">apply</span> S.ext
+        <span class="kw">intro</span> i
+        <span class="kw">rfl</span>
+      map_mul&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> x y
+        <span class="kw">apply</span> Multiplicative.ext
+        <span class="kw">apply</span> S.ext
+        <span class="kw">intro</span> i
+        <span class="kw">rfl</span> }
+  <span class="kw">let</span> βMul : T.inverseLimit →* Multiplicative H :=
+    (AddMonoidHom.toMultiplicative β).comp toAddLimitMulHom
+  <span class="kw">have</span> htoAddLimit_continuous : Continuous toAddLimit := <span class="kw">by</span>
+    <span class="kw">exact</span> Continuous.subtype_mk
+      (continuous_pi <span class="kw">fun</span> i =&gt;
+        (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph">additiveMultiplicativeHomeomorph</a> (S.X i)).continuous_invFun.comp
+          (T.continuous_projection i))
+      (<span class="kw">fun</span> x =&gt; (toAddLimit x).2)
+  <span class="kw">have</span> hβMul_continuous : Continuous βMul := <span class="kw">by</span>
+    change Continuous <span class="kw">fun</span> x =&gt; Multiplicative.ofAdd (β (toAddLimit x))
+    <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph">additiveMultiplicativeHomeomorph</a> H).continuous_toFun.comp
+      (hβ.comp htoAddLimit_continuous)
+  letI : Finite (Multiplicative H) := Finite.of_equiv H Multiplicative.ofAdd
+  rcases T.factors_through_projection_finite_group_hom hdir βMul hβMul_continuous <span class="kw">with</span>
+    ⟨k, γk, hγk_continuous, hγk_fac⟩
+  <span class="kw">let</span> βk : S.X k →+ H :=
+    { toFun := <span class="kw">fun</span> x =&gt; (γk (Multiplicative.ofAdd x)).toAdd
+      map_zero&#x27; := <span class="kw">by</span>
+        <span class="kw">exact</span> congrArg Multiplicative.toAdd γk.map_one
+      map_add&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> x y
+        <span class="kw">exact</span> congrArg Multiplicative.toAdd
+          (γk.map_mul (Multiplicative.ofAdd x) (Multiplicative.ofAdd y)) }
+  <span class="kw">have</span> hβk_continuous : Continuous βk := <span class="kw">by</span>
+    change Continuous <span class="kw">fun</span> x : S.X k =&gt; (γk (Multiplicative.ofAdd x)).toAdd
+    <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph">additiveMultiplicativeHomeomorph</a> H).continuous_invFun.comp
+      (hγk_continuous.comp (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.additiveMultiplicativeHomeomorph">additiveMultiplicativeHomeomorph</a> (S.X k)).continuous_toFun)
+  refine ⟨k, βk, hβk_continuous, ?_⟩
+  funext x
+  <span class="kw">have</span> hlim : toAddLimit (toMulLimit x) = x := <span class="kw">by</span>
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> i
+    <span class="kw">rfl</span>
+  <span class="kw">have</span> hpoint := congrArg Multiplicative.toAdd (congrFun hγk_fac (toMulLimit x))
+  <span class="kw">have</span> hleft : (βMul (toMulLimit x)).toAdd = β x := <span class="kw">by</span>
+    <span class="kw">simp</span> only [MonoidHom.coe_comp, AddMonoidHom.coe_toMultiplicative, MonoidHom.coe_mk, OneHom.coe_mk,
+  Function.comp_apply, hlim, toAdd_ofAdd, βMul, toAddLimitMulHom]
+  <span class="kw">have</span> hright :
+      (γk (T.projection k (toMulLimit x))).toAdd = βk (S.projection k x) := <span class="kw">by</span>
+    <span class="kw">rfl</span>
+  <span class="kw">exact</span> hleft.symm.trans (hpoint.trans hright)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.InverseSystems.FiniteStageFactorization"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

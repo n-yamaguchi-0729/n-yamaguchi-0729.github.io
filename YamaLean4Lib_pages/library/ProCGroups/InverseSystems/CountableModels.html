@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.InverseSystems.CountableModels | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.InverseSystems.CountableModels</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/InverseSystems.html">InverseSystems</a><span class="sep">/</span><span>CountableModels</span></div>
+      <h1 class="module-title">ProCGroups.InverseSystems.CountableModels</h1>
+      <div class="module-meta">2 Theorem</div>
+      <div class="module-overview"><p>This module develops the rewriting and basis constructions behind the subgroup calculations. It tracks words and relations through the chosen transversal to obtain the required presentation or basis statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li>Mathlib.Topology.Category.LightProfinite.Basic</li><li><a href="../../../library/ProCGroups/InverseSystems/ProfiniteSpace.html">ProCGroups.InverseSystems.ProfiniteSpace</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../library/ProCGroups/InverseSystems.html">ProCGroups.InverseSystems</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ProCGroups.InverseSystems.exists_nat_inverseSystem_of_secondCountable">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.exists_nat_inverseSystem_of_secondCountable">ProCGroups.InverseSystems.exists_nat_inverseSystem_of_secondCountable</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/CountableModels.html#L26">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_nat_inverseSystem_of_secondCountable (X : <span class="kw">Type</span> w) [TopologicalSpace X]
+    [SecondCountableTopology X] (hX : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteSpace.html#decl-ProCGroups.InverseSystems.IsProfiniteSpace">IsProfiniteSpace</a> X) :
+    ∃ S : InverseSystem.{0, w} (I := ℕ),
+      (∀ n, Finite (S.X n)) ∧ (∀ n, DiscreteTopology (S.X n)) ∧
+      Nonempty (X ≃ₜ S.inverseLimit)</code></pre></section>
+    <section><div class="natural-text"><p>A second-countable profinite space is a sequential inverse limit of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete spaces.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  rcases <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteSpace.html#decl-ProCGroups.InverseSystems.compact_t2_totallyDisconnected_of_isProfiniteSpace">compact_t2_totallyDisconnected_of_isProfiniteSpace</a> X hX <span class="kw">with</span>
+    ⟨hcompact, hT2, htotdisc⟩
+  <span class="kw">let</span> _ : CompactSpace X := hcompact
+  <span class="kw">let</span> _ : T2Space X := hT2
+  <span class="kw">let</span> _ : TotallyDisconnectedSpace X := htotdisc
+  <span class="kw">let</span> LX : LightProfinite := LightProfinite.of X
+  <span class="kw">let</span> _ : Countable (DiscreteQuotient X) := <span class="kw">by</span>
+    simpa [LX] using (LightProfinite.instCountableDiscreteQuotient LX)
+  <span class="kw">let</span> e : ℕ → DiscreteQuotient X :=
+    Set.enumerateCountable (s := (Set.univ : Set (DiscreteQuotient X))) Set.countable_univ ⊤
+  <span class="kw">let</span> q : ℕ → DiscreteQuotient X := <span class="kw">fun</span> n =&gt;
+    Nat.rec (motive := <span class="kw">fun</span> _ =&gt; DiscreteQuotient X) (e 0)
+      (<span class="kw">fun</span> n qn =&gt; qn ⊓ e (n + 1)) n
+  <span class="kw">have</span> hq_succ : ∀ n, q (n + 1) = q n ⊓ e (n + 1) := <span class="kw">by</span>
+    <span class="kw">intro</span> n
+    <span class="kw">simp</span> only [Nat.succ_eq_add_one, q]
+  <span class="kw">have</span> hq_antitone : Antitone q := <span class="kw">by</span>
+    refine antitone_nat_of_succ_le ?_
+    <span class="kw">intro</span> n
+    <span class="kw">rw</span> [hq_succ]
+    <span class="kw">exact</span> inf_le_left
+  <span class="kw">have</span> hq_le_enum : ∀ n, q n ≤ e n := <span class="kw">by</span>
+    <span class="kw">intro</span> n
+    <span class="kw">induction</span> n <span class="kw">with</span>
+    | <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> =&gt;
+        <span class="kw">simp</span> only [Nat.succ_eq_add_one, Nat.rec_zero, le_refl, q]
+    | succ n ih =&gt;
+        <span class="kw">rw</span> [hq_succ]
+        <span class="kw">exact</span> inf_le_right
+  <span class="kw">let</span> σ : ℕ → OrderDual (DiscreteQuotient X) := <span class="kw">fun</span> n =&gt;
+    (<span class="kw">show</span> OrderDual (DiscreteQuotient X) from q n)
+  <span class="kw">have</span> hσ : Monotone σ := <span class="kw">by</span>
+    <span class="kw">intro</span> m n hmn
+    change q n ≤ q m
+    <span class="kw">exact</span> hq_antitone hmn
+  <span class="kw">have</span> hdirNat : Directed (· ≤ ·) (id : ℕ → ℕ) := <span class="kw">by</span>
+    <span class="kw">intro</span> a b
+    <span class="kw">exact</span> ⟨max a b, le_max_left _ _, le_max_right _ _⟩
+  <span class="kw">have</span> hrange : Set.range e = (Set.univ : Set (DiscreteQuotient X)) := <span class="kw">by</span>
+    simpa [e] using
+      (Set.range_enumerateCountable_of_mem
+        (s := (Set.univ : Set (DiscreteQuotient X))) Set.countable_univ
+        (default := (⊤ : DiscreteQuotient X)) (<span class="kw">by</span> <span class="kw">simp</span> only [mem_univ]))
+  <span class="kw">have</span> hcofinal : ∀ Q : OrderDual (DiscreteQuotient X), ∃ n : ℕ, Q ≤ σ n := <span class="kw">by</span>
+    <span class="kw">intro</span> Q
+    <span class="kw">have</span> hQ : (<span class="kw">show</span> DiscreteQuotient X from Q) ∈ Set.range e := <span class="kw">by</span>
+      <span class="kw">rw</span> [hrange]
+      <span class="kw">simp</span> only [mem_univ]
+    rcases hQ <span class="kw">with</span> ⟨n, <span class="kw">rfl</span>⟩
+    refine ⟨n, ?_⟩
+    change q n ≤ e n
+    <span class="kw">exact</span> hq_le_enum n
+  <span class="kw">let</span> S0 : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := OrderDual (DiscreteQuotient X)) := <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteSpace.html#decl-ProCGroups.InverseSystems.discreteQuotientSystem">discreteQuotientSystem</a> X
+  <span class="kw">let</span> S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := ℕ) := S0.reindex σ hσ
+  refine ⟨S, ?_, ?_, ?_⟩
+  · <span class="kw">intro</span> n
+    <span class="kw">have</span> hfiniteQ : ∀ A : DiscreteQuotient X, Finite ↥A := <span class="kw">by</span>
+      <span class="kw">intro</span> A
+      infer_instance
+    simpa using hfiniteQ (q n)
+  · <span class="kw">intro</span> n
+    <span class="kw">have</span> hdiscQ : ∀ A : DiscreteQuotient X, DiscreteTopology ↥A := <span class="kw">by</span>
+      <span class="kw">intro</span> A
+      infer_instance
+    simpa using hdiscQ (q n)
+  · refine ⟨(<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteSpace.html#decl-ProCGroups.InverseSystems.homeomorph_inverseLimit_discreteQuotientSystem">homeomorph_inverseLimit_discreteQuotientSystem</a> X).trans ?_⟩
+    <span class="kw">exact</span> S0.homeomorph_reindex_cofinal σ hσ hdirNat hcofinal</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.secondCountable_iff_exists_countableLinearOrder_finiteDiscreteInverseSystem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.secondCountable_iff_exists_countableLinearOrder_finiteDiscreteInverseSystem">ProCGroups.InverseSystems.secondCountable_iff_exists_countableLinearOrder_finiteDiscreteInverseSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/CountableModels.html#L102">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> secondCountable_iff_exists_countableLinearOrder_finiteDiscreteInverseSystem
+    {X : <span class="kw">Type</span> w} [TopologicalSpace X] (hX : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteSpace.html#decl-ProCGroups.InverseSystems.IsProfiniteSpace">IsProfiniteSpace</a> X) :
+    SecondCountableTopology X ↔
+      ∃ (J : <span class="kw">Type</span>) (_ : LinearOrder J) (_ : Countable J),
+        ∃ S : InverseSystem.{0, w} (I := J),
+          (∀ j, Finite (S.X j)) ∧ (∀ j, DiscreteTopology (S.X j)) ∧
+            Nonempty (X ≃ₜ S.inverseLimit)</code></pre></section>
+    <section><div class="natural-text"><p>A profinite space is second countable exactly when it admits a presentation as an inverse limit of <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> discrete spaces over a countable linear order.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hsecond
+    letI : SecondCountableTopology X := hsecond
+    rcases <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CountableModels.html#decl-ProCGroups.InverseSystems.exists_nat_inverseSystem_of_secondCountable">exists_nat_inverseSystem_of_secondCountable</a> X hX <span class="kw">with</span> ⟨S, hfinite, hdisc, hhomeo⟩
+    <span class="kw">exact</span> ⟨ℕ, inferInstance, inferInstance, S, hfinite, hdisc, hhomeo⟩
+  · rintro ⟨J, _hJord, hJcount, S, hfinite, hdisc, ⟨e⟩⟩
+    letI : Countable J := hJcount
+    letI : ∀ j, SecondCountableTopology (S.X j) := <span class="kw">fun</span> j =&gt; <span class="kw">by</span>
+      <span class="kw">let</span> _ : Finite (S.X j) := hfinite j
+      <span class="kw">let</span> _ : DiscreteTopology (S.X j) := hdisc j
+      infer_instance
+    letI : SecondCountableTopology (∀ j, S.X j) := inferInstance
+    letI : SecondCountableTopology S.inverseLimit := <span class="kw">by</span>
+      change SecondCountableTopology {x : ∀ j, S.X j // S.Compatible x}
+      <span class="kw">exact</span> TopologicalSpace.Subtype.secondCountableTopology _
+    letI : SecondCountableTopology X := e.secondCountableTopology
+    <span class="kw">exact</span> inferInstance</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.InverseSystems.CountableModels"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

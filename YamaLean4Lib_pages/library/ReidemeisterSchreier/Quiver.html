@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReidemeisterSchreier.Quiver | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../download/index.html">Download</a></nav>
+  <div class="header-current">ReidemeisterSchreier.Quiver</div>
+  <form class="search-form" action="../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a><span class="sep">/</span><span>Quiver</span></div>
+      <h1 class="module-title">ReidemeisterSchreier.Quiver</h1>
+      <div class="module-meta">2 Definition</div>
+      <div class="module-overview"><p>This module formalizes the quiver and arborescence tools used by the groupoid construction.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li>Mathlib.Combinatorics.Quiver.Arborescence</li><li>Mathlib.Combinatorics.Quiver.ConnectedComponent</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../library/ReidemeisterSchreier/Discrete/OpenSubgroups/FreeBasis.html">ReidemeisterSchreier.Discrete.OpenSubgroups.FreeBasis</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ReidemeisterSchreier.Quiver.coveredArrowEquivTotal">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Quiver.coveredArrowEquivTotal">ReidemeisterSchreier.Quiver.coveredArrowEquivTotal</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/Quiver.html#L22">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> Quiver.coveredArrowEquivTotal
+    {V : <span class="kw">Type</span> u} [Quiver V] (T : WideSubquiver (Quiver.Symmetrify V)) [Quiver.Arborescence T] :
+    ↥(Quiver.wideSubquiverEquivSetTotal (Quiver.wideSubquiverSymmetrify T)) ≃ Quiver.Total T := <span class="kw">by</span>
+  classical
+  refine
+    { toFun := <span class="kw">fun</span> e =&gt;
+        <span class="kw">if</span> hpos : T e.1.left e.1.right (Sum.inl e.1.hom) <span class="kw">then</span>
+            { left := e.1.left
+              right := e.1.right
+              hom := ⟨Sum.inl e.1.hom, hpos⟩ }
+        <span class="kw">else</span>
+            { left := e.1.right
+              right := e.1.left
+              hom := ⟨Sum.inr e.1.hom, <span class="kw">by</span>
+                rcases e.2 <span class="kw">with</span> h | h
+                · <span class="kw">exact</span> False.elim (hpos h)
+                · <span class="kw">exact</span> h⟩ }
+      invFun := <span class="kw">fun</span> e =&gt;
+        <span class="kw">match</span> he : e.hom.1 <span class="kw">with</span>
+        | Sum.inl f =&gt;
+            ⟨⟨e.left, e.right, f⟩, <span class="kw">by</span>
+              simpa [Quiver.wideSubquiverSymmetrify, he] using Or.inl e.hom.2⟩
+        | Sum.inr f =&gt;
+            ⟨⟨e.right, e.left, f⟩, <span class="kw">by</span>
+              simpa [Quiver.wideSubquiverSymmetrify, he] using Or.inr e.hom.2⟩
+      left_inv := ?_
+      right_inv := ?_ }
+  · <span class="kw">intro</span> e
+    <span class="kw">apply</span> Subtype.ext
+    rcases e <span class="kw">with</span> ⟨⟨a, b, f⟩, hf⟩
+    dsimp
+    by_cases hpos : T a b (Sum.inl f)
+    · <span class="kw">rw</span> [dif_pos hpos]
+    · rcases hf <span class="kw">with</span> h | h
+      · <span class="kw">exact</span> False.elim (hpos h)
+      · <span class="kw">rw</span> [dif_neg hpos]
+  · <span class="kw">let</span> edgeStep {a b : T} (e : a ⟶ b) :
+        (default : Quiver.Path (Quiver.root T) a).length + 1 =
+          (default : Quiver.Path (Quiver.root T) b).length := <span class="kw">by</span>
+        <span class="kw">have</span> hpath :
+            ((default : Quiver.Path (Quiver.root T) a).cons e :
+              Quiver.Path (Quiver.root T) b) = default :=
+          Subsingleton.elim _ _
+        simpa using congrArg Quiver.Path.length hpath
+    <span class="kw">intro</span> e
+    rcases e <span class="kw">with</span> ⟨a, b, e⟩
+    <span class="kw">cases</span> e <span class="kw">with</span>
+    | <a class="decl-ref" href="../../library/ProCGroups/Abelian/TopologicalAbelianization.html#decl-ProCGroups.Abelian.TopologicalAbelianization.mk">mk</a> e he =&gt;
+        <span class="kw">cases</span> e <span class="kw">with</span>
+        | inl f =&gt;
+            dsimp
+            by_cases hpos : T a b (Sum.inl f)
+            · <span class="kw">simp</span> only [hpos, ↓reduceDIte]
+            · <span class="kw">exact</span> False.elim (hpos he)
+        | inr f =&gt;
+            dsimp
+            <span class="kw">have</span> hnot : ¬ T b a (Sum.inl f) := <span class="kw">by</span>
+              <span class="kw">intro</span> hpos
+              <span class="kw">let</span> e₁ : a ⟶ b := ⟨Sum.inr f, he⟩
+              <span class="kw">let</span> e₂ : b ⟶ a := ⟨Sum.inl f, hpos⟩
+              <span class="kw">have</span> h₁ := edgeStep e₁
+              <span class="kw">have</span> h₂ := edgeStep e₂
+              <span class="kw">have</span> hab :
+                  (default : Quiver.Path (Quiver.root T) a).length &lt;
+                    (default : Quiver.Path (Quiver.root T) b).length := <span class="kw">by</span>
+                <span class="kw">rw</span> [← h₁]
+                <span class="kw">exact</span> Nat.lt_succ_self _
+              <span class="kw">have</span> hba :
+                  (default : Quiver.Path (Quiver.root T) b).length &lt;
+                    (default : Quiver.Path (Quiver.root T) a).length := <span class="kw">by</span>
+                <span class="kw">rw</span> [← h₂]
+                <span class="kw">exact</span> Nat.lt_succ_self _
+              <span class="kw">exact</span> (Nat.lt_asymm hab hba).elim
+            <span class="kw">rw</span> [dif_neg hnot]</code></pre></section>
+    <section><div class="natural-text"><p>Forgetting the orientation of a tree edge in a symmetrized quiver identifies the total arrows of the tree with the original arrows covered by its symmetrification. It packages mutually inverse maps as an algebraic or topological equivalence.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Quiver.Arborescence.totalEquivNonRoot">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Quiver.Arborescence.totalEquivNonRoot">ReidemeisterSchreier.Quiver.Arborescence.totalEquivNonRoot</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/Quiver.html#L101">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> Arborescence.totalEquivNonRoot
+    (V : <span class="kw">Type</span> u) [Quiver V] [Quiver.Arborescence V] :
+    Quiver.Total V ≃ {v : V // v ≠ Quiver.root V} := <span class="kw">by</span>
+  <span class="kw">let</span> f : Quiver.Total V → {v : V // v ≠ Quiver.root V} := <span class="kw">fun</span> e =&gt;
+    ⟨e.right, <span class="kw">by</span>
+      <span class="kw">intro</span> hroot
+      <span class="kw">have</span> hpath :
+          ((default : Quiver.Path (Quiver.root V) e.left).cons
+              (Quiver.homOfEq e.hom <span class="kw">rfl</span> hroot) :
+            Quiver.Path (Quiver.root V) (Quiver.root V)) = default :=
+        Subsingleton.elim _ _
+      <span class="kw">have</span> hnil : (default : Quiver.Path (Quiver.root V) (Quiver.root V)) = Quiver.Path.nil :=
+        Subsingleton.elim _ _
+      <span class="kw">exact</span> Quiver.Path.cons_ne_nil
+        (default : Quiver.Path (Quiver.root V) e.left)
+        (Quiver.homOfEq e.hom <span class="kw">rfl</span> hroot) (hpath.trans hnil)⟩
+  refine Equiv.ofBijective f ⟨?_, ?_⟩
+  · <span class="kw">intro</span> e e&#x27; h
+    <span class="kw">cases</span> e <span class="kw">with</span>
+    | <a class="decl-ref" href="../../library/ProCGroups/Abelian/TopologicalAbelianization.html#decl-ProCGroups.Abelian.TopologicalAbelianization.mk">mk</a> left right hom =&gt;
+        <span class="kw">cases</span> e&#x27; <span class="kw">with</span>
+        | <a class="decl-ref" href="../../library/ProCGroups/Abelian/TopologicalAbelianization.html#decl-ProCGroups.Abelian.TopologicalAbelianization.mk">mk</a> left&#x27; right&#x27; hom&#x27; =&gt;
+            <span class="kw">cases</span> h
+            <span class="kw">have</span> hpath :
+                ((default : Quiver.Path (Quiver.root V) left).cons hom :
+                  Quiver.Path (Quiver.root V) right) =
+                ((default : Quiver.Path (Quiver.root V) left&#x27;).cons hom&#x27; :
+                  Quiver.Path (Quiver.root V) right) :=
+              Subsingleton.elim _ _
+            <span class="kw">have</span> hleft : left = left&#x27; := Quiver.Path.obj_eq_of_cons_eq_cons hpath
+            subst hleft
+            <span class="kw">have</span> hhom : hom ≍ hom&#x27; := Quiver.Path.hom_heq_of_cons_eq_cons hpath
+            <span class="kw">cases</span> hhom
+            <span class="kw">rfl</span>
+  · <span class="kw">intro</span> v
+    <span class="kw">let</span> p : Quiver.Path (Quiver.root V) v.1 := default
+    <span class="kw">have</span> hpne : p.length ≠ 0 := <span class="kw">by</span>
+      <span class="kw">intro</span> hp0
+      <span class="kw">exact</span> v.2 (Quiver.Path.eq_of_length_zero p hp0).symm
+    rcases (Quiver.Path.length_ne_zero_iff_eq_cons p).mp hpne <span class="kw">with</span> ⟨c, p&#x27;, e, hp⟩
+    refine ⟨⟨c, v.1, e⟩, ?_⟩
+    <span class="kw">exact</span> Subtype.ext <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>In an arborescence, the last edge of the unique path to a non-root vertex determines that vertex, and every edge arises this way. It packages mutually inverse maps as an algebraic or topological equivalence.</p></div></section>
+  </div>
+</section></div></main>
+  <aside class="file-tree" data-active="ReidemeisterSchreier.Quiver"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../assets/site.js" data-root="../../"></script>
+</body>
+</html>

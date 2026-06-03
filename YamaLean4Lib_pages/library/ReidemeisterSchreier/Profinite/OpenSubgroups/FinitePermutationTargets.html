@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReidemeisterSchreier.Profinite.OpenSubgroups.FinitePermutationTargets | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">ReidemeisterSchreier.Profinite.OpenSubgroups.FinitePermutationTargets</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a><span class="sep">/</span><a href="../../../../library/ReidemeisterSchreier/Profinite.html">Profinite</a><span class="sep">/</span><a href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups.html">OpenSubgroups</a><span class="sep">/</span><span>FinitePermutationTargets</span></div>
+      <h1 class="module-title">ReidemeisterSchreier.Profinite.OpenSubgroups.FinitePermutationTargets</h1>
+      <div class="module-meta">6 Theorem | 2 Definition | 1 Abbreviation | 7 Instance</div>
+      <div class="module-overview"><p>This module proves the universal-<a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> part of the construction. It packages <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage data into completed maps and shows the required <a class="decl-ref" href="../../../../library/ProCGroups/ProC/Subgroups/Closed.html#decl-ProCGroups.ProC.IsProCGroup.extension">extension</a> and uniqueness statements.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ProCGroups/FiniteGeneration/CharacteristicChainsAndIndices.html">ProCGroups.FiniteGeneration.CharacteristicChainsAndIndices</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a></li><li><a href="../../../../library/ReidemeisterSchreier/Profinite.html">ReidemeisterSchreier.Profinite</a></li><li><a href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups.html">ReidemeisterSchreier.Profinite.OpenSubgroups</a></li><li><a href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/DenseFreeModel.html">ReidemeisterSchreier.Profinite.OpenSubgroups.DenseFreeModel</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexContinuousHom_range_mem_class">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexContinuousHom_range_mem_class">ReidemeisterSchreier.Profinite.openSubgroupIndexContinuousHom_range_mem_class</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L32">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> openSubgroupIndexContinuousHom_range_mem_class
+    {C : ProCGroups.FiniteGroupClass.{u}}
+    (hIso : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.IsomClosed">ProCGroups.FiniteGroupClass.IsomClosed</a> C)
+    (hQuot : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.QuotientClosed">ProCGroups.FiniteGroupClass.QuotientClosed</a> C)
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (hG : ProCGroups.ProC.IsProCGroup C G)
+    (H : OpenSubgroup G) {n : ℕ}
+    (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    C
+      (ULift
+        ((ProCGroups.FiniteGeneration.openSubgroupIndexContinuousHom
+          (G := G) (H : Subgroup G) H.isOpen&#x27;
+          (Subgroup.quotient_finite_of_isOpen (H : Subgroup G) H.isOpen&#x27;) hn).range))</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation representation attached to an open subgroup of a concrete pro-\(C\) group has image in \(C\), packaged through \(\mathrm{ULift}\) to match universes.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> φ : G →ₜ* Equiv.Perm (Fin n) :=
+    ProCGroups.FiniteGeneration.openSubgroupIndexContinuousHom (G := G) (H : Subgroup G)
+      H.isOpen&#x27; (Subgroup.quotient_finite_of_isOpen (H : Subgroup G) H.isOpen&#x27;) hn
+  <span class="kw">let</span> U : OpenNormalSubgroup G :=
+    { toOpenSubgroup :=
+        { toSubgroup := φ.toMonoidHom.ker
+          isOpen&#x27; := <span class="kw">by</span>
+            <span class="kw">have</span> h1open :
+                IsOpen ({1} : Set (Equiv.Perm (Fin n))) := isOpen_discrete _
+            simpa [Set.preimage, MonoidHom.mem_ker] using h1open.preimage φ.continuous_toFun }
+      isNormal&#x27; := inferInstance }
+  <span class="kw">have</span> hQuotU : C (G ⧸ (U : Subgroup G)) :=
+    ProCGroups.ProC.IsProCGroup.hasAllOpenNormalQuotientsInClass_of_basis_of_quotientClosed
+      hIso hQuot hG U
+  <span class="kw">exact</span> hIso
+    ⟨(QuotientGroup.quotientKerEquivRange φ.toMonoidHom).trans MulEquiv.ulift.symm⟩
+    hQuotU</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coset action of the profinite group on the quotient by the open subgroup. The action factors through a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation group, and the lifted image inherits finiteness, the discrete topology, and the topological group structure from that <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation target. Membership in the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class follows by applying the class closure hypothesis to the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image. The basepoint and action formulas are checked directly on cosets.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl abbrev" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L64">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> openSubgroupIndexActionRange
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) : <span class="kw">Type</span> u :=
+  ULift
+    ((ProCGroups.FiniteGeneration.openSubgroupIndexContinuousHom (G := G) (H : Subgroup G)
+      H.isOpen&#x27; (Subgroup.quotient_finite_of_isOpen (H : Subgroup G) H.isOpen&#x27;) hn).range)</code></pre></section>
+    <section><div class="natural-text"><p>Universe-lifted permutation image of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coset action attached to an open subgroup.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_topologicalSpace">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_topologicalSpace">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_topologicalSpace</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L71">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> openSubgroupIndexActionRange_topologicalSpace
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    TopologicalSpace (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn) :=
+  inferInstance</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image is equipped with the discrete topology inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation target.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_discreteTopology">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_discreteTopology">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_discreteTopology</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L77">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> openSubgroupIndexActionRange_discreteTopology
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    DiscreteTopology (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn) :=
+  inferInstance</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image carries the discrete topology.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_isTopologicalGroup">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_isTopologicalGroup">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_isTopologicalGroup</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L83">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> openSubgroupIndexActionRange_isTopologicalGroup
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    IsTopologicalGroup (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn) :=
+  inferInstance</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image is a topological group with its discrete topology.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_finite">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_finite">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_finite</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L89">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> openSubgroupIndexActionRange_finite
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    Finite (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn) :=
+  inferInstance</code></pre></section>
+    <section><div class="natural-text"><p>The permutation image of the open-subgroup coset action is finite.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L96">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> openSubgroupIndexActionRangeContinuousHom
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    G →ₜ* <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn := <span class="kw">by</span>
+  <span class="kw">let</span> φ : G →ₜ* Equiv.Perm (Fin n) :=
+    ProCGroups.FiniteGeneration.openSubgroupIndexContinuousHom (G := G) (H : Subgroup G)
+      H.isOpen&#x27; (Subgroup.quotient_finite_of_isOpen (H : Subgroup G) H.isOpen&#x27;) hn
+  refine
+    { toMonoidHom :=
+        { toFun := <span class="kw">fun</span> g =&gt; ⟨⟨φ g, ⟨g, <span class="kw">rfl</span>⟩⟩⟩
+          map_one&#x27; := <span class="kw">by</span>
+            <span class="kw">apply</span> ULift.ext
+            <span class="kw">apply</span> Subtype.ext
+            <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a>, ContinuousMonoidHom.coe_toMonoidHom, ULift.one_down, OneMemClass.coe_one, φ]
+          map_mul&#x27; := <span class="kw">by</span>
+            <span class="kw">intro</span> g h
+            <span class="kw">apply</span> ULift.ext
+            <span class="kw">apply</span> Subtype.ext
+            <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a>, ContinuousMonoidHom.coe_toMonoidHom, ULift.mul_down, Subgroup.coe_mul]}
+      continuous_toFun := ?_ }
+  <span class="kw">exact</span> continuous_uliftUp.comp &lt;|
+    Continuous.subtype_mk φ.continuous_toFun _</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coset-action homomorphism lifted to its universe-lifted permutation image.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_mulAction">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_mulAction">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_mulAction</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L121">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> openSubgroupIndexActionRange_mulAction
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    MulAction (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn) (Fin n) <span class="kw">where</span>
+  smul g i := g.down.1 i
+  one_smul i := <span class="kw">by</span>
+    <span class="kw">rfl</span>
+  mul_smul g h i := <span class="kw">by</span>
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The lifted permutation image acts on the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coset index set through its underlying permutation.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_smul_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_smul_apply">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_smul_apply</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L131">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> openSubgroupIndexActionRange_smul_apply
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n)
+    (g : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn) (i : Fin n) :
+    g • i = g.down.1 i</code></pre></section>
+    <section><div class="natural-text"><p>The lifted permutation image acts on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coset by applying the represented permutation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coset action of the profinite group on the quotient by the open subgroup. The action factors through a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation group, and the lifted image inherits finiteness, the discrete topology, and the topological group structure from that <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation target. Membership in the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class follows by applying the class closure hypothesis to the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image. The basepoint and action formulas are checked directly on cosets.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L139">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> openSubgroupIndexActionRange_leftQuotient_smul
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn →
+      (G ⧸ (H : Subgroup G)) → (G ⧸ (H : Subgroup G)) :=
+  <span class="kw">fun</span> g q =&gt;
+    <span class="kw">let</span> e := ProCGroups.FiniteGeneration.openSubgroupIndexEquiv
+      (G := G) (H : Subgroup G)
+      (Subgroup.quotient_finite_of_isOpen (H : Subgroup G) H.isOpen&#x27;) hn
+    e.symm (g.down.1 (e q))</code></pre></section>
+    <section><div class="natural-text"><p>The inverse transported permutation action of the coset-permutation image on the quotient.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotientMulAction_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotientMulAction_apply">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotientMulAction_apply</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L150">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> openSubgroupIndexActionRange_leftQuotientMulAction_apply
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n)
+    (g : <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn) (q : G ⧸ (H : Subgroup G)) :
+    <span class="kw">let</span> e</code></pre></section>
+    <section><div class="natural-text"><p>The <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation action evaluates on a coset by applying the represented group element.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>ProCGroups.FiniteGeneration.openSubgroupIndexEquiv
+      (G := G) (H : Subgroup G)
+      (Subgroup.quotient_finite_of_isOpen (H : Subgroup G) H.isOpen&#x27;) hn
+    e (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">openSubgroupIndexActionRange_leftQuotient_smul</a> (G := G) H hn g q) = g.down.1 (e q) := <span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">openSubgroupIndexActionRange_leftQuotient_smul</a>, ContinuousMonoidHom.coe_toMonoidHom,
+  Equiv.apply_symm_apply]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coset action of the profinite group on the quotient by the open subgroup. The action factors through a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation group, and the lifted image inherits finiteness, the discrete topology, and the topological group structure from that <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation target. Membership in the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class follows by applying the class closure hypothesis to the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image. The basepoint and action formulas are checked directly on cosets.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotientMulAction">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotientMulAction">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotientMulAction</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L163">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">instance</span> openSubgroupIndexActionRange_leftQuotientMulAction
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    MulAction (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn) (G ⧸ (H : Subgroup G)) <span class="kw">where</span>
+  smul := <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">openSubgroupIndexActionRange_leftQuotient_smul</a> (G := G) H hn
+  one_smul q := <span class="kw">by</span>
+    <span class="kw">let</span> e := ProCGroups.FiniteGeneration.openSubgroupIndexEquiv
+      (G := G) (H : Subgroup G)
+      (Subgroup.quotient_finite_of_isOpen (H : Subgroup G) H.isOpen&#x27;) hn
+    <span class="kw">apply</span> e.injective
+    change e (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">openSubgroupIndexActionRange_leftQuotient_smul</a> (G := G) H hn 1 q) = e q
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">openSubgroupIndexActionRange_leftQuotient_smul</a>, ContinuousMonoidHom.coe_toMonoidHom,
+  ULift.one_down, OneMemClass.coe_one, Equiv.Perm.coe_one, id_eq, Equiv.symm_apply_apply]
+  mul_smul g h q := <span class="kw">by</span>
+    <span class="kw">let</span> e := ProCGroups.FiniteGeneration.openSubgroupIndexEquiv
+      (G := G) (H : Subgroup G)
+      (Subgroup.quotient_finite_of_isOpen (H : Subgroup G) H.isOpen&#x27;) hn
+    <span class="kw">apply</span> e.injective
+    change
+      e (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">openSubgroupIndexActionRange_leftQuotient_smul</a> (G := G) H hn (g * h) q) =
+        e (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">openSubgroupIndexActionRange_leftQuotient_smul</a> (G := G) H hn g
+          (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">openSubgroupIndexActionRange_leftQuotient_smul</a> (G := G) H hn h q))
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">openSubgroupIndexActionRange_leftQuotient_smul</a>, ContinuousMonoidHom.coe_toMonoidHom,
+  ULift.mul_down, Subgroup.coe_mul, Equiv.Perm.coe_mul, Function.comp_apply, Equiv.apply_symm_apply]</code></pre></section>
+    <section><div class="natural-text"><p>The permutation image acts on the quotient by the inverse transported permutation, so that \(\<a class="decl-ref" href="../../../../library/ProCGroups/LocalWeight/CardinalInvariantsAndLocalWeight.html#decl-ProCGroups.LocalWeight.rho">rho</a>(g)\) sends the basepoint coset to the coset of \(g\).</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotientContinuousSMul">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotientContinuousSMul">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotientContinuousSMul</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L188">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> openSubgroupIndexActionRange_leftQuotientContinuousSMul
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    ContinuousSMul (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn) (G ⧸ (H : Subgroup G)) := <span class="kw">by</span>
+  letI : DiscreteTopology (G ⧸ (H : Subgroup G)) := inferInstance
+  <span class="kw">exact</span> ⟨continuous_of_discreteTopology⟩</code></pre></section>
+    <section><div class="natural-text"><p>The induced action of the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image on the quotient by the open subgroup is continuous.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom_smul_basepoint">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom_smul_basepoint">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom_smul_basepoint</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L195">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900] <span class="kw">theorem</span> openSubgroupIndexActionRangeContinuousHom_smul_basepoint
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) (g : G) :
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom">openSubgroupIndexActionRangeContinuousHom</a> (G := G) H hn g •
+        (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G)) =
+      QuotientGroup.mk (s := (H : Subgroup G)) g</code></pre></section>
+    <section><div class="natural-text"><p>The lifted <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation action sends the basepoint coset to the expected coset.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">let</span> e := ProCGroups.FiniteGeneration.openSubgroupIndexEquiv
+    (G := G) (H : Subgroup G)
+    (Subgroup.quotient_finite_of_isOpen (H : Subgroup G) H.isOpen&#x27;) hn
+  <span class="kw">let</span> φ : G →* Equiv.Perm (Fin n) :=
+    ProCGroups.FiniteGeneration.openSubgroupIndexAction (G := G) (H : Subgroup G)
+      (Subgroup.quotient_finite_of_isOpen (H : Subgroup G) H.isOpen&#x27;) hn
+  <span class="kw">have</span> hbase :
+      g • (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G)) =
+        QuotientGroup.mk (s := (H : Subgroup G)) g := <span class="kw">by</span>
+    change QuotientGroup.mk (s := (H : Subgroup G)) (g * 1) =
+        QuotientGroup.mk (s := (H : Subgroup G)) g
+    <span class="kw">simp</span> only [mul_one]
+  <span class="kw">have</span> haction :
+      <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom">openSubgroupIndexActionRangeContinuousHom</a> (G := G) H hn g •
+          (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G)) =
+        g • (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G)) := <span class="kw">by</span>
+    <span class="kw">have</span> himage :
+        e (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom">openSubgroupIndexActionRangeContinuousHom</a> (G := G) H hn g •
+              (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G))) =
+          e (g • (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G))) := <span class="kw">by</span>
+      change
+        e (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotient_smul">openSubgroupIndexActionRange_leftQuotient_smul</a> (G := G) H hn
+              (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom">openSubgroupIndexActionRangeContinuousHom</a> (G := G) H hn g)
+              (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G))) =
+          e (g • (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G)))
+      <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_leftQuotientMulAction_apply">openSubgroupIndexActionRange_leftQuotientMulAction_apply</a>]
+      change φ g (e (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G))) =
+          e (g • (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G)))
+      <span class="kw">rw</span> [<span class="kw">show</span> φ g = e.permCongr (MulAction.toPerm g) <span class="kw">by</span>
+        <span class="kw">rfl</span>]
+      <span class="kw">rw</span> [Equiv.permCongr_apply, e.symm_apply_apply]
+      <span class="kw">rfl</span>
+    <span class="kw">exact</span> e.injective himage
+  <span class="kw">exact</span> haction.trans hbase</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coset action of the profinite group on the quotient by the open subgroup. The action factors through a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation group, and the lifted image inherits finiteness, the discrete topology, and the topological group structure from that <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation target. Membership in the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class follows by applying the class closure hypothesis to the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image. The basepoint and action formulas are checked directly on cosets.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom_smul_basepoint_of_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom_smul_basepoint_of_mem">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom_smul_basepoint_of_mem</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L237">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> openSubgroupIndexActionRangeContinuousHom_smul_basepoint_of_mem
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (H : OpenSubgroup G) {n : ℕ} (hn : Nat.card (G ⧸ (H : Subgroup G)) = n)
+    {g : G} (hg : g ∈ (H : Subgroup G)) :
+    <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom">openSubgroupIndexActionRangeContinuousHom</a> (G := G) H hn g •
+        (QuotientGroup.mk (s := (H : Subgroup G)) (1 : G)) =
+      QuotientGroup.mk (s := (H : Subgroup G)) (1 : G)</code></pre></section>
+    <section><div class="natural-text"><p>Under the subgroup-membership condition, the lifted <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation action fixes the basepoint coset as prescribed.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRangeContinuousHom_smul_basepoint">openSubgroupIndexActionRangeContinuousHom_smul_basepoint</a> (G := G) H hn g]
+  simpa [QuotientGroup.eq] using hg</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coset action of the profinite group on the quotient by the open subgroup. The action factors through a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation group, and the lifted image inherits finiteness, the discrete topology, and the topological group structure from that <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation target. Membership in the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class follows by applying the class closure hypothesis to the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image. The basepoint and action formulas are checked directly on cosets.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_mem_class">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_mem_class">ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange_mem_class</a>
+    <a class="source-link" href="../../../../library/src/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#L249">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> openSubgroupIndexActionRange_mem_class
+    {C : ProCGroups.FiniteGroupClass.{u}}
+    (hIso : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.IsomClosed">ProCGroups.FiniteGroupClass.IsomClosed</a> C)
+    (hQuot : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.QuotientClosed">ProCGroups.FiniteGroupClass.QuotientClosed</a> C)
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    (hG : ProCGroups.ProC.IsProCGroup C G)
+    (H : OpenSubgroup G) {n : ℕ}
+    (hn : Nat.card (G ⧸ (H : Subgroup G)) = n) :
+    C (<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexActionRange">openSubgroupIndexActionRange</a> (G := G) H hn)</code></pre></section>
+    <section><div class="natural-text"><p>The universe-lifted <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image of an open-subgroup action belongs to the ambient <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/FinitePermutationTargets.html#decl-ReidemeisterSchreier.Profinite.openSubgroupIndexContinuousHom_range_mem_class">openSubgroupIndexContinuousHom_range_mem_class</a>
+    (C := C) hIso hQuot hG H hn</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> coset action of the profinite group on the quotient by the open subgroup. The action factors through a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation group, and the lifted image inherits finiteness, the discrete topology, and the topological group structure from that <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation target. Membership in the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-group class follows by applying the class closure hypothesis to the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> permutation image. The basepoint and action formulas are checked directly on cosets.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ReidemeisterSchreier.Profinite.OpenSubgroups.FinitePermutationTargets"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

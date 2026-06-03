@@ -1,0 +1,1626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Categorical.QuotientPullbackEquivalences | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.Categorical.QuotientPullbackEquivalences</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Categorical.html">Categorical</a><span class="sep">/</span><span>QuotientPullbackEquivalences</span></div>
+      <h1 class="module-title">ProCGroups.Categorical.QuotientPullbackEquivalences</h1>
+      <div class="module-meta">48 Theorem | 15 Definition | 1 Instance</div>
+      <div class="module-overview"><p>This module supplies the topological part of the construction. It checks continuity and stagewise neighborhood properties so that the completed object inherits the required topology.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html">ProCGroups.Categorical.ProfinitePullbacks</a></li><li><a href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html">ProCGroups.ProC.Quotients.ClosedNormal</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../library/ProCGroups/Categorical.html">ProCGroups.Categorical</a></li><li><a href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Separation.html">ProCGroups.ProC.OpenNormalSubgroups.Separation</a></li><li><a href="../../../library/Yama2026_Sections_1_And_2_1/main.html">Yama2026_Sections_1_And_2_1.main</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl instance" id="decl-Subgroup.normal_iInf">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-Subgroup.normal_iInf">Subgroup.normal_iInf</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L21">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> normal_iInf
+    {ι : <span class="kw">Type</span>*} {G : <span class="kw">Type</span>*} [Group G] (W : ι → Subgroup G)
+    [∀ i, (W i).Normal] :
+    (⨅ i, W i).Normal <span class="kw">where</span>
+  conj_mem := <span class="kw">by</span>
+    <span class="kw">intro</span> n hn g
+    <span class="kw">rw</span> [Subgroup.mem_iInf] at hn ⊢
+    <span class="kw">intro</span> i
+    <span class="kw">exact</span> (<span class="kw">show</span> (W i).Normal <span class="kw">by</span> infer_instance).conj_mem n (hn i) g</code></pre></section>
+    <section><div class="natural-text"><p>An infimum of normal subgroups is normal.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-Subgroup.isClosed_sup_of_isCompact_of_normal_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-Subgroup.isClosed_sup_of_isCompact_of_normal_right">Subgroup.isClosed_sup_of_isCompact_of_normal_right</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L33">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isClosed_sup_of_isCompact_of_normal_right
+    {G : <span class="kw">Type</span>*} [TopologicalSpace G] [Group G] [IsTopologicalGroup G] [T2Space G]
+    (U V : Subgroup G) [V.Normal]
+    (hU : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature.IsCompact">IsCompact</a> (U : Set G)) (hV : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature.IsCompact">IsCompact</a> (V : Set G)) :
+    IsClosed ((U ⊔ V : Subgroup G) : Set G)</code></pre></section>
+    <section><div class="natural-text"><p>In a Hausdorff topological group, the join of a compact subgroup with a compact normal subgroup is closed.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hmul : Continuous (<span class="kw">fun</span> p : G × G =&gt; p.1 * p.2) :=
+    continuous_fst.mul continuous_snd
+  <span class="kw">have</span> hcompact :
+      <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature.IsCompact">IsCompact</a> ((<span class="kw">fun</span> p : G × G =&gt; p.1 * p.2) &#x27;&#x27; ((U : Set G) ×ˢ (V : Set G))) :=
+    (hU.prod hV).image hmul
+  <span class="kw">have</span> hsup_eq_image :
+      ((U ⊔ V : Subgroup G) : Set G) =
+        (<span class="kw">fun</span> p : G × G =&gt; p.1 * p.2) &#x27;&#x27; ((U : Set G) ×ˢ (V : Set G)) := <span class="kw">by</span>
+    ext g
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hg
+      rcases (Subgroup.mem_sup_of_normal_right (s := U) (t := V)).1 hg <span class="kw">with</span>
+        ⟨u, hu, v, hv, huv⟩
+      <span class="kw">exact</span> ⟨(u, v), ⟨hu, hv⟩, <span class="kw">by</span> <span class="kw">simp</span> only [huv]⟩
+    · rintro ⟨p, hp, <span class="kw">rfl</span>⟩
+      <span class="kw">exact</span> (U ⊔ V).mul_mem
+        ((le_sup_left : U ≤ U ⊔ V) hp.1)
+        ((le_sup_right : V ≤ U ⊔ V) hp.2)
+  simpa [hsup_eq_image] using hcompact.isClosed</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-Subgroup.isClosed_sup_of_normal">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-Subgroup.isClosed_sup_of_normal">Subgroup.isClosed_sup_of_normal</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L60">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isClosed_sup_of_normal
+    {G : <span class="kw">Type</span>*} [TopologicalSpace G] [Group G] [IsTopologicalGroup G] [CompactSpace G]
+    [T2Space G]
+    (U V : Subgroup G) [V.Normal]
+    (hUclosed : IsClosed (U : Set G)) (hVclosed : IsClosed (V : Set G)) :
+    IsClosed ((U ⊔ V : Subgroup G) : Set G)</code></pre></section>
+    <section><div class="natural-text"><p>In a compact Hausdorff topological group, the join of a closed subgroup with a closed normal subgroup is closed.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-Subgroup.isClosed_sup_of_isCompact_of_normal_right">isClosed_sup_of_isCompact_of_normal_right</a> U V hUclosed.isCompact hVclosed.isCompact</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.quotientMapOfLE">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientMapOfLE">ProCGroups.Categorical.quotientMapOfLE</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L78">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientMapOfLE (M N : Subgroup G) [M.Normal] [N.Normal] (hMN : M ≤ N) :
+    G ⧸ M →* G ⧸ N :=
+  QuotientGroup.map M N (MonoidHom.id G) (<span class="kw">by</span>
+    <span class="kw">intro</span> g hg
+    <span class="kw">exact</span> hMN hg)</code></pre></section>
+    <section><div class="natural-text"><p>The quotient map induced by an inclusion of normal subgroups.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientMapOfLE_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientMapOfLE_mk">ProCGroups.Categorical.quotientMapOfLE_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L85">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientMapOfLE_mk (M N : Subgroup G) [M.Normal] [N.Normal]
+    (hMN : M ≤ N) (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a> (G := G) M N hMN (QuotientGroup.mk g) = QuotientGroup.mk g</code></pre></section>
+    <section><div class="natural-text"><p>The quotient map induced by an inclusion sends a coset to its image coset.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+    <span class="kw">let</span> hcomap : M ≤ Subgroup.comap (MonoidHom.id G) N := <span class="kw">by</span>
+      simpa using hMN
+    change QuotientGroup.map M N (MonoidHom.id G) hcomap (QuotientGroup.mk g) = QuotientGroup.mk g
+    <span class="kw">simp</span> only [QuotientGroup.map_mk, MonoidHom.id_apply]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.quotientIInfToCoordinate">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientIInfToCoordinate">ProCGroups.Categorical.quotientIInfToCoordinate</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L95">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientIInfToCoordinate {ι : <span class="kw">Type</span> v} (W : ι → Subgroup G) [∀ i, (W i).Normal]
+    (i : ι) :
+    G ⧸ (⨅ j, W j) →* G ⧸ W i :=
+  <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a> (G := G) (⨅ j, W j) (W i) (iInf_le W i)</code></pre></section>
+    <section><div class="natural-text"><p>Coordinate map from the quotient by an indexed intersection of normal subgroups.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientIInfToCoordinate_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientIInfToCoordinate_mk">ProCGroups.Categorical.quotientIInfToCoordinate_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L100">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientIInfToCoordinate_mk {ι : <span class="kw">Type</span> v}
+    (W : ι → Subgroup G) [∀ i, (W i).Normal] (i : ι) (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientIInfToCoordinate">quotientIInfToCoordinate</a> (G := G) W i (QuotientGroup.mk&#x27; (⨅ j, W j) g) =
+      QuotientGroup.mk&#x27; (W i) g</code></pre></section>
+    <section><div class="natural-text"><p>The map from the quotient by the infimum to a coordinate quotient sends a <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> to its coordinate coset.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientIInfToCoordinate">quotientIInfToCoordinate</a>, QuotientGroup.mk&#x27;_apply, <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE_mk">quotientMapOfLE_mk</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotient_iInf_isLimit_finite">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotient_iInf_isLimit_finite">ProCGroups.Categorical.quotient_iInf_isLimit_finite</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L108">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotient_iInf_isLimit_finite {ι : <span class="kw">Type</span> v} [Fintype ι]
+    (W : ι → Subgroup G) [∀ i, (W i).Normal]
+    {x y : G ⧸ (⨅ i, W i)}
+    (hxy : ∀ i, <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientIInfToCoordinate">quotientIInfToCoordinate</a> (G := G) W i x =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientIInfToCoordinate">quotientIInfToCoordinate</a> (G := G) W i y) :
+    x = y</code></pre></section>
+    <section><div class="natural-text"><p>Quotient classes modulo an indexed intersection are equal when all coordinate quotients are equal. For <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> families this is the extensional core of the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-family quotient pullback.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases QuotientGroup.mk&#x27;_surjective (⨅ i, W i) x <span class="kw">with</span> ⟨gx, <span class="kw">rfl</span>⟩
+  rcases QuotientGroup.mk&#x27;_surjective (⨅ i, W i) y <span class="kw">with</span> ⟨gy, <span class="kw">rfl</span>⟩
+  <span class="kw">apply</span> QuotientGroup.eq.2
+  <span class="kw">rw</span> [Subgroup.mem_iInf]
+  <span class="kw">intro</span> i
+  <span class="kw">have</span> hi := hxy i
+  simpa [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientIInfToCoordinate">quotientIInfToCoordinate</a>] using (QuotientGroup.eq.1 hi)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.ker_quotientMapOfLE_comp_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.ker_quotientMapOfLE_comp_mk">ProCGroups.Categorical.ker_quotientMapOfLE_comp_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L124">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> ker_quotientMapOfLE_comp_mk (M N : Subgroup G) [M.Normal] [N.Normal]
+    (hMN : M ≤ N) :
+    ((<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a> (G := G) M N hMN).comp (QuotientGroup.mk&#x27; M)).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = N</code></pre></section>
+    <section><div class="natural-text"><p>Kernel of the quotient map induced by M \(\le\) N, after precomposition with the quotient map from \(G\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext g
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a>, MonoidHom.mem_ker, MonoidHom.coe_comp, QuotientGroup.coe_mk&#x27;, Function.comp_apply,
+  QuotientGroup.map_mk, MonoidHom.id_apply, QuotientGroup.eq_one_iff]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.quotientInfToLeft">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInfToLeft">ProCGroups.Categorical.quotientInfToLeft</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L132">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientInfToLeft : G ⧸ (U ⊓ V) →* G ⧸ U :=
+  <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a> (G := G) (U ⊓ V) U inf_le_left</code></pre></section>
+    <section><div class="natural-text"><p>The left-hand map in the quotient pullback square.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.quotientInfToRight">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInfToRight">ProCGroups.Categorical.quotientInfToRight</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L136">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientInfToRight : G ⧸ (U ⊓ V) →* G ⧸ V :=
+  <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a> (G := G) (U ⊓ V) V inf_le_right</code></pre></section>
+    <section><div class="natural-text"><p>The right-hand map in the quotient pullback square.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.quotientToSupLeft">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientToSupLeft">ProCGroups.Categorical.quotientToSupLeft</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L140">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientToSupLeft : G ⧸ U →* G ⧸ (U ⊔ V) :=
+  <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a> (G := G) U (U ⊔ V) le_sup_left</code></pre></section>
+    <section><div class="natural-text"><p>The bottom-left map in the quotient pullback square.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.quotientToSupRight">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientToSupRight">ProCGroups.Categorical.quotientToSupRight</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L144">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientToSupRight : G ⧸ V →* G ⧸ (U ⊔ V) :=
+  <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a> (G := G) V (U ⊔ V) le_sup_right</code></pre></section>
+    <section><div class="natural-text"><p>The bottom-right map in the quotient pullback square.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.ker_quotientToSupLeft_comp_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.ker_quotientToSupLeft_comp_mk">ProCGroups.Categorical.ker_quotientToSupLeft_comp_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L148">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> ker_quotientToSupLeft_comp_mk :
+    ((<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a> (G := G) U V).comp (QuotientGroup.mk&#x27; U)).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = U ⊔ V</code></pre></section>
+    <section><div class="natural-text"><p>Kernel of the left quotient-to-<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.TopologicallyCharacteristic.sup">sup</a> map after precomposition with the quotient map from \(G\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a>, <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.ker_quotientMapOfLE_comp_mk">ker_quotientMapOfLE_comp_mk</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.ker_quotientToSupRight_comp_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.ker_quotientToSupRight_comp_mk">ProCGroups.Categorical.ker_quotientToSupRight_comp_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L153">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> ker_quotientToSupRight_comp_mk :
+    ((<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a> (G := G) U V).comp (QuotientGroup.mk&#x27; V)).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> = U ⊔ V</code></pre></section>
+    <section><div class="natural-text"><p>This lemma identifies the kernel of the right quotient-to-<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.TopologicallyCharacteristic.sup">sup</a> map after precomposition with the quotient map from \(G\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a>, <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.ker_quotientMapOfLE_comp_mk">ker_quotientMapOfLE_comp_mk</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.quotientMapOfLECont">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientMapOfLECont">ProCGroups.Categorical.quotientMapOfLECont</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L158">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientMapOfLECont
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G]
+    (M N : Subgroup G) [M.Normal] [N.Normal] (hMN : M ≤ N) :
+    G ⧸ M →ₜ* G ⧸ N :=
+  QuotientGroup.mapₜ M N (ContinuousMonoidHom.id G) (<span class="kw">by</span>
+    <span class="kw">intro</span> g hg
+    <span class="kw">exact</span> hMN hg)</code></pre></section>
+    <section><div class="natural-text"><p>The quotient map induced by an inclusion of normal subgroups is viewed as continuous.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientMapOfLECont_toMonoidHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientMapOfLECont_toMonoidHom">ProCGroups.Categorical.quotientMapOfLECont_toMonoidHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L167">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientMapOfLECont_toMonoidHom
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G]
+    (M N : Subgroup G) [M.Normal] [N.Normal] (hMN : M ≤ N) :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont">quotientMapOfLECont</a> (G := G) M N hMN).toMonoidHom =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a> (G := G) M N hMN</code></pre></section>
+    <section><div class="natural-text"><p>The quotient map sends the class of an element to the class of its image under the underlying group homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+    ext g
+    change <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont">quotientMapOfLECont</a> (G := G) M N hMN (QuotientGroup.mk&#x27; M g) =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a> (G := G) M N hMN (QuotientGroup.mk&#x27; M g)
+    simpa [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont">quotientMapOfLECont</a>, <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLE">quotientMapOfLE</a>] using
+      (QuotientGroup.mapₜ_apply_mk
+        (N := M) (M := N) (f := ContinuousMonoidHom.id G)
+        (hNM := <span class="kw">by</span>
+          <span class="kw">intro</span> g hg
+          <span class="kw">exact</span> hMN hg) g)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientMapOfLECont_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientMapOfLECont_mk">ProCGroups.Categorical.quotientMapOfLECont_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L184">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientMapOfLECont_mk
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G]
+    (M N : Subgroup G) [M.Normal] [N.Normal] (hMN : M ≤ N) (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont">quotientMapOfLECont</a> (G := G) M N hMN (QuotientGroup.mk g) = QuotientGroup.mk g</code></pre></section>
+    <section><div class="natural-text"><p>Evaluation of the continuous quotient map induced by inclusion on a quotient class.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont">quotientMapOfLECont</a> (G := G) M N hMN (QuotientGroup.mk&#x27; M g) =
+    QuotientGroup.mk&#x27; N g
+  simpa [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont">quotientMapOfLECont</a>] using
+    (QuotientGroup.mapₜ_apply_mk
+      (N := M) (M := N) (f := ContinuousMonoidHom.id G)
+      (hNM := <span class="kw">by</span>
+        <span class="kw">intro</span> g hg
+        <span class="kw">exact</span> hMN hg) g)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.quotientInfToPullback">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInfToPullback">ProCGroups.Categorical.quotientInfToPullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L199">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> quotientInfToPullback :
+    G ⧸ (U ⊓ V) →*
+      FiberProduct.carrier (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a> (G := G) U V) (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a> (G := G) U V) := <span class="kw">by</span>
+  refine FiberProduct.lift
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToLeft">quotientInfToLeft</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToRight">quotientInfToRight</a> (G := G) U V) ?_
+  <span class="kw">intro</span> x
+  refine Quotient.inductionOn x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The canonical map from \(G/(U \cap V)\) to the concrete pullback of \(G/U\) and \(G/V\) over \(G/(UV)\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientInfToPullback_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInfToPullback_mk">ProCGroups.Categorical.quotientInfToPullback_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L213">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfToPullback_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V (QuotientGroup.mk g) =
+      ⟨(QuotientGroup.mk g, QuotientGroup.mk g), <span class="kw">rfl</span>⟩</code></pre></section>
+    <section><div class="natural-text"><p>The quotient-to-pullback map sends a coset to the corresponding pair of quotient cosets.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackFst_quotientInfToPullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackFst_quotientInfToPullback">ProCGroups.Categorical.pullbackFst_quotientInfToPullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L219">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackFst_quotientInfToPullback :
+    (FiberProduct.fst _ _).comp
+        (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V) =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToLeft">quotientInfToLeft</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>The first projection of the quotient-to-pullback map is the natural quotient map to \(G/U\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> MonoidHom.ext
+  <span class="kw">intro</span> x
+  refine Quotient.inductionOn&#x27; x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.pullbackSnd_quotientInfToPullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.pullbackSnd_quotientInfToPullback">ProCGroups.Categorical.pullbackSnd_quotientInfToPullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L230">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackSnd_quotientInfToPullback :
+    (FiberProduct.snd _ _).comp
+        (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V) =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToRight">quotientInfToRight</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>The second projection of the quotient-to-pullback map is the natural quotient map to \(G/V\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> MonoidHom.ext
+  <span class="kw">intro</span> x
+  refine Quotient.inductionOn&#x27; x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientInfToPullback_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInfToPullback_injective">ProCGroups.Categorical.quotientInfToPullback_injective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L241">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientInfToPullback_injective :
+    Function.Injective (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical map from \(G/(U \cap V)\) to the pullback of \(G/U\) and \(G/V\) over \(G/(UV)\) is injective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x y hxy
+  revert hxy
+  refine Quotient.inductionOn₂&#x27; x y ?_
+  <span class="kw">intro</span> g h hEq
+  <span class="kw">apply</span> QuotientGroup.eq.2
+  <span class="kw">have</span> hU :
+      QuotientGroup.mk&#x27; U g = QuotientGroup.mk&#x27; U h := <span class="kw">by</span>
+    simpa [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback_mk">quotientInfToPullback_mk</a>] using
+      congrArg (<span class="kw">fun</span> z =&gt; FiberProduct.fst _ _ z) hEq
+  <span class="kw">have</span> hV :
+      QuotientGroup.mk&#x27; V g = QuotientGroup.mk&#x27; V h := <span class="kw">by</span>
+    simpa [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback_mk">quotientInfToPullback_mk</a>] using
+      congrArg (<span class="kw">fun</span> z =&gt; FiberProduct.snd _ _ z) hEq
+  <span class="kw">exact</span> ⟨QuotientGroup.eq.1 hU, QuotientGroup.eq.1 hV⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientInfToPullback_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInfToPullback_surjective">ProCGroups.Categorical.quotientInfToPullback_surjective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L259">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientInfToPullback_surjective :
+    Function.Surjective (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical map from the quotient by \(U \cap V\) to the pullback of the quotients by \(U\) and \(V\) is surjective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x
+  rcases QuotientGroup.mk&#x27;_surjective U x.1.1 <span class="kw">with</span> ⟨a, ha⟩
+  rcases QuotientGroup.mk&#x27;_surjective V x.1.2 <span class="kw">with</span> ⟨b, hb⟩
+  <span class="kw">have</span> hsup :
+      QuotientGroup.mk&#x27; (U ⊔ V) a = QuotientGroup.mk&#x27; (U ⊔ V) b := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      QuotientGroup.mk&#x27; (U ⊔ V) a =
+          <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a> (G := G) U V x.1.1 := <span class="kw">by</span>
+            <span class="kw">rw</span> [← ha]
+            <span class="kw">rfl</span>
+      _ = <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a> (G := G) U V x.1.2 := x.2
+      _ = QuotientGroup.mk&#x27; (U ⊔ V) b := <span class="kw">by</span>
+            <span class="kw">rw</span> [← hb]
+            <span class="kw">rfl</span>
+  <span class="kw">have</span> hab : a⁻¹ * b ∈ U ⊔ V := QuotientGroup.eq.1 hsup
+  rcases (Subgroup.mem_sup_of_normal_right (s := U) (t := V)).1 hab <span class="kw">with</span>
+    ⟨u, hu, v, hv, huv⟩
+  <span class="kw">have</span> hb_eq : b = (a * u) * v := <span class="kw">by</span>
+    <span class="kw">calc</span>
+      b = a * (a⁻¹ * b) := <span class="kw">by</span> <span class="kw">simp</span> only [mul_inv_cancel_left]
+      _ = a * (u * v) := <span class="kw">by</span> <span class="kw">rw</span> [← huv]
+      _ = (a * u) * v := <span class="kw">by</span> <span class="kw">simp</span> only [mul_assoc]
+  <span class="kw">have</span> hU : QuotientGroup.mk&#x27; U (a * u) = QuotientGroup.mk&#x27; U a := <span class="kw">by</span>
+    symm
+    <span class="kw">apply</span> QuotientGroup.eq.2
+    <span class="kw">have</span> hmem : a⁻¹ * (a * u) = u := <span class="kw">by</span> <span class="kw">simp</span> only [inv_mul_cancel_left]
+    simpa [hmem] using hu
+  <span class="kw">have</span> hV : QuotientGroup.mk&#x27; V (a * u) = QuotientGroup.mk&#x27; V b := <span class="kw">by</span>
+    <span class="kw">apply</span> QuotientGroup.eq.2
+    <span class="kw">have</span> hmem : (a * u)⁻¹ * b = v := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        (a * u)⁻¹ * b = (a * u)⁻¹ * ((a * u) * v) := <span class="kw">by</span> <span class="kw">rw</span> [hb_eq]
+        _ = v := <span class="kw">by</span> <span class="kw">simp</span> only [mul_inv_rev, mul_assoc, inv_mul_cancel_left]
+    <span class="kw">rw</span> [hmem]
+    <span class="kw">exact</span> hv
+  refine ⟨QuotientGroup.mk&#x27; (U ⊓ V) (a * u), ?_⟩
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">apply</span> Prod.ext
+  · <span class="kw">calc</span>
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V
+          (QuotientGroup.mk&#x27; (U ⊓ V) (a * u))).1.1 =
+          QuotientGroup.mk&#x27; U (a * u) := <span class="kw">rfl</span>
+      _ = QuotientGroup.mk&#x27; U a := hU
+      _ = x.1.1 := ha
+  · <span class="kw">calc</span>
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V
+          (QuotientGroup.mk&#x27; (U ⊓ V) (a * u))).1.2 =
+          QuotientGroup.mk&#x27; V (a * u) := <span class="kw">rfl</span>
+      _ = QuotientGroup.mk&#x27; V b := hV
+      _ = x.1.2 := hb</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientInfToPullback_bijective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInfToPullback_bijective">ProCGroups.Categorical.quotientInfToPullback_bijective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L313">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientInfToPullback_bijective :
+    Function.Bijective (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical quotient-to-pullback map is bijective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> ⟨<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback_injective">quotientInfToPullback_injective</a> (G := G) U V,
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback_surjective">quotientInfToPullback_surjective</a> (G := G) U V⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Categorical.quotientInfPullbackEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInfPullbackEquiv">ProCGroups.Categorical.quotientInfPullbackEquiv</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L319">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> quotientInfPullbackEquiv :
+    G ⧸ (U ⊓ V) ≃*
+      FiberProduct.carrier (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a> (G := G) U V) (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a> (G := G) U V) :=
+  MulEquiv.ofBijective (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback_bijective">quotientInfToPullback_bijective</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>The quotient square is canonically isomorphic to the pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientInfPullbackEquiv_fst">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInfPullbackEquiv_fst">ProCGroups.Categorical.quotientInfPullbackEquiv_fst</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L326">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfPullbackEquiv_fst :
+    (FiberProduct.fst _ _).comp (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfPullbackEquiv">quotientInfPullbackEquiv</a> (G := G) U V).toMonoidHom =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToLeft">quotientInfToLeft</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>The first coordinate of the quotient pullback equivalence is the natural map to \(G/U\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change (FiberProduct.fst _ _).comp (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V) =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToLeft">quotientInfToLeft</a> (G := G) U V
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.pullbackFst_quotientInfToPullback">pullbackFst_quotientInfToPullback</a> (G := G) U V</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientInfPullbackEquiv_snd">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInfPullbackEquiv_snd">ProCGroups.Categorical.quotientInfPullbackEquiv_snd</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L334">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfPullbackEquiv_snd :
+    (FiberProduct.snd _ _).comp (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfPullbackEquiv">quotientInfPullbackEquiv</a> (G := G) U V).toMonoidHom =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToRight">quotientInfToRight</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>The second coordinate of the quotient pullback equivalence is the natural map to \(G/V\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change (FiberProduct.snd _ _).comp (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V) =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToRight">quotientInfToRight</a> (G := G) U V
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.pullbackSnd_quotientInfToPullback">pullbackSnd_quotientInfToPullback</a> (G := G) U V</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.quotientInf_isPullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.quotientInf_isPullback">ProCGroups.Categorical.quotientInf_isPullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L342">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientInf_isPullback :
+    IsPullbackSquare
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToLeft">quotientInfToLeft</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToRight">quotientInfToRight</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>The quotient square is a pullback square.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/AlgebraicPullbacks.html#decl-ProCGroups.Categorical.isPullbackSquare_of_bijective_toConcretePullback">isPullbackSquare_of_bijective_toConcretePullback</a>
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToLeft">quotientInfToLeft</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToRight">quotientInfToRight</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback_bijective">quotientInfToPullback_bijective</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.pullbackFst_quotientInfToPullback">pullbackFst_quotientInfToPullback</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.pullbackSnd_quotientInfToPullback">pullbackSnd_quotientInfToPullback</a> (G := G) U V)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Categorical.isClosed_sup_of_normal">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Categorical.isClosed_sup_of_normal">ProCGroups.Categorical.isClosed_sup_of_normal</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L369">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isClosed_sup_of_normal
+    (hG : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G)
+    (hUclosed : IsClosed (U : Set G)) (hVclosed : IsClosed (V : Set G)) :
+    IsClosed ((U ⊔ V : Subgroup G) : Set G)</code></pre></section>
+    <section><div class="natural-text"><p>In a profinite group, the join of two closed normal subgroups is closed. This is the compactness input needed for the lower-right quotient in the quotient-pullback square.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : CompactSpace G := IsProfiniteGroup.compactSpace hG
+  letI : T2Space G := IsProfiniteGroup.t2Space hG
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-Subgroup.isClosed_sup_of_normal">Subgroup.isClosed_sup_of_normal</a> U V hUclosed hVclosed</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.quotientInfToLeftCont">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToLeftCont">ProCGroups.quotientInfToLeftCont</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L380">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientInfToLeftCont : G ⧸ (U ⊓ V) →ₜ* G ⧸ U :=
+  <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont">quotientMapOfLECont</a> (G := G) (U ⊓ V) U inf_le_left</code></pre></section>
+    <section><div class="natural-text"><p>The left map in the continuous quotient square.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.quotientInfToRightCont">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToRightCont">ProCGroups.quotientInfToRightCont</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L384">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientInfToRightCont : G ⧸ (U ⊓ V) →ₜ* G ⧸ V :=
+  <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont">quotientMapOfLECont</a> (G := G) (U ⊓ V) V inf_le_right</code></pre></section>
+    <section><div class="natural-text"><p>The right map in the continuous quotient square.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.quotientToSupLeftCont">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientToSupLeftCont">ProCGroups.quotientToSupLeftCont</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L388">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientToSupLeftCont : G ⧸ U →ₜ* G ⧸ (U ⊔ V) :=
+  <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont">quotientMapOfLECont</a> (G := G) U (U ⊔ V) le_sup_left</code></pre></section>
+    <section><div class="natural-text"><p>The bottom-left map in the continuous quotient square.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.quotientToSupRightCont">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientToSupRightCont">ProCGroups.quotientToSupRightCont</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L392">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientToSupRightCont : G ⧸ V →ₜ* G ⧸ (U ⊔ V) :=
+  <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont">quotientMapOfLECont</a> (G := G) V (U ⊔ V) le_sup_right</code></pre></section>
+    <section><div class="natural-text"><p>The bottom-right map in the continuous quotient square.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfToLeftCont_toMonoidHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToLeftCont_toMonoidHom">ProCGroups.quotientInfToLeftCont_toMonoidHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L397">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfToLeftCont_toMonoidHom :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToLeftCont">quotientInfToLeftCont</a> (G := G) U V).toMonoidHom = <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToLeft">quotientInfToLeft</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>Forgetting continuity from the left continuous quotient-square map recovers the algebraic map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfToRightCont_toMonoidHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToRightCont_toMonoidHom">ProCGroups.quotientInfToRightCont_toMonoidHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L403">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfToRightCont_toMonoidHom :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToRightCont">quotientInfToRightCont</a> (G := G) U V).toMonoidHom = <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToRight">quotientInfToRight</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>Forgetting continuity from the right continuous quotient-square map recovers the underlying algebraic map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientToSupLeftCont_toMonoidHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientToSupLeftCont_toMonoidHom">ProCGroups.quotientToSupLeftCont_toMonoidHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L409">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientToSupLeftCont_toMonoidHom :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V).toMonoidHom = <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>Forgetting continuity from the lower-left continuous quotient-square map recovers the algebraic map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientToSupRightCont_toMonoidHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientToSupRightCont_toMonoidHom">ProCGroups.quotientToSupRightCont_toMonoidHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L415">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientToSupRightCont_toMonoidHom :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V).toMonoidHom = <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>Forgetting continuity from the lower-right continuous quotient-square map recovers the algebraic map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfToLeftCont_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToLeftCont_mk">ProCGroups.quotientInfToLeftCont_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L420">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfToLeftCont_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToLeftCont">quotientInfToLeftCont</a> (G := G) U V (QuotientGroup.mk g) = QuotientGroup.mk g</code></pre></section>
+    <section><div class="natural-text"><p>Evaluation of the left continuous quotient-square map on a quotient class.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToLeftCont">quotientInfToLeftCont</a>, <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont_mk">quotientMapOfLECont_mk</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfToRightCont_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToRightCont_mk">ProCGroups.quotientInfToRightCont_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L425">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfToRightCont_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToRightCont">quotientInfToRightCont</a> (G := G) U V (QuotientGroup.mk g) = QuotientGroup.mk g</code></pre></section>
+    <section><div class="natural-text"><p>Evaluation of the right continuous quotient-square map on a quotient class.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToRightCont">quotientInfToRightCont</a>, <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont_mk">quotientMapOfLECont_mk</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientToSupLeftCont_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientToSupLeftCont_mk">ProCGroups.quotientToSupLeftCont_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L430">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientToSupLeftCont_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V (QuotientGroup.mk g) = QuotientGroup.mk g</code></pre></section>
+    <section><div class="natural-text"><p>Evaluation of the lower-left continuous quotient-square map on a quotient class.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a>, <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont_mk">quotientMapOfLECont_mk</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientToSupRightCont_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientToSupRightCont_mk">ProCGroups.quotientToSupRightCont_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L435">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientToSupRightCont_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V (QuotientGroup.mk g) = QuotientGroup.mk g</code></pre></section>
+    <section><div class="natural-text"><p>Evaluation of the lower-right continuous quotient-square map on a quotient class.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a>, <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientMapOfLECont_mk">quotientMapOfLECont_mk</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.quotientInfToContinuousPullback">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToContinuousPullback">ProCGroups.quotientInfToContinuousPullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L443">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientInfToContinuousPullback :
+    G ⧸ (U ⊓ V) →ₜ*
+      TopologicalFiberProduct.carrier (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V) (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V) := <span class="kw">by</span>
+  refine TopologicalFiberProduct.lift
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToLeftCont">quotientInfToLeftCont</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToRightCont">quotientInfToRightCont</a> (G := G) U V) ?_
+  <span class="kw">intro</span> x
+  refine Quotient.inductionOn x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The canonical continuous map from \(G/(U \cap V)\) to the concrete continuous pullback of \(G/U\) and \(G/V\) over \(G/(UV)\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfToContinuousPullback_toMonoidHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToContinuousPullback_toMonoidHom">ProCGroups.quotientInfToContinuousPullback_toMonoidHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L460">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfToContinuousPullback_toMonoidHom :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V).toMonoidHom =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>Forgetting continuity from the continuous quotient-to-pullback map recovers the algebraic one.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> MonoidHom.ext
+  <span class="kw">intro</span> x
+  refine Quotient.inductionOn&#x27; x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">exact</span> Subtype.ext &lt;| Prod.ext <span class="kw">rfl</span> <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfToContinuousPullback_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToContinuousPullback_mk">ProCGroups.quotientInfToContinuousPullback_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L471">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfToContinuousPullback_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V (QuotientGroup.mk g) =
+      ⟨(QuotientGroup.mk g, QuotientGroup.mk g), <span class="kw">rfl</span>⟩</code></pre></section>
+    <section><div class="natural-text"><p>The quotient-to-continuous-pullback map sends a coset to the corresponding continuous pullback pair.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.pullbackFstCont_quotientInfToContinuousPullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.pullbackFstCont_quotientInfToContinuousPullback">ProCGroups.pullbackFstCont_quotientInfToContinuousPullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L479">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackFstCont_quotientInfToContinuousPullback :
+    (TopologicalFiberProduct.fst _ _).comp (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V) =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToLeftCont">quotientInfToLeftCont</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>The first projection of the continuous quotient-to-pullback map is the natural quotient map to \(G/U\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> ContinuousMonoidHom.ext
+  <span class="kw">intro</span> x
+  refine Quotient.inductionOn&#x27; x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.pullbackSndCont_quotientInfToContinuousPullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.pullbackSndCont_quotientInfToContinuousPullback">ProCGroups.pullbackSndCont_quotientInfToContinuousPullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L491">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> pullbackSndCont_quotientInfToContinuousPullback :
+    (TopologicalFiberProduct.snd _ _).comp (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V) =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToRightCont">quotientInfToRightCont</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>The second projection of the continuous quotient-to-pullback map is the natural quotient map to \(G/V\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> ContinuousMonoidHom.ext
+  <span class="kw">intro</span> x
+  refine Quotient.inductionOn&#x27; x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfToContinuousPullback_injective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToContinuousPullback_injective">ProCGroups.quotientInfToContinuousPullback_injective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L502">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientInfToContinuousPullback_injective :
+    Function.Injective (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>Injectivity of the continuous quotient-to-pullback map on the underlying groups.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x y hxy
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback_injective">quotientInfToPullback_injective</a> (G := G) U V &lt;| <span class="kw">by</span>
+    simpa using hxy</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfToContinuousPullback_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToContinuousPullback_surjective">ProCGroups.quotientInfToContinuousPullback_surjective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L510">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientInfToContinuousPullback_surjective :
+    Function.Surjective (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>Surjectivity of the continuous quotient-to-pullback map on the underlying groups.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x
+  rcases <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback_surjective">quotientInfToPullback_surjective</a> (G := G) U V x <span class="kw">with</span> ⟨y, hy⟩
+  refine ⟨y, ?_⟩
+  simpa using hy</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfToContinuousPullback_bijective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfToContinuousPullback_bijective">ProCGroups.quotientInfToContinuousPullback_bijective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L519">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientInfToContinuousPullback_bijective :
+    Function.Bijective (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>The continuous quotient-to-pullback map is bijective on the underlying groups.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> ⟨<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback_injective">quotientInfToContinuousPullback_injective</a> (G := G) U V,
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback_surjective">quotientInfToContinuousPullback_surjective</a> (G := G) U V⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.quotientInfContinuousPullbackEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfContinuousPullbackEquiv">ProCGroups.quotientInfContinuousPullbackEquiv</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L525">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> quotientInfContinuousPullbackEquiv
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G]
+    (hUclosed : IsClosed (U : Set G)) (hVclosed : IsClosed (V : Set G)) :
+    G ⧸ (U ⊓ V) ≃ₜ*
+      TopologicalFiberProduct.carrier (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V) (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V) := <span class="kw">by</span>
+  <span class="kw">let</span> hG : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G :=
+    ⟨inferInstance, inferInstance, inferInstance, inferInstance⟩
+  <span class="kw">let</span> hInfClosed : IsClosed (((U ⊓ V : Subgroup G) : Set G)) := hUclosed.inter hVclosed
+  <span class="kw">let</span> hSupClosed : IsClosed (((U ⊔ V : Subgroup G) : Set G)) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-Subgroup.isClosed_sup_of_normal">Subgroup.isClosed_sup_of_normal</a> U V hUclosed hVclosed
+  <span class="kw">let</span> hQuotInf : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (G ⧸ (U ⊓ V)) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html#decl-ProCGroups.Generation.isProfinite_quotient_closedNormal">ProCGroups.Generation.isProfinite_quotient_closedNormal</a> (G := G) hG hInfClosed
+  <span class="kw">let</span> hQuotU : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (G ⧸ U) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html#decl-ProCGroups.Generation.isProfinite_quotient_closedNormal">ProCGroups.Generation.isProfinite_quotient_closedNormal</a> (G := G) hG hUclosed
+  <span class="kw">let</span> hQuotV : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (G ⧸ V) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html#decl-ProCGroups.Generation.isProfinite_quotient_closedNormal">ProCGroups.Generation.isProfinite_quotient_closedNormal</a> (G := G) hG hVclosed
+  <span class="kw">let</span> hQuotSup : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> (G ⧸ (U ⊔ V)) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html#decl-ProCGroups.Generation.isProfinite_quotient_closedNormal">ProCGroups.Generation.isProfinite_quotient_closedNormal</a> (G := G) hG hSupClosed
+  <span class="kw">let</span> hPull :
+      <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a>
+        (TopologicalFiberProduct.carrier (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V) (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V)) :=
+    TopologicalFiberProduct.isProfiniteGroup
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V)
+      hQuotU hQuotV hQuotSup
+  letI : CompactSpace (G ⧸ (U ⊓ V)) := IsProfiniteGroup.compactSpace hQuotInf
+  letI : T2Space
+      (TopologicalFiberProduct.carrier (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V) (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V)) :=
+    IsProfiniteGroup.t2Space hPull
+  <span class="kw">exact</span> ContinuousMulEquiv.ofBijectiveCompactToT2
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V).continuous_toFun
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback_bijective">quotientInfToContinuousPullback_bijective</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>The quotient square is canonically isomorphic to the concrete profinite pullback.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfContinuousPullbackEquiv_toContinuousMonoidHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfContinuousPullbackEquiv_toContinuousMonoidHom">ProCGroups.quotientInfContinuousPullbackEquiv_toContinuousMonoidHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L561">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfContinuousPullbackEquiv_toContinuousMonoidHom
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G]
+    (hUclosed : IsClosed (U : Set G)) (hVclosed : IsClosed (V : Set G)) :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfContinuousPullbackEquiv">quotientInfContinuousPullbackEquiv</a>
+        (G := G) (U := U) (V := V) hUclosed hVclosed).toContinuousMonoidHom =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>The quotient pullback equivalence is induced by the canonical <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> ContinuousMonoidHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">exact</span> Subtype.ext &lt;| Prod.ext <span class="kw">rfl</span> <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfContinuousPullbackEquiv_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfContinuousPullbackEquiv_mk">ProCGroups.quotientInfContinuousPullbackEquiv_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L573">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfContinuousPullbackEquiv_mk
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G]
+    (hUclosed : IsClosed (U : Set G)) (hVclosed : IsClosed (V : Set G)) (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfContinuousPullbackEquiv">quotientInfContinuousPullbackEquiv</a> (G := G) (U := U) (V := V) hUclosed hVclosed
+      (QuotientGroup.mk g) = ⟨(QuotientGroup.mk g, QuotientGroup.mk g), <span class="kw">rfl</span>⟩</code></pre></section>
+    <section><div class="natural-text"><p>The continuous pullback equivalence sends a quotient coset to the corresponding pullback pair.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback">quotientInfToContinuousPullback</a> (G := G) U V (QuotientGroup.mk g) = _
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToContinuousPullback_mk">quotientInfToContinuousPullback_mk</a> (G := G) U V g</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfContinuousPullbackEquiv_fst">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfContinuousPullbackEquiv_fst">ProCGroups.quotientInfContinuousPullbackEquiv_fst</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L584">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfContinuousPullbackEquiv_fst
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G]
+    (hUclosed : IsClosed (U : Set G)) (hVclosed : IsClosed (V : Set G)) :
+    (TopologicalFiberProduct.fst _ _).comp
+        (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfContinuousPullbackEquiv">quotientInfContinuousPullbackEquiv</a>
+          (G := G) (U := U) (V := V) hUclosed hVclosed).toContinuousMonoidHom =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToLeftCont">quotientInfToLeftCont</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>The first coordinate of the continuous quotient pullback equivalence is the natural map to \(G/U\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfContinuousPullbackEquiv_toContinuousMonoidHom">quotientInfContinuousPullbackEquiv_toContinuousMonoidHom</a>
+    (G := G) (U := U) (V := V) hUclosed hVclosed]
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.pullbackFstCont_quotientInfToContinuousPullback">pullbackFstCont_quotientInfToContinuousPullback</a> (G := G) U V</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInfContinuousPullbackEquiv_snd">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInfContinuousPullbackEquiv_snd">ProCGroups.quotientInfContinuousPullbackEquiv_snd</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L598">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientInfContinuousPullbackEquiv_snd
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G]
+    (hUclosed : IsClosed (U : Set G)) (hVclosed : IsClosed (V : Set G)) :
+    (TopologicalFiberProduct.snd _ _).comp
+        (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfContinuousPullbackEquiv">quotientInfContinuousPullbackEquiv</a>
+          (G := G) (U := U) (V := V) hUclosed hVclosed).toContinuousMonoidHom =
+      <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToRightCont">quotientInfToRightCont</a> (G := G) U V</code></pre></section>
+    <section><div class="natural-text"><p>The second coordinate of the continuous quotient pullback equivalence is the natural map to \(G/V\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfContinuousPullbackEquiv_toContinuousMonoidHom">quotientInfContinuousPullbackEquiv_toContinuousMonoidHom</a>
+    (G := G) (U := U) (V := V) hUclosed hVclosed]
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.pullbackSndCont_quotientInfToContinuousPullback">pullbackSndCont_quotientInfToContinuousPullback</a> (G := G) U V</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.quotientInf_hasProfiniteTestPullbackProperty">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.quotientInf_hasProfiniteTestPullbackProperty">ProCGroups.quotientInf_hasProfiniteTestPullbackProperty</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L610">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientInf_hasProfiniteTestPullbackProperty
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G]
+    (hUclosed : IsClosed (U : Set G)) (hVclosed : IsClosed (V : Set G)) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a>
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToLeftCont">quotientInfToLeftCont</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToRightCont">quotientInfToRightCont</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>The quotient square is a pullback square in the category of profinite groups.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.hasProfiniteTestPullbackProperty_of_equiv_toConcretePullback">hasProfiniteTestPullbackProperty_of_equiv_toConcretePullback</a>
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToLeftCont">quotientInfToLeftCont</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToRightCont">quotientInfToRightCont</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfContinuousPullbackEquiv">quotientInfContinuousPullbackEquiv</a> (G := G) (U := U) (V := V) hUclosed hVclosed)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfContinuousPullbackEquiv_fst">quotientInfContinuousPullbackEquiv_fst</a> (G := G) (U := U) (V := V) hUclosed hVclosed)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfContinuousPullbackEquiv_snd">quotientInfContinuousPullbackEquiv_snd</a> (G := G) (U := U) (V := V) hUclosed hVclosed)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.QuotientPullback.infToLeft_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.QuotientPullback.infToLeft_mk">ProCGroups.QuotientPullback.infToLeft_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L630">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> infToLeft_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToLeft">quotientInfToLeft</a> (G := G) U V (QuotientGroup.mk g) = QuotientGroup.mk g</code></pre></section>
+    <section><div class="natural-text"><p>The map from the infimum quotient to the left quotient sends a coset to its left coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.QuotientPullback.infToRight_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.QuotientPullback.infToRight_mk">ProCGroups.QuotientPullback.infToRight_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L635">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> infToRight_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToRight">quotientInfToRight</a> (G := G) U V (QuotientGroup.mk g) = QuotientGroup.mk g</code></pre></section>
+    <section><div class="natural-text"><p>The map from the infimum quotient to the right quotient sends a coset to its right coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.QuotientPullback.leftToSup_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.QuotientPullback.leftToSup_mk">ProCGroups.QuotientPullback.leftToSup_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L640">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> leftToSup_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a> (G := G) U V (QuotientGroup.mk g) = QuotientGroup.mk g</code></pre></section>
+    <section><div class="natural-text"><p>The map from the left quotient to the supremum quotient sends a coset to its image in the larger quotient.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.QuotientPullback.rightToSup_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.QuotientPullback.rightToSup_mk">ProCGroups.QuotientPullback.rightToSup_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L645">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> rightToSup_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a> (G := G) U V (QuotientGroup.mk g) = QuotientGroup.mk g</code></pre></section>
+    <section><div class="natural-text"><p>The map from the right quotient to the supremum quotient sends a coset to its image in the larger quotient.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.QuotientPullback.comparison_apply_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.QuotientPullback.comparison_apply_mk">ProCGroups.QuotientPullback.comparison_apply_mk</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L650">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> comparison_apply_mk (g : G) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V (QuotientGroup.mk g) =
+      ⟨(QuotientGroup.mk g, QuotientGroup.mk g), <span class="kw">rfl</span>⟩</code></pre></section>
+    <section><div class="natural-text"><p>The pullback <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map sends a quotient <a class="decl-ref" href="../../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> to the corresponding pullback pair.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback_mk">quotientInfToPullback_mk</a> (G := G) U V g</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.QuotientPullback.comparison_bijective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.QuotientPullback.comparison_bijective">ProCGroups.QuotientPullback.comparison_bijective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L656">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> comparison_bijective :
+    Function.Bijective (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback">quotientInfToPullback</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>The quotient-pullback <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> map is bijective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToPullback_bijective">quotientInfToPullback_bijective</a> (G := G) U V</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the corresponding <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage, relator-set, or <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> construction. The claim follows by reading off the defining projection, relator family, deletion/replacement data, or inclusion map and checking the stated compatibility field.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.QuotientPullback.isPullback">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.QuotientPullback.isPullback">ProCGroups.QuotientPullback.isPullback</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L662">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isPullback :
+    IsPullbackSquare
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToLeft">quotientInfToLeft</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInfToRight">quotientInfToRight</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupLeft">quotientToSupLeft</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientToSupRight">quotientToSupRight</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>Namespaced form of the algebraic quotient-pullback theorem.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.Categorical.quotientInf_isPullback">quotientInf_isPullback</a> (G := G) (U := U) (V := V)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.QuotientPullback.hasProfiniteTestPullbackProperty">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.QuotientPullback.hasProfiniteTestPullbackProperty">ProCGroups.QuotientPullback.hasProfiniteTestPullbackProperty</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Categorical/QuotientPullbackEquivalences.html#L670">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hasProfiniteTestPullbackProperty
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G]
+    (hUclosed : IsClosed (U : Set G)) (hVclosed : IsClosed (V : Set G)) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Categorical/ProfinitePullbacks.html#decl-ProCGroups.Categorical.HasProfiniteTestPullbackProperty">HasProfiniteTestPullbackProperty</a>
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToLeftCont">quotientInfToLeftCont</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInfToRightCont">quotientInfToRightCont</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupLeftCont">quotientToSupLeftCont</a> (G := G) U V)
+      (<a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientToSupRightCont">quotientToSupRightCont</a> (G := G) U V)</code></pre></section>
+    <section><div class="natural-text"><p>A topological pullback square has the restricted profinite-source test property.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><a class="decl-ref" href="../../../library/ProCGroups/Categorical/QuotientPullbackEquivalences.html#decl-ProCGroups.quotientInf_hasProfiniteTestPullbackProperty">quotientInf_hasProfiniteTestPullbackProperty</a> (G := G) (U := U) (V := V) hUclosed hVclosed</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the topological fiber product as the closed subspace of the product cut out by equality of the two continuous maps. The coordinate projections are continuous, the universal map into the fiber product is continuous because its product map is continuous and its image satisfies the pullback equation, and uniqueness follows from coordinate extensionality. Profinite and closedness claims follow from closed subspaces of compact Hausdorff profinite products.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Categorical.QuotientPullbackEquivalences"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

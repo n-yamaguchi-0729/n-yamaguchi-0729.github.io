@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.InverseSystems.StagewiseIso | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.InverseSystems.StagewiseIso</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/InverseSystems.html">InverseSystems</a><span class="sep">/</span><span>StagewiseIso</span></div>
+      <h1 class="module-title">ProCGroups.InverseSystems.StagewiseIso</h1>
+      <div class="module-meta">2 Theorem | 5 Definition | 1 Structure</div>
+      <div class="module-overview"><p>This module supplies the topological part of the construction. It checks continuity and stagewise neighborhood properties so that the completed object inherits the required topology.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html">ProCGroups.InverseSystems.CompatibilityAndSurjectivity</a></li><li><a href="../../../library/ProCGroups/Topologies/ContinuousMulEquiv.html">ProCGroups.Topologies.ContinuousMulEquiv</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html">ProCGroups.Abelian.TopologicalAbelianizationLimits</a></li><li><a href="../../../library/ProCGroups/InverseSystems.html">ProCGroups.InverseSystems</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl structure" id="decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso">ProCGroups.InverseSystems.InverseSystem.InverseSystemIso</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/StagewiseIso.html#L36">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> InverseSystemIso <span class="kw">where</span>
+  stageEquiv : ∀ i, S.X i ≃ₜ* T.X i
+  comm : ∀ {i j : I} (hij : i ≤ j) (x : S.X j),
+    stageEquiv i (S.map hij x) = T.map hij (stageEquiv j x)</code></pre></section>
+    <section><div class="natural-text"><p>A <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family of stagewise continuous group isomorphisms between two concrete inverse systems.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.toMorphism">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.toMorphism">ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.toMorphism</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/StagewiseIso.html#L47">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> toMorphism (E : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso">InverseSystemIso</a> S T) : S.Morphism T <span class="kw">where</span>
+  map i := E.stageEquiv i
+  continuous_map i := (E.stageEquiv i).continuous_toFun
+  comm := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext x
+    <span class="kw">exact</span> (E.comm hij x).symm</code></pre></section>
+    <section><div class="natural-text"><p>A stagewise isomorphism determines the forward morphism of inverse systems.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.invMorphism">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.invMorphism">ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.invMorphism</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/StagewiseIso.html#L57">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> invMorphism (E : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso">InverseSystemIso</a> S T) : T.Morphism S <span class="kw">where</span>
+  map i := (E.stageEquiv i).symm
+  continuous_map i := (E.stageEquiv i).continuous_invFun
+  comm := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext x
+    <span class="kw">apply</span> (E.stageEquiv i).injective
+    simpa using E.comm hij ((E.stageEquiv j).symm x)</code></pre></section>
+    <section><div class="natural-text"><p>A stagewise isomorphism determines the inverse morphism of inverse systems.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.toContinuousMonoidHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.toContinuousMonoidHom">ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.toContinuousMonoidHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/StagewiseIso.html#L68">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> toContinuousMonoidHom (E : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso">InverseSystemIso</a> S T) :
+    S.inverseLimit →ₜ* T.inverseLimit <span class="kw">where</span>
+  toMonoidHom :=
+    { toFun := S.limMap E.toMorphism
+      map_one&#x27; := <span class="kw">by</span>
+        <span class="kw">apply</span> T.ext
+        <span class="kw">intro</span> i
+        change T.projection i (S.limMap E.toMorphism 1) = T.projection i 1
+        <span class="kw">rw</span> [S.π_limMap_apply (Θ := E.toMorphism)]
+        change (E.stageEquiv i) (1 : S.X i) = (1 : T.X i)
+        <span class="kw">exact</span> (E.stageEquiv i).toMulEquiv.map_one
+      map_mul&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> x y
+        <span class="kw">apply</span> T.ext
+        <span class="kw">intro</span> i
+        change T.projection i (S.limMap E.toMorphism (x * y)) =
+          T.projection i (S.limMap E.toMorphism x * S.limMap E.toMorphism y)
+        <span class="kw">rw</span> [S.π_limMap_apply (Θ := E.toMorphism)]
+        <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.projection_mul">projection_mul</a> (S := T), S.π_limMap_apply (Θ := E.toMorphism),
+          S.π_limMap_apply (Θ := E.toMorphism)]
+        change (E.stageEquiv i) (S.projection i x * S.projection i y) =
+          (E.stageEquiv i) (S.projection i x) * (E.stageEquiv i) (S.projection i y)
+        <span class="kw">exact</span> (E.stageEquiv i).toMulEquiv.map_mul (S.projection i x) (S.projection i y) }
+  continuous_toFun := S.continuous_limMap E.toMorphism</code></pre></section>
+    <section><div class="natural-text"><p>The forward continuous homomorphism on inverse limits induced by a stagewise isomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.invContinuousMonoidHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.invContinuousMonoidHom">ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.invContinuousMonoidHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/StagewiseIso.html#L95">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> invContinuousMonoidHom (E : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso">InverseSystemIso</a> S T) :
+    T.inverseLimit →ₜ* S.inverseLimit <span class="kw">where</span>
+  toMonoidHom :=
+    { toFun := T.limMap E.invMorphism
+      map_one&#x27; := <span class="kw">by</span>
+        <span class="kw">apply</span> S.ext
+        <span class="kw">intro</span> i
+        change S.projection i (T.limMap E.invMorphism 1) = S.projection i 1
+        <span class="kw">rw</span> [T.π_limMap_apply (Θ := E.invMorphism)]
+        change (E.stageEquiv i).symm (1 : T.X i) = (1 : S.X i)
+        <span class="kw">exact</span> (E.stageEquiv i).symm.toMulEquiv.map_one
+      map_mul&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> x y
+        <span class="kw">apply</span> S.ext
+        <span class="kw">intro</span> i
+        change S.projection i (T.limMap E.invMorphism (x * y)) =
+          S.projection i (T.limMap E.invMorphism x * T.limMap E.invMorphism y)
+        <span class="kw">rw</span> [T.π_limMap_apply (Θ := E.invMorphism)]
+        <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.projection_mul">projection_mul</a> (S := S), T.π_limMap_apply (Θ := E.invMorphism),
+          T.π_limMap_apply (Θ := E.invMorphism)]
+        change (E.stageEquiv i).symm (T.projection i x * T.projection i y) =
+          (E.stageEquiv i).symm (T.projection i x) * (E.stageEquiv i).symm (T.projection i y)
+        <span class="kw">exact</span> (E.stageEquiv i).symm.toMulEquiv.map_mul (T.projection i x) (T.projection i y) }
+  continuous_toFun := T.continuous_limMap E.invMorphism</code></pre></section>
+    <section><div class="natural-text"><p>The inverse continuous homomorphism on inverse limits induced by a stagewise isomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.inverseLimitContinuousMulEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.inverseLimitContinuousMulEquiv">ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.inverseLimitContinuousMulEquiv</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/StagewiseIso.html#L122">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> inverseLimitContinuousMulEquiv (E : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso">InverseSystemIso</a> S T) :
+    S.inverseLimit ≃ₜ* T.inverseLimit :=
+  <a class="decl-ref" href="../../../library/ProCGroups/Topologies/ContinuousMulEquiv.html#decl-ContinuousMulEquiv.ofHomInv">ContinuousMulEquiv.ofHomInv</a>
+    E.toContinuousMonoidHom
+    E.invContinuousMonoidHom
+    (<span class="kw">by</span>
+      <span class="kw">intro</span> x
+      <span class="kw">apply</span> S.ext
+      <span class="kw">intro</span> i
+      change S.projection i
+          (T.limMap E.invMorphism (S.limMap E.toMorphism x)) = S.projection i x
+      <span class="kw">rw</span> [T.π_limMap_apply (Θ := E.invMorphism),
+        S.π_limMap_apply (Θ := E.toMorphism)]
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.invMorphism">invMorphism</a>, <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.toMorphism">toMorphism</a>, <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.projection_apply">projection_apply</a>, ContinuousMulEquiv.symm_apply_apply])
+    (<span class="kw">by</span>
+      <span class="kw">intro</span> x
+      <span class="kw">apply</span> T.ext
+      <span class="kw">intro</span> i
+      change T.projection i
+          (S.limMap E.toMorphism (T.limMap E.invMorphism x)) = T.projection i x
+      <span class="kw">rw</span> [S.π_limMap_apply (Θ := E.toMorphism),
+        T.π_limMap_apply (Θ := E.invMorphism)]
+      <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.toMorphism">toMorphism</a>, <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.invMorphism">invMorphism</a>, <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.projection_apply">projection_apply</a>, ContinuousMulEquiv.apply_symm_apply])</code></pre></section>
+    <section><div class="natural-text"><p><a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.Compatible">Compatible</a> stagewise continuous group isomorphisms induce a continuous multiplicative equivalence on concrete inverse limits.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.projection_inverseLimitContinuousMulEquiv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.projection_inverseLimitContinuousMulEquiv">ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.projection_inverseLimitContinuousMulEquiv</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/StagewiseIso.html#L147">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_inverseLimitContinuousMulEquiv
+    (E : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso">InverseSystemIso</a> S T) (i : I) (x : S.inverseLimit) :
+    T.projection i (E.inverseLimitContinuousMulEquiv x) =
+      E.stageEquiv i (S.projection i x)</code></pre></section>
+    <section><div class="natural-text"><p>The projection inverse limit continuous multiplicative equivalence is <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with the profinite topology and gives the continuous map or equivalence determined by the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change T.projection i (S.limMap E.toMorphism x) =
+    E.stageEquiv i (S.projection i x)
+  <span class="kw">exact</span> S.π_limMap_apply E.toMorphism i x</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.projection_inverseLimitContinuousMulEquiv_symm">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.projection_inverseLimitContinuousMulEquiv_symm">ProCGroups.InverseSystems.InverseSystem.InverseSystemIso.projection_inverseLimitContinuousMulEquiv_symm</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/StagewiseIso.html#L156">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_inverseLimitContinuousMulEquiv_symm
+    (E : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/StagewiseIso.html#decl-ProCGroups.InverseSystems.InverseSystem.InverseSystemIso">InverseSystemIso</a> S T) (i : I) (x : T.inverseLimit) :
+    S.projection i (E.inverseLimitContinuousMulEquiv.symm x) =
+      (E.stageEquiv i).symm (T.projection i x)</code></pre></section>
+    <section><div class="natural-text"><p>The inverse of the projection-induced inverse-limit continuous multiplicative equivalence is <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with the profinite topology and gives the continuous map or equivalence determined by the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  change S.projection i (T.limMap E.invMorphism x) =
+    (E.stageEquiv i).symm (T.projection i x)
+  <span class="kw">exact</span> T.π_limMap_apply E.invMorphism i x</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.InverseSystems.StagewiseIso"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

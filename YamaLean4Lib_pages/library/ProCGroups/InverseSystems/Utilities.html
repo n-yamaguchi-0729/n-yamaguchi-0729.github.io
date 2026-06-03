@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.InverseSystems.Utilities | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.InverseSystems.Utilities</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/InverseSystems.html">InverseSystems</a><span class="sep">/</span><span>Utilities</span></div>
+      <h1 class="module-title">ProCGroups.InverseSystems.Utilities</h1>
+      <div class="module-meta">1 Theorem | 1 Definition</div>
+      <div class="module-overview"><p>This module supplies the topological part of the construction. It checks continuity and stagewise neighborhood properties so that the completed object inherits the required topology.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li>Mathlib.Topology.Homeomorph.Lemmas</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/FoxDifferential/Completed/Continuous/Universal/FiniteStage.html">FoxDifferential.Completed.Continuous.Universal.FiniteStage</a></li><li><a href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html">ProCGroups.InverseSystems.CompatibilityAndSurjectivity</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-Continuous.homeoOfBijectiveCompactToT2">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-Continuous.homeoOfBijectiveCompactToT2">Continuous.homeoOfBijectiveCompactToT2</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/Utilities.html#L20">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> homeoOfBijectiveCompactToT2
+    {X Y : <span class="kw">Type</span>*} [TopologicalSpace X] [TopologicalSpace Y]
+    [CompactSpace X] [T2Space Y] {f : X → Y} (hf : Continuous f)
+    (hbij : Function.Bijective f) :
+    X ≃ₜ Y :=
+  homeoOfEquivCompactToT2 (f := Equiv.ofBijective f hbij) hf</code></pre></section>
+    <section><div class="natural-text"><p>A continuous bijection from a compact space to a Hausdorff space is a homeomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.exists_upperBound_finset">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.exists_upperBound_finset">ProCGroups.InverseSystems.exists_upperBound_finset</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/Utilities.html#L38">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_upperBound_finset (hdir : Directed (· ≤ ·) (id : I → I)) :
+    ∀ s : Finset I, s.Nonempty → ∃ j, ∀ i ∈ s, i ≤ j</code></pre></section>
+    <section><div class="natural-text"><p>A <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> subset of a <a class="decl-ref" href="../../../library/ProCGroups/FreeProducts/Concrete.html#decl-ProCGroups.FreeProducts.Concrete.AdmissibleQuotient.directed">directed</a> preorder admits an upper bound.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">intro</span> s
+  refine Finset.induction_on s ?_ ?_
+  · <span class="kw">intro</span> hs
+    rcases hs <span class="kw">with</span> ⟨i, hi⟩
+    <span class="kw">simp</span> only [Finset.notMem_empty] at hi
+  · <span class="kw">intro</span> a s ha ih hs
+    by_cases hs&#x27; : s.Nonempty
+    · rcases ih hs&#x27; <span class="kw">with</span> ⟨j, hj⟩
+      rcases hdir a j <span class="kw">with</span> ⟨k, hak, hjk⟩
+      refine ⟨k, ?_⟩
+      <span class="kw">intro</span> i hi
+      <span class="kw">rw</span> [Finset.mem_insert] at hi
+      rcases hi <span class="kw">with</span> <span class="kw">rfl</span> | hi
+      · <span class="kw">exact</span> hak
+      · <span class="kw">exact</span> (hj i hi).trans hjk
+    · <span class="kw">have</span> hs&#x27;&#x27; : s = ∅ := Finset.not_nonempty_iff_eq_empty.mp hs&#x27;
+      subst hs&#x27;&#x27;
+      refine ⟨a, ?_⟩
+      <span class="kw">intro</span> i hi
+      <span class="kw">simp</span> only [insert_empty_eq, Finset.mem_singleton] at hi
+      <span class="kw">simp</span> only [hi, le_refl]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.InverseSystems.Utilities"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

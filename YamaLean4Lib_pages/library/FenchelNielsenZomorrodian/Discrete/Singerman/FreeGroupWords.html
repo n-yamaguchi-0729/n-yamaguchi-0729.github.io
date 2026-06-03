@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FenchelNielsenZomorrodian.Discrete.Singerman.FreeGroupWords | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">FenchelNielsenZomorrodian.Discrete.Singerman.FreeGroupWords</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/FenchelNielsenZomorrodian.html">FenchelNielsenZomorrodian</a><span class="sep">/</span><a href="../../../../library/FenchelNielsenZomorrodian/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman.html">Singerman</a><span class="sep">/</span><span>FreeGroupWords</span></div>
+      <h1 class="module-title">FenchelNielsenZomorrodian.Discrete.Singerman.FreeGroupWords</h1>
+      <div class="module-meta">7 Theorem</div>
+      <div class="module-overview"><p>This module studies free group words for fenchel nielsen zomorrodian. A <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list indexed by \(\mathrm{Fin}(1+n)\) splits into its first entry and the remaining \(n\) entries. A <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list indexed by \(\mathrm{Fin}(2+n)\) splits into its first two entries and the remaining \(n\) entries.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ReidemeisterSchreier/Discrete/Presentations/Relators.html">ReidemeisterSchreier.Discrete.Presentations.Relators</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete.html">FenchelNielsenZomorrodian.Discrete</a></li><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/CompactFuchsian/FirstReduction/Signatures.html">FenchelNielsenZomorrodian.Discrete.CompactFuchsian.FirstReduction.Signatures</a></li><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman.html">FenchelNielsenZomorrodian.Discrete.Singerman</a></li><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/CyclicProductIdentities.html">FenchelNielsenZomorrodian.Discrete.Singerman.CyclicProductIdentities</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-FenchelNielsen.list_ofFn_one_add">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.list_ofFn_one_add">FenchelNielsen.list_ofFn_one_add</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#L19">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> list_ofFn_one_add {α : <span class="kw">Type</span>*} {n : ℕ} (f : Fin (1 + n) → α) :
+    List.ofFn f =
+      f ⟨0, <span class="kw">by</span> omega⟩ ::
+        List.ofFn (<span class="kw">fun</span> j : Fin n =&gt; f ⟨1 + j.val, <span class="kw">by</span> omega⟩)</code></pre></section>
+    <section><div class="natural-text"><p>A <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list indexed by \(\mathrm{Fin}(1+n)\) splits into its first entry and the remaining \(n\) entries.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [List.ofFn_congr (<span class="kw">show</span> 1 + n = n + 1 <span class="kw">by</span> omega)]
+  <span class="kw">rw</span> [List.ofFn_succ]
+  <span class="kw">simp</span> only [Fin.cast_zero, Fin.mk_zero&#x27;, List.cons.injEq, List.ofFn_inj, true_and]
+  funext j
+  <span class="kw">apply</span> congrArg f
+  ext
+  <span class="kw">simp</span> only [Fin.val_cast, Fin.val_succ]
+  omega</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. For the Fenchel--Nielsen--Zomorrodian relations, the period calculation checks that each elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has image of the prescribed order, and the product relation is verified by multiplying the images in the stated order. Divisibility, lcm, or gcd hypotheses are used precisely to make the period <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish in the target quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.list_ofFn_two_add">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.list_ofFn_two_add">FenchelNielsen.list_ofFn_two_add</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#L32">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> list_ofFn_two_add {α : <span class="kw">Type</span>*} {n : ℕ} (f : Fin (2 + n) → α) :
+    List.ofFn f =
+      f ⟨0, <span class="kw">by</span> omega⟩ :: f ⟨1, <span class="kw">by</span> omega⟩ ::
+        List.ofFn (<span class="kw">fun</span> j : Fin n =&gt; f ⟨2 + j.val, <span class="kw">by</span> omega⟩)</code></pre></section>
+    <section><div class="natural-text"><p>A <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> list indexed by \(\mathrm{Fin}(2+n)\) splits into its first two entries and the remaining \(n\) entries.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [List.ofFn_congr (<span class="kw">show</span> 2 + n = (1 + n) + 1 <span class="kw">by</span> omega)]
+  <span class="kw">rw</span> [List.ofFn_succ]
+  <span class="kw">rw</span> [List.ofFn_congr (<span class="kw">show</span> 1 + n = n + 1 <span class="kw">by</span> omega)]
+  <span class="kw">rw</span> [List.ofFn_succ]
+  <span class="kw">simp</span> only [Fin.cast_zero, Fin.succ_zero_eq_one&#x27;, Fin.mk_zero&#x27;, List.cons.injEq,
+    List.ofFn_inj, true_and]
+  <span class="kw">constructor</span>
+  · <span class="kw">apply</span> congrArg f
+    ext
+    <span class="kw">simp</span> only [Fin.val_cast, Fin.coe_ofNat_eq_mod, Nat.mod_succ_eq_iff_lt, Nat.succ_eq_add_one,
+  lt_add_iff_pos_left, add_pos_iff, zero_lt_one, true_or]
+  · funext j
+    <span class="kw">apply</span> congrArg f
+    ext
+    <span class="kw">simp</span> only [Fin.val_cast, Fin.val_succ]
+    omega</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. For the Fenchel--Nielsen--Zomorrodian relations, the period calculation checks that each elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has image of the prescribed order, and the product relation is verified by multiplying the images in the stated order. Divisibility, lcm, or gcd hypotheses are used precisely to make the period <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish in the target quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.freeGroup_of_pow_ne_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.freeGroup_of_pow_ne_one">FenchelNielsen.freeGroup_of_pow_ne_one</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#L53">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeGroup_of_pow_ne_one {X : <span class="kw">Type</span>*}
+    (x : X) {n : ℕ} (hn : n ≠ 0) :
+    (FreeGroup.of x : FreeGroup X) ^ n ≠ 1</code></pre></section>
+    <section><div class="natural-text"><p>A nonzero power of a free <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> is nontrivial.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">intro</span> h
+  <span class="kw">let</span> χ : X → Multiplicative ℤ :=
+    <span class="kw">fun</span> y =&gt; <span class="kw">if</span> y = x <span class="kw">then</span> Multiplicative.ofAdd (1 : ℤ) <span class="kw">else</span> 1
+  <span class="kw">have</span> hmap := congrArg (FreeGroup.lift χ) h
+  <span class="kw">have</span> hn0 : n = 0 := <span class="kw">by</span>
+    simpa [χ, map_pow] using hmap
+  <span class="kw">exact</span> hn hn0</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. Every map between the reduced presentations is determined by the images of elliptic, handle, and boundary generators. The period and product <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> are checked explicitly after applying those images. Therefore the constructed quotient or abelianized map is well defined and has the claimed effect on the named <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> or class. For the Fenchel--Nielsen--Zomorrodian relations, the period calculation checks that each elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has image of the prescribed order, and the product relation is verified by multiplying the images in the stated order. Divisibility, lcm, or gcd hypotheses are used precisely to make the period <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish in the target quotient. Consequently the two expressions have the same determining coordinates, and the defining extensionality principle for the inverse-limit, quotient, or presentation construction gives the claim in the statement.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.freeGroup_isReduced_pow_mul_of_mul_pow_inv_word">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.freeGroup_isReduced_pow_mul_of_mul_pow_inv_word">FenchelNielsen.freeGroup_isReduced_pow_mul_of_mul_pow_inv_word</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#L65">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> freeGroup_isReduced_pow_mul_of_mul_pow_inv_word {X : <span class="kw">Type</span>*}
+    {x y : X} (hxy : x ≠ y) (a b : ℕ) :
+    FreeGroup.IsReduced
+      (List.replicate a (x, true) ++ [(y, true)] ++ List.replicate b (x, false))</code></pre></section>
+    <section><div class="natural-text"><p>The explicit word with \(a\) copies of \(x\), then \(y\), then \(b\) copies of \(x^{-1}\), is reduced when \(x e y\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> List.IsChain.append
+  · <span class="kw">apply</span> List.IsChain.append
+    · <span class="kw">exact</span> List.isChain_replicate_of_rel a (<span class="kw">by</span> <span class="kw">intro</span> _; <span class="kw">rfl</span>)
+    · <span class="kw">simp</span> only [List.IsChain.singleton]
+    · <span class="kw">intro</span> u hu v hv huv
+      <span class="kw">simp</span> only [List.head?_cons, Option.mem_def, Option.some.injEq] at hv
+      subst v
+      by_cases ha : a = 0
+      · <span class="kw">simp</span> only [ha, List.replicate_zero, List.getLast?_nil, Option.mem_def, reduceCtorEq] at hu
+      · <span class="kw">have</span> hlast : u = (x, true) := <span class="kw">by</span>
+          simpa [List.getLast?_replicate, ha] using hu.symm
+        subst u
+        <span class="kw">exact</span> False.elim (hxy huv)
+  · <span class="kw">exact</span> List.isChain_replicate_of_rel b (<span class="kw">by</span> <span class="kw">intro</span> _; <span class="kw">rfl</span>)
+  · <span class="kw">intro</span> u hu v hv huv
+    by_cases hb : b = 0
+    · <span class="kw">simp</span> only [hb, List.replicate_zero, List.head?_nil, Option.mem_def, reduceCtorEq] at hv
+    · <span class="kw">have</span> hvx : v = (x, false) := <span class="kw">by</span>
+        simpa [List.head?_replicate, hb] using hv.symm
+      subst v
+      <span class="kw">have</span> huy : u = (y, true) := <span class="kw">by</span>
+        simpa using hu.symm
+      subst u
+      <span class="kw">exact</span> False.elim (hxy huv.symm)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. For the Fenchel--Nielsen--Zomorrodian relations, the period calculation checks that each elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has image of the prescribed order, and the product relation is verified by multiplying the images in the stated order. Divisibility, lcm, or gcd hypotheses are used precisely to make the period <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish in the target quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.freeGroup_toWord_pow_mul_of_mul_pow_inv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.freeGroup_toWord_pow_mul_of_mul_pow_inv">FenchelNielsen.freeGroup_toWord_pow_mul_of_mul_pow_inv</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#L94">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeGroup_toWord_pow_mul_of_mul_pow_inv {X : <span class="kw">Type</span>*} [DecidableEq X]
+    {x y : X} (hxy : x ≠ y) (a b : ℕ) :
+    FreeGroup.toWord
+        ((FreeGroup.of x : FreeGroup X) ^ a * FreeGroup.of y *
+          ((FreeGroup.of x : FreeGroup X) ^ b)⁻¹) =
+      List.replicate a (x, true) ++ [(y, true)] ++ List.replicate b (x, false)</code></pre></section>
+    <section><div class="natural-text"><p>The reduced word for \(x^a y x^{-b}\) is the explicit list of \(a\) positive \(x\) letters, <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> positive \(y\), and \(b\) negative \(x\) letters.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> L := List.replicate a (x, true) ++ [(y, true)] ++ List.replicate b (x, false)
+  <span class="kw">have</span> hmk :
+      (FreeGroup.of x : FreeGroup X) ^ a * FreeGroup.of y *
+          ((FreeGroup.of x : FreeGroup X) ^ b)⁻¹ =
+        FreeGroup.mk L := <span class="kw">by</span>
+    <span class="kw">simp</span> only [FreeGroup.of, FreeGroup.pow_mk, List.flatten_replicate_singleton, FreeGroup.mul_mk,
+  FreeGroup.inv_mk, FreeGroup.invRev, List.map_replicate, Bool.not_true, List.reverse_replicate, List.append_assoc,
+  List.cons_append, List.nil_append, L]
+  <span class="kw">rw</span> [hmk, FreeGroup.toWord_mk]
+  <span class="kw">exact</span> (<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#decl-FenchelNielsen.freeGroup_isReduced_pow_mul_of_mul_pow_inv_word">freeGroup_isReduced_pow_mul_of_mul_pow_inv_word</a> hxy a b).reduce_eq</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. For the Fenchel--Nielsen--Zomorrodian relations, the period calculation checks that each elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has image of the prescribed order, and the product relation is verified by multiplying the images in the stated order. Divisibility, lcm, or gcd hypotheses are used precisely to make the period <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish in the target quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.freeGroup_pow_mul_of_mul_pow_inv_word_initialLength">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.freeGroup_pow_mul_of_mul_pow_inv_word_initialLength">FenchelNielsen.freeGroup_pow_mul_of_mul_pow_inv_word_initialLength</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#L111">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">private</span> <span class="kw">theorem</span> freeGroup_pow_mul_of_mul_pow_inv_word_initialLength {X : <span class="kw">Type</span>*} [DecidableEq X]
+    {x y : X} (hxy : x ≠ y) (a b : ℕ) :
+    (List.takeWhile (<span class="kw">fun</span> q : X × Bool =&gt; q = (x, true))
+      (List.replicate a (x, true) ++ [(y, true)] ++ List.replicate b (x, false))).length =
+        a</code></pre></section>
+    <section><div class="natural-text"><p>In the explicit reduced word for \(x^a y x^{-b}\), the initial run of positive \(x\) letters has length \(a\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hyx : (y, true) ≠ (x, true) := <span class="kw">by</span>
+    <span class="kw">intro</span> h
+    <span class="kw">exact</span> hxy (<span class="kw">by</span> <span class="kw">cases</span> h; <span class="kw">rfl</span>)
+  <span class="kw">induction</span> a <span class="kw">with</span>
+  | <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.zero">zero</a> =&gt; <span class="kw">simp</span> [hyx]
+  | succ a _ih =&gt; <span class="kw">simp</span> [List.replicate_succ, hyx]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. For the Fenchel--Nielsen--Zomorrodian relations, the period calculation checks that each elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has image of the prescribed order, and the product relation is verified by multiplying the images in the stated order. Divisibility, lcm, or gcd hypotheses are used precisely to make the period <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish in the target quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FenchelNielsen.freeGroup_pow_mul_of_mul_pow_inv_left_exponent_eq_of_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FenchelNielsen.freeGroup_pow_mul_of_mul_pow_inv_left_exponent_eq_of_eq">FenchelNielsen.freeGroup_pow_mul_of_mul_pow_inv_left_exponent_eq_of_eq</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#L123">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeGroup_pow_mul_of_mul_pow_inv_left_exponent_eq_of_eq {X : <span class="kw">Type</span>*}
+    {x y : X} (hxy : x ≠ y) {a b c d : ℕ}
+    (h :
+      (FreeGroup.of x : FreeGroup X) ^ a * FreeGroup.of y *
+          ((FreeGroup.of x : FreeGroup X) ^ b)⁻¹ =
+        (FreeGroup.of x : FreeGroup X) ^ c * FreeGroup.of y *
+          ((FreeGroup.of x : FreeGroup X) ^ d)⁻¹) :
+    a = c</code></pre></section>
+    <section><div class="natural-text"><p>Equality of words \(x^a y x^{-b}=x^c y x^{-d}\) with \(x e y\) forces \(a=c\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">have</span> hwords := congrArg (<span class="kw">fun</span> w : FreeGroup X =&gt; FreeGroup.toWord w) h
+  change
+    FreeGroup.toWord
+        ((FreeGroup.of x : FreeGroup X) ^ a * FreeGroup.of y *
+          ((FreeGroup.of x : FreeGroup X) ^ b)⁻¹) =
+      FreeGroup.toWord
+        ((FreeGroup.of x : FreeGroup X) ^ c * FreeGroup.of y *
+          ((FreeGroup.of x : FreeGroup X) ^ d)⁻¹) at hwords
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#decl-FenchelNielsen.freeGroup_toWord_pow_mul_of_mul_pow_inv">freeGroup_toWord_pow_mul_of_mul_pow_inv</a> hxy a b,
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#decl-FenchelNielsen.freeGroup_toWord_pow_mul_of_mul_pow_inv">freeGroup_toWord_pow_mul_of_mul_pow_inv</a> hxy c d] at hwords
+  <span class="kw">have</span> htake := congrArg
+    (<span class="kw">fun</span> L : List (X × Bool) =&gt;
+      (List.takeWhile (<span class="kw">fun</span> q : X × Bool =&gt; q = (x, true)) L).length) hwords
+  change
+    (List.takeWhile (<span class="kw">fun</span> q : X × Bool =&gt; q = (x, true))
+      (List.replicate a (x, true) ++ [(y, true)] ++ List.replicate b (x, false))).length =
+    (List.takeWhile (<span class="kw">fun</span> q : X × Bool =&gt; q = (x, true))
+      (List.replicate c (x, true) ++ [(y, true)] ++ List.replicate d (x, false))).length at htake
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#decl-FenchelNielsen.freeGroup_pow_mul_of_mul_pow_inv_word_initialLength">freeGroup_pow_mul_of_mul_pow_inv_word_initialLength</a> hxy a b,
+    <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Singerman/FreeGroupWords.html#decl-FenchelNielsen.freeGroup_pow_mul_of_mul_pow_inv_word_initialLength">freeGroup_pow_mul_of_mul_pow_inv_word_initialLength</a> hxy c d] at htake
+  <span class="kw">exact</span> htake</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the named Fenchel--Nielsen reduction, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/StandardClasses.html#decl-ProCGroups.FiniteGroupClass.cyclic">cyclic</a>-Schreier word, or total-relation definition. The equality or membership follows by evaluating the relevant <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> branch, simplifying the period or product formula, and using that normal closures are closed under products, inverses, and conjugation when a relator membership is involved.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FenchelNielsenZomorrodian.Discrete.Singerman.FreeGroupWords"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

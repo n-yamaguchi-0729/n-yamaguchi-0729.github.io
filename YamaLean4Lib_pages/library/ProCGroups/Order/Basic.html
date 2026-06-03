@@ -1,0 +1,1334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Order.Basic | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.Order.Basic</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Order.html">Order</a><span class="sep">/</span><span>Basic</span></div>
+      <h1 class="module-title">ProCGroups.Order.Basic</h1>
+      <div class="module-meta">24 Theorem | 9 Definition | 8 Instance</div>
+      <div class="module-overview"><p>This module develops the maps induced by continuous homomorphisms. It organizes the relevant quotient pullbacks and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage maps, then proves the compatibility statements needed for the completed construction.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html">ProCGroups.InverseSystems.FiniteStageFactorization</a></li><li><a href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html">ProCGroups.ProC.OpenNormalSubgroups.Basic</a></li><li><a href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/FilteredFamilies.html">ProCGroups.ProC.OpenNormalSubgroups.FilteredFamilies</a></li><li><a href="../../../library/ProCGroups/Profinite/Basic.html">ProCGroups.Profinite.Basic</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Commutators/DerivedSeriesAndQuotients.html">ProCGroups.FiniteStepSolvableQuotients.Commutators.DerivedSeriesAndQuotients</a></li><li><a href="../../../library/ProCGroups/Order.html">ProCGroups.Order</a></li><li><a href="../../../library/Yama2026_Sections_1_And_2_1/main.html">Yama2026_Sections_1_And_2_1.main</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl instance" id="decl-ProCGroups.Order.ClosedSubgroup.instTopClosedSubgroup">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.instTopClosedSubgroup">ProCGroups.Order.ClosedSubgroup.instTopClosedSubgroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L36">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instTopClosedSubgroup : Top (ClosedSubgroup G) :=
+  ⟨{ toSubgroup := ⊤, isClosed&#x27; := isClosed_univ }⟩</code></pre></section>
+    <section><div class="natural-text"><p>Closed subgroups have a top element: the whole group.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.Order.ClosedSubgroup.instBotClosedSubgroup">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.instBotClosedSubgroup">ProCGroups.Order.ClosedSubgroup.instBotClosedSubgroup</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L40">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instBotClosedSubgroup [T1Space G] : Bot (ClosedSubgroup G) :=
+  ⟨{ toSubgroup := ⊥
+     isClosed&#x27; := <span class="kw">by</span>
+       change IsClosed ({(1 : G)} : Set G)
+       <span class="kw">exact</span> isClosed_singleton }⟩</code></pre></section>
+    <section><div class="natural-text"><p>Closed subgroups have a bottom element: the trivial subgroup, closed in a \(T_1\) topological group.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Order.ClosedSubgroup.map">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.map">ProCGroups.Order.ClosedSubgroup.map</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L48">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> map [CompactSpace G] [T2Space K] (H : ClosedSubgroup G)
+    (φ : G →* K) (hφ : Continuous φ) : ClosedSubgroup K <span class="kw">where</span>
+  toSubgroup := (H : Subgroup G).map φ
+  isClosed&#x27; := <span class="kw">by</span>
+    <span class="kw">let</span> f : H → K := <span class="kw">fun</span> x =&gt; φ x
+    <span class="kw">have</span> hcont : Continuous f := hφ.comp continuous_subtype_val
+    <span class="kw">have</span> hcompact : <a class="decl-ref" href="../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature.IsCompact">IsCompact</a> (Set.range f) := isCompact_range hcont
+    <span class="kw">have</span> hEq : Set.range f = ((H : Subgroup G).map φ : Set K) := <span class="kw">by</span>
+      ext y
+      <span class="kw">constructor</span>
+      · rintro ⟨x, <span class="kw">rfl</span>⟩
+        <span class="kw">exact</span> (Subgroup.mem_map).2 ⟨x.1, x.2, <span class="kw">rfl</span>⟩
+      · <span class="kw">intro</span> hy
+        rcases (Subgroup.mem_map).1 hy <span class="kw">with</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+        <span class="kw">exact</span> ⟨⟨x, hx⟩, <span class="kw">rfl</span>⟩
+    simpa [hEq] using hcompact.isClosed</code></pre></section>
+    <section><div class="natural-text"><p>The image of a closed subgroup under a continuous homomorphism from a compact domain into a Hausdorff codomain.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.ClosedSubgroup.toSubgroup_map">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.toSubgroup_map">ProCGroups.Order.ClosedSubgroup.toSubgroup_map</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L68">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> toSubgroup_map [CompactSpace G] [T2Space K] (H : ClosedSubgroup G)
+    (φ : G →* K) (hφ : Continuous φ) :
+    ((map H φ hφ : ClosedSubgroup K) : Subgroup K) = (H : Subgroup G).map φ</code></pre></section>
+    <section><div class="natural-text"><p>The underlying subgroup of the image closed subgroup is the image of the underlying subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.ClosedSubgroup.mem_map">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.mem_map">ProCGroups.Order.ClosedSubgroup.mem_map</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L75">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_map [CompactSpace G] [T2Space K] {H : ClosedSubgroup G}
+    {φ : G →* K} (hφ : Continuous φ) {y : K} :
+    y ∈ map H φ hφ ↔ ∃ x ∈ (H : Subgroup G), φ x = y</code></pre></section>
+    <section><div class="natural-text"><p>Membership in the image closed subgroup is membership in the subgroup map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.ClosedSubgroup.map_id">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.map_id">ProCGroups.Order.ClosedSubgroup.map_id</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L82">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_id [CompactSpace G] [T2Space G] (H : ClosedSubgroup G) :
+    map H (MonoidHom.id G) continuous_id = H</code></pre></section>
+    <section><div class="natural-text"><p>Mapping a closed subgroup along the identity homomorphism gives the same closed subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> ClosedSubgroup.toSubgroup_injective
+  ext x
+  <span class="kw">constructor</span>
+  · rintro ⟨y, hy, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> hy
+  · <span class="kw">intro</span> hx
+    <span class="kw">exact</span> ⟨x, hx, <span class="kw">rfl</span>⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.ClosedSubgroup.map_comp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.map_comp">ProCGroups.Order.ClosedSubgroup.map_comp</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L94">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_comp
+    {L : <span class="kw">Type</span> w} [Group L] [TopologicalSpace L]
+    [CompactSpace G] [T2Space K] [CompactSpace K] [T2Space L]
+    (H : ClosedSubgroup G) (φ : G →* K) (hφ : Continuous φ)
+    (ψ : K →* L) (hψ : Continuous ψ) :
+    map (map H φ hφ) ψ hψ = map H (ψ.comp φ) (hψ.comp hφ)</code></pre></section>
+    <section><div class="natural-text"><p>Images of closed subgroups compose under composition of continuous homomorphisms.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> ClosedSubgroup.toSubgroup_injective
+  ext z
+  <span class="kw">constructor</span>
+  · rintro ⟨y, hy, <span class="kw">rfl</span>⟩
+    rcases (Subgroup.mem_map).1 hy <span class="kw">with</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+  · rintro ⟨x, hx, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> ⟨φ x, (Subgroup.mem_map).2 ⟨x, hx, <span class="kw">rfl</span>⟩, <span class="kw">rfl</span>⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.ClosedSubgroup.map_mono">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.map_mono">ProCGroups.Order.ClosedSubgroup.map_mono</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L111">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_mono [CompactSpace G] [T2Space K] {H H&#x27; : ClosedSubgroup G}
+    (hHH&#x27; : (H : Subgroup G) ≤ (H&#x27; : Subgroup G))
+    (φ : G →* K) (hφ : Continuous φ) :
+    ((map H φ hφ : ClosedSubgroup K) : Subgroup K) ≤
+      ((map H&#x27; φ hφ : ClosedSubgroup K) : Subgroup K)</code></pre></section>
+    <section><div class="natural-text"><p>The image construction on closed subgroups is monotone.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Subgroup.map_mono hHH&#x27;</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.ClosedSubgroup.map_bot">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.map_bot">ProCGroups.Order.ClosedSubgroup.map_bot</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L121">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_bot [CompactSpace G] [T1Space G] [T2Space K]
+    (φ : G →* K) (hφ : Continuous φ) :
+    map (⊥ : ClosedSubgroup G) φ hφ = (⊥ : ClosedSubgroup K)</code></pre></section>
+    <section><div class="natural-text"><p>The image of the bottom closed subgroup is the bottom closed subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> ClosedSubgroup.toSubgroup_injective
+  ext y
+  <span class="kw">constructor</span>
+  · rintro ⟨x, hx, <span class="kw">rfl</span>⟩
+    simpa using congrArg φ (<span class="kw">show</span> x = 1 from <span class="kw">by</span> simpa using hx)
+  · <span class="kw">intro</span> hy
+    refine ⟨1, <span class="kw">by</span> <span class="kw">simp</span> only [SetLike.mem_coe, one_mem], ?_⟩
+    simpa using (<span class="kw">show</span> y = 1 from <span class="kw">by</span> simpa using hy).symm</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.ClosedSubgroup.map_eq_top_of_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.map_eq_top_of_surjective">ProCGroups.Order.ClosedSubgroup.map_eq_top_of_surjective</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L135">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_eq_top_of_surjective [CompactSpace G] [T2Space K] (H : ClosedSubgroup G)
+    (φ : G →* K) (hφ : Continuous φ)
+    (hφH : ∀ y : K, ∃ x ∈ (H : Subgroup G), φ x = y) :
+    map H φ hφ = (⊤ : ClosedSubgroup K)</code></pre></section>
+    <section><div class="natural-text"><p>The image of the top closed subgroup under a surjective homomorphism is top.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> ClosedSubgroup.toSubgroup_injective
+  ext y
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> _
+    trivial
+  · <span class="kw">intro</span> _
+    <span class="kw">exact</span> hφH y</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.ClosedSubgroup.map_le_iff_le_comap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.ClosedSubgroup.map_le_iff_le_comap">ProCGroups.Order.ClosedSubgroup.map_le_iff_le_comap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L149">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_le_iff_le_comap [CompactSpace G] [T2Space K]
+    {H : ClosedSubgroup G} {L : ClosedSubgroup K}
+    {φ : G →* K} (hφ : Continuous φ) :
+    ((map H φ hφ : ClosedSubgroup K) : Subgroup K) ≤ (L : Subgroup K) ↔
+      (H : Subgroup G) ≤ Subgroup.comap φ (L : Subgroup K)</code></pre></section>
+    <section><div class="natural-text"><p>Image containment for closed subgroups is equivalent to containment in the comap.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> h x hx
+    <span class="kw">exact</span> h ((Subgroup.mem_map).2 ⟨x, hx, <span class="kw">rfl</span>⟩)
+  · <span class="kw">intro</span> h y hy
+    rcases (Subgroup.mem_map).1 hy <span class="kw">with</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> h hx</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Order.IsSurjectiveInverseSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.IsSurjectiveInverseSystem">ProCGroups.Order.IsSurjectiveInverseSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L164">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> IsSurjectiveInverseSystem {I : <span class="kw">Type</span> v} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">ProCGroups.InverseSystems.InverseSystem</a> (I := I)) : <span class="kw">Prop</span> :=
+  ∀ ⦃i j : I⦄ (hij : i ≤ j), Function.Surjective (S.map hij)</code></pre></section>
+    <section><div class="natural-text"><p>The surjectivity hypothesis for transition maps in a group-valued inverse system.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Order.inverseLimitProjectionImage">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.inverseLimitProjectionImage">ProCGroups.Order.inverseLimitProjectionImage</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L169">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> inverseLimitProjectionImage
+    {I : <span class="kw">Type</span> v} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">ProCGroups.InverseSystems.InverseSystem</a> (I := I))
+    [∀ i, Group (S.X i)] [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.IsGroupSystem">ProCGroups.InverseSystems.IsGroupSystem</a> S]
+    [∀ i, TopologicalSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    [CompactSpace S.inverseLimit]
+    (H : ClosedSubgroup S.inverseLimit) (i : I) : ClosedSubgroup (S.X i) :=
+  <span class="kw">let</span> πi : S.inverseLimit →* S.X i := {
+    toFun := <span class="kw">fun</span> x =&gt; S.projection i x
+    map_one&#x27; := <span class="kw">rfl</span>
+    map_mul&#x27; := <span class="kw">by</span>
+      <span class="kw">intro</span> x y
+      <span class="kw">rfl</span>
+  }
+  <span class="kw">have</span> hπi : Continuous (<span class="kw">fun</span> x : S.inverseLimit =&gt; S.projection i x) := <span class="kw">by</span>
+    <span class="kw">exact</span> (continuous_apply i).comp continuous_subtype_val
+  ClosedSubgroup.map H πi hπi</code></pre></section>
+    <section><div class="natural-text"><p>The image of a closed subgroup under a projection from a group-valued inverse limit.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Order.quotientImage">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.quotientImage">ProCGroups.Order.quotientImage</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L192">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> quotientImage [CompactSpace G] (H : ClosedSubgroup G)
+    (U : OpenNormalSubgroup G) : ClosedSubgroup (G ⧸ (U : Subgroup G)) :=
+  ClosedSubgroup.map H (QuotientGroup.mk&#x27; (U : Subgroup G)) continuous_quotient_mk&#x27;</code></pre></section>
+    <section><div class="natural-text"><p>The image of a closed subgroup in an open-normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.toSubgroup_quotientImage">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.toSubgroup_quotientImage">ProCGroups.Order.toSubgroup_quotientImage</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L198">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> toSubgroup_quotientImage [CompactSpace G] (H : ClosedSubgroup G)
+    (U : OpenNormalSubgroup G) :
+    ((<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) H U : ClosedSubgroup (G ⧸ (U : Subgroup G))) :
+      Subgroup (G ⧸ (U : Subgroup G))) =
+        (H : Subgroup G).map (QuotientGroup.mk&#x27; (U : Subgroup G))</code></pre></section>
+    <section><div class="natural-text"><p>The subgroup underlying a quotient image is the image of the closed subgroup in the quotient.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.mem_quotientImage">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.mem_quotientImage">ProCGroups.Order.mem_quotientImage</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L207">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_quotientImage [CompactSpace G] {H : ClosedSubgroup G}
+    {U : OpenNormalSubgroup G} {y : G ⧸ (U : Subgroup G)} :
+    y ∈ <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) H U ↔
+      ∃ x ∈ (H : Subgroup G), QuotientGroup.mk&#x27; (U : Subgroup G) x = y</code></pre></section>
+    <section><div class="natural-text"><p>Membership in a quotient image is membership in the image of the underlying closed subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.mem_closedSubgroup_iff_forall_quotientImage_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.mem_closedSubgroup_iff_forall_quotientImage_mem">ProCGroups.Order.mem_closedSubgroup_iff_forall_quotientImage_mem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L215">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mem_closedSubgroup_iff_forall_quotientImage_mem [CompactSpace G]
+    (hG : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G) {H : ClosedSubgroup G} {x : G} :
+    x ∈ H ↔
+      ∀ U : OpenNormalSubgroup G,
+        OpenNormalSubgroup.quotientProj U x ∈
+          (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) H U : Subgroup (G ⧸ (U : Subgroup G)))</code></pre></section>
+    <section><div class="natural-text"><p>Membership in a closed subgroup of a profinite group can be checked after all open-normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hx U
+    <span class="kw">exact</span> (Subgroup.mem_map).2 ⟨x, hx, <span class="kw">rfl</span>⟩
+  · <span class="kw">intro</span> hx
+    letI : T2Space G := IsProfiniteGroup.t2Space hG
+    letI : TotallyDisconnectedSpace G := IsProfiniteGroup.totallyDisconnectedSpace hG
+    <span class="kw">have</span> hxOpen :
+        ∀ N : Subgroup G, IsOpen (N : Set G) ∧ (H : Subgroup G) ≤ N → x ∈ N := <span class="kw">by</span>
+      <span class="kw">intro</span> N hN
+      <span class="kw">let</span> V : OpenSubgroup G := ⟨N, hN.1⟩
+      rcases <a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/FilteredFamilies.html#decl-ProCGroups.ProC.exists_openNormalSubgroup_mul_subset_openSubgroup">exists_openNormalSubgroup_mul_subset_openSubgroup</a> (G := G) H V hN.2 <span class="kw">with</span>
+        ⟨U, hHU⟩
+      <span class="kw">have</span> hxImg :
+          QuotientGroup.mk&#x27; (U : Subgroup G) x ∈
+            (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) H U : Subgroup (G ⧸ (U : Subgroup G))) := <span class="kw">by</span>
+        simpa [OpenNormalSubgroup.quotientProj] using hx U
+      <span class="kw">have</span> hxSup : x ∈ (H : Subgroup G) ⊔ (U : Subgroup G) := <span class="kw">by</span>
+        <span class="kw">have</span> hEq :
+            (H : Subgroup G) ⊔ (U : Subgroup G) =
+              Subgroup.comap (QuotientGroup.mk&#x27; (U : Subgroup G))
+                ((<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) H U :
+                  ClosedSubgroup (G ⧸ (U : Subgroup G))) :
+                    Subgroup (G ⧸ (U : Subgroup G))) := <span class="kw">by</span>
+          <span class="kw">calc</span>
+            (H : Subgroup G) ⊔ (U : Subgroup G) =
+                (H : Subgroup G) ⊔ (QuotientGroup.mk&#x27; (U : Subgroup G)).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> := <span class="kw">by</span>
+                  <span class="kw">rw</span> [QuotientGroup.ker_mk&#x27;]
+            _ = Subgroup.comap (QuotientGroup.mk&#x27; (U : Subgroup G))
+                  (((H : Subgroup G).map (QuotientGroup.mk&#x27; (U : Subgroup G))) :
+                    Subgroup (G ⧸ (U : Subgroup G))) := <span class="kw">by</span>
+                  <span class="kw">rw</span> [← Subgroup.comap_map_eq]
+            _ = Subgroup.comap (QuotientGroup.mk&#x27; (U : Subgroup G))
+                  ((<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) H U :
+                    ClosedSubgroup (G ⧸ (U : Subgroup G))) :
+                      Subgroup (G ⧸ (U : Subgroup G))) := <span class="kw">by</span>
+                  <span class="kw">rfl</span>
+        <span class="kw">rw</span> [hEq]
+        <span class="kw">exact</span> hxImg
+      rcases
+          (Subgroup.mem_sup_of_normal_right (s := (H : Subgroup G)) (t := (U : Subgroup G))).1
+            hxSup <span class="kw">with</span>
+        ⟨h, hhH, u, huU, hhu⟩
+      <span class="kw">have</span> hxV : x ∈ (V : Set G) := hHU ⟨h, hhH, u, huU, hhu⟩
+      simpa [V] using hxV
+    <span class="kw">have</span> hxInf :
+        x ∈ sInf {N : Subgroup G | IsOpen (N : Set G) ∧ (H : Subgroup G) ≤ N} := <span class="kw">by</span>
+      <span class="kw">simp</span> only [Subgroup.mem_sInf, Set.mem_setOf_eq]
+      <span class="kw">intro</span> N hN
+      <span class="kw">exact</span> hxOpen N hN
+    change x ∈ (H : Subgroup G)
+    <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/ClosedAndCosets.html#decl-ProCGroups.ProC.closedSubgroup_eq_sInf_open">closedSubgroup_eq_sInf_open</a> (G := G) H).symm ▸ hxInf</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.closedSubgroup_le_iff_forall_quotientImages_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.closedSubgroup_le_iff_forall_quotientImages_le">ProCGroups.Order.closedSubgroup_le_iff_forall_quotientImages_le</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L275">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> closedSubgroup_le_iff_forall_quotientImages_le [CompactSpace G]
+    (hG : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G) {H K : ClosedSubgroup G} :
+    (H : Subgroup G) ≤ (K : Subgroup G) ↔
+      ∀ U : OpenNormalSubgroup G,
+        (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) H U : Subgroup (G ⧸ (U : Subgroup G))) ≤
+          (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) K U : Subgroup (G ⧸ (U : Subgroup G)))</code></pre></section>
+    <section><div class="natural-text"><p>Inclusion of closed subgroups of a profinite group can be checked on all open-normal <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hHK U y hy
+    rcases (Subgroup.mem_map).1 hy <span class="kw">with</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> (Subgroup.mem_map).2 ⟨x, hHK hx, <span class="kw">rfl</span>⟩
+  · <span class="kw">intro</span> hHK x hx
+    <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.mem_closedSubgroup_iff_forall_quotientImage_mem">mem_closedSubgroup_iff_forall_quotientImage_mem</a> (G := G) hG (H := K)).2 (<span class="kw">by</span>
+      <span class="kw">intro</span> U
+      <span class="kw">exact</span> hHK U ((Subgroup.mem_map).2 ⟨x, hx, <span class="kw">rfl</span>⟩))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Order.closedSubgroup_eq_of_quotientImages_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Order.closedSubgroup_eq_of_quotientImages_eq">ProCGroups.Order.closedSubgroup_eq_of_quotientImages_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L292">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> closedSubgroup_eq_of_quotientImages_eq [CompactSpace G]
+    (hG : <a class="decl-ref" href="../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G) {H K : ClosedSubgroup G}
+    (hHK : ∀ U : OpenNormalSubgroup G,
+      <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) H U = <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) K U) :
+    H = K</code></pre></section>
+    <section><div class="natural-text"><p>Two closed subgroups are equal if their images agree in every <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : T2Space G := IsProfiniteGroup.t2Space hG
+  letI : TotallyDisconnectedSpace G := IsProfiniteGroup.totallyDisconnectedSpace hG
+  <span class="kw">have</span> hle :
+      ∀ {A B : ClosedSubgroup G},
+        (∀ U : OpenNormalSubgroup G,
+          <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) A U = <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) B U) →
+            (A : Subgroup G) ≤ B := <span class="kw">by</span>
+    <span class="kw">intro</span> A B hAB x hxA
+    <span class="kw">have</span> hxOpen :
+        ∀ N : Subgroup G, IsOpen (N : Set G) ∧ (B : Subgroup G) ≤ N → x ∈ N := <span class="kw">by</span>
+      <span class="kw">intro</span> N hN
+      <span class="kw">let</span> V : OpenSubgroup G := ⟨N, hN.1⟩
+      rcases <a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/FilteredFamilies.html#decl-ProCGroups.ProC.exists_openNormalSubgroup_mul_subset_openSubgroup">exists_openNormalSubgroup_mul_subset_openSubgroup</a> (G := G) B V hN.2 <span class="kw">with</span>
+        ⟨U, hBU⟩
+      <span class="kw">have</span> hxImgA :
+          QuotientGroup.mk&#x27; (U : Subgroup G) x ∈ (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) A U : Subgroup _) := <span class="kw">by</span>
+        <span class="kw">exact</span> (Subgroup.mem_map).2 ⟨x, hxA, <span class="kw">rfl</span>⟩
+      <span class="kw">have</span> hxImgB :
+          QuotientGroup.mk&#x27; (U : Subgroup G) x ∈ (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) B U : Subgroup _) := <span class="kw">by</span>
+        <span class="kw">rw</span> [← hAB U]
+        <span class="kw">exact</span> hxImgA
+      <span class="kw">have</span> hxSup : x ∈ (B : Subgroup G) ⊔ (U : Subgroup G) := <span class="kw">by</span>
+        <span class="kw">have</span> hEq :
+            (B : Subgroup G) ⊔ (U : Subgroup G) =
+              Subgroup.comap (QuotientGroup.mk&#x27; (U : Subgroup G))
+                ((<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) B U :
+                  ClosedSubgroup (G ⧸ (U : Subgroup G))) :
+                    Subgroup (G ⧸ (U : Subgroup G))) := <span class="kw">by</span>
+          <span class="kw">calc</span>
+            (B : Subgroup G) ⊔ (U : Subgroup G) =
+                (B : Subgroup G) ⊔ (QuotientGroup.mk&#x27; (U : Subgroup G)).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a> := <span class="kw">by</span>
+                  <span class="kw">rw</span> [QuotientGroup.ker_mk&#x27;]
+            _ = Subgroup.comap (QuotientGroup.mk&#x27; (U : Subgroup G))
+                  (((B : Subgroup G).map (QuotientGroup.mk&#x27; (U : Subgroup G))) :
+                    Subgroup (G ⧸ (U : Subgroup G))) := <span class="kw">by</span>
+                  <span class="kw">rw</span> [← Subgroup.comap_map_eq]
+            _ = Subgroup.comap (QuotientGroup.mk&#x27; (U : Subgroup G))
+                  ((<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.quotientImage">quotientImage</a> (G := G) B U :
+                    ClosedSubgroup (G ⧸ (U : Subgroup G))) :
+                      Subgroup (G ⧸ (U : Subgroup G))) := <span class="kw">by</span>
+                  <span class="kw">rfl</span>
+        <span class="kw">rw</span> [hEq]
+        <span class="kw">exact</span> hxImgB
+      rcases
+          (Subgroup.mem_sup_of_normal_right (s := (B : Subgroup G)) (t := (U : Subgroup G))).1
+            hxSup <span class="kw">with</span>
+        ⟨b, hbB, u, huU, hbu⟩
+      <span class="kw">have</span> hxV : x ∈ (V : Set G) := hBU ⟨b, hbB, u, huU, hbu⟩
+      simpa [V] using hxV
+    <span class="kw">have</span> hxB :
+        x ∈ sInf {N : Subgroup G | IsOpen (N : Set G) ∧ (B : Subgroup G) ≤ N} := <span class="kw">by</span>
+      <span class="kw">simp</span> only [Subgroup.mem_sInf, Set.mem_setOf_eq]
+      <span class="kw">intro</span> N hN
+      <span class="kw">exact</span> hxOpen N hN
+    <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/ClosedAndCosets.html#decl-ProCGroups.ProC.closedSubgroup_eq_sInf_open">closedSubgroup_eq_sInf_open</a> (G := G) B).symm ▸ hxB
+  <span class="kw">exact</span> le_antisymm (hle hHK) (hle (<span class="kw">fun</span> U =&gt; (hHK U).symm))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-ProCGroups.instTopologicalSpaceXCompat">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.instTopologicalSpaceXCompat">ProCGroups.instTopologicalSpaceXCompat</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L367">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instTopologicalSpaceXCompat (i : I) :
+    TopologicalSpace (S.X i) :=
+  S.topologicalSpace i</code></pre></section>
+    <section><div class="natural-text"><p>The constructed object carries the topological space structure inherited from its construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.instTopologicalSpaceXCompatFun">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.instTopologicalSpaceXCompatFun">ProCGroups.instTopologicalSpaceXCompatFun</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L370">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instTopologicalSpaceXCompatFun :
+    ∀ i, TopologicalSpace (S.X i) :=
+  S.topologicalSpace</code></pre></section>
+    <section><div class="natural-text"><p>The constructed object carries the topological space structure inherited from its construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.instCompactSpaceXCompatFun">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.instCompactSpaceXCompatFun">ProCGroups.instCompactSpaceXCompatFun</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L373">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instCompactSpaceXCompatFun : ∀ i, CompactSpace (S.X i) := <span class="kw">by</span>
+  <span class="kw">intro</span> i
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>The constructed object carries the compact space structure inherited from its profinite construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.instT2SpaceXCompatFun">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.instT2SpaceXCompatFun">ProCGroups.instT2SpaceXCompatFun</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L376">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instT2SpaceXCompatFun : ∀ i, T2Space (S.X i) := <span class="kw">by</span>
+  <span class="kw">intro</span> i
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>The constructed object is Hausdorff, with its \(T_2\) structure inherited from the profinite construction.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.inverseSystemStageHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.inverseSystemStageHom">ProCGroups.inverseSystemStageHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L381">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> inverseSystemStageHom {i j : I} (hij : i ≤ j) : S.X j →* S.X i <span class="kw">where</span>
+  toFun := S.map hij
+  map_one&#x27; := ProCGroups.InverseSystems.IsGroupSystem.map_one (S := S) hij
+  map_mul&#x27; := ProCGroups.InverseSystems.IsGroupSystem.map_mul (S := S) hij</code></pre></section>
+    <section><div class="natural-text"><p>The transition map of a group-valued inverse system is viewed as a homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.inverseSystemStageHom_continuous">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.inverseSystemStageHom_continuous">ProCGroups.inverseSystemStageHom_continuous</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L389">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> inverseSystemStageHom_continuous {i j : I} (hij : i ≤ j) :
+    Continuous (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)</code></pre></section>
+    <section><div class="natural-text"><p>The stage homomorphism associated to a group-valued inverse system is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa [<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a>] using (S.continuous_map hij :
+    Continuous (<span class="kw">fun</span> x : S.X j =&gt; S.map hij x))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.compatibleClosedSubgroupSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.compatibleClosedSubgroupSystem">ProCGroups.compatibleClosedSubgroupSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L396">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> compatibleClosedSubgroupSystem
+    (L : ∀ i, ClosedSubgroup (S.X i))
+    (hcompat : ∀ {i j : I} (hij : i ≤ j),
+      ((ClosedSubgroup.map (L j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+          (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+          ClosedSubgroup (S.X i)) : Subgroup (S.X i)) =
+        (L i : Subgroup (S.X i))) :
+    <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">ProCGroups.InverseSystems.InverseSystem</a> (I := I) <span class="kw">where</span>
+  X := <span class="kw">fun</span> i =&gt; L i
+  topologicalSpace := <span class="kw">fun</span> i =&gt; inferInstance
+  map := <span class="kw">fun</span> {i j} hij x =&gt;
+    ⟨S.map hij x.1, <span class="kw">by</span>
+      <span class="kw">have</span> hx :
+          S.map hij x.1 ∈
+            ((ClosedSubgroup.map (L j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+                (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+                  ClosedSubgroup (S.X i)) : Subgroup (S.X i)) := <span class="kw">by</span>
+        <span class="kw">exact</span> (Subgroup.mem_map).2 ⟨x.1, x.2, <span class="kw">rfl</span>⟩
+      <span class="kw">rw</span> [hcompat hij] at hx
+      <span class="kw">exact</span> hx⟩
+  continuous_map := <span class="kw">fun</span> {i j} hij =&gt;
+    Continuous.subtype_mk
+      ((<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij).comp continuous_subtype_val) (<span class="kw">fun</span> x =&gt; <span class="kw">by</span>
+      <span class="kw">have</span> hx :
+          S.map hij x.1 ∈
+            ((ClosedSubgroup.map (L j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+                (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+                  ClosedSubgroup (S.X i)) : Subgroup (S.X i)) := <span class="kw">by</span>
+        <span class="kw">exact</span> (Subgroup.mem_map).2 ⟨x.1, x.2, <span class="kw">rfl</span>⟩
+      <span class="kw">rw</span> [hcompat hij] at hx
+      <span class="kw">exact</span> hx)
+  map_id := <span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+    funext x
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">simp</span> only [InverseSystem.map_id_apply, id_eq]
+  map_comp := <span class="kw">fun</span> {i j k} hij hjk =&gt; <span class="kw">by</span>
+    funext x
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">simp</span> only [Function.comp_apply, InverseSystem.map_comp_apply]</code></pre></section>
+    <section><div class="natural-text"><p>The inverse system obtained by restricting an ambient inverse system to a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family of closed subgroups.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.compatibleClosedSubgroupSystem_group">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.compatibleClosedSubgroupSystem_group">ProCGroups.compatibleClosedSubgroupSystem_group</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L437">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> compatibleClosedSubgroupSystem_group
+    (L : ∀ i, ClosedSubgroup (S.X i))
+    (hcompat : ∀ {i j : I} (hij : i ≤ j),
+      ((ClosedSubgroup.map (L j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+          (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+          ClosedSubgroup (S.X i)) : Subgroup (S.X i)) =
+        (L i : Subgroup (S.X i)))
+    (i : I) :
+    Group ((<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a> (S := S) L hcompat).X i) := <span class="kw">by</span>
+  dsimp [<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>]
+  infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>Each stage of a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> closed-subgroup system is a group.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.compatibleClosedSubgroupSystem_isGroupSystem">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.compatibleClosedSubgroupSystem_isGroupSystem">ProCGroups.compatibleClosedSubgroupSystem_isGroupSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L450">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> compatibleClosedSubgroupSystem_isGroupSystem
+    (L : ∀ i, ClosedSubgroup (S.X i))
+    (hcompat : ∀ {i j : I} (hij : i ≤ j),
+      ((ClosedSubgroup.map (L j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+          (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+          ClosedSubgroup (S.X i)) : Subgroup (S.X i)) =
+        (L i : Subgroup (S.X i))) :
+    <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.IsGroupSystem">ProCGroups.InverseSystems.IsGroupSystem</a> (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a> (S := S) L hcompat) <span class="kw">where</span>
+  <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_one">map_one</a> := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">apply</span> Subtype.ext
+    simpa [<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a>] using
+      (ProCGroups.InverseSystems.IsGroupSystem.map_one (S := S) hij)
+  <a class="decl-ref" href="../../../library/FoxDifferential/RightDerivative/Basic.html#decl-FoxDifferential.RightDerivation.map_mul">map_mul</a> := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij x y
+    <span class="kw">apply</span> Subtype.ext
+    simpa [<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a>] using
+      (ProCGroups.InverseSystems.IsGroupSystem.map_mul (S := S) hij x.1 y.1)
+  map_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij x
+    <span class="kw">apply</span> Subtype.ext
+    simpa [<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a>] using
+      (ProCGroups.InverseSystems.IsGroupSystem.map_inv (S := S) hij x.1)</code></pre></section>
+    <section><div class="natural-text"><p>A <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> closed-subgroup system is a group-valued inverse system.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.compatibleClosedSubgroupInclusion">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.compatibleClosedSubgroupInclusion">ProCGroups.compatibleClosedSubgroupInclusion</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L477">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> compatibleClosedSubgroupInclusion
+    (L : ∀ i, ClosedSubgroup (S.X i))
+    (hcompat : ∀ {i j : I} (hij : i ≤ j),
+      ((ClosedSubgroup.map (L j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+          (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+          ClosedSubgroup (S.X i)) : Subgroup (S.X i)) =
+        (L i : Subgroup (S.X i))) :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a> (S := S) L hcompat).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.Morphism">Morphism</a> S <span class="kw">where</span>
+  map := <span class="kw">fun</span> i =&gt; Subtype.val
+  continuous_map := <span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+    dsimp [<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>]
+    <span class="kw">exact</span> continuous_subtype_val
+  comm := <span class="kw">fun</span> {i j} hij =&gt; <span class="kw">by</span>
+    funext x
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The canonical coordinatewise inclusion of a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> subgroup system into the ambient system.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.compatibleClosedSubgroupLimHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.compatibleClosedSubgroupLimHom">ProCGroups.compatibleClosedSubgroupLimHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L495">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> compatibleClosedSubgroupLimHom
+    (L : ∀ i, ClosedSubgroup (S.X i))
+    (hcompat : ∀ {i j : I} (hij : i ≤ j),
+      ((ClosedSubgroup.map (L j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+          (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+          ClosedSubgroup (S.X i)) : Subgroup (S.X i)) =
+        (L i : Subgroup (S.X i))) :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a> (S := S) L hcompat).inverseLimit →* S.inverseLimit <span class="kw">where</span>
+  toFun :=
+    (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a> (S := S) L hcompat).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.limMap">limMap</a>
+      (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupInclusion">compatibleClosedSubgroupInclusion</a> (S := S) L hcompat)
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> i
+    <span class="kw">rfl</span>
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> i
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The induced homomorphism from the inverse limit of a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> subgroup family into the ambient inverse limit.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.closedSubgroupFromCompatibleFamily">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.closedSubgroupFromCompatibleFamily">ProCGroups.closedSubgroupFromCompatibleFamily</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L518">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> closedSubgroupFromCompatibleFamily
+    (L : ∀ i, ClosedSubgroup (S.X i))
+    (hcompat : ∀ {i j : I} (hij : i ≤ j),
+      ((ClosedSubgroup.map (L j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+          (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+          ClosedSubgroup (S.X i)) : Subgroup (S.X i)) =
+        (L i : Subgroup (S.X i))) :
+    ClosedSubgroup S.inverseLimit <span class="kw">where</span>
+  toSubgroup := (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupLimHom">compatibleClosedSubgroupLimHom</a> (S := S) L hcompat).range
+  isClosed&#x27; := <span class="kw">by</span>
+    <span class="kw">let</span> T := <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a> (S := S) L hcompat
+    letI : ∀ i, TopologicalSpace (S.X i) := S.topologicalSpace
+    letI : ∀ i, T2Space (S.X i) := <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.instT2SpaceXCompatFun">instT2SpaceXCompatFun</a> (S := S)
+    letI : ∀ i, CompactSpace (T.X i) := <span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+      dsimp [T, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>]
+      infer_instance
+    letI : ∀ i, T2Space (T.X i) := <span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+      dsimp [T, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>]
+      infer_instance
+    letI : CompactSpace T.inverseLimit := inferInstance
+    letI : T2Space S.inverseLimit := S.t2Space_inverseLimit
+    <span class="kw">let</span> φ := <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupLimHom">compatibleClosedSubgroupLimHom</a> (S := S) L hcompat
+    <span class="kw">have</span> hφcont :
+        Continuous (φ : T.inverseLimit → S.inverseLimit) := <span class="kw">by</span>
+      change Continuous (T.limMap (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupInclusion">compatibleClosedSubgroupInclusion</a> (S := S) L hcompat))
+      <span class="kw">exact</span> T.continuous_limMap (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupInclusion">compatibleClosedSubgroupInclusion</a> (S := S) L hcompat)
+    simpa [φ] using (isCompact_range hφcont).isClosed</code></pre></section>
+    <section><div class="natural-text"><p>Closed subgroup of the ambient inverse limit obtained from a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family of closed subgroups with surjective transition maps.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.inverseLimitProjectionImage_closedSubgroupFromCompatibleFamily">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.inverseLimitProjectionImage_closedSubgroupFromCompatibleFamily">ProCGroups.inverseLimitProjectionImage_closedSubgroupFromCompatibleFamily</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L548">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> inverseLimitProjectionImage_closedSubgroupFromCompatibleFamily
+    [CompactSpace S.inverseLimit]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (L : ∀ i, ClosedSubgroup (S.X i))
+    (hcompat : ∀ {i j : I} (hij : i ≤ j),
+      ((ClosedSubgroup.map (L j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+          (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+          ClosedSubgroup (S.X i)) : Subgroup (S.X i)) =
+        (L i : Subgroup (S.X i))) (i : I) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.closedSubgroupFromCompatibleFamily">closedSubgroupFromCompatibleFamily</a> (S := S) L hcompat) i =
+      L i</code></pre></section>
+    <section><div class="natural-text"><p>Projection images of a closed subgroup recovered from a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> family match the given family.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> T := <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a> (S := S) L hcompat
+  <span class="kw">let</span> incl := <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupInclusion">compatibleClosedSubgroupInclusion</a> (S := S) L hcompat
+  <span class="kw">let</span> φ := <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupLimHom">compatibleClosedSubgroupLimHom</a> (S := S) L hcompat
+  <span class="kw">have</span> hTsurj : ∀ {i j : I} (hij : i ≤ j), Function.Surjective (T.map hij) := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij y
+    <span class="kw">have</span> hy :
+        y.1 ∈
+        ((ClosedSubgroup.map (L j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+            (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+            ClosedSubgroup (S.X i)) : Subgroup (S.X i)) := <span class="kw">by</span>
+      <span class="kw">exact</span> (hcompat hij).symm ▸ (<span class="kw">show</span> y.1 ∈ (L i : Subgroup (S.X i)) from y.2)
+    rcases (Subgroup.mem_map).1 hy <span class="kw">with</span> ⟨x, hx, hxy⟩
+    refine ⟨⟨x, hx⟩, ?_⟩
+    <span class="kw">apply</span> Subtype.ext
+    simpa [T, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>] using hxy
+  letI : ∀ i, CompactSpace (T.X i) := <span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+    dsimp [T, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>]
+    infer_instance
+  letI : ∀ i, T2Space (T.X i) := <span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+    dsimp [T, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>]
+    infer_instance
+  letI : CompactSpace T.inverseLimit := inferInstance
+  letI : T2Space T.inverseLimit := T.t2Space_inverseLimit
+  ext y
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hy
+    rcases (Subgroup.mem_map).1 hy <span class="kw">with</span> ⟨x, hx, hxy⟩
+    rcases hx <span class="kw">with</span> ⟨z, <span class="kw">rfl</span>⟩
+    <span class="kw">have</span> hcoord :
+        S.projection i ((φ : T.inverseLimit →* S.inverseLimit) z) = (T.projection i z).1 := <span class="kw">by</span>
+      simpa [φ, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupInclusion">compatibleClosedSubgroupInclusion</a>] using congrFun (T.π_comp_limMap (Θ := incl) i) z
+    <span class="kw">have</span> hmem : (T.projection i z).1 ∈ (L i : Subgroup (S.X i)) := <span class="kw">by</span>
+      <span class="kw">exact</span> (T.projection i z).2
+    <span class="kw">have</span> hmem&#x27; : S.projection i ((φ : T.inverseLimit →* S.inverseLimit) z) ∈ (L i : Subgroup (S.X i)) := <span class="kw">by</span>
+      <span class="kw">exact</span> hcoord ▸ hmem
+    <span class="kw">exact</span> hxy ▸ hmem&#x27;
+  · <span class="kw">intro</span> hy
+    <span class="kw">have</span> hπsurj : Function.Surjective (T.projection i) := T.surjective_π hdir hTsurj i
+    rcases hπsurj ⟨y, hy⟩ <span class="kw">with</span> ⟨z, hz⟩
+    refine (Subgroup.mem_map).2 ?_
+    refine ⟨φ z, ⟨z, <span class="kw">rfl</span>⟩, ?_⟩
+    <span class="kw">have</span> hcoord :
+        S.projection i ((φ : T.inverseLimit →* S.inverseLimit) z) = y := <span class="kw">by</span>
+      simpa [φ, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupLimHom">compatibleClosedSubgroupLimHom</a>, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupInclusion">compatibleClosedSubgroupInclusion</a>,
+        <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.compatibleClosedSubgroupSystem">compatibleClosedSubgroupSystem</a>] using congrArg Subtype.val hz
+    <span class="kw">exact</span> hcoord</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.map_inverseLimitProjectionImage">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.map_inverseLimitProjectionImage">ProCGroups.map_inverseLimitProjectionImage</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L608">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_inverseLimitProjectionImage
+    [CompactSpace S.inverseLimit]
+    (H : ClosedSubgroup S.inverseLimit) {i j : I} (hij : i ≤ j) :
+    ((ClosedSubgroup.map (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S H j) (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+        (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) :
+        ClosedSubgroup (S.X i)) : Subgroup (S.X i)) =
+      (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S H i : Subgroup (S.X i))</code></pre></section>
+    <section><div class="natural-text"><p>Projection images commute with mapping a closed subgroup along a <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> inverse-limit morphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext x
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hx
+    rcases (Subgroup.mem_map).1 hx <span class="kw">with</span> ⟨y, hy, hxy⟩
+    rcases (Subgroup.mem_map).1 hy <span class="kw">with</span> ⟨z, hz, hzy⟩
+    refine (Subgroup.mem_map).2 ⟨z, hz, ?_⟩
+    <span class="kw">calc</span>
+      S.projection i z = S.map hij (S.projection j z) := <span class="kw">by</span>
+        symm
+        simpa using z.2 i j hij
+      _ = S.map hij y := <span class="kw">by</span> simpa using congrArg (S.map hij) hzy
+      _ = x := hxy
+  · <span class="kw">intro</span> hx
+    rcases (Subgroup.mem_map).1 hx <span class="kw">with</span> ⟨z, hz, hzx⟩
+    refine (Subgroup.mem_map).2 ⟨S.projection j z, ?_, ?_⟩
+    · <span class="kw">exact</span> (Subgroup.mem_map).2 ⟨z, hz, <span class="kw">rfl</span>⟩
+    · <span class="kw">calc</span>
+        S.map hij (S.projection j z) = S.projection i z := <span class="kw">by</span>
+          simpa using z.2 i j hij
+        _ = x := hzx</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.map_inverseLimitProjectionImage_closed">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.map_inverseLimitProjectionImage_closed">ProCGroups.map_inverseLimitProjectionImage_closed</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L639">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_inverseLimitProjectionImage_closed
+    [CompactSpace S.inverseLimit]
+    (H : ClosedSubgroup S.inverseLimit) {i j : I} (hij : i ≤ j) :
+    ClosedSubgroup.map (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S H j)
+        (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom">inverseSystemStageHom</a> (S := S) hij)
+        (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseSystemStageHom_continuous">inverseSystemStageHom_continuous</a> (S := S) hij) =
+      <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S H i</code></pre></section>
+    <section><div class="natural-text"><p>The stage-transition compatibility of projection images, repackaged as an equality of closed subgroups.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext x
+  simpa using congrArg (<span class="kw">fun</span> K : Subgroup (S.X i) =&gt; x ∈ K)
+    (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.map_inverseLimitProjectionImage">map_inverseLimitProjectionImage</a> (S := S) H hij)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.inverseLimitProjectionImage_bot">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.inverseLimitProjectionImage_bot">ProCGroups.inverseLimitProjectionImage_bot</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L652">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> inverseLimitProjectionImage_bot
+    [CompactSpace S.inverseLimit] (i : I) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S (⊥ : ClosedSubgroup S.inverseLimit) i = ⊥</code></pre></section>
+    <section><div class="natural-text"><p>The projection image of the trivial closed subgroup is trivial.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext x
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hx
+    rcases (Subgroup.mem_map).1 hx <span class="kw">with</span> ⟨y, hy, hyx⟩
+    <span class="kw">have</span> hy1 : y = 1 := <span class="kw">by</span> simpa using hy
+    <span class="kw">cases</span> hy1
+    simpa using hyx.symm
+  · <span class="kw">intro</span> hx
+    <span class="kw">have</span> hx1 : x = 1 := <span class="kw">by</span> simpa using hx
+    refine (Subgroup.mem_map).2 ⟨1, <span class="kw">by</span> <span class="kw">simp</span> only [one_mem], ?_⟩
+    <span class="kw">rw</span> [hx1]
+    <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.inverseLimitProjectionImage_top">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.inverseLimitProjectionImage_top">ProCGroups.inverseLimitProjectionImage_top</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L671">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> inverseLimitProjectionImage_top
+    [CompactSpace S.inverseLimit]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (hsurj : <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.IsSurjectiveInverseSystem">IsSurjectiveInverseSystem</a> S) (i : I) :
+    <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S (⊤ : ClosedSubgroup S.inverseLimit) i = ⊤</code></pre></section>
+    <section><div class="natural-text"><p>Under surjective transition maps, the projection image of the whole inverse limit is the whole stage group.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext x
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> _
+    change x ∈ (⊤ : Subgroup (S.X i))
+    <span class="kw">simp</span> only [Subgroup.mem_top]
+  · <span class="kw">intro</span> _
+    <span class="kw">have</span> hπsurj : Function.Surjective (S.projection i) :=
+      S.surjective_π hdir (<span class="kw">fun</span> {i j} hij =&gt; hsurj hij) i
+    rcases hπsurj x <span class="kw">with</span> ⟨y, hy⟩
+    refine (Subgroup.mem_map).2 ⟨y, ?_, hy⟩
+    change y ∈ (⊤ : Subgroup S.inverseLimit)
+    <span class="kw">simp</span> only [Subgroup.mem_top]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.inverseLimitProjectionImage_mono">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.inverseLimitProjectionImage_mono">ProCGroups.inverseLimitProjectionImage_mono</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L691">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> inverseLimitProjectionImage_mono
+    [CompactSpace S.inverseLimit]
+    {H K : ClosedSubgroup S.inverseLimit}
+    (hHK : (H : Subgroup S.inverseLimit) ≤ K) (i : I) :
+    (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S H i : Subgroup (S.X i)) ≤
+      (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S K i : Subgroup (S.X i))</code></pre></section>
+    <section><div class="natural-text"><p>Projection images are monotone in the closed subgroup argument.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x hx
+  rcases (Subgroup.mem_map).1 hx <span class="kw">with</span> ⟨y, hy, <span class="kw">rfl</span>⟩
+  <span class="kw">exact</span> (Subgroup.mem_map).2 ⟨y, hHK hy, <span class="kw">rfl</span>⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.closedSubgroup_le_of_projectionImages_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.closedSubgroup_le_of_projectionImages_le">ProCGroups.closedSubgroup_le_of_projectionImages_le</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L702">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> closedSubgroup_le_of_projectionImages_le
+    [Nonempty I] [CompactSpace S.inverseLimit]
+    [TotallyDisconnectedSpace S.inverseLimit] [IsTopologicalGroup S.inverseLimit]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (H K : ClosedSubgroup S.inverseLimit)
+    (hproj : ∀ i,
+      (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S H i : Subgroup (S.X i)) ≤
+        (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S K i : Subgroup (S.X i))) :
+    (H : Subgroup S.inverseLimit) ≤ (K : Subgroup S.inverseLimit)</code></pre></section>
+    <section><div class="natural-text"><p>Closed subgroups of an inverse limit are determined by their stagewise projection images.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x hx
+  <span class="kw">have</span> hx&#x27; :
+      x ∈ sInf {N : Subgroup S.inverseLimit |
+        IsOpen (N : Set S.inverseLimit) ∧ (K : Subgroup S.inverseLimit) ≤ N} := <span class="kw">by</span>
+    <span class="kw">simp</span> only [Subgroup.mem_sInf, Set.mem_setOf_eq]
+    <span class="kw">intro</span> N hN
+    <span class="kw">let</span> V : OpenSubgroup S.inverseLimit := ⟨N, hN.1⟩
+    rcases <a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/FilteredFamilies.html#decl-ProCGroups.ProC.exists_openNormalSubgroup_mul_subset_openSubgroup">exists_openNormalSubgroup_mul_subset_openSubgroup</a> (G := S.inverseLimit) K V hN.2 <span class="kw">with</span>
+      ⟨U, hKU⟩
+    letI : Finite (S.inverseLimit ⧸ (U : Subgroup S.inverseLimit)) :=
+      <a class="decl-ref" href="../../../library/ProCGroups/Profinite/OpenSubgroups.html#decl-ProCGroups.openNormalSubgroup_finiteQuotient">openNormalSubgroup_finiteQuotient</a> (G := S.inverseLimit) U
+    letI : DiscreteTopology (S.inverseLimit ⧸ (U : Subgroup S.inverseLimit)) :=
+      QuotientGroup.discreteTopology (<a class="decl-ref" href="../../../library/ProCGroups/Profinite/OpenSubgroups.html#decl-ProCGroups.openNormalSubgroup_isOpen">openNormalSubgroup_isOpen</a> (G := S.inverseLimit) U)
+    <span class="kw">let</span> β : S.inverseLimit →* S.inverseLimit ⧸ (U : Subgroup S.inverseLimit) :=
+      QuotientGroup.mk&#x27; (U : Subgroup S.inverseLimit)
+    rcases <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/FiniteStageFactorization.html#decl-ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite_group_hom">ProCGroups.InverseSystems.InverseSystem.factors_through_projection_finite_group_hom</a>
+        (S := S) hdir β continuous_quotient_mk&#x27; <span class="kw">with</span> ⟨k, βk, hβkcont, hβfac⟩
+    <span class="kw">have</span> hxk : S.projection k x ∈ (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S H k : Subgroup (S.X k)) := <span class="kw">by</span>
+      <span class="kw">exact</span> (Subgroup.mem_map).2 ⟨x, hx, <span class="kw">rfl</span>⟩
+    <span class="kw">have</span> hxkK : S.projection k x ∈ (<a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S K k : Subgroup (S.X k)) := hproj k hxk
+    rcases (Subgroup.mem_map).1 hxkK <span class="kw">with</span> ⟨z, hzK, hzxk⟩
+    <span class="kw">have</span> hβz : β z = βk (S.projection k z) := <span class="kw">by</span>
+      simpa [Function.comp] using
+        congrArg (<span class="kw">fun</span> f : S.inverseLimit → S.inverseLimit ⧸ (U : Subgroup S.inverseLimit) =&gt;
+          f z) hβfac
+    <span class="kw">have</span> hβx : β x = βk (S.projection k x) := <span class="kw">by</span>
+      simpa [Function.comp] using
+        congrArg (<span class="kw">fun</span> f : S.inverseLimit → S.inverseLimit ⧸ (U : Subgroup S.inverseLimit) =&gt;
+          f x) hβfac
+    <span class="kw">have</span> hzxu : z⁻¹ * x ∈ (U : Subgroup S.inverseLimit) := <span class="kw">by</span>
+      <span class="kw">apply</span> (QuotientGroup.eq_one_iff (N := (U : Subgroup S.inverseLimit)) (z⁻¹ * x)).1
+      <span class="kw">have</span> hβeq : β z = β x := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          β z = βk (S.projection k z) := hβz
+          _ = βk (S.projection k x) := <span class="kw">by</span> simpa using congrArg βk hzxk
+          _ = β x := hβx.symm
+      <span class="kw">calc</span>
+        β (z⁻¹ * x) = (β z)⁻¹ * β x := <span class="kw">by</span> <span class="kw">simp</span> only [QuotientGroup.mk&#x27;_apply, QuotientGroup.mk_mul, QuotientGroup.mk_inv, β]
+        _ = 1 := <span class="kw">by</span> <span class="kw">simp</span> only [hβeq, inv_mul_cancel]
+    <span class="kw">have</span> hxKU : x ∈ (((K : Subgroup S.inverseLimit) : Set S.inverseLimit) *
+        (((U : Subgroup S.inverseLimit) : Set S.inverseLimit))) := <span class="kw">by</span>
+      refine ⟨z, hzK, z⁻¹ * x, hzxu, ?_⟩
+      <span class="kw">simp</span> only [mul_inv_cancel_left]
+    <span class="kw">exact</span> hKU hxKU
+  <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/ClosedAndCosets.html#decl-ProCGroups.ProC.closedSubgroup_eq_sInf_open">closedSubgroup_eq_sInf_open</a> (G := S.inverseLimit) K).symm ▸ hx&#x27;</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.closedSubgroup_eq_of_projectionImages_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.closedSubgroup_eq_of_projectionImages_eq">ProCGroups.closedSubgroup_eq_of_projectionImages_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L759">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> closedSubgroup_eq_of_projectionImages_eq
+    [Nonempty I] [CompactSpace S.inverseLimit]
+    [TotallyDisconnectedSpace S.inverseLimit] [IsTopologicalGroup S.inverseLimit]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (H K : ClosedSubgroup S.inverseLimit)
+    (hproj : ∀ i, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S H i = <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S K i) :
+    H = K</code></pre></section>
+    <section><div class="natural-text"><p>Stagewise equality of projection images determines a closed subgroup of an inverse limit.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">have</span> hHK : (H : Subgroup S.inverseLimit) ≤ (K : Subgroup S.inverseLimit) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.closedSubgroup_le_of_projectionImages_le">closedSubgroup_le_of_projectionImages_le</a> (S := S) hdir H K (<span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+      <span class="kw">exact</span>
+        le_of_eq &lt;|
+          congrArg (<span class="kw">fun</span> (L : ClosedSubgroup (S.X i)) =&gt; (L : Subgroup (S.X i))) (hproj i))
+  <span class="kw">have</span> hKH : (K : Subgroup S.inverseLimit) ≤ (H : Subgroup S.inverseLimit) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.closedSubgroup_le_of_projectionImages_le">closedSubgroup_le_of_projectionImages_le</a> (S := S) hdir K H (<span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+      <span class="kw">exact</span>
+        le_of_eq &lt;|
+          congrArg (<span class="kw">fun</span> (L : ClosedSubgroup (S.X i)) =&gt; (L : Subgroup (S.X i))) (hproj i).symm)
+  <span class="kw">apply</span> SetLike.ext&#x27;
+  <span class="kw">exact</span> Set.ext <span class="kw">fun</span> x =&gt; ⟨<span class="kw">fun</span> hx =&gt; hHK hx, <span class="kw">fun</span> hx =&gt; hKH hx⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.closedSubgroup_eq_bot_of_projectionImages_eq_bot">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.closedSubgroup_eq_bot_of_projectionImages_eq_bot">ProCGroups.closedSubgroup_eq_bot_of_projectionImages_eq_bot</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L781">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> closedSubgroup_eq_bot_of_projectionImages_eq_bot
+    [Nonempty I] [CompactSpace S.inverseLimit]
+    [TotallyDisconnectedSpace S.inverseLimit] [IsTopologicalGroup S.inverseLimit]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (H : ClosedSubgroup S.inverseLimit)
+    (hproj : ∀ i, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S H i = ⊥) :
+    H = ⊥</code></pre></section>
+    <section><div class="natural-text"><p>If every stagewise projection image is trivial, then the closed subgroup itself is trivial.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.closedSubgroup_eq_of_projectionImages_eq">closedSubgroup_eq_of_projectionImages_eq</a> (S := S) hdir H ⊥
+  <span class="kw">intro</span> i
+  <span class="kw">rw</span> [hproj i, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseLimitProjectionImage_bot">inverseLimitProjectionImage_bot</a> (S := S) (i := i)]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.closedSubgroup_eq_top_of_projectionImages_eq_top">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.closedSubgroup_eq_top_of_projectionImages_eq_top">ProCGroups.closedSubgroup_eq_top_of_projectionImages_eq_top</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/Order/Basic.html#L795">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> closedSubgroup_eq_top_of_projectionImages_eq_top
+    [Nonempty I] [CompactSpace S.inverseLimit]
+    [TotallyDisconnectedSpace S.inverseLimit] [IsTopologicalGroup S.inverseLimit]
+    [∀ i, TotallyDisconnectedSpace (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (hsurj : <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.IsSurjectiveInverseSystem">IsSurjectiveInverseSystem</a> S)
+    (H : ClosedSubgroup S.inverseLimit)
+    (hproj : ∀ i, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.Order.inverseLimitProjectionImage">inverseLimitProjectionImage</a> S H i = ⊤) :
+    H = ⊤</code></pre></section>
+    <section><div class="natural-text"><p>If every stagewise projection image is the whole stage group, then the closed subgroup itself is the whole inverse limit.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.closedSubgroup_eq_of_projectionImages_eq">closedSubgroup_eq_of_projectionImages_eq</a> (S := S) hdir H ⊤
+  <span class="kw">intro</span> i
+  <span class="kw">rw</span> [hproj i, <a class="decl-ref" href="../../../library/ProCGroups/Order/Basic.html#decl-ProCGroups.inverseLimitProjectionImage_top">inverseLimitProjectionImage_top</a> (S := S) hdir hsurj i]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold closed subgroups as subgroups equipped with closedness data. Bottom, top, infimum, image, comap, and order relations are computed on the underlying subgroups, while closedness follows from the relevant topological facts: the trivial subgroup is closed in a \(T_1\) group, the whole group is closed, compact images in Hausdorff groups are closed, and intersections of closed sets are closed. Stagewise projection-image statements use inverse-limit extensionality for closed subgroups.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Order.Basic"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

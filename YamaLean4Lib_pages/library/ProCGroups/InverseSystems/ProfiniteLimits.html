@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.InverseSystems.ProfiniteLimits | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.InverseSystems.ProfiniteLimits</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/InverseSystems.html">InverseSystems</a><span class="sep">/</span><span>ProfiniteLimits</span></div>
+      <h1 class="module-title">ProCGroups.InverseSystems.ProfiniteLimits</h1>
+      <div class="module-meta">3 Theorem | 2 Definition</div>
+      <div class="module-overview"><p>This module develops the maps induced by continuous homomorphisms. It organizes the relevant quotient pullbacks and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage maps, then proves the compatibility statements needed for the completed construction.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/Profinite/Basic.html">ProCGroups.Profinite.Basic</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../library/ProCGroups/InverseSystems.html">ProCGroups.InverseSystems</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.inverseLimitProjectionHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.inverseLimitProjectionHom">ProCGroups.inverseLimitProjectionHom</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProfiniteLimits.html#L28">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> inverseLimitProjectionHom {I : <span class="kw">Type</span> v} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S] (i : I) :
+    S.inverseLimit →* S.X i <span class="kw">where</span>
+  toFun := S.projection i
+  map_one&#x27; := <span class="kw">rfl</span>
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The projection from a group-valued inverse limit to <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> component is viewed as a homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.inverseLimitProjectionKer">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.inverseLimitProjectionKer">ProCGroups.inverseLimitProjectionKer</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProfiniteLimits.html#L39">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> inverseLimitProjectionKer {I : <span class="kw">Type</span> v} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I))
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, DiscreteTopology (S.X i)] (i : I) :
+    OpenNormalSubgroup S.inverseLimit <span class="kw">where</span>
+  toOpenSubgroup :=
+    { toSubgroup := (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.inverseLimitProjectionHom">inverseLimitProjectionHom</a> S i).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>
+      isOpen&#x27; := <span class="kw">by</span>
+        change IsOpen {x : S.inverseLimit | <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.inverseLimitProjectionHom">inverseLimitProjectionHom</a> S i x = 1}
+        simpa [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.inverseLimitProjectionHom">inverseLimitProjectionHom</a>] using
+          (isOpen_discrete ({1} : Set (S.X i))).preimage (S.continuous_projection i) }
+  isNormal&#x27; := <span class="kw">by</span>
+    change ((<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.inverseLimitProjectionHom">inverseLimitProjectionHom</a> S i).<a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/Basic.html#decl-ProCGroups.ProC.OpenNormalSubgroup.ker">ker</a>).Normal
+    infer_instance</code></pre></section>
+    <section><div class="natural-text"><p>The kernel of a projection from an inverse limit of discrete groups is open normal.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.mem_inverseLimitProjectionKer">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.mem_inverseLimitProjectionKer">ProCGroups.mem_inverseLimitProjectionKer</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProfiniteLimits.html#L55">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> mem_inverseLimitProjectionKer {I : <span class="kw">Type</span> v} [Preorder I]
+    {S : InverseSystems.InverseSystem (I := I)}
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, DiscreteTopology (S.X i)]
+    {i : I} {x : S.inverseLimit} :
+    x ∈ <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.inverseLimitProjectionKer">inverseLimitProjectionKer</a> S i ↔ S.projection i x = 1</code></pre></section>
+    <section><div class="natural-text"><p>Membership in the kernel of an inverse-limit projection is membership in the kernel at that <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stage.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>Iff.rfl</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.exists_inverseLimitProjectionKer_sub_open_nhds_of_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.exists_inverseLimitProjectionKer_sub_open_nhds_of_one">ProCGroups.exists_inverseLimitProjectionKer_sub_open_nhds_of_one</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProfiniteLimits.html#L65">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_inverseLimitProjectionKer_sub_open_nhds_of_one
+    {I : <span class="kw">Type</span> v} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I)) [Nonempty I]
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, DiscreteTopology (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    {W : Set S.inverseLimit} (hW : IsOpen W) (h1W : (1 : S.inverseLimit) ∈ W) :
+    ∃ i : I,
+      (((<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.inverseLimitProjectionKer">inverseLimitProjectionKer</a> S i : OpenNormalSubgroup S.inverseLimit) :
+        Subgroup S.inverseLimit) : Set S.inverseLimit) ⊆ W</code></pre></section>
+    <section><div class="natural-text"><p>In an inverse limit of discrete groups, every open neighborhood of \(1\) contains the kernel of <a class="decl-ref" href="../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> projection map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  rcases S.exists_projection_preimage_subset hdir hW h1W <span class="kw">with</span> ⟨i, V, -, h1V, hVW⟩
+  refine ⟨i, ?_⟩
+  <span class="kw">intro</span> x hx
+  <span class="kw">have</span> hxker : S.projection i x = 1 := (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.mem_inverseLimitProjectionKer">mem_inverseLimitProjectionKer</a> (S := S) (i := i)).1 hx
+  <span class="kw">have</span> hV1 : (1 : S.X i) ∈ V := h1V
+  <span class="kw">have</span> hxV : x ∈ S.projection i ⁻¹&#x27; V := <span class="kw">by</span>
+    change S.projection i x ∈ V
+    <span class="kw">rw</span> [hxker]
+    <span class="kw">exact</span> hV1
+  <span class="kw">exact</span> hVW hxV</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.inverseLimitProjectionKer_fundamentalSystemAtOne">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.inverseLimitProjectionKer_fundamentalSystemAtOne">ProCGroups.inverseLimitProjectionKer_fundamentalSystemAtOne</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProfiniteLimits.html#L88">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> inverseLimitProjectionKer_fundamentalSystemAtOne
+    {I : <span class="kw">Type</span> v} [Preorder I]
+    (S : InverseSystems.InverseSystem (I := I)) [Nonempty I]
+    [∀ i, Group (S.X i)] [InverseSystems.IsGroupSystem S]
+    [∀ i, DiscreteTopology (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I)) :
+    (∀ i : I,
+      IsOpen ((((<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.inverseLimitProjectionKer">inverseLimitProjectionKer</a> S i : OpenNormalSubgroup S.inverseLimit) :
+        Subgroup S.inverseLimit) : Set S.inverseLimit)) ∧
+      (1 : S.inverseLimit) ∈ (((<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.inverseLimitProjectionKer">inverseLimitProjectionKer</a> S i :
+        OpenNormalSubgroup S.inverseLimit) : Subgroup S.inverseLimit) : Set S.inverseLimit)) ∧
+    ∀ W : Set S.inverseLimit, IsOpen W → (1 : S.inverseLimit) ∈ W →
+      ∃ i : I,
+        ((((<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.inverseLimitProjectionKer">inverseLimitProjectionKer</a> S i : OpenNormalSubgroup S.inverseLimit) :
+          Subgroup S.inverseLimit) : Set S.inverseLimit)) ⊆ W</code></pre></section>
+    <section><div class="natural-text"><p>The projection kernels form a fundamental system of open neighborhoods of 1 in the inverse limit.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · <span class="kw">intro</span> i
+    refine ⟨<a class="decl-ref" href="../../../library/ProCGroups/Profinite/OpenSubgroups.html#decl-ProCGroups.openNormalSubgroup_isOpen">openNormalSubgroup_isOpen</a> (G := S.inverseLimit) (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.inverseLimitProjectionKer">inverseLimitProjectionKer</a> S i), ?_⟩
+    change ((1 : S.inverseLimit).1 i) = 1
+    <span class="kw">rfl</span>
+  · <span class="kw">intro</span> W hW h1W
+    <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProfiniteLimits.html#decl-ProCGroups.exists_inverseLimitProjectionKer_sub_open_nhds_of_one">exists_inverseLimitProjectionKer_sub_open_nhds_of_one</a> S hdir hW h1W</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.InverseSystems.ProfiniteLimits"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

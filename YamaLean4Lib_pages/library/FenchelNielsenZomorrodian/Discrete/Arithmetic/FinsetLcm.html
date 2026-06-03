@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FenchelNielsenZomorrodian.Discrete.Arithmetic.FinsetLcm | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">FenchelNielsenZomorrodian.Discrete.Arithmetic.FinsetLcm</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/FenchelNielsenZomorrodian.html">FenchelNielsenZomorrodian</a><span class="sep">/</span><a href="../../../../library/FenchelNielsenZomorrodian/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/Arithmetic.html">Arithmetic</a><span class="sep">/</span><span>FinsetLcm</span></div>
+      <h1 class="module-title">FenchelNielsenZomorrodian.Discrete.Arithmetic.FinsetLcm</h1>
+      <div class="module-meta">1 Theorem</div>
+      <div class="module-overview"><p>This module studies finset lcm for fenchel nielsen zomorrodian. If a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> set of periods contains an equal pair in the required position, then twice the lcm is bounded by the product.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/Arithmetic/FamilyLcm.html">FenchelNielsenZomorrodian.Discrete.Arithmetic.FamilyLcm</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete.html">FenchelNielsenZomorrodian.Discrete</a></li><li><a href="../../../../library/FenchelNielsenZomorrodian/Discrete/Arithmetic.html">FenchelNielsenZomorrodian.Discrete.Arithmetic</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-Finset.two_mul_lcm_le_prod_of_equal_pair">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-Finset.two_mul_lcm_le_prod_of_equal_pair">Finset.two_mul_lcm_le_prod_of_equal_pair</a>
+    <a class="source-link" href="../../../../library/src/FenchelNielsenZomorrodian/Discrete/Arithmetic/FinsetLcm.html#L21">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> two_mul_lcm_le_prod_of_equal_pair
+    {ι : <span class="kw">Type</span>*} {periods : ι → ℕ} {s : Finset ι}
+    (hge : ∀ i ∈ s, 2 ≤ periods i)
+    {i j : ι} (hi : i ∈ s) (hj : j ∈ s)
+    (hji : j ≠ i) (hjEq : periods j = periods i) :
+    2 * s.lcm periods ≤ s.prod periods</code></pre></section>
+    <section><div class="natural-text"><p>If a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> set of periods contains an equal pair in the required position, then twice the lcm is bounded by the product.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">have</span> hjmem : j ∈ s.erase i := <span class="kw">by</span>
+    <span class="kw">exact</span> Finset.mem_erase.mpr ⟨hji, hj⟩
+  <span class="kw">have</span> hlcmDivProdErase :
+      s.lcm periods ∣ (s.erase i).prod periods := <span class="kw">by</span>
+    <span class="kw">apply</span> Finset.lcm_dvd
+    <span class="kw">intro</span> k hk
+    by_cases hki : k = i
+    · subst hki
+      <span class="kw">rw</span> [← hjEq]
+      <span class="kw">exact</span> Finset.dvd_prod_of_mem periods hjmem
+    · <span class="kw">have</span> hkmem : k ∈ s.erase i := <span class="kw">by</span>
+        <span class="kw">exact</span> Finset.mem_erase.mpr ⟨hki, hk⟩
+      <span class="kw">exact</span> Finset.dvd_prod_of_mem periods hkmem
+  <span class="kw">have</span> hProdErasePos : 0 &lt; (s.erase i).prod periods := <span class="kw">by</span>
+    <span class="kw">exact</span> Finset.prod_pos
+      (<span class="kw">fun</span> k hk =&gt; lt_of_lt_of_le (<span class="kw">by</span> decide : 0 &lt; 2)
+        (hge k (Finset.mem_of_mem_erase hk)))
+  <span class="kw">have</span> hlcmLeProdErase : s.lcm periods ≤ (s.erase i).prod periods :=
+    Nat.le_of_dvd hProdErasePos hlcmDivProdErase
+  <span class="kw">calc</span>
+    2 * s.lcm periods
+        ≤ periods i * (s.erase i).prod periods :=
+          Nat.mul_le_mul (hge i hi) hlcmLeProdErase
+    _ = s.prod periods := <span class="kw">by</span>
+          <span class="kw">rw</span> [mul_comm]
+          <span class="kw">exact</span> Finset.prod_erase_mul (s := s) (f := periods) (a := i) hi</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Use the Fenchel--Nielsen--Zomorrodian presentation with elliptic generators of prescribed periods, handle and boundary generators, and the defining product relation. The proof checks the images of the named generators and verifies that every presentation relator is preserved in the target quotient, abelianization, or reduced presentation. For period-class statements, the relevant lcm or gcd divisibility is converted into a scalar multiple of the abelianized elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>, and the defining period relation makes that multiple vanish. Schreier-rewriting steps are performed with the chosen transversal; the letter-by-letter formula sends each relator to the corresponding canonical word in the subgroup presentation. Because the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> images satisfy all defining relations and agree with the displayed quotient data, the presentation universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> yields the asserted identity. The reductions preserve the ordering of the canonical generators and the period data, so the image of every relator can be read directly in the target presentation. In the abelianized arguments, commutators vanish and only the period coefficients remain. The divisibility or lcm calculation then gives the required scalar multiple, while the presentation relation supplies its vanishing. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked. For the Fenchel--Nielsen--Zomorrodian relations, the period calculation checks that each elliptic <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> has image of the prescribed order, and the product relation is verified by multiplying the images in the stated order. Divisibility, lcm, or gcd hypotheses are used precisely to make the period <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/CompactFuchsianPresentation.html#decl-FenchelNielsen.relators">relators</a> vanish in the target quotient.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="FenchelNielsenZomorrodian.Discrete.Arithmetic.FinsetLcm"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

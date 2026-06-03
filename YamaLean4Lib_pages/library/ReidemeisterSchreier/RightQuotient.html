@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReidemeisterSchreier.RightQuotient | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../download/index.html">Download</a></nav>
+  <div class="header-current">ReidemeisterSchreier.RightQuotient</div>
+  <form class="search-form" action="../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../library/ReidemeisterSchreier.html">ReidemeisterSchreier</a><span class="sep">/</span><span>RightQuotient</span></div>
+      <h1 class="module-title">ReidemeisterSchreier.RightQuotient</h1>
+      <div class="module-meta">5 Theorem | 3 Definition | 1 Abbreviation</div>
+      <div class="module-overview"><p>This module formalizes right quotients and transversals for subgroup rewriting.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li>Mathlib.GroupTheory.QuotientGroup.Basic</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html">ReidemeisterSchreier.Profinite.OpenSubgroups.RightQuotient</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl abbrev" id="decl-ReidemeisterSchreier.RightQuotient">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.RightQuotient">ReidemeisterSchreier.RightQuotient</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/RightQuotient.html#L26">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> RightQuotient (H : Subgroup G) :=
+  Quotient (QuotientGroup.rightRel H)</code></pre></section>
+    <section><div class="natural-text"><p>The right quotient \(H\backslash G\) is realized as the standard quotient by the right-coset relation.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.rightCoset">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.rightCoset">ReidemeisterSchreier.rightCoset</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/RightQuotient.html#L30">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightCoset (H : Subgroup G) (g : G) : <a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.RightQuotient">RightQuotient</a> H :=
+  Quotient.mk&#x27;&#x27; g</code></pre></section>
+    <section><div class="natural-text"><p>The right coset of an element modulo a subgroup.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.rightCoset_eq_basepoint_iff_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.rightCoset_eq_basepoint_iff_mem">ReidemeisterSchreier.rightCoset_eq_basepoint_iff_mem</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/RightQuotient.html#L34">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> rightCoset_eq_basepoint_iff_mem
+    {H : Subgroup G} {g : G} :
+    <a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.rightCoset">rightCoset</a> H g = <a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.rightCoset">rightCoset</a> H (1 : G) ↔ g ∈ H</code></pre></section>
+    <section><div class="natural-text"><p>A right coset is the base coset exactly when its <a class="decl-ref" href="../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> lies in the subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hg
+    <span class="kw">have</span> hrel : QuotientGroup.rightRel H g 1 := Quotient.exact&#x27; hg
+    <span class="kw">have</span> hginv : g⁻¹ ∈ H := <span class="kw">by</span>
+      simpa using (QuotientGroup.rightRel_apply.mp hrel)
+    simpa using H.inv_mem hginv
+  · <span class="kw">intro</span> hg
+    <span class="kw">apply</span> Quotient.sound&#x27;
+    <span class="kw">rw</span> [QuotientGroup.rightRel_apply]
+    simpa using H.inv_mem hg</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the right-coset quotient relation. Two elements define the same quotient point exactly when they differ by an element of the subgroup on the right, and the quotient map respects multiplication by representatives through this relation. The stated formulas follow by rewriting membership and equality in the quotient relation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.rightCosetMulAction">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.rightCosetMulAction">ReidemeisterSchreier.rightCosetMulAction</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/RightQuotient.html#L50">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightCosetMulAction (H : Subgroup G) :
+    MulAction G (<a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.RightQuotient">RightQuotient</a> H) <span class="kw">where</span>
+  smul g :=
+    Quotient.map&#x27; (<span class="kw">fun</span> a =&gt; a * g⁻¹) <span class="kw">fun</span> a b hab =&gt; <span class="kw">by</span>
+      <span class="kw">rw</span> [QuotientGroup.rightRel_apply] at hab ⊢
+      simpa [mul_assoc] using hab
+  one_smul q := <span class="kw">by</span>
+    refine Quotient.inductionOn&#x27; q ?_
+    <span class="kw">intro</span> a
+    <span class="kw">apply</span> Quotient.sound&#x27;
+    <span class="kw">rw</span> [QuotientGroup.rightRel_apply]
+    <span class="kw">simp</span> only [inv_one, mul_one, mul_inv_cancel, one_mem]
+  mul_smul g h q := <span class="kw">by</span>
+    refine Quotient.inductionOn&#x27; q ?_
+    <span class="kw">intro</span> a
+    <span class="kw">apply</span> Quotient.sound&#x27;
+    <span class="kw">rw</span> [QuotientGroup.rightRel_apply]
+    <span class="kw">simp</span> only [mul_assoc, mul_inv_rev, <a class="decl-ref" href="../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>, inv_mul_cancel_left, mul_inv_cancel, one_mem]</code></pre></section>
+    <section><div class="natural-text"><p>Right multiplication on right cosets, expressed as the left action \(g\cdot [a]=[a g^{-1}]\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.rightCosetMulAction_mk_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.rightCosetMulAction_mk_smul">ReidemeisterSchreier.rightCosetMulAction_mk_smul</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/RightQuotient.html#L69">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> rightCosetMulAction_mk_smul
+    (H : Subgroup G) (g a : G) :
+    letI</code></pre></section>
+    <section><div class="natural-text"><p>The right-coset multiplication action has the displayed <a class="decl-ref" href="../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> formula.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>rightCosetMulAction H
+    g • (Quotient.mk&#x27;&#x27; a : <a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.RightQuotient">RightQuotient</a> H) = Quotient.mk&#x27;&#x27; (a * g⁻¹) :=
+  <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the right-coset quotient relation. Two elements define the same quotient point exactly when they differ by an element of the subgroup on the right, and the quotient map respects multiplication by representatives through this relation. The stated formulas follow by rewriting membership and equality in the quotient relation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.rightCosetMulAction_inv_mk_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.rightCosetMulAction_inv_mk_smul">ReidemeisterSchreier.rightCosetMulAction_inv_mk_smul</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/RightQuotient.html#L75">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> rightCosetMulAction_inv_mk_smul
+    (H : Subgroup G) (g a : G) :
+    letI</code></pre></section>
+    <section><div class="natural-text"><p>The right-coset multiplication action has the displayed <a class="decl-ref" href="../../library/ReidemeisterSchreier/Discrete/ReidemeisterSchreier/FiniteQuotient/Data.html#decl-ReidemeisterSchreier.Discrete.ReidemeisterSchreier.FiniteQuotientSchreierData.representative">representative</a> formula.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>rightCosetMulAction H
+    g⁻¹ • (Quotient.mk&#x27;&#x27; a : <a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.RightQuotient">RightQuotient</a> H) = Quotient.mk&#x27;&#x27; (a * g) := <span class="kw">by</span>
+  <span class="kw">rw</span> [rightCosetMulAction_mk_smul (H := H) g⁻¹ a]
+  <span class="kw">simp</span> only [<a class="decl-ref" href="../../library/ReidemeisterSchreier/FreeGroup/PrefixParent.html#decl-ReidemeisterSchreier.SignedLetter.inv_inv">inv_inv</a>]</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the right-coset quotient relation. Two elements define the same quotient point exactly when they differ by an element of the subgroup on the right, and the quotient map respects multiplication by representatives through this relation. The stated formulas follow by rewriting membership and equality in the quotient relation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.rightCosetMulAction_rightCoset_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.rightCosetMulAction_rightCoset_smul">ReidemeisterSchreier.rightCosetMulAction_rightCoset_smul</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/RightQuotient.html#L82">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> rightCosetMulAction_rightCoset_smul
+    (H : Subgroup G) (g a : G) :
+    letI</code></pre></section>
+    <section><div class="natural-text"><p>Under the left action on right cosets, \(g\) sends the right coset of \(a\) to the right coset of \(a g^{-1}\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>rightCosetMulAction H
+    g • <a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.rightCoset">rightCoset</a> H a = <a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.rightCoset">rightCoset</a> H (a * g⁻¹) :=
+  rightCosetMulAction_mk_smul H g a</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the right-coset quotient relation. Two elements define the same quotient point exactly when they differ by an element of the subgroup on the right, and the quotient map respects multiplication by representatives through this relation. The stated formulas follow by rewriting membership and equality in the quotient relation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.rightCosetMulAction_inv_rightCoset_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.rightCosetMulAction_inv_rightCoset_smul">ReidemeisterSchreier.rightCosetMulAction_inv_rightCoset_smul</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/RightQuotient.html#L88">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> rightCosetMulAction_inv_rightCoset_smul
+    (H : Subgroup G) (g a : G) :
+    letI</code></pre></section>
+    <section><div class="natural-text"><p>Under the left action on right cosets, \(g^{-1}\) sends the right coset of \(a\) to the right coset of \(a g\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code>rightCosetMulAction H
+    g⁻¹ • <a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.rightCoset">rightCoset</a> H a = <a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.rightCoset">rightCoset</a> H (a * g) :=
+  rightCosetMulAction_inv_mk_smul H g a</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the right-coset quotient relation. Two elements define the same quotient point exactly when they differ by an element of the subgroup on the right, and the quotient map respects multiplication by representatives through this relation. The stated formulas follow by rewriting membership and equality in the quotient relation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.rightQuotientEquivLeftQuotient">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.rightQuotientEquivLeftQuotient">ReidemeisterSchreier.rightQuotientEquivLeftQuotient</a>
+    <a class="source-link" href="../../library/src/ReidemeisterSchreier/RightQuotient.html#L95">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightQuotientEquivLeftQuotient (H : Subgroup G) :
+    <a class="decl-ref" href="../../library/ReidemeisterSchreier/RightQuotient.html#decl-ReidemeisterSchreier.RightQuotient">RightQuotient</a> H ≃ G ⧸ H :=
+  QuotientGroup.quotientRightRelEquivQuotientLeftRel H</code></pre></section>
+    <section><div class="natural-text"><p>Right cosets are equivalent to the usual left quotient. It packages mutually inverse maps as an algebraic or topological equivalence.</p></div></section>
+  </div>
+</section></div></main>
+  <aside class="file-tree" data-active="ReidemeisterSchreier.RightQuotient"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../assets/site.js" data-root="../../"></script>
+</body>
+</html>

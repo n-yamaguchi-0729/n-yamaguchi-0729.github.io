@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.ProC.OpenNormalSubgroups.CountableChains | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.ProC.OpenNormalSubgroups.CountableChains</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../../library/ProCGroups/ProC.html">ProC</a><span class="sep">/</span><a href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups.html">OpenNormalSubgroups</a><span class="sep">/</span><span>CountableChains</span></div>
+      <h1 class="module-title">ProCGroups.ProC.OpenNormalSubgroups.CountableChains</h1>
+      <div class="module-meta">3 Theorem | 1 Definition</div>
+      <div class="module-overview"><p>This module supplies the topological part of the construction. It checks continuity and stagewise neighborhood properties so that the completed object inherits the required topology.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ProCGroups/Profinite/Basic.html">ProCGroups.Profinite.Basic</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ProCGroups.html">ProCGroups</a></li><li><a href="../../../../library/ProCGroups/LocalWeight/SubgroupChains.html">ProCGroups.LocalWeight.SubgroupChains</a></li><li><a href="../../../../library/ProCGroups/ProC.html">ProCGroups.ProC</a></li><li><a href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups.html">ProCGroups.ProC.OpenNormalSubgroups</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.ProC.HasCountableOpenNormalBasisAtOne">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.HasCountableOpenNormalBasisAtOne">ProCGroups.ProC.HasCountableOpenNormalBasisAtOne</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#L32">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> HasCountableOpenNormalBasisAtOne
+    (G : <span class="kw">Type</span> u) [Group G] [TopologicalSpace G] : <span class="kw">Prop</span> :=
+  ∃ U : ℕ → OpenNormalSubgroup G,
+    Antitone (<span class="kw">fun</span> n =&gt; (U n : Subgroup G)) ∧
+    ∀ W : Set G, IsOpen W → (1 : G) ∈ W →
+      ∃ n : ℕ, (((U n : Subgroup G) : Set G)) ⊆ W</code></pre></section>
+    <section><div class="natural-text"><p>Preparatory countable-chain layer for later use: \(1\) has a countable fundamental system of open normal subgroups. This isolates the part of the corollary that does not yet depend on the not-yet-formalized cardinal invariant \(w_0(G)\) or on the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-counting statements from the later section on generators.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.exists_term_le_openSubgroup_of_iInf_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.exists_term_le_openSubgroup_of_iInf_le">ProCGroups.ProC.exists_term_le_openSubgroup_of_iInf_le</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#L41">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_term_le_openSubgroup_of_iInf_le [CompactSpace G]
+    (H : ℕ → Subgroup G) (hmono : Antitone H)
+    (hclosed : ∀ n, IsClosed (((H n : Subgroup G) : Set G)))
+    (U : OpenSubgroup G) (hInf : iInf H ≤ (U : Subgroup G)) :
+    ∃ n : ℕ, H n ≤ (U : Subgroup G)</code></pre></section>
+    <section><div class="natural-text"><p>Compactness lemma for descending families of closed subgroups: if the total intersection lies inside an open subgroup, then <a class="decl-ref" href="../../../../library/FoxDifferential/Common/CrossedDifferential.html#decl-FoxDifferential.IsCrossedDifferential.one">one</a> term already lies inside that open subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> K : Set G := (((U : Subgroup G) : Set G))ᶜ
+  <span class="kw">have</span> hKclosed : IsClosed K := <span class="kw">by</span>
+    simpa [K] using (<a class="decl-ref" href="../../../../library/ProCGroups/Profinite/OpenSubgroups.html#decl-ProCGroups.openSubgroup_isOpen">openSubgroup_isOpen</a> (G := G) U).isClosed_compl
+  <span class="kw">have</span> hKcompact : <a class="decl-ref" href="../../../../library/FenchelNielsenZomorrodian/Discrete/Core/Signature.html#decl-FenchelNielsen.FenchelSignature.IsCompact">IsCompact</a> K := hKclosed.isCompact
+  <span class="kw">have</span> havoid : K ∩ ⋂ n, (((H n : Subgroup G) : Set G)) = ∅ := <span class="kw">by</span>
+    ext x
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hx
+      <span class="kw">have</span> hxInf : x ∈ iInf H := <span class="kw">by</span>
+        simpa using hx.2
+      <span class="kw">exact</span> False.elim (hx.1 (hInf hxInf))
+    · <span class="kw">intro</span> hx
+      <span class="kw">simp</span> only [Set.mem_empty_iff_false] at hx
+  <span class="kw">have</span> hdir : Directed (<span class="kw">fun</span> s t : Set G =&gt; s ⊇ t) (<span class="kw">fun</span> n =&gt; (((H n : Subgroup G) : Set G))) := <span class="kw">by</span>
+    <span class="kw">intro</span> i j
+    refine ⟨max i j, ?_, ?_⟩
+    · <span class="kw">exact</span> hmono (Nat.le_max_left i j)
+    · <span class="kw">exact</span> hmono (Nat.le_max_right i j)
+  rcases hKcompact.elim_directed_family_closed
+      (<span class="kw">fun</span> n =&gt; (((H n : Subgroup G) : Set G))) hclosed havoid hdir <span class="kw">with</span> ⟨n, hn⟩
+  refine ⟨n, ?_⟩
+  <span class="kw">intro</span> x hx
+  by_contra hxU
+  <span class="kw">have</span> hxK : x ∈ K := <span class="kw">by</span>
+    simpa [K] using hxU
+  <span class="kw">have</span> hmem : x ∈ K ∩ (((H n : Subgroup G) : Set G)) := <span class="kw">by</span>
+    <span class="kw">exact</span> ⟨hxK, hx⟩
+  <span class="kw">have</span> : x ∈ (∅ : Set G) := <span class="kw">by</span>
+    <span class="kw">simp</span> only [hn, Set.mem_empty_iff_false] at hmem
+  <span class="kw">simp</span> only [Set.mem_empty_iff_false] at this</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. Closed-subgroup and subgroup-permanence claims use ambient open-normal approximation: an open normal subgroup of the closed subgroup is refined by the intersection with an ambient open normal subgroup of \(G\). Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument. For quotient and subgroup claims, representatives are chosen in the ambient group and the induced map is checked to send the class of an element to the class of its image. Normality, openness, and membership in the <a class="decl-ref" href="../../../../library/ProCGroups/ProC/GroupPredicates/Basic.html#decl-ProCGroups.ProC.ProCGroupPredicate.finiteQuotientClass">finite quotient class</a> are preserved by the subgroup, quotient, intersection, or inverse-image closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> being invoked.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.hasCountableOpenNormalBasisAtOne_iff_exists_descending_openNormalChain">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.hasCountableOpenNormalBasisAtOne_iff_exists_descending_openNormalChain">ProCGroups.ProC.hasCountableOpenNormalBasisAtOne_iff_exists_descending_openNormalChain</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#L85">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hasCountableOpenNormalBasisAtOne_iff_exists_descending_openNormalChain
+    [IsTopologicalGroup G] [CompactSpace G] [T1Space G] [TotallyDisconnectedSpace G] :
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#decl-ProCGroups.ProC.HasCountableOpenNormalBasisAtOne">HasCountableOpenNormalBasisAtOne</a> G ↔
+      ∃ U : ℕ → OpenNormalSubgroup G,
+        Antitone (<span class="kw">fun</span> n =&gt; (U n : Subgroup G)) ∧
+        iInf (<span class="kw">fun</span> n =&gt; (U n : Subgroup G)) = (⊥ : Subgroup G)</code></pre></section>
+    <section><div class="natural-text"><p>Preparatory countable-chain / neighborhood-basis equivalence for profinite groups: for a profinite group, giving a countable descending chain of open normal subgroups with trivial intersection is equivalent to giving a countable neighborhood basis at \(1\) formed by a descending chain of open normal subgroups. This is exactly the chain-theoretic content of the corollary; the <a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a>-cardinality half will be added later once the \(w_0(G)\) / convergent-<a class="decl-ref" href="../../../../library/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html#decl-ReidemeisterSchreier.SchreierSection.generator">generator</a> formulation is in place.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · rintro ⟨U, hmono, hbasis⟩
+    refine ⟨U, hmono, ?_⟩
+    <span class="kw">apply</span> le_antisymm
+    · <span class="kw">intro</span> x hx
+      change x = 1
+      by_contra hxne
+      <span class="kw">let</span> W : Set G := ({x} : Set G)ᶜ
+      <span class="kw">have</span> hW : IsOpen W := <span class="kw">by</span>
+        <span class="kw">simp</span> only [isOpen_compl_iff, Set.finite_singleton, Set.Finite.isClosed, W]
+      <span class="kw">have</span> h1W : (1 : G) ∈ W := <span class="kw">by</span>
+        <span class="kw">have</span> hx1 : (1 : G) ≠ x := <span class="kw">by</span>
+          <span class="kw">intro</span> h1x
+          <span class="kw">exact</span> hxne h1x.symm
+        simpa [W] using hx1
+      rcases hbasis W hW h1W <span class="kw">with</span> ⟨n, hnW⟩
+      <span class="kw">have</span> hxall : ∀ n : ℕ, x ∈ (((U n : Subgroup G) : Set G)) := <span class="kw">by</span>
+        simpa using hx
+      <span class="kw">have</span> hxW : x ∈ W := hnW (hxall n)
+      <span class="kw">have</span> : x ∉ ({x} : Set G) := <span class="kw">by</span>
+        <span class="kw">simp</span> only [Set.mem_compl_iff, Set.mem_singleton_iff, not_true_eq_false, W] at hxW
+      <span class="kw">exact</span> this (<span class="kw">by</span> <span class="kw">simp</span> only [Set.mem_singleton_iff])
+    · <span class="kw">exact</span> bot_le
+  · rintro ⟨U, hmono, hinf⟩
+    refine ⟨U, hmono, ?_⟩
+    <span class="kw">intro</span> W hW h1W
+    rcases ProfiniteGrp.exist_openNormalSubgroup_sub_open_nhds_of_one
+        (G := G) hW h1W <span class="kw">with</span> ⟨N, hNW⟩
+    <span class="kw">have</span> hInfLe : iInf (<span class="kw">fun</span> n =&gt; (U n : Subgroup G)) ≤ (N : Subgroup G) := <span class="kw">by</span>
+      <span class="kw">simp</span> only [hinf, bot_le]
+    rcases <a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#decl-ProCGroups.ProC.exists_term_le_openSubgroup_of_iInf_le">exists_term_le_openSubgroup_of_iInf_le</a> (G := G)
+        (<span class="kw">fun</span> n =&gt; (U n : Subgroup G)) hmono
+        (<span class="kw">fun</span> n =&gt; <a class="decl-ref" href="../../../../library/ProCGroups/Profinite/OpenSubgroups.html#decl-ProCGroups.openNormalSubgroup_isClosed">openNormalSubgroup_isClosed</a> (G := G) (U n))
+        N.toOpenSubgroup hInfLe <span class="kw">with</span> ⟨n, hnN⟩
+    <span class="kw">exact</span> ⟨n, <span class="kw">fun</span> x hx =&gt; hNW (hnN hx)⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Continuity is checked by composing with all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient projections; each composite is a continuous map between <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> or profinite quotient spaces. Kernel and image statements are verified after quotienting by sufficiently small open normal subgroups, where they become ordinary <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> group calculations. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. Exactness is checked by separating injectivity, kernel containment, and image containment. Injectivity is either coordinatewise injectivity or the injectivity of a <a class="decl-ref" href="../../../../library/ProCGroups/Topologies/ContinuousMonoidHom.html#decl-ContinuousMonoidHom.subtype">subtype</a> inclusion; the kernel-to-image direction is obtained by packaging an element with the required vanishing proof, while the reverse direction is obtained by applying the next boundary or <a class="decl-ref" href="../../../../library/FoxDifferential/Discrete/GroupRing.html#decl-FoxDifferential.augmentation">augmentation</a> map and simplifying the defining relation.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.hasCountableOpenNormalBasisAtOne_iff_exists_descending_openNormalChain_of_isProfinite">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.hasCountableOpenNormalBasisAtOne_iff_exists_descending_openNormalChain_of_isProfinite">ProCGroups.ProC.hasCountableOpenNormalBasisAtOne_iff_exists_descending_openNormalChain_of_isProfinite</a>
+    <a class="source-link" href="../../../../library/src/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#L129">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hasCountableOpenNormalBasisAtOne_iff_exists_descending_openNormalChain_of_isProfinite
+    [IsTopologicalGroup G]
+    (hprof : <a class="decl-ref" href="../../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> G) :
+    <a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#decl-ProCGroups.ProC.HasCountableOpenNormalBasisAtOne">HasCountableOpenNormalBasisAtOne</a> G ↔
+      ∃ U : ℕ → OpenNormalSubgroup G,
+        Antitone (<span class="kw">fun</span> n =&gt; (U n : Subgroup G)) ∧
+        iInf (<span class="kw">fun</span> n =&gt; (U n : Subgroup G)) = (⊥ : Subgroup G)</code></pre></section>
+    <section><div class="natural-text"><p>The same preparatory countable-chain equivalence, packaged with the working <a class="decl-ref" href="../../../../library/ProCGroups/Profinite/Basic.html#decl-ProCGroups.IsProfiniteGroup">IsProfiniteGroup</a> predicate used throughout this file.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  letI : CompactSpace G := IsProfiniteGroup.compactSpace hprof
+  letI : T2Space G := IsProfiniteGroup.t2Space hprof
+  letI : TotallyDisconnectedSpace G := IsProfiniteGroup.totallyDisconnectedSpace hprof
+  simpa using
+    (<a class="decl-ref" href="../../../../library/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#decl-ProCGroups.ProC.hasCountableOpenNormalBasisAtOne_iff_exists_descending_openNormalChain">hasCountableOpenNormalBasisAtOne_iff_exists_descending_openNormalChain</a> (G := G))</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Work with open normal subgroups and <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients of the profinite or pro-\(C\) group. Finite quotients separate points, and continuous homomorphisms are determined by their <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> quotient-level maps. For pro-\(C\) claims, the resulting <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients lie in \(C\) by the closure <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> used in the construction: closure under quotients, subgroups, <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> products, or extensions. Continuity is checked by composing with all <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient projections; each composite is a continuous map between <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> or profinite quotient spaces. Compatibility under refinement then assembles the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-quotient data and proves the required profinite or pro-\(C\) statement. The quotient-level assertions are stable under passing to smaller open normal subgroups, so they define <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> data in the inverse system of <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotients. For pro-\(C\) permanence, the construction uses only operations for which the chosen <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass">finite group class</a> is closed. Hence the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> verification assembles to the desired profinite map, subgroup, or quotient statement. For categorical constructions such as products, pullbacks, and inverse limits, the universal <a class="decl-ref" href="../../../../library/ProCGroups/Frattini.html#decl-ProCGroups.Frattini.Subgroup.IsMaximalWithProperty.property">property</a> is checked by composing with the coordinate projections. The uniqueness part follows because any two candidate maps with the same <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient composites have the same value on every separating <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient. Existence is obtained by assembling the <a class="decl-ref" href="../../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> coordinate maps supplied by the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> quotient construction. The topological assertion is checked by the initial topology of the inverse limit. After composing with each <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage projection, the relevant map is a continuous <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage homomorphism or an operation on a <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> product; compactness, Hausdorffness, total disconnectedness, and profiniteness are then inherited from the <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a> stages by the standard inverse-limit argument.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.ProC.OpenNormalSubgroups.CountableChains"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

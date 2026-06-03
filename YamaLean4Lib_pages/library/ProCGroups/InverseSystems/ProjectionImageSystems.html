@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.InverseSystems.ProjectionImageSystems | Yamaguchi Lean4 Library</title>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean4 Library</a>
+  <nav class="header-nav"><a href="../../../download/index.html">Download</a></nav>
+  <div class="header-current">ProCGroups.InverseSystems.ProjectionImageSystems</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/InverseSystems.html">InverseSystems</a><span class="sep">/</span><span>ProjectionImageSystems</span></div>
+      <h1 class="module-title">ProCGroups.InverseSystems.ProjectionImageSystems</h1>
+      <div class="module-meta">15 Theorem | 6 Definition</div>
+      <div class="module-overview"><p>This module sets up the <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage and inverse-limit description of the construction. It records the stage maps, projections, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> lemmas used to pass back to the completed object.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/InverseSystems/CofinalityAndDensity.html">ProCGroups.InverseSystems.CofinalityAndDensity</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/FoxDifferential/Completed/ProCIntegerCoefficients/AugmentationIdeal/Closure.html">FoxDifferential.Completed.ProCIntegerCoefficients.AugmentationIdeal.Closure</a></li><li><a href="../../../library/ProCGroups/Generation/QuotientCriteria.html">ProCGroups.Generation.QuotientCriteria</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.projectionImageSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.projectionImageSystem">ProCGroups.InverseSystems.InverseSystem.projectionImageSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L25">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> InverseSystem.projectionImageSystem {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) (Y : Set S.inverseLimit) :
+    <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I) <span class="kw">where</span>
+  X := <span class="kw">fun</span> i =&gt; S.projection i &#x27;&#x27; Y
+  topologicalSpace := <span class="kw">fun</span> _ =&gt; inferInstance
+  map := <span class="kw">fun</span> {i j} hij x =&gt; ⟨S.map hij x.1, <span class="kw">by</span>
+    rcases x.2 <span class="kw">with</span> ⟨y, hy, hxy⟩
+    refine ⟨y, hy, ?_⟩
+    simpa [← hxy] using (S.projection_compatible y i j hij).symm⟩
+  continuous_map := <span class="kw">fun</span> {i j} hij =&gt;
+    Continuous.subtype_mk
+      ((S.continuous_map hij).comp continuous_subtype_val) (<span class="kw">fun</span> x =&gt; <span class="kw">by</span>
+        rcases x.2 <span class="kw">with</span> ⟨y, hy, hxy⟩
+        refine ⟨y, hy, ?_⟩
+        simpa [Function.comp, ← hxy] using (S.projection_compatible y i j hij).symm)
+  map_id := <span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+    funext x
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">simp</span> only [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.map_id_apply">map_id_apply</a>, id_eq]
+  map_comp := <span class="kw">fun</span> {i j k} hij hjk =&gt; <span class="kw">by</span>
+    funext x
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">simp</span> only [Function.comp_apply, S.map_comp_apply hij hjk]</code></pre></section>
+    <section><div class="natural-text"><p>The inverse system formed by the projection images of a subset of an inverse limit.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.projectionImageInclusion">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projectionImageInclusion">ProCGroups.InverseSystems.projectionImageInclusion</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L51">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> projectionImageInclusion {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) (Y : Set S.inverseLimit) :
+    (S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.Morphism">Morphism</a> S <span class="kw">where</span>
+  map := <span class="kw">fun</span> _ =&gt; Subtype.val
+  continuous_map := <span class="kw">fun</span> _ =&gt; continuous_subtype_val
+  comm := <span class="kw">fun</span> {i j} hij =&gt; <span class="kw">by</span>
+    funext x
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text"><p>The canonical morphism from the projection-image system into the ambient inverse system.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.projectionImageSectionMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projectionImageSectionMap">ProCGroups.InverseSystems.projectionImageSectionMap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L62">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> projectionImageSectionMap {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) (Y : Set S.inverseLimit) (i : I) :
+    Y → (S.projectionImageSystem Y).X i :=
+  <span class="kw">fun</span> y =&gt; ⟨S.projection i y.1, ⟨y.1, y.2, <span class="kw">rfl</span>⟩⟩</code></pre></section>
+    <section><div class="natural-text"><p>The coordinatewise section map from a subset of an inverse limit to its projection-image system.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.continuous_projectionImageSectionMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.continuous_projectionImageSectionMap">ProCGroups.InverseSystems.continuous_projectionImageSectionMap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L68">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_projectionImageSectionMap {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) (Y : Set S.inverseLimit) (i : I) :
+    Continuous (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageSectionMap">projectionImageSectionMap</a> S Y i)</code></pre></section>
+    <section><div class="natural-text"><p>The section map from the projection-image inverse limit back to the closed subspace is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> Continuous.subtype_mk ((S.continuous_projection i).comp continuous_subtype_val)
+    (<span class="kw">fun</span> y =&gt; ⟨y.1, y.2, <span class="kw">rfl</span>⟩)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.compatible_projectionImageSectionMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.compatible_projectionImageSectionMap">ProCGroups.InverseSystems.compatible_projectionImageSectionMap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L76">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> compatible_projectionImageSectionMap {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) (Y : Set S.inverseLimit) :
+    (S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.CompatibleMaps">CompatibleMaps</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageSectionMap">projectionImageSectionMap</a> S Y)</code></pre></section>
+    <section><div class="natural-text"><p>The projection-image section maps are <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> with the inverse-system transition maps.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> i j hij
+  funext y
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">exact</span> S.projection_compatible y.1 i j hij</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.surjective_projectionImageSectionMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.surjective_projectionImageSectionMap">ProCGroups.InverseSystems.surjective_projectionImageSectionMap</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L85">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> surjective_projectionImageSectionMap {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) (Y : Set S.inverseLimit) (i : I) :
+    Function.Surjective (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageSectionMap">projectionImageSectionMap</a> S Y i)</code></pre></section>
+    <section><div class="natural-text"><p>Each coordinate section map onto a projection image is surjective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x
+  rcases x.2 <span class="kw">with</span> ⟨y, hy, hxy⟩
+  refine ⟨⟨y, hy⟩, ?_⟩
+  <span class="kw">apply</span> Subtype.ext
+  simpa using hxy</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.projectionImageLift">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projectionImageLift">ProCGroups.InverseSystems.projectionImageLift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L96">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> projectionImageLift {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) (Y : Set S.inverseLimit) :
+    Y → (S.projectionImageSystem Y).inverseLimit :=
+  (S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.inverseLimitLift">inverseLimitLift</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageSectionMap">projectionImageSectionMap</a> S Y)
+    (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.compatible_projectionImageSectionMap">compatible_projectionImageSectionMap</a> S Y)</code></pre></section>
+    <section><div class="natural-text"><p>The canonical lift from a subset of an inverse limit to the inverse limit of its projection-image system.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.continuous_projectionImageLift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.continuous_projectionImageLift">ProCGroups.InverseSystems.continuous_projectionImageLift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L103">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_projectionImageLift {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) (Y : Set S.inverseLimit) :
+    Continuous (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y)</code></pre></section>
+    <section><div class="natural-text"><p>The lift from a closed subspace into the inverse limit of its projection images is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">exact</span> (S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.continuous_inverseLimitLift">continuous_inverseLimitLift</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageSectionMap">projectionImageSectionMap</a> S Y)
+    (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.continuous_projectionImageSectionMap">continuous_projectionImageSectionMap</a> S Y) (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.compatible_projectionImageSectionMap">compatible_projectionImageSectionMap</a> S Y)</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.surjective_projectionImageLift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.surjective_projectionImageLift">ProCGroups.InverseSystems.surjective_projectionImageLift</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L111">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> surjective_projectionImageLift {I : <span class="kw">Type</span> u} [Preorder I] [Nonempty I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I)) (Y : Set S.inverseLimit) (hY : IsClosed Y) :
+    Function.Surjective (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y)</code></pre></section>
+    <section><div class="natural-text"><p>For a closed subset of a compact Hausdorff inverse limit, the canonical projection-image lift is surjective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> T := S.projectionImageSystem Y
+  letI : CompactSpace Y := <span class="kw">by</span>
+    simpa using hY.isClosedEmbedding_subtypeVal.compactSpace
+  letI : ∀ i, T2Space (T.X i) := <span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+    change T2Space (S.projection i &#x27;&#x27; Y)
+    infer_instance
+  <span class="kw">exact</span> T.surjective_inverseLimitLift (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageSectionMap">projectionImageSectionMap</a> S Y) (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.continuous_projectionImageSectionMap">continuous_projectionImageSectionMap</a> S Y)
+    (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.compatible_projectionImageSectionMap">compatible_projectionImageSectionMap</a> S Y) (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.surjective_projectionImageSectionMap">surjective_projectionImageSectionMap</a> S Y) hdir</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projectionImageLift_comp_subtype">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projectionImageLift_comp_subtype">ProCGroups.InverseSystems.projectionImageLift_comp_subtype</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L126">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> projectionImageLift_comp_subtype {I : <span class="kw">Type</span> u} [Preorder I]
+    (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) (Y : Set S.inverseLimit) :
+    (S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.limMap">limMap</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y) ∘
+        <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y = Subtype.val</code></pre></section>
+    <section><div class="natural-text"><p>Composing the projection-image lift with the inclusion morphism recovers the underlying point of the original inverse limit.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  funext y
+  <span class="kw">apply</span> S.ext
+  <span class="kw">intro</span> i
+  <span class="kw">have</span> hpi :
+      (S.projectionImageSystem Y).projection i (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y y) =
+        <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageSectionMap">projectionImageSectionMap</a> S Y i y := <span class="kw">by</span>
+    simpa [Function.comp, <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a>] using
+      congrFun
+        ((S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem.projection_comp_inverseLimitLift">projection_comp_inverseLimitLift</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageSectionMap">projectionImageSectionMap</a> S Y)
+          (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.compatible_projectionImageSectionMap">compatible_projectionImageSectionMap</a> S Y) i) y
+  <span class="kw">calc</span>
+    S.projection i ((S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.limMap">limMap</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y)
+        (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y y))
+        = (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y).map i
+            ((S.projectionImageSystem Y).projection i (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y y)) := <span class="kw">by</span>
+              simpa [Function.comp] using
+                congrFun
+                  ((S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem._u03c0_comp_limMap">π_comp_limMap</a>
+                    (Θ := <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y) i) (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y y)
+    _ = ((S.projectionImageSystem Y).projection i (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y y)).1 := <span class="kw">rfl</span>
+    _ = (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageSectionMap">projectionImageSectionMap</a> S Y i y).1 := <span class="kw">by</span> <span class="kw">rw</span> [hpi]
+    _ = S.projection i y.1 := <span class="kw">rfl</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.surjective_projectionImageSystem_map">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.surjective_projectionImageSystem_map">ProCGroups.InverseSystems.InverseSystem.surjective_projectionImageSystem_map</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L154">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.surjective_projectionImageSystem_map
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) (Y : Set S.inverseLimit)
+    {i j : I} (hij : i ≤ j) :
+    Function.Surjective ((S.projectionImageSystem Y).map hij)</code></pre></section>
+    <section><div class="natural-text"><p>The transition maps in the projection-image system are always surjective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x
+  rcases x.2 <span class="kw">with</span> ⟨y, hy, hxy⟩
+  refine ⟨⟨S.projection j y, ⟨y, hy, <span class="kw">rfl</span>⟩⟩, ?_⟩
+  <span class="kw">apply</span> Subtype.ext
+  change S.map hij (S.projection j y) = x.1
+  <span class="kw">rw</span> [S.projection_compatible y i j hij]
+  <span class="kw">exact</span> hxy</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.homeomorph_projectionImageSystem_of_isClosed">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.homeomorph_projectionImageSystem_of_isClosed">ProCGroups.InverseSystems.InverseSystem.homeomorph_projectionImageSystem_of_isClosed</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L168">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> InverseSystem.homeomorph_projectionImageSystem_of_isClosed
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) [Nonempty I]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (Y : Set S.inverseLimit) (hY : IsClosed Y) :
+    Y ≃ₜ (S.projectionImageSystem Y).inverseLimit := <span class="kw">by</span>
+  classical
+  letI : CompactSpace Y := <span class="kw">by</span>
+    simpa using hY.isClosedEmbedding_subtypeVal.compactSpace
+  letI : ∀ i, T2Space ((S.projectionImageSystem Y).X i) := <span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+    change T2Space (S.projection i &#x27;&#x27; Y)
+    infer_instance
+  <span class="kw">let</span> e := <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y
+  <span class="kw">have</span> he_inj : Function.Injective e := <span class="kw">by</span>
+    <span class="kw">intro</span> y y&#x27; hyy
+    <span class="kw">have</span> hy : y.1 = y&#x27;.1 := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        y.1 = (S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.limMap">limMap</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y) (e y) := <span class="kw">by</span>
+          simpa [Function.comp] using (congrFun (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift_comp_subtype">projectionImageLift_comp_subtype</a> S Y) y).symm
+        _ = (S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.limMap">limMap</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y) (e y&#x27;) := <span class="kw">by</span>
+          <span class="kw">rw</span> [hyy]
+        _ = y&#x27;.1 := <span class="kw">by</span>
+          simpa [Function.comp] using congrFun (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift_comp_subtype">projectionImageLift_comp_subtype</a> S Y) y&#x27;
+    <span class="kw">exact</span> Subtype.ext hy
+  <span class="kw">exact</span> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.continuous_projectionImageLift">continuous_projectionImageLift</a> S Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Utilities.html#decl-Continuous.homeoOfBijectiveCompactToT2">homeoOfBijectiveCompactToT2</a>
+    ⟨he_inj, <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.surjective_projectionImageLift">surjective_projectionImageLift</a> S hdir Y hY⟩</code></pre></section>
+    <section><div class="natural-text"><p>A closed subset of an inverse limit is homeomorphic to the inverse limit of its projection-image system.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.range_limMap_projectionImageInclusion_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.range_limMap_projectionImageInclusion_eq">ProCGroups.InverseSystems.range_limMap_projectionImageInclusion_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L197">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> range_limMap_projectionImageInclusion_eq
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) [Nonempty I]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (Y : Set S.inverseLimit) (hY : IsClosed Y) :
+    Set.range ((S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.limMap">limMap</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y)) = Y</code></pre></section>
+    <section><div class="natural-text"><p>The range of the limit map is exactly the <a class="decl-ref" href="../../../library/ProCGroups/FreeProC/Characterization/InverseLimitTowers.html#decl-ProCGroups.FreeProC.Characterization.CountableSurjectiveFreeProCSystem.compatible">compatible</a> inverse limit of the projection images.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">apply</span> le_antisymm
+  · rintro x ⟨z, <span class="kw">rfl</span>⟩
+    rcases <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.surjective_projectionImageLift">surjective_projectionImageLift</a> S hdir Y hY z <span class="kw">with</span> ⟨y, hy⟩
+    <span class="kw">have</span> hx :
+        (S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.limMap">limMap</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y) z = y.1 := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        (S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.limMap">limMap</a> (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y) z
+            = (S.projectionImageSystem Y).<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html#decl-ProCGroups.InverseSystems.InverseSystem.limMap">limMap</a>
+                (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y) (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y y) := <span class="kw">by</span>
+                  <span class="kw">rw</span> [hy]
+        _ = y.1 := <span class="kw">by</span>
+          simpa [Function.comp] using congrFun (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift_comp_subtype">projectionImageLift_comp_subtype</a> S Y) y
+    <span class="kw">exact</span> hx ▸ y.2
+  · <span class="kw">intro</span> y hy
+    refine ⟨<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift">projectionImageLift</a> S Y ⟨y, hy⟩, ?_⟩
+    simpa [Function.comp] using congrFun (<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageLift_comp_subtype">projectionImageLift_comp_subtype</a> S Y) ⟨y, hy⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.mem_isClosed_iff_forall_projection_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.mem_isClosed_iff_forall_projection_mem">ProCGroups.InverseSystems.InverseSystem.mem_isClosed_iff_forall_projection_mem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L222">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.mem_isClosed_iff_forall_projection_mem
+    {I : <span class="kw">Type</span> u} [Preorder I] {S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)} [Nonempty I]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    {Y : Set S.inverseLimit} (hY : IsClosed Y) {x : S.inverseLimit} :
+    x ∈ Y ↔ ∀ i, S.projection i x ∈ S.projection i &#x27;&#x27; Y</code></pre></section>
+    <section><div class="natural-text"><p>Membership in the projected image system can be checked coordinatewise.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  classical
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hx i
+    <span class="kw">exact</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+  · <span class="kw">intro</span> hx
+    <span class="kw">let</span> T := S.projectionImageSystem Y
+    <span class="kw">let</span> incl : T.Morphism S := <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.projectionImageInclusion">projectionImageInclusion</a> S Y
+    <span class="kw">have</span> hcompat :
+        T.CompatibleMaps (<span class="kw">fun</span> (i : I) (_ : Unit) =&gt; (⟨S.projection i x, hx i⟩ : T.X i)) := <span class="kw">by</span>
+      <span class="kw">intro</span> i j hij
+      funext _
+      <span class="kw">apply</span> Subtype.ext
+      <span class="kw">exact</span> S.projection_compatible x i j hij
+    <span class="kw">let</span> z : T.inverseLimit :=
+      T.inverseLimitLift (<span class="kw">fun</span> (i : I) (_ : Unit) =&gt; (⟨S.projection i x, hx i⟩ : T.X i)) hcompat ()
+    <span class="kw">have</span> hz : T.limMap incl z = x := <span class="kw">by</span>
+      <span class="kw">apply</span> S.ext
+      <span class="kw">intro</span> i
+      <span class="kw">have</span> hpi : T.projection i z = (⟨S.projection i x, hx i⟩ : T.X i) := <span class="kw">by</span>
+        simpa [Function.comp, z] using
+          congrFun
+            (T.projection_comp_inverseLimitLift (<span class="kw">fun</span> (i : I) (_ : Unit) =&gt; (⟨S.projection i x, hx i⟩ : T.X i)) hcompat i) ()
+      <span class="kw">calc</span>
+        S.projection i (T.limMap incl z) = incl.map i (T.projection i z) := <span class="kw">by</span>
+          simpa [Function.comp] using congrFun (T.π_comp_limMap (Θ := incl) i) z
+        _ = (T.projection i z).1 := <span class="kw">rfl</span>
+        _ = S.projection i x := <span class="kw">by</span> <span class="kw">rw</span> [hpi]
+    <span class="kw">have</span> hxrange : x ∈ Set.range (T.limMap incl) := ⟨z, hz⟩
+    <span class="kw">rw</span> [<a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/ProjectionImageSystems.html#decl-ProCGroups.InverseSystems.range_limMap_projectionImageInclusion_eq">range_limMap_projectionImageInclusion_eq</a> S hdir Y hY] at hxrange
+    <span class="kw">exact</span> hxrange</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.exists_homeomorph_closed_subspace_projection_images">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.exists_homeomorph_closed_subspace_projection_images">ProCGroups.InverseSystems.InverseSystem.exists_homeomorph_closed_subspace_projection_images</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L260">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.exists_homeomorph_closed_subspace_projection_images
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) [Nonempty I]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (Y : Set S.inverseLimit) (hY : IsClosed Y) :
+    (∀ i, Nonempty (((S.projectionImageSystem Y).X i) ≃ₜ (S.projection i &#x27;&#x27; Y))) ∧
+      Nonempty (Y ≃ₜ (S.projectionImageSystem Y).inverseLimit)</code></pre></section>
+    <section><div class="natural-text"><p>A closed subspace of an inverse limit is again an inverse limit of its projection images.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> i
+    <span class="kw">exact</span> ⟨Homeomorph.refl _⟩
+  · <span class="kw">exact</span> ⟨S.homeomorph_projectionImageSystem_of_isClosed hdir Y hY⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.projection_image_closure_eq_closure_projection_image">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.projection_image_closure_eq_closure_projection_image">ProCGroups.InverseSystems.InverseSystem.projection_image_closure_eq_closure_projection_image</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L273">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.projection_image_closure_eq_closure_projection_image
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I))
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (i : I) (Y : Set S.inverseLimit) :
+    S.projection i &#x27;&#x27; closure Y = closure (S.projection i &#x27;&#x27; Y)</code></pre></section>
+    <section><div class="natural-text"><p>The projection of the closure of a subset equals the closure of the projection image.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">let</span> hclosed : IsClosedMap (S.projection i) := (S.continuous_projection i).isClosedMap
+  simpa using (hclosed.closure_image_eq_of_continuous (S.continuous_projection i) Y).symm
+
+<span class="comment">/-</span>
+<span class="comment">Textual note: the printed PDF on p. 7 states these results without closures on the projection</span>
+<span class="comment">images. As written, that is false already for a one-point index set. The proof works after</span>
+<span class="comment">inserting closures on the projection images, equivalently by replacing `Y` with `closure Y`</span>
+<span class="comment">inside the projection-image system.</span>
+<span class="comment">-/</span></code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.exists_homeomorph_closure_projection_images">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.exists_homeomorph_closure_projection_images">ProCGroups.InverseSystems.InverseSystem.exists_homeomorph_closure_projection_images</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L289">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.exists_homeomorph_closure_projection_images
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) [Nonempty I]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (Y : Set S.inverseLimit) :
+    (∀ i, Nonempty (((S.projectionImageSystem (closure Y)).X i) ≃ₜ (S.projection i &#x27;&#x27; closure Y))) ∧
+      Nonempty (closure Y ≃ₜ (S.projectionImageSystem (closure Y)).inverseLimit)</code></pre></section>
+    <section><div class="natural-text"><p>The closure of a subset of an inverse limit is homeomorphic to the inverse limit of the projection-image system of that closure.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  simpa using S.exists_homeomorph_closed_subspace_projection_images hdir (Y := closure Y)
+    isClosed_closure</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.closure_eq_of_projection_images_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.closure_eq_of_projection_images_eq">ProCGroups.InverseSystems.InverseSystem.closure_eq_of_projection_images_eq</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L300">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.closure_eq_of_projection_images_eq
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) [Nonempty I]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (Y Y&#x27; : Set S.inverseLimit)
+    (hproj : ∀ i, S.projection i &#x27;&#x27; closure Y = S.projection i &#x27;&#x27; closure Y&#x27;) :
+    closure Y = closure Y&#x27;</code></pre></section>
+    <section><div class="natural-text"><p>Closed subsets of the inverse limit are equal when their projection images agree at every stage.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  ext x
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hx
+    <span class="kw">rw</span> [S.mem_isClosed_iff_forall_projection_mem hdir isClosed_closure] at hx
+    <span class="kw">rw</span> [S.mem_isClosed_iff_forall_projection_mem hdir isClosed_closure]
+    <span class="kw">intro</span> i
+    <span class="kw">rw</span> [← hproj i]
+    <span class="kw">exact</span> hx i
+  · <span class="kw">intro</span> hx
+    <span class="kw">rw</span> [S.mem_isClosed_iff_forall_projection_mem hdir isClosed_closure] at hx
+    <span class="kw">rw</span> [S.mem_isClosed_iff_forall_projection_mem hdir isClosed_closure]
+    <span class="kw">intro</span> i
+    <span class="kw">rw</span> [hproj i]
+    <span class="kw">exact</span> hx i</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.closure_eq_of_projection_images_eq_of_subsets">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.closure_eq_of_projection_images_eq_of_subsets">ProCGroups.InverseSystems.InverseSystem.closure_eq_of_projection_images_eq_of_subsets</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L324">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.closure_eq_of_projection_images_eq_of_subsets
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) [Nonempty I]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I))
+    (Y Y&#x27; : Set S.inverseLimit)
+    (hproj : ∀ i, S.projection i &#x27;&#x27; Y = S.projection i &#x27;&#x27; Y&#x27;) :
+    closure Y = closure Y&#x27;</code></pre></section>
+    <section><div class="natural-text"><p>Equal raw projection images of two subsets force their closures in the inverse limit to be equal.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">apply</span> S.closure_eq_of_projection_images_eq hdir Y Y&#x27;
+  <span class="kw">intro</span> i
+  <span class="kw">calc</span>
+    S.projection i &#x27;&#x27; closure Y = closure (S.projection i &#x27;&#x27; Y) := <span class="kw">by</span>
+      <span class="kw">exact</span> S.projection_image_closure_eq_closure_projection_image i Y
+    _ = closure (S.projection i &#x27;&#x27; Y&#x27;) := <span class="kw">by</span> <span class="kw">rw</span> [hproj i]
+    _ = S.projection i &#x27;&#x27; closure Y&#x27; := <span class="kw">by</span>
+      symm
+      <span class="kw">exact</span> S.projection_image_closure_eq_closure_projection_image i Y&#x27;</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.homeomorph_surjectiveProjectionImageSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.homeomorph_surjectiveProjectionImageSystem">ProCGroups.InverseSystems.InverseSystem.homeomorph_surjectiveProjectionImageSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L343">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> InverseSystem.homeomorph_surjectiveProjectionImageSystem
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) [Nonempty I]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I)) :
+    S.inverseLimit ≃ₜ (S.projectionImageSystem (Set.univ : Set S.inverseLimit)).inverseLimit :=
+  (Homeomorph.Set.univ S.inverseLimit).symm.trans
+    (S.homeomorph_projectionImageSystem_of_isClosed hdir Set.univ isClosed_univ)</code></pre></section>
+    <section><div class="natural-text"><p>Any inverse system of compact Hausdorff spaces admits a surjective projection-image system with the same inverse limit.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.exists_homeomorph_surjectiveProjectionImageSystem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.exists_homeomorph_surjectiveProjectionImageSystem">ProCGroups.InverseSystems.InverseSystem.exists_homeomorph_surjectiveProjectionImageSystem</a>
+    <a class="source-link" href="../../../library/src/ProCGroups/InverseSystems/ProjectionImageSystems.html#L353">Source</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> InverseSystem.exists_homeomorph_surjectiveProjectionImageSystem
+    {I : <span class="kw">Type</span> u} [Preorder I] (S : <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">InverseSystem</a> (I := I)) [Nonempty I]
+    [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)]
+    (hdir : Directed (· ≤ ·) (id : I → I)) :
+    (∀ {i j : I} (hij : i ≤ j),
+      Function.Surjective ((S.projectionImageSystem (Set.univ : Set S.inverseLimit)).map hij)) ∧
+      Nonempty (S.inverseLimit ≃ₜ
+        (S.projectionImageSystem (Set.univ : Set S.inverseLimit)).inverseLimit)</code></pre></section>
+    <section><div class="natural-text"><p>The projection-image system of the full inverse limit is surjective and has the same inverse limit as the original system.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show proof</span></summary>
+    <template class="proof-template">
+      <div class="pair proof-pair">
+        <section><pre class="code-box"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> i j hij
+    <span class="kw">exact</span> S.surjective_projectionImageSystem_map (Y := (Set.univ : Set S.inverseLimit)) hij
+  · <span class="kw">exact</span> ⟨S.homeomorph_surjectiveProjectionImageSystem hdir⟩</code></pre></section>
+        <section><div class="natural-text"><div class="proof-text"><p><strong class="proof-label">Proof.</strong> Unfold the inverse-system data and argue componentwise at each index. Morphisms, transition maps, and <a class="decl-ref" href="../../../library/ProCGroups/Completion/UniversalProperty.html#decl-ProCGroups.Completion.IsProCCompletion.comparison">comparison</a> maps are defined by their stage maps, and the compatibility squares say exactly that these coordinates commute with refinement. For inverse-limit statements, equality is proved by projection extensionality; continuity is checked from the initial topology of the limit; and compactness, Hausdorffness, discreteness, density, and <a class="decl-ref" href="../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.finite">finite</a>-stage factorization are inherited from the corresponding stagewise hypotheses.</p><span class="qed">□</span></div></div></section>
+      </div>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.InverseSystems.ProjectionImageSystems"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>
