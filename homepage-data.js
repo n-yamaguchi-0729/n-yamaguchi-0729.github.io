@@ -169,8 +169,8 @@
                 <a href="https://booklog.jp/users/naganori1995" target="_blank">My bookshelf</a>
             </p>
             <p>
-                Lean4 library index:
-                <a href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/" target="_blank">Yamaguchi Lean4 Library</a>
+                Yamaguchi Lean4 Library:
+                <a href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/" target="_blank">URL</a>
             </p>
         `,
         `
@@ -193,8 +193,8 @@
                 <a href="https://booklog.jp/users/naganori1995" target="_blank">本棚</a>
             </p>
             <p>
-                Lean4 library index:
-                <a href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/" target="_blank">Yamaguchi Lean4 Library</a>
+                Yamaguchi Lean4 Library:
+                <a href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/" target="_blank">URL</a>
             </p>
         `
     );
