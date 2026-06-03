@@ -168,6 +168,10 @@
                 /
                 <a href="https://booklog.jp/users/naganori1995" target="_blank">My bookshelf</a>
             </p>
+            <p>
+                Lean4 library index:
+                <a href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/" target="_blank">Yamaguchi Lean4 Library</a>
+            </p>
         `,
         `
             <p>現職：東京電機大学 工学部 数理・データサイエンス系 講師</p>
@@ -187,6 +191,10 @@
                 >ArXiv</a>
                 /
                 <a href="https://booklog.jp/users/naganori1995" target="_blank">本棚</a>
+            </p>
+            <p>
+                Lean4 library index:
+                <a href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/" target="_blank">Yamaguchi Lean4 Library</a>
             </p>
         `
     );
