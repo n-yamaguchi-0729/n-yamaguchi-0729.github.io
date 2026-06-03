@@ -170,7 +170,7 @@
             </p>
             <p>
                 Yamaguchi Lean4 Library:
-                <a href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/" target="_blank">URL</a>
+                <a href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/index.html" target="_blank">URL</a>
             </p>
         `,
         `
@@ -194,7 +194,7 @@
             </p>
             <p>
                 Yamaguchi Lean4 Library:
-                <a href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/" target="_blank">URL</a>
+                <a href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/index.html" target="_blank">URL</a>
             </p>
         `
     );
