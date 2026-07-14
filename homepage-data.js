@@ -275,7 +275,7 @@
                     details: [arxivPart("2508.01588")]
                 },
                 {
-                    title: "A refined version of the geometrically m-step solvable Grothendieck conjecture for genus 0 curves over finitely generated fields",
+                    title: "The metabelian Grothendieck conjecture for genus zero curves over finitely generated fields",
                     details: [arxivPart("2407.09906")]
                 }
             ]
