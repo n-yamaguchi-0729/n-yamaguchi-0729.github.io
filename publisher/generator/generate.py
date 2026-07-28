@@ -1038,6 +1038,7 @@ def build_public_tree(
         ],
         mathlib_ref=site["mathlib_version"],
         documentation_url=f"{SITE_URL}/{PORTAL}/",
+        site_description=site["description"],
         download_mode=build_site.DOWNLOAD_MODE_NONE,
         reporter=build_site.BuildReporter(enabled=verbose),
     )

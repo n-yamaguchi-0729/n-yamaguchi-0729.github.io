@@ -66,10 +66,21 @@ LIBRARY_CARD = re.compile(
     re.DOTALL,
 )
 HOME_LIBRARY_LINK = '<a href="./YamaLean4Lib_pages/">URL</a>'
+EXPECTED_SITE_DESCRIPTION = (
+    "Lean 4 libraries by Naganori Yamaguchi, developed with AI assistance "
+    "by a non-specialist. Please use them at your own risk."
+)
+EXPECTED_PCG_SUMMARY = (
+    "Formalizations of profinite and pro-C group theory in Lean 4."
+)
+EXPECTED_PCG_CONTENTS = (
+    "Foundations, inverse systems, and free pro-C groups",
+    "Reidemeister–Schreier theory and presentations",
+    "Completed group algebras, Fox calculus, and Crowell exact sequences",
+)
 FORBIDDEN_NOTICE_PHRASES = (
     "subject-matter expert",
     "accuracy and completeness are not guaranteed",
-    "at your own risk",
     "cannot answer questions",
     "個別の質問",
     "自己責任",
@@ -274,15 +285,61 @@ def check_public_presentation(root: Path, errors: list[str]) -> None:
             'id="library-ProCGroups"',
             ">Pro-C Groups</a>",
             'href="https://github.com/n-yamaguchi-0729/ProCGroups"',
-            "A Lean library for profinite groups and pro-C groups.",
+            f'<p class="library-summary">{EXPECTED_PCG_SUMMARY}</p>',
+            *(f"<li>{item}</li>" for item in EXPECTED_PCG_CONTENTS),
         ):
             if marker not in card:
                 errors.append(
                     f"{portal_relative}: ProCGroups card is missing {marker!r}"
                 )
+        if "library-module-note" in card:
+            errors.append(
+                f"{portal_relative}: aggregate module prose remains in the "
+                "curated ProCGroups card"
+            )
         if "Open documentation" in card:
             errors.append(
                 f"{portal_relative}: ProCGroups card contains Open documentation"
+            )
+    for marker in (
+        f'<meta name="description" content="{EXPECTED_SITE_DESCRIPTION}">',
+        f"<p>{EXPECTED_SITE_DESCRIPTION}</p>",
+    ):
+        if portal.count(marker) != 1:
+            errors.append(
+                f"{portal_relative}: short site notice must occur exactly once: "
+                f"{marker!r}"
+            )
+    if portal.count('class="sort-bar"') != 1 or (
+        '<section class="sort-bar" aria-label="Sort libraries" hidden>'
+        not in portal
+    ):
+        errors.append(
+            f"{portal_relative}: library sort controls must be retained but hidden"
+        )
+    for marker in (
+        'select data-sort-target="library_list"',
+        'select data-sort-direction-target="library_list"',
+    ):
+        if portal.count(marker) != 1:
+            errors.append(
+                f"{portal_relative}: hidden sort implementation is missing or "
+                f"duplicated: {marker!r}"
+            )
+    try:
+        stylesheet = (
+            root / PORTAL_NAME / "assets" / "site.css"
+        ).read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as error:
+        errors.append(
+            f"{PORTAL_NAME}/assets/site.css: cannot verify hidden sort controls: "
+            f"{error}"
+        )
+    else:
+        if ".sort-bar[hidden] { display: none; }" not in stylesheet:
+            errors.append(
+                f"{PORTAL_NAME}/assets/site.css: hidden sort controls can be "
+                "overridden by the visible sort-bar rule"
             )
     if portal.count(
         'href="https://github.com/n-yamaguchi-0729/ProCGroups"'

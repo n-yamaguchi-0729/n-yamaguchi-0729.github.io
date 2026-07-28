@@ -145,9 +145,6 @@ DOWNLOAD_MODES = frozenset({
     DOWNLOAD_MODE_GITHUB_ARCHIVE,
     DOWNLOAD_MODE_NONE,
 })
-DOCUMENTATION_DESCRIPTION = (
-    "Published Lean 4 libraries for formalized mathematics."
-)
 GOOGLE_TAG_ID = "G-NGQXB29549"
 GOOGLE_TAG = f'''<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={GOOGLE_TAG_ID}"></script>
@@ -3082,7 +3079,9 @@ def render_index(
     github_repo: str = "",
     documentation_url: str = DEFAULT_DOCUMENTATION_URL,
     library_metadata: list[dict[str, Any]] | None = None,
+    site_description: str = "",
 ) -> str:
+    site_description = site_description.strip() or f"{title} documentation."
     content_modules = [m for m in modules if not is_wrapper_module(m)]
     total = sum(len(m.decls) for m in content_modules)
     grouped = group_modules_by_library(modules)
@@ -3127,9 +3126,7 @@ def render_index(
             description_parts.append(
                 f'<p class="library-summary">{escape(summary.strip())}</p>'
             )
-        if note_html and (
-            not isinstance(summary, str) or note.strip() != summary.strip()
-        ):
+        if note_html and not (isinstance(summary, str) and summary.strip()):
             description_parts.append(
                 f'<div class="library-module-note tex2jax_process">{note_html}</div>'
             )
@@ -3168,10 +3165,10 @@ def render_index(
 </section>''')
     content = f'''<section>
   <h1 class="page-title">{escape(title)}</h1>
-  <p>{escape(DOCUMENTATION_DESCRIPTION)}</p>
+  <p>{escape(site_description)}</p>
   <div class="stats"><span>{count_label(len(grouped), "library", "libraries")}</span><span>{count_label(len(content_modules), "file")}</span><span>{count_label(total, "declaration")}</span></div>
 </section>
-<section class="sort-bar" aria-label="Sort libraries">
+<section class="sort-bar" aria-label="Sort libraries" hidden>
   <label>Sort <select data-sort-target="library_list">
     <option value="updated">Recently updated</option>
     <option value="name">Name</option>
@@ -3190,7 +3187,7 @@ def render_index(
         './',
         shell(content),
         site_title=title,
-        description=DOCUMENTATION_DESCRIPTION,
+        description=site_description,
         canonical_url=documentation_url,
         render_math=True,
     )
@@ -3571,6 +3568,7 @@ def generate_site(
     lean_distribution_source_mirror: Path | None = None,
     mathlib_ref: str = "master",
     documentation_url: str = DEFAULT_DOCUMENTATION_URL,
+    site_description: str = "",
     component_dirs: Iterable[Path] | None = None,
     module_components: dict[str, str] | None = None,
     component_display_names: dict[str, str] | None = None,
@@ -3731,6 +3729,7 @@ def generate_site(
             github_repo,
             documentation_url,
             library_metadata,
+            site_description=site_description,
         ),
     )
     emit('find/index.html', render_find_page(title, documentation_url))

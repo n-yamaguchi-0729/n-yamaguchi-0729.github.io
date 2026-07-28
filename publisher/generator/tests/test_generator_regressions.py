@@ -1064,6 +1064,78 @@ class DocumentationSourceRegressionTests(unittest.TestCase):
             self.assertIn("<summary>import</summary>", module_page)
             self.assertIn("<summary>Imported by</summary>", module_page)
 
+    def test_curated_library_card_replaces_the_aggregate_doc_comment(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "ProCGroups").mkdir()
+            (root / "ProCGroups.lean").write_text(
+                "import ProCGroups.Child\n"
+                "/-!\n"
+                "# Pro-C Groups\n\n"
+                "A long aggregate description that belongs on the module page, "
+                "not on the curated library card.\n"
+                "-/\n",
+                encoding="utf-8",
+            )
+            (root / "ProCGroups" / "Child.lean").write_text(
+                "/-! # Child -/\n"
+                "namespace ProCGroups\n"
+                "/-- A visible declaration. -/\n"
+                "theorem child : True := by trivial\n"
+                "end ProCGroups\n",
+                encoding="utf-8",
+            )
+
+            modules, _ = build_site.prepare_modules(root, fixed_updated_at=1)
+            homepage = build_site.render_index(
+                modules,
+                "Demo",
+                library_metadata=[
+                    {
+                        "id": "ProCGroups",
+                        "display_name": "Pro-C Groups",
+                        "summary": "A concise curated summary.",
+                        "contents": ["A concise topic"],
+                    }
+                ],
+            )
+
+            self.assertIn("A concise curated summary.", homepage)
+            self.assertIn("A concise topic", homepage)
+            self.assertNotIn("A long aggregate description", homepage)
+            self.assertNotIn("library-module-note", homepage)
+
+    def test_library_sort_controls_are_hidden_but_retained(self) -> None:
+        homepage = build_site.render_index([], "Demo")
+        stylesheet = build_site.read_static_asset("site.css", None)
+
+        self.assertIn(
+            '<section class="sort-bar" aria-label="Sort libraries" hidden>',
+            homepage,
+        )
+        self.assertEqual(homepage.count('class="sort-bar"'), 1)
+        self.assertNotIn(
+            '<section class="sort-bar" aria-label="Sort libraries">',
+            homepage,
+        )
+        self.assertIn('select data-sort-target="library_list"', homepage)
+        self.assertIn('select data-sort-direction-target="library_list"', homepage)
+        self.assertIn(".sort-bar[hidden] { display: none; }", stylesheet)
+
+    def test_library_homepage_uses_the_configured_site_description(self) -> None:
+        description = "A short, data-driven description."
+        homepage = build_site.render_index(
+            [],
+            "Demo",
+            site_description=description,
+        )
+
+        self.assertIn(f"<p>{description}</p>", homepage)
+        self.assertIn(
+            f'<meta name="description" content="{description}">',
+            homepage,
+        )
+
     def test_library_card_preserves_multiple_paragraphs(self) -> None:
         single = "<p>One paragraph.</p>"
         multiple = "<p>First paragraph.</p>\n<p>Second paragraph.</p>"
@@ -1434,6 +1506,15 @@ class DatabaseContractRegressionTests(unittest.TestCase):
                 path.parts[:2] == ("library", "ProCGroups")
                 for path in module_pages | source_pages
             )
+        )
+
+    def test_site_description_is_the_short_public_notice(self) -> None:
+        libraries = generate.load_libraries_database()
+
+        self.assertEqual(
+            libraries["site"]["description"],
+            "Lean 4 libraries by Naganori Yamaguchi, developed with AI "
+            "assistance by a non-specialist. Please use them at your own risk.",
         )
 
     def test_a_new_library_is_added_by_data_without_generator_changes(self) -> None:
