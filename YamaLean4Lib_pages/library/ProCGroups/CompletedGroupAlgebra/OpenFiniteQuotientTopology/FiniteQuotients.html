@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.CompletedGroupAlgebra.OpenFiniteQuotientTopology.FiniteQuotients | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="This file constructs the finite group-algebra stages obtained by quotienting both coefficients and the group. It develops their quotient maps, kernels, transition maps, basis formulas, continuity, and surjectivity.">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/CompletedGroupAlgebra/OpenFiniteQuotientTopology/FiniteQuotients.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.CompletedGroupAlgebra.OpenFiniteQuotientTopology.FiniteQuotients</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../../library/ProCGroups/CompletedGroupAlgebra.html">CompletedGroupAlgebra</a><span class="sep">/</span><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/OpenFiniteQuotientTopology.html">OpenFiniteQuotientTopology</a><span class="sep">/</span><span>FiniteQuotients</span></div>
+      <h1 class="module-title">ProCGroups.CompletedGroupAlgebra.OpenFiniteQuotientTopology.FiniteQuotients</h1>
+      <div class="module-meta">25 Theorems | 7 Definitions | 1 Abbreviation</div>
+      <div class="module-overview tex2jax_process"><p>This file constructs the finite group-algebra stages obtained by quotienting both coefficients and the group. It develops their quotient maps, kernels, transition maps, basis formulas, continuity, and surjectivity.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/OpenFiniteQuotientTopology/CanonicalMaps.html">ProCGroups.CompletedGroupAlgebra.OpenFiniteQuotientTopology.CanonicalMaps</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/OpenFiniteQuotientTopology/OpenFiniteQuotients.html">ProCGroups.CompletedGroupAlgebra.OpenFiniteQuotientTopology.OpenFiniteQuotients</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-CompletedGroupAlgebra.continuous_idealQuotient_mk_openIdeal_discrete">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.continuous_idealQuotient_mk_openIdeal_discrete">CompletedGroupAlgebra.continuous_idealQuotient_mk_openIdeal_discrete</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_idealQuotient_mk_openIdeal_discrete
+    (I : Ideal R) (hI : IsOpen (I : Set R)) :
+    letI : TopologicalSpace (R ⧸ I) := ⊥
+    Continuous (Ideal.Quotient.mk I)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>An open coefficient ideal gives a continuous quotient map when the quotient is equipped with the discrete topology. This is the coefficient-side continuity used in Ribes--Zalesskii Section \(5.3\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.continuous_idealQuotient_mk_openIdeal_discrete">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  letI : TopologicalSpace (R ⧸ I) := ⊥
+  haveI : DiscreteTopology (R ⧸ I) := ⟨<span class="kw">rfl</span>⟩
+  <span class="kw">rw</span> [continuous_discrete_rng]
+  <span class="kw">intro</span> b
+  rcases Ideal.Quotient.mk_surjective (I := I) b <span class="kw">with</span> ⟨a, <span class="kw">rfl</span>⟩
+  <span class="kw">have</span> hpre :
+      (Ideal.Quotient.mk I) ⁻¹&#x27; ({Ideal.Quotient.mk I a} : Set (R ⧸ I)) =
+        (<span class="kw">fun</span> x : R =&gt; x - a) ⁻¹&#x27; (I : Set R) := <span class="kw">by</span>
+    ext x
+    <span class="kw">simp</span> only [Set.mem_preimage, Set.mem_singleton_iff, Ideal.Quotient.eq, SetLike.mem_coe]
+  <span class="kw">rw</span> [hpre]
+  <span class="kw">exact</span> hI.preimage (continuous_id.sub continuous_const)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.finiteGroupAlgebra_mapRangeRingHom_continuous">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.finiteGroupAlgebra_mapRangeRingHom_continuous">CompletedGroupAlgebra.finiteGroupAlgebra_mapRangeRingHom_continuous</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit G [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">theorem</span> finiteGroupAlgebra_mapRangeRingHom_continuous
+    (S : <span class="kw">Type</span> u) [CommRing S] [TopologicalSpace S]
+    (Q : <span class="kw">Type</span> v) [Group Q] [Finite Q]
+    (f : R →+* S) (hf : Continuous f) :
+    letI : TopologicalSpace (MonoidAlgebra R Q) := finiteGroupAlgebraTopology R Q
+    letI : TopologicalSpace (MonoidAlgebra S Q) := finiteGroupAlgebraTopology S Q
+    Continuous (MonoidAlgebra.mapRingHom Q f :
+      MonoidAlgebra R Q → MonoidAlgebra S Q)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Finite-stage group algebras are functorial in the coefficient ring by continuous maps.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.finiteGroupAlgebra_mapRangeRingHom_continuous">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  letI : Fintype Q := Fintype.ofFinite Q
+  letI : TopologicalSpace (MonoidAlgebra R Q) := finiteGroupAlgebraTopology R Q
+  letI : TopologicalSpace (MonoidAlgebra S Q) := finiteGroupAlgebraTopology S Q
+  <span class="kw">let</span> eS : MonoidAlgebra S Q ≃ (Q → S) :=
+    MonoidAlgebra.coeffEquiv.trans Finsupp.equivFunOnFinite
+  <span class="kw">have</span> heS : Topology.IsInducing (eS : MonoidAlgebra S Q → Q → S) :=
+    Topology.IsInducing.induced eS
+  <span class="kw">have</span> hcoordR : ∀ q : Q, Continuous <span class="kw">fun</span> x : MonoidAlgebra R Q =&gt; x.coeff q := <span class="kw">by</span>
+    <span class="kw">intro</span> q
+    <span class="kw">exact</span> finiteGroupAlgebra_coordinate_continuous R Q q
+  <span class="kw">rw</span> [heS.continuous_iff]
+  <span class="kw">apply</span> continuous_pi
+  <span class="kw">intro</span> q
+  change Continuous <span class="kw">fun</span> x : MonoidAlgebra R Q =&gt;
+    (MonoidAlgebra.mapRingHom Q f x : MonoidAlgebra S Q).coeff q
+  change Continuous (f ∘ <span class="kw">fun</span> x : MonoidAlgebra R Q =&gt; x.coeff q)
+  <span class="kw">exact</span> hf.comp (hcoordR q)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.finiteGroupAlgebraTopology_discrete_of_discrete_coeff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.finiteGroupAlgebraTopology_discrete_of_discrete_coeff">CompletedGroupAlgebra.finiteGroupAlgebraTopology_discrete_of_discrete_coeff</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit R G [CommRing R] [TopologicalSpace R] [IsTopologicalRing R] [Group G]
+    [TopologicalSpace G] [IsTopologicalGroup G] <span class="kw">in</span>
+<span class="kw">theorem</span> finiteGroupAlgebraTopology_discrete_of_discrete_coeff
+    (S : <span class="kw">Type</span> u) [CommRing S] [TopologicalSpace S] [DiscreteTopology S]
+    (Q : <span class="kw">Type</span> v) [Finite Q] :
+    letI : TopologicalSpace (MonoidAlgebra S Q) := finiteGroupAlgebraTopology S Q
+    DiscreteTopology (MonoidAlgebra S Q)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>If the coefficient ring is discrete, then the finite-stage group algebra has the discrete finite-product topology.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.finiteGroupAlgebraTopology_discrete_of_discrete_coeff">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  letI : Fintype Q := Fintype.ofFinite Q
+  letI : TopologicalSpace (MonoidAlgebra S Q) := finiteGroupAlgebraTopology S Q
+  <span class="kw">let</span> e : MonoidAlgebra S Q ≃ (Q → S) :=
+    MonoidAlgebra.coeffEquiv.trans Finsupp.equivFunOnFinite
+  haveI : DiscreteTopology (Q → S) := inferInstance
+  <span class="kw">exact</span> DiscreteTopology.of_continuous_injective
+    (continuous_induced_dom : Continuous (e : MonoidAlgebra S Q → Q → S)) e.injective</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl abbrev" id="decl-CompletedGroupAlgebra.CompletedGroupAlgebraCoeffQuotientStage">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.CompletedGroupAlgebraCoeffQuotientStage">CompletedGroupAlgebra.CompletedGroupAlgebraCoeffQuotientStage</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">abbrev</span> CompletedGroupAlgebraCoeffQuotientStage
+    (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (I : Ideal R) (U : CompletedGroupAlgebraIndex G) :
+    <span class="kw">Type</span> (max u v) :=
+  MonoidAlgebra (R ⧸ I) (CompletedGroupAlgebraQuotient G U)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The Ribes--Zalesskii Section \(5.3\) finite quotient \((R/I)[G/U]\) applies both the coefficient quotient and the group quotient and is used in the kernel-neighborhood topology.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap">CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">def</span> completedGroupAlgebraStageCoeffQuotientMap
+    (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G]
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) :
+    CompletedGroupAlgebraStage R G U →+*
+      CompletedGroupAlgebraCoeffQuotientStage R G I U :=
+  MonoidAlgebra.mapRingHom (CompletedGroupAlgebraQuotient G U)
+    (Ideal.Quotient.mk I)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The coefficient quotient map \(R[G/U]\) \(\to\) \((R/I)[G/U]\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap_single">CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap_single</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraStageCoeffQuotientMap_single
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G)
+    (q : CompletedGroupAlgebraQuotient G U) (r : R) :
+    completedGroupAlgebraStageCoeffQuotientMap R G I U (MonoidAlgebra.single q r) =
+      MonoidAlgebra.single q (Ideal.Quotient.mk I r)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The coefficient-quotient map sends a singleton supported at a finite quotient class to the corresponding singleton with transformed coefficient and unchanged quotient support.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap_single">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> MonoidAlgebra.mapRingHom_single (Ideal.Quotient.mk I) q r</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap_surjective">CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap_surjective</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">theorem</span> completedGroupAlgebraStageCoeffQuotientMap_surjective
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) :
+    Function.Surjective (completedGroupAlgebraStageCoeffQuotientMap R G I U)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The finite-stage coefficient-quotient map is surjective; every target singleton is lifted by keeping the quotient support and lifting the coefficient.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraStageCoeffQuotientMap_surjective">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  <span class="kw">intro</span> x
+  obtain ⟨y, hy⟩ :=
+    MonoidAlgebra.map_surjective (M := CompletedGroupAlgebraQuotient G U)
+      (Ideal.Quotient.mk I).toAddMonoidHom Ideal.Quotient.mk_surjective x
+  <span class="kw">exact</span> ⟨y, hy⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap">CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">def</span> groupAlgebraFiniteQuotientMap
+    (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G]
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) :
+    MonoidAlgebra R G →+* CompletedGroupAlgebraCoeffQuotientStage R G I U :=
+  (completedGroupAlgebraStageCoeffQuotientMap R G I U).comp
+    (completedGroupAlgebraStageMap R G U)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The finite-quotient map \(R[G]\to (R/I)[G/U]\) used in Ribes--Zalesskii Section \(5.3\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_single">CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_single</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> groupAlgebraFiniteQuotientMap_single
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) (g : G) (r : R) :
+    groupAlgebraFiniteQuotientMap R G I U (MonoidAlgebra.single g r) =
+      MonoidAlgebra.single
+        (openNormalSubgroupInClassProj
+          (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G) U g)
+        (Ideal.Quotient.mk I r)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The finite quotient map on a group algebra sends a singleton \(r[g]\) to the singleton \(\bar r[\bar g]\) in \((R/I)[G/U]\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_single">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  change
+    MonoidAlgebra.map (Ideal.Quotient.mk I)
+        (MonoidAlgebra.mapDomain
+          (openNormalSubgroupInClassProj
+            (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G) U)
+          (MonoidAlgebra.single g r)) =
+      MonoidAlgebra.single
+        (openNormalSubgroupInClassProj
+          (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G) U g)
+        (Ideal.Quotient.mk I r)
+  <span class="kw">rw</span> [MonoidAlgebra.mapDomain_single, MonoidAlgebra.map_single]
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_of">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_of">CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_of</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> groupAlgebraFiniteQuotientMap_of
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) (g : G) :
+    groupAlgebraFiniteQuotientMap R G I U (MonoidAlgebra.of R G g) =
+      MonoidAlgebra.of (R ⧸ I) (CompletedGroupAlgebraQuotient G U)
+        (openNormalSubgroupInClassProj
+          (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G) U g)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The finite quotient group-algebra map is computed by choosing representatives and applying the quotient map to supports.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_of">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  change
+    groupAlgebraFiniteQuotientMap R G I U (MonoidAlgebra.single g 1) =
+      MonoidAlgebra.single
+        (openNormalSubgroupInClassProj
+          (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G) U g) 1
+  <span class="kw">rw</span> [groupAlgebraFiniteQuotientMap_single]
+  <span class="kw">exact</span> congrArg
+    (MonoidAlgebra.single
+      (openNormalSubgroupInClassProj
+        (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G) U g))
+    (Ideal.Quotient.mk I).map_one</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_eq_mapDomain_comp_mapRange">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_eq_mapDomain_comp_mapRange">CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_eq_mapDomain_comp_mapRange</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">theorem</span> groupAlgebraFiniteQuotientMap_eq_mapDomain_comp_mapRange
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) :
+    groupAlgebraFiniteQuotientMap R G I U =
+      (MonoidAlgebra.mapDomainRingHom (R ⧸ I)
+          (openNormalSubgroupInClassProj
+            (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G) U)).comp
+        (MonoidAlgebra.mapRingHom G (Ideal.Quotient.mk I))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The quotient map \(R[G] \to (R/I)[G/U]\) factors equally as coefficient quotient followed by group quotient, or group quotient followed by coefficient quotient.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_eq_mapDomain_comp_mapRange">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  change
+    (MonoidAlgebra.mapRingHom (CompletedGroupAlgebraQuotient G U)
+        (Ideal.Quotient.mk I)).comp
+        (MonoidAlgebra.mapDomainRingHom R
+          (openNormalSubgroupInClassProj
+            (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G) U)) =
+      (MonoidAlgebra.mapDomainRingHom (R ⧸ I)
+        (openNormalSubgroupInClassProj
+          (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G) U)).comp
+        (MonoidAlgebra.mapRingHom G (Ideal.Quotient.mk I))
+  <span class="kw">exact</span> MonoidAlgebra.mapRingHom_comp_mapDomainRingHom
+    (f := Ideal.Quotient.mk I)
+    (g := openNormalSubgroupInClassProj
+      (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G) U)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_surjective">CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_surjective</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">theorem</span> groupAlgebraFiniteQuotientMap_surjective
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) :
+    Function.Surjective (groupAlgebraFiniteQuotientMap R G I U)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The finite quotient map on group algebras is surjective, expressing functoriality after passage to finite quotient stages.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientMap_surjective">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  <span class="kw">exact</span>
+    (completedGroupAlgebraStageCoeffQuotientMap_surjective
+      (R := R) (G := G) I U).comp
+      (completedGroupAlgebraStageMap_surjective (R := R) (G := G) U)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientKernel">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientKernel">CompletedGroupAlgebra.groupAlgebraFiniteQuotientKernel</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">def</span> groupAlgebraFiniteQuotientKernel
+    (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G]
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) :
+    Ideal (MonoidAlgebra R G) :=
+  RingHom.ker (groupAlgebraFiniteQuotientMap R G I U)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The kernels used in Ribes--Zalesskii&#x27;s natural topology on \(R[G]\); for the kernel-neighborhood topology this family is restricted to open ideals \(I\) and open normal subgroups \(U\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.mem_groupAlgebraFiniteQuotientKernel_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.mem_groupAlgebraFiniteQuotientKernel_iff">CompletedGroupAlgebra.mem_groupAlgebraFiniteQuotientKernel_iff</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> mem_groupAlgebraFiniteQuotientKernel_iff
+    {R : <span class="kw">Type</span> u} {G : <span class="kw">Type</span> v} [CommRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G]
+    {I : Ideal R} {U : CompletedGroupAlgebraIndex G} {x : MonoidAlgebra R G} :
+    x ∈ groupAlgebraFiniteQuotientKernel R G I U ↔
+      groupAlgebraFiniteQuotientMap R G I U x = 0</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>An element of \(R[G]\) lies in <code>groupAlgebraFiniteQuotientKernel</code> exactly when its image in \((R/I)[G/U]\) is zero.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.mem_groupAlgebraFiniteQuotientKernel_iff">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>Iff.rfl</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientKernel_eq_comap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientKernel_eq_comap">CompletedGroupAlgebra.groupAlgebraFiniteQuotientKernel_eq_comap</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">theorem</span> groupAlgebraFiniteQuotientKernel_eq_comap
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) :
+    groupAlgebraFiniteQuotientKernel R G I U =
+      Ideal.comap (completedGroupAlgebraStageMap R G U)
+        (RingHom.ker (completedGroupAlgebraStageCoeffQuotientMap R G I U))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The kernel of the finite quotient group-algebra map is the comap of the corresponding quotient-kernel data.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.groupAlgebraFiniteQuotientKernel_eq_comap">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition">CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">def</span> completedGroupAlgebraCoeffQuotientTransition
+    (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] {I J : Ideal R} (hIJ : I ≤ J)
+    (U : CompletedGroupAlgebraIndex G) :
+    CompletedGroupAlgebraCoeffQuotientStage R G I U →+*
+      CompletedGroupAlgebraCoeffQuotientStage R G J U :=
+  MonoidAlgebra.mapRingHom (CompletedGroupAlgebraQuotient G U)
+    (Ideal.Quotient.factor hIJ)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Coefficient transition \((R/I)[G/U]\) \(\to\) \((R/J)[G/U]\) induced by an inclusion \(I\le J\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_single">CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_single</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraCoeffQuotientTransition_single
+    {I J : Ideal R} (hIJ : I ≤ J) (U : CompletedGroupAlgebraIndex G)
+    (q : CompletedGroupAlgebraQuotient G U) (r : R ⧸ I) :
+    completedGroupAlgebraCoeffQuotientTransition R G hIJ U (MonoidAlgebra.single q r) =
+      MonoidAlgebra.single q (Ideal.Quotient.factor hIJ r)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The coefficient transition from \(R/I\) to \(R/J\) fixes the support \(q\) and applies <code>Ideal.Quotient.factor</code> to the singleton coefficient.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_single">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> MonoidAlgebra.mapRingHom_single (Ideal.Quotient.factor hIJ) q r</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_comp_stageCoeffQuotientMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_comp_stageCoeffQuotientMap">CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_comp_stageCoeffQuotientMap</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraCoeffQuotientTransition_comp_stageCoeffQuotientMap
+    {I J : Ideal R} (hIJ : I ≤ J) (U : CompletedGroupAlgebraIndex G) :
+    (completedGroupAlgebraCoeffQuotientTransition R G hIJ U).comp
+        (completedGroupAlgebraStageCoeffQuotientMap R G I U) =
+      completedGroupAlgebraStageCoeffQuotientMap R G J U</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Applying the coefficient transition after reduction modulo \(I\) agrees with reducing the stage coefficients directly modulo \(J\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_comp_stageCoeffQuotientMap">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [completedGroupAlgebraCoeffQuotientTransition,
+    completedGroupAlgebraStageCoeffQuotientMap, completedGroupAlgebraStageCoeffQuotientMap,
+    ← MonoidAlgebra.mapRingHom_comp]
+  <span class="kw">simp</span> only [Ideal.Quotient.factor_comp_mk]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_surjective">CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_surjective</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">theorem</span> completedGroupAlgebraCoeffQuotientTransition_surjective
+    {I J : Ideal R} (hIJ : I ≤ J) (U : CompletedGroupAlgebraIndex G) :
+    Function.Surjective (completedGroupAlgebraCoeffQuotientTransition R G hIJ U)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>At a fixed quotient stage \(U\), the coefficient transition induced by \(I\leq J\) is surjective.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientTransition_surjective">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  <span class="kw">intro</span> x
+  obtain ⟨y, hy⟩ :=
+    MonoidAlgebra.map_surjective (M := CompletedGroupAlgebraQuotient G U)
+      (Ideal.Quotient.factor hIJ).toAddMonoidHom
+      (Ideal.Quotient.factor_surjective hIJ) x
+  <span class="kw">exact</span> ⟨y, hy⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition">CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">def</span> completedGroupAlgebraCoeffQuotientGroupTransition
+    (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (I : Ideal R) {U V : CompletedGroupAlgebraIndex G}
+    (hUV : U ≤ V) :
+    CompletedGroupAlgebraCoeffQuotientStage R G I V →+*
+      CompletedGroupAlgebraCoeffQuotientStage R G I U :=
+  MonoidAlgebra.mapDomainRingHom (R ⧸ I)
+    (OpenNormalSubgroupInClass.map
+      (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G)
+      (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Group-quotient transition \((R/I)[G/V]\) \(\to\) \((R/I)[G/U]\) induced by \(U\le V\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_single">CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_single</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraCoeffQuotientGroupTransition_single
+    (I : Ideal R) {U V : CompletedGroupAlgebraIndex G} (hUV : U ≤ V)
+    (q : CompletedGroupAlgebraQuotient G V) (r : R ⧸ I) :
+    completedGroupAlgebraCoeffQuotientGroupTransition R G I hUV
+        (MonoidAlgebra.single q r) =
+      MonoidAlgebra.single
+        ((OpenNormalSubgroupInClass.map
+          (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G)
+          (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV) q) r</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The group-quotient transition from \(G/V\) to \(G/U\) sends a singleton to the singleton at the induced quotient image and leaves its \(R/I\)-coefficient unchanged.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_single">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  change
+    MonoidAlgebra.mapDomain
+        (OpenNormalSubgroupInClass.map
+          (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G)
+          (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV)
+        (MonoidAlgebra.single q r) =
+      MonoidAlgebra.single
+        ((OpenNormalSubgroupInClass.map
+          (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G)
+          (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV) q) r
+  <span class="kw">exact</span> MonoidAlgebra.mapDomain_single</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_comp_stageCoeffQuotientMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_comp_stageCoeffQuotientMap">CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_comp_stageCoeffQuotientMap</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraCoeffQuotientGroupTransition_comp_stageCoeffQuotientMap
+    (I : Ideal R) {U V : CompletedGroupAlgebraIndex G} (hUV : U ≤ V) :
+    (completedGroupAlgebraCoeffQuotientGroupTransition R G I hUV).comp
+        (completedGroupAlgebraStageCoeffQuotientMap R G I V) =
+      (completedGroupAlgebraStageCoeffQuotientMap R G I U).comp
+        (completedGroupAlgebraTransition R G hUV)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Changing the group quotient after reducing coefficients modulo \(I\) agrees with first applying the group-stage transition and then reducing coefficients.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_comp_stageCoeffQuotientMap">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [completedGroupAlgebraCoeffQuotientGroupTransition,
+    completedGroupAlgebraStageCoeffQuotientMap, completedGroupAlgebraStageCoeffQuotientMap,
+    completedGroupAlgebraTransition]
+  <span class="kw">exact</span> (MonoidAlgebra.mapRingHom_comp_mapDomainRingHom
+    (f := Ideal.Quotient.mk I)
+    (g := OpenNormalSubgroupInClass.map
+      (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G)
+      (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV)).symm</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraQuotientTransition_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraQuotientTransition_surjective">CompletedGroupAlgebra.completedGroupAlgebraQuotientTransition_surjective</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] [IsTopologicalGroup G] <span class="kw">in</span>
+<span class="kw">theorem</span> completedGroupAlgebraQuotientTransition_surjective
+    {U V : CompletedGroupAlgebraIndex G} (hUV : U ≤ V) :
+    Function.Surjective
+      (OpenNormalSubgroupInClass.map
+        (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G)
+        (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical quotient homomorphism \(G/V\to G/U\) induced by \(U\leq V\) is surjective.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraQuotientTransition_surjective">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> q
+  rcases QuotientGroup.mk&#x27;_surjective
+      ((((OrderDual.ofDual U).1 : OpenNormalSubgroup G) : Subgroup G)) q <span class="kw">with</span>
+    ⟨g, <span class="kw">rfl</span>⟩
+  refine ⟨QuotientGroup.mk&#x27;
+    ((((OrderDual.ofDual V).1 : OpenNormalSubgroup G) : Subgroup G)) g, <span class="kw">rfl</span>⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_surjective">CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_surjective</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">theorem</span> completedGroupAlgebraCoeffQuotientGroupTransition_surjective
+    (I : Ideal R) {U V : CompletedGroupAlgebraIndex G} (hUV : U ≤ V) :
+    Function.Surjective (completedGroupAlgebraCoeffQuotientGroupTransition R G I hUV)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The group-quotient transition \((R/I)[G/V]\to(R/I)[G/U]\) is surjective.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_surjective">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  <span class="kw">intro</span> x
+  obtain ⟨y, hy⟩ :=
+    Finsupp.mapDomain_surjective (M := R ⧸ I)
+      (completedGroupAlgebraQuotientTransition_surjective
+        (G := G) hUV) x.coeff
+  refine ⟨MonoidAlgebra.ofCoeff y, ?_⟩
+  <span class="kw">apply</span> MonoidAlgebra.coeff_injective
+  <span class="kw">exact</span> hy</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition">CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">def</span> completedGroupAlgebraFiniteQuotientTransition
+    (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] {I J : Ideal R} (hIJ : I ≤ J)
+    {U V : CompletedGroupAlgebraIndex G} (hUV : U ≤ V) :
+    CompletedGroupAlgebraCoeffQuotientStage R G I V →+*
+      CompletedGroupAlgebraCoeffQuotientStage R G J U :=
+  (completedGroupAlgebraCoeffQuotientTransition R G hIJ U).comp
+    (completedGroupAlgebraCoeffQuotientGroupTransition R G I hUV)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The combined transition (R/I)[G/V] -&gt; (R/J)[G/U].</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_single">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_single">CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_single</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraFiniteQuotientTransition_single
+    {I J : Ideal R} (hIJ : I ≤ J) {U V : CompletedGroupAlgebraIndex G}
+    (hUV : U ≤ V) (q : CompletedGroupAlgebraQuotient G V) (r : R ⧸ I) :
+    completedGroupAlgebraFiniteQuotientTransition R G hIJ hUV
+        (MonoidAlgebra.single q r) =
+      MonoidAlgebra.single
+        ((OpenNormalSubgroupInClass.map
+          (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G)
+          (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV) q)
+        (Ideal.Quotient.factor hIJ r)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The combined finite-quotient transition sends a singleton by transporting its support from \(G/V\) to \(G/U\) and its coefficient from \(R/I\) to \(R/J\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_single">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  change
+    MonoidAlgebra.map (Ideal.Quotient.factor hIJ)
+        (MonoidAlgebra.mapDomain
+          (OpenNormalSubgroupInClass.map
+            (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G)
+            (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV)
+          (MonoidAlgebra.single q r)) =
+      MonoidAlgebra.single
+        ((OpenNormalSubgroupInClass.map
+          (C := <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/AllFinite.html#decl-ProCGroups.FiniteGroupClass.allFinite">ProCGroups.FiniteGroupClass.allFinite</a>) (G := G)
+          (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV) q)
+        (Ideal.Quotient.factor hIJ r)
+  <span class="kw">rw</span> [MonoidAlgebra.mapDomain_single, MonoidAlgebra.map_single]
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_comp_finiteQuotientMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_comp_finiteQuotientMap">CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_comp_finiteQuotientMap</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraCoeffQuotientGroupTransition_comp_finiteQuotientMap
+    (I : Ideal R) {U V : CompletedGroupAlgebraIndex G} (hUV : U ≤ V) :
+    (completedGroupAlgebraCoeffQuotientGroupTransition R G I hUV).comp
+        (groupAlgebraFiniteQuotientMap R G I V) =
+      groupAlgebraFiniteQuotientMap R G I U</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>At fixed coefficient quotient \(R/I\), applying the group-quotient transition after the abstract finite-quotient map at \(V\) gives the finite-quotient map at \(U\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraCoeffQuotientGroupTransition_comp_finiteQuotientMap">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> RingHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">calc</span>
+    completedGroupAlgebraCoeffQuotientGroupTransition R G I hUV
+        (groupAlgebraFiniteQuotientMap R G I V x) =
+      completedGroupAlgebraCoeffQuotientGroupTransition R G I hUV
+        (completedGroupAlgebraStageCoeffQuotientMap R G I V
+          (completedGroupAlgebraStageMap R G V x)) := <span class="kw">rfl</span>
+    _ =
+      completedGroupAlgebraStageCoeffQuotientMap R G I U
+        (completedGroupAlgebraTransition R G hUV
+          (completedGroupAlgebraStageMap R G V x)) := <span class="kw">by</span>
+      <span class="kw">exact</span> congrFun
+        (congrArg DFunLike.coe
+          (completedGroupAlgebraCoeffQuotientGroupTransition_comp_stageCoeffQuotientMap
+            (R := R) (G := G) I (U := U) (V := V) hUV))
+        (completedGroupAlgebraStageMap R G V x)
+    _ =
+      completedGroupAlgebraStageCoeffQuotientMap R G I U
+        (completedGroupAlgebraStageMap R G U x) := <span class="kw">by</span>
+      congr 1
+      <span class="kw">exact</span> congrFun
+        (congrArg DFunLike.coe
+          (completedGroupAlgebraStageMap_compatible
+            (R := R) (G := G) (U := U) (V := V) hUV))
+        x
+    _ = groupAlgebraFiniteQuotientMap R G I U x := <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_comp_finiteQuotientMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_comp_finiteQuotientMap">CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_comp_finiteQuotientMap</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraFiniteQuotientTransition_comp_finiteQuotientMap
+    {I J : Ideal R} (hIJ : I ≤ J) {U V : CompletedGroupAlgebraIndex G}
+    (hUV : U ≤ V) :
+    (completedGroupAlgebraFiniteQuotientTransition R G hIJ hUV).comp
+        (groupAlgebraFiniteQuotientMap R G I V) =
+      groupAlgebraFiniteQuotientMap R G J U</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The combined transition from \((R/I)[G/V]\) to \((R/J)[G/U]\), composed with the source finite-quotient map, is the target finite-quotient map.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_comp_finiteQuotientMap">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [completedGroupAlgebraFiniteQuotientTransition, RingHom.comp_assoc,
+    completedGroupAlgebraCoeffQuotientGroupTransition_comp_finiteQuotientMap]
+  <span class="kw">rw</span> [groupAlgebraFiniteQuotientMap, groupAlgebraFiniteQuotientMap]
+  <span class="kw">rw</span> [← RingHom.comp_assoc,
+    completedGroupAlgebraCoeffQuotientTransition_comp_stageCoeffQuotientMap]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_surjective">CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_surjective</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [TopologicalSpace R] [IsTopologicalRing R] <span class="kw">in</span>
+<span class="kw">theorem</span> completedGroupAlgebraFiniteQuotientTransition_surjective
+    {I J : Ideal R} (hIJ : I ≤ J) {U V : CompletedGroupAlgebraIndex G}
+    (hUV : U ≤ V) :
+    Function.Surjective (completedGroupAlgebraFiniteQuotientTransition R G hIJ hUV)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The combined coefficient-and-group transition \((R/I)[G/V]\to(R/J)[G/U]\) is surjective.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_surjective">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x
+  rcases completedGroupAlgebraCoeffQuotientTransition_surjective
+      (R := R) (G := G) hIJ U x <span class="kw">with</span>
+    ⟨y, hy⟩
+  rcases completedGroupAlgebraCoeffQuotientGroupTransition_surjective
+      (R := R) (G := G) I hUV y <span class="kw">with</span>
+    ⟨z, hz⟩
+  <span class="kw">exact</span> ⟨z, <span class="kw">by</span> <span class="kw">rw</span> [completedGroupAlgebraFiniteQuotientTransition, RingHom.comp_apply, hz, hy]⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection">CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraFiniteQuotientProjection
+    (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R] [TopologicalSpace R]
+    [IsTopologicalRing R] [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) :
+    CompletedGroupAlgebraCarrier R G →+*
+      CompletedGroupAlgebraCoeffQuotientStage R G I U :=
+  (completedGroupAlgebraStageCoeffQuotientMap R G I U).comp
+    (completedGroupAlgebraProjection R G U)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The corresponding projection from the completed group algebra to \((R/I)[G/U]\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection_toCompletedGroupAlgebra">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection_toCompletedGroupAlgebra">CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection_toCompletedGroupAlgebra</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraFiniteQuotientProjection_toCompletedGroupAlgebra
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) :
+    (completedGroupAlgebraFiniteQuotientProjection R G I U).comp
+        (toCompletedGroupAlgebraRingHom R G) =
+      groupAlgebraFiniteQuotientMap R G I U</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Composing the finite-quotient projection from the completed group algebra with its canonical dense ring homomorphism gives <code>groupAlgebraFiniteQuotientMap</code>.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection_toCompletedGroupAlgebra">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> RingHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection_apply_toCompletedGroupAlgebra">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection_apply_toCompletedGroupAlgebra">CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection_apply_toCompletedGroupAlgebra</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraFiniteQuotientProjection_apply_toCompletedGroupAlgebra
+    (I : Ideal R) (U : CompletedGroupAlgebraIndex G) (x : MonoidAlgebra R G) :
+    completedGroupAlgebraFiniteQuotientProjection R G I U
+        (toCompletedGroupAlgebra R G x) =
+      groupAlgebraFiniteQuotientMap R G I U x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The finite-quotient projection of the canonical dense element is computed by the associated quotient-stage map.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientProjection_apply_toCompletedGroupAlgebra">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_comp_projection">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_comp_projection">CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_comp_projection</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900]
+<span class="kw">theorem</span> completedGroupAlgebraFiniteQuotientTransition_comp_projection
+    {I J : Ideal R} (hIJ : I ≤ J) {U V : CompletedGroupAlgebraIndex G}
+    (hUV : U ≤ V) :
+    (completedGroupAlgebraFiniteQuotientTransition R G hIJ hUV).comp
+        (completedGroupAlgebraFiniteQuotientProjection R G I V) =
+      completedGroupAlgebraFiniteQuotientProjection R G J U</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Projecting to \((R/I)[G/V]\) and then applying the combined transition agrees with projecting directly to \((R/J)[G/U]\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraFiniteQuotientTransition_comp_projection">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> RingHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">calc</span>
+    completedGroupAlgebraFiniteQuotientTransition R G hIJ hUV
+        (completedGroupAlgebraFiniteQuotientProjection R G I V x)
+        =
+      completedGroupAlgebraCoeffQuotientTransition R G hIJ U
+        (completedGroupAlgebraCoeffQuotientGroupTransition R G I hUV
+          (completedGroupAlgebraStageCoeffQuotientMap R G I V
+            (completedGroupAlgebraProjection R G V x))) := <span class="kw">rfl</span>
+    _ =
+      completedGroupAlgebraCoeffQuotientTransition R G hIJ U
+        (completedGroupAlgebraStageCoeffQuotientMap R G I U
+          (completedGroupAlgebraTransition R G hUV
+            (completedGroupAlgebraProjection R G V x))) := <span class="kw">by</span>
+        <span class="kw">have</span> hstage := congrFun
+          (congrArg DFunLike.coe
+            (completedGroupAlgebraCoeffQuotientGroupTransition_comp_stageCoeffQuotientMap
+              (R := R) (G := G) I (U := U) (V := V) hUV))
+          (completedGroupAlgebraProjection R G V x)
+        <span class="kw">exact</span> congrArg (completedGroupAlgebraCoeffQuotientTransition R G hIJ U) hstage
+    _ =
+      completedGroupAlgebraCoeffQuotientTransition R G hIJ U
+        (completedGroupAlgebraStageCoeffQuotientMap R G I U
+          (completedGroupAlgebraProjection R G U x)) := <span class="kw">by</span>
+        <span class="kw">rw</span> [completedGroupAlgebraProjection_compatible (R := R) (G := G) x hUV]
+    _ =
+      completedGroupAlgebraStageCoeffQuotientMap R G J U
+        (completedGroupAlgebraProjection R G U x) := <span class="kw">by</span>
+        <span class="kw">exact</span> congrFun
+          (congrArg DFunLike.coe
+            (completedGroupAlgebraCoeffQuotientTransition_comp_stageCoeffQuotientMap
+              (R := R) (G := G) (I := I) (J := J) hIJ U))
+          (completedGroupAlgebraProjection R G U x)
+    _ = completedGroupAlgebraFiniteQuotientProjection R G J U x := <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.CompletedGroupAlgebra.OpenFiniteQuotientTopology.FiniteQuotients"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

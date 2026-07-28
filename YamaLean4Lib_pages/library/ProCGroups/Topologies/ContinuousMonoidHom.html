@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Topologies.ContinuousMonoidHom | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="This file provides standard continuous homomorphisms involving subgroups and quotients, proves an open-mapping criterion for compact-to-Hausdorff surjections, and develops range restrictions. Kernels and ranges are sh...">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/Topologies/ContinuousMonoidHom.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.Topologies.ContinuousMonoidHom</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Topologies.html">Topologies</a><span class="sep">/</span><span>ContinuousMonoidHom</span></div>
+      <h1 class="module-title">ProCGroups.Topologies.ContinuousMonoidHom</h1>
+      <div class="module-meta">8 Theorems | 3 Definitions</div>
+      <div class="module-overview tex2jax_process"><p>This file provides standard continuous homomorphisms involving subgroups and quotients, proves an open-mapping criterion for compact-to-Hausdorff surjections, and develops range restrictions. Kernels and ranges are shown closed under the expected separation hypotheses.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>imports</summary><ul><li>Mathlib.Topology.Algebra.ContinuousMonoidHom</li><li>Mathlib.Topology.Algebra.Group.Quotient</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/Topologies.html">ProCGroups.Topologies</a></li><li><a href="../../../library/ProCGroups/Topologies/ContinuousMulEquiv.html">ProCGroups.Topologies.ContinuousMulEquiv</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ProCGroups.MonoidHom.continuous_of_isOpen_ker_to_discrete">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.MonoidHom.continuous_of_isOpen_ker_to_discrete">ProCGroups.MonoidHom.continuous_of_isOpen_ker_to_discrete</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_of_isOpen_ker_to_discrete
+    {G : <span class="kw">Type</span> u} {Q : <span class="kw">Type</span> v}
+    [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [Group Q] [TopologicalSpace Q] [DiscreteTopology Q]
+    (f : G →* Q) (hker : IsOpen ((f.ker : Subgroup G) : Set G)) : Continuous f</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A homomorphism from a topological group to a discrete group is continuous if its kernel is open.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.MonoidHom.continuous_of_isOpen_ker_to_discrete">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  <span class="kw">rw</span> [continuous_discrete_rng]
+  <span class="kw">intro</span> y
+  by_cases hy : ∃ x : G, f x = y
+  · rcases hy <span class="kw">with</span> ⟨x, hx⟩
+    <span class="kw">have</span> hEq :
+        f ⁻¹&#x27; ({y} : Set Q) = (<span class="kw">fun</span> z : G =&gt; x * z) &#x27;&#x27; ((f.ker : Subgroup G) : Set G) := <span class="kw">by</span>
+      ext z
+      <span class="kw">constructor</span>
+      · <span class="kw">intro</span> hz
+        <span class="kw">have</span> hz&#x27; : f z = y := <span class="kw">by</span> simpa using hz
+        refine ⟨x⁻¹ * z, ?_, <span class="kw">by</span> <span class="kw">simp</span> only [mul_inv_cancel_left]⟩
+        change f (x⁻¹ * z) = 1
+        <span class="kw">simp</span> only [map_mul, map_inv, hx, hz&#x27;, inv_mul_cancel]
+      · rintro ⟨k, hk, <span class="kw">rfl</span>⟩
+        change f (x * k) = y
+        <span class="kw">rw</span> [map_mul, hx]
+        simpa using hk
+    <span class="kw">rw</span> [hEq]
+    <span class="kw">exact</span> isOpenMap_mul_left x _ hker
+  · <span class="kw">have</span> hEq : f ⁻¹&#x27; ({y} : Set Q) = ∅ := <span class="kw">by</span>
+      ext z
+      <span class="kw">constructor</span>
+      · <span class="kw">intro</span> hz
+        <span class="kw">exact</span> False.elim (hy ⟨z, hz⟩)
+      · <span class="kw">intro</span> hz
+        <span class="kw">simp</span> only [Set.mem_empty_iff_false] at hz
+    <span class="kw">rw</span> [hEq]
+    <span class="kw">exact</span> isOpen_empty</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.ContinuousMonoidHom.subtype">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.ContinuousMonoidHom.subtype">ProCGroups.ContinuousMonoidHom.subtype</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> subtype (K : Subgroup G) : K →ₜ* G <span class="kw">where</span>
+  toMonoidHom := K.subtype
+  continuous_toFun := continuous_subtype_val</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inclusion of a subgroup, as a continuous monoid homomorphism for the subtype topology.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ContinuousMonoidHom.subtype_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ContinuousMonoidHom.subtype_apply">ProCGroups.ContinuousMonoidHom.subtype_apply</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> subtype_apply (K : Subgroup G) (x : K) :
+    subtype K x = x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The continuous homomorphism induced by a subgroup inclusion evaluates to the underlying subgroup element.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ContinuousMonoidHom.subtype_apply">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.ContinuousMonoidHom.quotientMk">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.ContinuousMonoidHom.quotientMk">ProCGroups.ContinuousMonoidHom.quotientMk</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> quotientMk (K : Subgroup G) [K.Normal] : G →ₜ* G ⧸ K <span class="kw">where</span>
+  toMonoidHom := QuotientGroup.mk&#x27; K
+  continuous_toFun := continuous_quotient_mk&#x27;</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The quotient projection \(G \to G/K\), bundled as a continuous monoid homomorphism for the quotient topology.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ContinuousMonoidHom.quotientMk_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ContinuousMonoidHom.quotientMk_apply">ProCGroups.ContinuousMonoidHom.quotientMk_apply</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientMk_apply (K : Subgroup G) [K.Normal] (x : G) :
+    quotientMk K x = QuotientGroup.mk&#x27; K x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The continuous quotient homomorphism evaluates by taking the quotient class of the input element.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ContinuousMonoidHom.quotientMk_apply">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ContinuousMonoidHom.isOpenMap_of_surjective_compact_t2">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ContinuousMonoidHom.isOpenMap_of_surjective_compact_t2">ProCGroups.ContinuousMonoidHom.isOpenMap_of_surjective_compact_t2</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isOpenMap_of_surjective_compact_t2
+    [IsTopologicalGroup G] [CompactSpace G] [T2Space H]
+    (f : G →ₜ* H) (hf : Function.Surjective f) :
+    IsOpenMap f</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A continuous surjective homomorphism from a compact group to a Hausdorff topological group is an open map.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ContinuousMonoidHom.isOpenMap_of_surjective_compact_t2">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> U hU
+  <span class="kw">have</span> hq : Topology.IsQuotientMap f :=
+    f.continuous_toFun.isClosedMap.isQuotientMap f.continuous_toFun hf
+  refine (hq.isOpen_preimage).1 ?_
+  <span class="kw">have</span> hpre :
+      f ⁻¹&#x27; (f &#x27;&#x27; U) =
+        ⋃ k : f.toMonoidHom.ker, (<span class="kw">fun</span> x : G =&gt; x * k.1) &#x27;&#x27; U := <span class="kw">by</span>
+    ext z
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hz
+      rcases hz <span class="kw">with</span> ⟨u, huU, huf⟩
+      refine Set.mem_iUnion.2
+        ⟨⟨u⁻¹ * z, ?_⟩, ⟨u, huU, <span class="kw">by</span> <span class="kw">simp</span> only [mul_inv_cancel_left]⟩⟩
+      change f.toMonoidHom (u⁻¹ * z) = 1
+      <span class="kw">simp</span> only [_root_.ContinuousMonoidHom.coe_toMonoidHom, map_mul, map_inv,
+          MonoidHom.coe_coe, huf, inv_mul_cancel]
+    · <span class="kw">intro</span> hz
+      rcases Set.mem_iUnion.1 hz <span class="kw">with</span> ⟨k, hk⟩
+      rcases hk <span class="kw">with</span> ⟨u, huU, <span class="kw">rfl</span>⟩
+      <span class="kw">exact</span> ⟨u, huU, <span class="kw">by</span>
+        change f.toMonoidHom u = f.toMonoidHom (u * k.1)
+        <span class="kw">rw</span> [map_mul, <span class="kw">show</span> f.toMonoidHom k.1 = 1 from k.2, mul_one]⟩
+  <span class="kw">rw</span> [hpre]
+  <span class="kw">exact</span> isOpen_iUnion <span class="kw">fun</span> k =&gt; isOpenMap_mul_right k.1 U hU</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.ContinuousMonoidHom.rangeRestrict">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.ContinuousMonoidHom.rangeRestrict">ProCGroups.ContinuousMonoidHom.rangeRestrict</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rangeRestrict (f : G →ₜ* H) : G →ₜ* f.toMonoidHom.range <span class="kw">where</span>
+  toMonoidHom := f.toMonoidHom.rangeRestrict
+  continuous_toFun := Continuous.subtype_mk f.continuous_toFun <span class="kw">fun</span> x =&gt; ⟨x, <span class="kw">rfl</span>⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A continuous homomorphism restricts to its range with the induced subtype topology.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ContinuousMonoidHom.rangeRestrict_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ContinuousMonoidHom.rangeRestrict_apply">ProCGroups.ContinuousMonoidHom.rangeRestrict_apply</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> rangeRestrict_apply (f : G →ₜ* H) (x : G) :
+    f.rangeRestrict x = f.toMonoidHom.rangeRestrict x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The range-restricted continuous homomorphism evaluates to the image element together with its range-membership certificate.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ContinuousMonoidHom.rangeRestrict_apply">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ContinuousMonoidHom.coe_rangeRestrict_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ContinuousMonoidHom.coe_rangeRestrict_apply">ProCGroups.ContinuousMonoidHom.coe_rangeRestrict_apply</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> coe_rangeRestrict_apply (f : G →ₜ* H) (x : G) :
+    (f.rangeRestrict x : H) = f x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Coercing the range-restricted homomorphism back to the codomain recovers the original homomorphism value.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ContinuousMonoidHom.coe_rangeRestrict_apply">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ContinuousMonoidHom.isClosed_ker">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ContinuousMonoidHom.isClosed_ker">ProCGroups.ContinuousMonoidHom.isClosed_ker</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isClosed_ker [T1Space H] (f : G →ₜ* H) :
+    IsClosed ((f.toMonoidHom.ker : Subgroup G) : Set G)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The kernel of a continuous homomorphism to a \(T_1\) group is closed.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ContinuousMonoidHom.isClosed_ker">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> hker :
+      ((f.toMonoidHom.ker : Subgroup G) : Set G) =
+        f ⁻¹&#x27; ({1} : Set H) := <span class="kw">by</span>
+    ext x
+    change (f x = 1) ↔ f x ∈ ({1} : Set H)
+    <span class="kw">simp</span> only [Set.mem_singleton_iff]
+  <span class="kw">rw</span> [hker]
+  <span class="kw">exact</span> (isClosed_singleton (x := (1 : H))).preimage f.continuous_toFun</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ContinuousMonoidHom.isClosed_range">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ContinuousMonoidHom.isClosed_range">ProCGroups.ContinuousMonoidHom.isClosed_range</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isClosed_range [CompactSpace G] [T2Space H] (f : G →ₜ* H) :
+    IsClosed ((f.toMonoidHom.range : Subgroup H) : Set H)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The range of a continuous homomorphism from a compact space to a Hausdorff space is closed.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ContinuousMonoidHom.isClosed_range">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> himage : IsCompact (f &#x27;&#x27; (Set.univ : Set G)) :=
+    isCompact_univ.image f.continuous_toFun
+  <span class="kw">have</span> hEq : f &#x27;&#x27; (Set.univ : Set G) = ((f.toMonoidHom.range : Subgroup H) : Set H) := <span class="kw">by</span>
+    ext y
+    <span class="kw">constructor</span>
+    · rintro ⟨x, _hx, <span class="kw">rfl</span>⟩
+      <span class="kw">exact</span> ⟨x, <span class="kw">rfl</span>⟩
+    · rintro ⟨x, <span class="kw">rfl</span>⟩
+      <span class="kw">exact</span> ⟨x, trivial, <span class="kw">rfl</span>⟩
+  <span class="kw">exact</span> (hEq ▸ himage).isClosed</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Topologies.ContinuousMonoidHom"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

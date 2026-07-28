@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Generation.Convergence | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="The open-subgroup convergence predicate is shown to be stable under pointed continuous maps, subsets, and finite modifications. For a generating set containing one, the module identifies its closure with a compact one...">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/Generation/Convergence.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.Generation.Convergence</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Generation.html">Generation</a><span class="sep">/</span><span>Convergence</span></div>
+      <h1 class="module-title">ProCGroups.Generation.Convergence</h1>
+      <div class="module-meta">8 Theorems | 1 Definition</div>
+      <div class="module-overview tex2jax_process"><p>The open-subgroup convergence predicate is shown to be stable under pointed continuous maps, subsets, and finite modifications.  For a generating set containing one, the module identifies its closure with a compact one-point extension and proves that the convergent set is closed.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>imports</summary><ul><li>Mathlib.Topology.Compactification.OnePoint.Basic</li><li><a href="../../../library/ProCGroups/Generation/Basic.html">ProCGroups.Generation.Basic</a></li><li><a href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/BasisAtOne.html">ProCGroups.ProC.OpenNormalSubgroups.BasisAtOne</a></li><li><a href="../../../library/ProCGroups/Profinite/Basic.html">ProCGroups.Profinite.Basic</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/Generation.html">ProCGroups.Generation</a></li><li><a href="../../../library/ProCGroups/Generation/QuotientGeneratorConvergingPairs.html">ProCGroups.Generation.QuotientGeneratorConvergingPairs</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed">ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed
+    {H : <span class="kw">Type</span> v} [Group H] [TopologicalSpace H]
+    [CompactSpace G] [TotallyDisconnectedSpace G]
+    {f : G → H} (hf : Continuous f) (hf1 : f 1 = 1)
+    {X : Set G} (hX : ConvergesToOneAlongOpenSubgroups (G := G) X) :
+    ConvergesToOneAlongOpenSubgroups (G := H) (f &#x27;&#x27; X)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A continuous map between topological groups that sends \(1\) to \(1\) carries convergent sets to convergent sets, provided the source is profinite.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> U
+  <span class="kw">have</span> hpre : IsOpen (f ⁻¹&#x27; (U : Set H)) :=
+    (openSubgroup_isOpen (G := H) U).preimage hf
+  <span class="kw">have</span> h1pre : (1 : G) ∈ f ⁻¹&#x27; (U : Set H) := <span class="kw">by</span>
+    <span class="kw">simp</span> only [mem_preimage, hf1, SetLike.mem_coe, one_mem]
+  rcases exists_openNormalSubgroup_sub_open_nhds_of_one (G := G) hpre h1pre <span class="kw">with</span> ⟨V, hVU⟩
+  <span class="kw">have</span> hsubset : (f &#x27;&#x27; X) \ (U : Set H) ⊆ f &#x27;&#x27; (X \ (V : Set G)) := <span class="kw">by</span>
+    <span class="kw">intro</span> y hy
+    rcases hy <span class="kw">with</span> ⟨hyX, hyU⟩
+    rcases hyX <span class="kw">with</span> ⟨x, hxX, <span class="kw">rfl</span>⟩
+    refine ⟨x, ⟨hxX, ?_⟩, <span class="kw">rfl</span>⟩
+    <span class="kw">intro</span> hxV
+    <span class="kw">exact</span> hyU (hVU hxV)
+  <span class="kw">exact</span> (hX V.toOpenSubgroup).image f |&gt;.subset hsubset</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.mono">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.mono">ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.mono</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup G] <span class="kw">in</span>
+<span class="kw">theorem</span> ConvergesToOneAlongOpenSubgroups.mono {X Y : Set G}
+    (hX : ConvergesToOneAlongOpenSubgroups (G := G) X) (hYX : Y ⊆ X) :
+    ConvergesToOneAlongOpenSubgroups (G := G) Y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Passing to a subset preserves convergence to \(1\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.mono">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> U
+  <span class="kw">exact</span> (hX U).subset (<span class="kw">by</span>
+    <span class="kw">intro</span> y hy
+    <span class="kw">exact</span> ⟨hYX hy.1, hy.2⟩)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_finite">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_finite">ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_finite</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup G] <span class="kw">in</span>
+<span class="kw">theorem</span> ConvergesToOneAlongOpenSubgroups.union_finite {X F : Set G}
+    (hX : ConvergesToOneAlongOpenSubgroups (G := G) X) (hF : F.Finite) :
+    ConvergesToOneAlongOpenSubgroups (G := G) (X ∪ F)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Finite enlargements preserve convergence to \(1\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_finite">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> U
+  <span class="kw">have</span> h1 : (X \ (U : Set G)).Finite := hX U
+  <span class="kw">have</span> h2 : (F \ (U : Set G)).Finite := hF.subset (<span class="kw">by</span>
+    <span class="kw">intro</span> y hy
+    <span class="kw">exact</span> hy.1)
+  <span class="kw">have</span> hsubset : (X ∪ F) \ (U : Set G) ⊆ (X \ (U : Set G)) ∪ (F \ (U : Set G)) := <span class="kw">by</span>
+    <span class="kw">intro</span> y hy
+    rcases hy <span class="kw">with</span> ⟨hyXF, hyU⟩
+    rcases hyXF <span class="kw">with</span> hyX | hyF
+    · <span class="kw">exact</span> Or.inl ⟨hyX, hyU⟩
+    · <span class="kw">exact</span> Or.inr ⟨hyF, hyU⟩
+  <span class="kw">exact</span> (h1.union h2).subset hsubset</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_finite_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_finite_iff">ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_finite_iff</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup G] <span class="kw">in</span>
+<span class="kw">theorem</span> ConvergesToOneAlongOpenSubgroups.union_finite_iff {X F : Set G}
+    (hF : F.Finite) :
+    ConvergesToOneAlongOpenSubgroups (G := G) (X ∪ F) ↔ ConvergesToOneAlongOpenSubgroups (G :=
+        G) X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Convergence to \(1\) is preserved and reflected by the indicated finite union, insertion, or continuous equivalence operation.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_finite_iff">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> h
+    <span class="kw">exact</span> ConvergesToOneAlongOpenSubgroups.mono (G := G) h (<span class="kw">by</span>
+      <span class="kw">intro</span> x hx
+      <span class="kw">exact</span> Or.inl hx)
+  · <span class="kw">intro</span> h
+    <span class="kw">exact</span> ConvergesToOneAlongOpenSubgroups.union_finite (G := G) h hF</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.insert_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.insert_iff">ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.insert_iff</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup G] <span class="kw">in</span>
+<span class="kw">theorem</span> ConvergesToOneAlongOpenSubgroups.insert_iff {X : Set G} {x : G} :
+    ConvergesToOneAlongOpenSubgroups (G := G) (Set.insert x X) ↔
+        ConvergesToOneAlongOpenSubgroups (G := G) X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Convergence to \(1\) is preserved and reflected by the indicated finite union, insertion, or continuous equivalence operation.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.insert_iff">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> hEq : Set.insert x X = X ∪ ({x} : Set G) := <span class="kw">by</span>
+    ext y
+    <span class="kw">constructor</span>
+    · <span class="kw">intro</span> hy
+      rcases Set.mem_insert_iff.mp hy <span class="kw">with</span> <span class="kw">rfl</span> | hyX
+      · <span class="kw">exact</span> Or.inr (<span class="kw">by</span> <span class="kw">simp</span> only [mem_singleton_iff])
+      · <span class="kw">exact</span> Or.inl hyX
+    · <span class="kw">intro</span> hy
+      rcases hy <span class="kw">with</span> hyX | hyx
+      · <span class="kw">exact</span> Set.mem_insert_iff.mpr (Or.inr hyX)
+      · <span class="kw">exact</span> Set.mem_insert_iff.mpr (Or.inl (<span class="kw">by</span> simpa using hyx))
+  <span class="kw">rw</span> [hEq]
+  <span class="kw">exact</span> ConvergesToOneAlongOpenSubgroups.union_finite_iff (G := G) (X := X) (F := ({x} : Set G))
+    (Set.finite_singleton x)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_one_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_one_iff">ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_one_iff</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup G] <span class="kw">in</span>
+<span class="kw">theorem</span> ConvergesToOneAlongOpenSubgroups.union_one_iff {X : Set G} :
+    ConvergesToOneAlongOpenSubgroups (G := G) (X ∪ ({1} : Set G)) ↔
+        ConvergesToOneAlongOpenSubgroups (G := G) X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Convergence to \(1\) is preserved and reflected by the indicated finite union, insertion, or continuous equivalence operation.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.union_one_iff">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> ConvergesToOneAlongOpenSubgroups.union_finite_iff (G := G) (X := X) (F := ({1} : Set G))
+    (Set.finite_singleton 1)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.closure_generatorsConvergingToOne">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.closure_generatorsConvergingToOne">ProCGroups.Generation.closure_generatorsConvergingToOne</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> closure_generatorsConvergingToOne
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] {X : Set G}
+    (hX : ConvergesToOneAlongOpenSubgroups (G := G) X) :
+    IsDiscrete (X \ {1}) ∧
+      (Set.Infinite X → closure X = X ∪ ({1} : Set G))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A set converging to \(1\) is discrete away from \(1\), and if it is infinite its closure is obtained by adjoining the unique possible limit point \(1\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.Generation.closure_generatorsConvergingToOne">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · <span class="kw">rw</span> [isDiscrete_iff_forall_mem_exists_isOpen]
+    <span class="kw">intro</span> y hy
+    <span class="kw">have</span> hy1 : y ≠ 1 := <span class="kw">by</span> simpa using hy.2
+    <span class="kw">let</span> W : Set G := ({y} : Set G)ᶜ
+    <span class="kw">have</span> hWopen : IsOpen W := isClosed_singleton.isOpen_compl
+    <span class="kw">have</span> h1W : (1 : G) ∈ W := <span class="kw">by</span> simpa [W, eq_comm] using hy1
+    rcases exists_openNormalSubgroup_sub_open_nhds_of_one (G := G) hWopen h1W <span class="kw">with</span> ⟨U, hUW⟩
+    <span class="kw">have</span> hyU : y ∉ (U : Set G) := <span class="kw">by</span>
+      <span class="kw">intro</span> hyU
+      <span class="kw">have</span> hyW : y ∈ W := hUW hyU
+      <span class="kw">simp</span> only [mem_compl_iff, mem_singleton_iff, not_true_eq_false, W] at hyW
+    <span class="kw">let</span> V : Set G := (<span class="kw">fun</span> z : G =&gt; y⁻¹ * z) ⁻¹&#x27; (U : Set G)
+    <span class="kw">have</span> hVopen : IsOpen V := <span class="kw">by</span>
+      <span class="kw">exact</span> (openNormalSubgroup_isOpen (G := G) U).preimage
+        (continuous_const.mul continuous_id)
+    <span class="kw">have</span> hyV : y ∈ V := <span class="kw">by</span>
+      <span class="kw">simp</span> only [mem_preimage, inv_mul_cancel, SetLike.mem_coe, one_mem, V]
+    <span class="kw">have</span> hsubset : V ∩ (X \ ({1} : Set G)) ⊆ X \ (U : Set G) := <span class="kw">by</span>
+      <span class="kw">intro</span> z hz
+      rcases hz <span class="kw">with</span> ⟨hzV, hzX⟩
+      refine ⟨hzX.1, ?_⟩
+      <span class="kw">intro</span> hzU
+      <span class="kw">have</span> hmem : z * (y⁻¹ * z)⁻¹ ∈ (U : Subgroup G) := U.mul_mem hzU (U.inv_mem hzV)
+      <span class="kw">have</span> : y ∈ (U : Subgroup G) := <span class="kw">by</span>
+        simpa [mul_assoc] using hmem
+      <span class="kw">exact</span> hyU this
+    <span class="kw">have</span> hfinite : (V ∩ (X \ ({1} : Set G))).Finite := <span class="kw">by</span>
+      <span class="kw">exact</span> (hX U.toOpenSubgroup).subset hsubset
+    rcases (isDiscrete_iff_forall_mem_exists_isOpen.mp hfinite.isDiscrete) y ⟨hyV, hy⟩ <span class="kw">with</span>
+      ⟨V&#x27;, hV&#x27;open, hV&#x27;⟩
+    refine ⟨V&#x27; ∩ V, hV&#x27;open.inter hVopen, ?_⟩
+    simpa [Set.inter_assoc, Set.inter_left_comm, Set.inter_comm] using hV&#x27;
+  · <span class="kw">intro</span> hXinfinite
+    <span class="kw">apply</span> subset_antisymm
+    · <span class="kw">intro</span> y hycl
+      by_cases hy1 : y = 1
+      · <span class="kw">simp</span> only [union_singleton, hy1, mem_insert_iff, true_or]
+      · by_cases hyX : y ∈ X
+        · <span class="kw">simp</span> only [union_singleton, mem_insert_iff, hy1, hyX, or_true]
+        · <span class="kw">let</span> W : Set G := ({y} : Set G)ᶜ
+          <span class="kw">have</span> hWopen : IsOpen W := isClosed_singleton.isOpen_compl
+          <span class="kw">have</span> h1W : (1 : G) ∈ W := <span class="kw">by</span> simpa [W, eq_comm] using hy1
+          rcases exists_openNormalSubgroup_sub_open_nhds_of_one (G := G) hWopen h1W <span class="kw">with</span>
+            ⟨U, hUW⟩
+          <span class="kw">have</span> hyU : y ∉ (U : Set G) := <span class="kw">by</span>
+            <span class="kw">intro</span> hyU
+            <span class="kw">have</span> hyW : y ∈ W := hUW hyU
+            <span class="kw">simp</span> only [mem_compl_iff, mem_singleton_iff, not_true_eq_false, W] at hyW
+          <span class="kw">let</span> V : Set G := (<span class="kw">fun</span> z : G =&gt; y⁻¹ * z) ⁻¹&#x27; (U : Set G)
+          <span class="kw">have</span> hVopen : IsOpen V := <span class="kw">by</span>
+            <span class="kw">exact</span> (openNormalSubgroup_isOpen (G := G) U).preimage
+              (continuous_const.mul continuous_id)
+          <span class="kw">have</span> hyV : y ∈ V := <span class="kw">by</span>
+            <span class="kw">simp</span> only [mem_preimage, inv_mul_cancel, SetLike.mem_coe, one_mem, V]
+          <span class="kw">have</span> hsubset : V ∩ X ⊆ X \ (U : Set G) := <span class="kw">by</span>
+            <span class="kw">intro</span> z hz
+            rcases hz <span class="kw">with</span> ⟨hzV, hzX⟩
+            refine ⟨hzX, ?_⟩
+            <span class="kw">intro</span> hzU
+            <span class="kw">have</span> hmem : z * (y⁻¹ * z)⁻¹ ∈ (U : Subgroup G) := U.mul_mem hzU (U.inv_mem hzV)
+            <span class="kw">have</span> : y ∈ (U : Subgroup G) := <span class="kw">by</span>
+              simpa [mul_assoc] using hmem
+            <span class="kw">exact</span> hyU this
+          <span class="kw">have</span> hfinite : (V ∩ X).Finite := <span class="kw">by</span>
+            <span class="kw">exact</span> (hX U.toOpenSubgroup).subset hsubset
+          <span class="kw">have</span> hclosed : IsClosed (V ∩ X) := hfinite.isClosed
+          <span class="kw">have</span> hyVX : y ∉ V ∩ X := <span class="kw">by</span>
+            <span class="kw">simp</span> only [mem_inter_iff, hyV, hyX, and_false, not_false_eq_true]
+          <span class="kw">have</span> hne :=
+            (mem_closure_iff.1 hycl) (V \ (V ∩ X)) (hVopen.sdiff hclosed) ⟨hyV, hyVX⟩
+          rcases hne <span class="kw">with</span> ⟨z, hz⟩
+          <span class="kw">exact</span> False.elim (hz.1.2 ⟨hz.1.1, hz.2⟩)
+    · <span class="kw">intro</span> y hy
+      rcases hy <span class="kw">with</span> hyX | hy1
+      · <span class="kw">exact</span> subset_closure hyX
+      · subst hy1
+        refine mem_closure_iff.2 ?_
+        <span class="kw">intro</span> W hWopen h1W
+        rcases exists_openNormalSubgroup_sub_open_nhds_of_one (G := G) hWopen h1W <span class="kw">with</span>
+          ⟨U, hUW⟩
+        <span class="kw">have</span> hproper : ¬ X ⊆ X \ (U : Set G) := <span class="kw">by</span>
+          <span class="kw">intro</span> hsub
+          <span class="kw">have</span> hXfinite : X.Finite := (hX U.toOpenSubgroup).subset hsub
+          <span class="kw">exact</span> hXinfinite hXfinite
+        rcases Set.not_subset.1 hproper <span class="kw">with</span> ⟨x, hxX, hxnot⟩
+        <span class="kw">have</span> hxU : x ∈ (U : Set G) := <span class="kw">by</span>
+          by_contra hxU
+          <span class="kw">exact</span> hxnot ⟨hxX, hxU⟩
+        <span class="kw">exact</span> ⟨x, hUW hxU, hxX⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.isClosed_of_one_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.isClosed_of_one_mem">ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.isClosed_of_one_mem</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> ConvergesToOneAlongOpenSubgroups.isClosed_of_one_mem
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] {X : Set G}
+    (hX : ConvergesToOneAlongOpenSubgroups (G := G) X) (h1 : (1 : G) ∈ X) :
+    IsClosed X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A convergent set containing its only possible limit point \(1\) is closed.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.isClosed_of_one_mem">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  rcases closure_generatorsConvergingToOne (G := G) hX <span class="kw">with</span> ⟨_, hclosure⟩
+  by_cases hfinite : X.Finite
+  · <span class="kw">exact</span> hfinite.isClosed
+  · <span class="kw">have</span> hEq : closure X = X := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        closure X = X ∪ ({1} : Set G) := <span class="kw">by</span>
+          <span class="kw">exact</span> hclosure hfinite
+        _ = X := <span class="kw">by</span> <span class="kw">simp</span> only [union_singleton, h1, insert_eq_of_mem]
+    <span class="kw">exact</span> closure_eq_iff_isClosed.mp hEq</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Generation.closure_generatorsConvergingToOne_homeomorph_onePoint">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.closure_generatorsConvergingToOne_homeomorph_onePoint">ProCGroups.Generation.closure_generatorsConvergingToOne_homeomorph_onePoint</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> closure_generatorsConvergingToOne_homeomorph_onePoint
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] {X : Set G}
+    (hX : ConvergesToOneAlongOpenSubgroups (G := G) X) (hXinfinite : X.Infinite) (h1X : (1 : G)
+        ∉ X) :
+    OnePoint X ≃ₜ closure X := <span class="kw">by</span>
+  classical
+  rcases closure_generatorsConvergingToOne (G := G) hX <span class="kw">with</span> ⟨hdisc, hclosure⟩
+  <span class="kw">have</span> hdiff : X \ ({1} : Set G) = X := <span class="kw">by</span>
+    ext x
+    by_cases hx : x = 1
+    · <span class="kw">simp</span> only [h1X, not_false_eq_true, sdiff_singleton_eq_self, hx]
+    · <span class="kw">simp</span> only [mem_sdiff, mem_singleton_iff, hx, not_false_eq_true, and_true]
+  <span class="kw">have</span> hdiscX : IsDiscrete X := <span class="kw">by</span>
+    simpa [hdiff] using hdisc
+  letI : DiscreteTopology X := (isDiscrete_iff_discreteTopology).1 hdiscX
+  <span class="kw">have</span> h1closure : (1 : G) ∈ closure X := <span class="kw">by</span>
+    <span class="kw">have</span> : (1 : G) ∈ X ∪ ({1} : Set G) := <span class="kw">by</span> <span class="kw">simp</span> only [union_singleton, mem_insert_iff, true_or]
+    <span class="kw">rw</span> [hclosure hXinfinite]
+    <span class="kw">simp</span> only [union_singleton, mem_insert_iff, true_or]
+  <span class="kw">let</span> toClosure : OnePoint X → closure X
+    | OnePoint.infty =&gt; ⟨1, h1closure⟩
+    | (x : X) =&gt; ⟨x.1, subset_closure x.2⟩
+  <span class="kw">let</span> fromClosure : closure X → OnePoint X := <span class="kw">fun</span> y =&gt;
+    <span class="kw">if</span> hy : (y : G) = 1 <span class="kw">then</span>
+      OnePoint.infty
+    <span class="kw">else</span>
+      OnePoint.some ⟨(y : G), <span class="kw">by</span>
+        <span class="kw">have</span> hy&#x27; : (y : G) ∈ X ∪ ({1} : Set G) := <span class="kw">by</span>
+          simpa [hclosure hXinfinite] using y.2
+        rcases hy&#x27; <span class="kw">with</span> hyX | hy1
+        · <span class="kw">exact</span> hyX
+        · <span class="kw">exact</span> False.elim (hy hy1)⟩
+  <span class="kw">have</span> hleft : Function.LeftInverse fromClosure toClosure := <span class="kw">by</span>
+    <span class="kw">intro</span> z
+    refine OnePoint.rec ?_ ?_ z
+    · <span class="kw">simp</span> only [↓reduceDIte, fromClosure, toClosure]
+    · <span class="kw">intro</span> x
+      <span class="kw">have</span> hx1 : (x : G) ≠ 1 := <span class="kw">by</span>
+        <span class="kw">intro</span> hx1
+        <span class="kw">exact</span> h1X (hx1 ▸ x.2)
+      <span class="kw">simp</span> only [hx1, ↓reduceDIte, Subtype.coe_eta, fromClosure, toClosure]
+  <span class="kw">have</span> hright : Function.RightInverse fromClosure toClosure := <span class="kw">by</span>
+    <span class="kw">intro</span> y
+    by_cases hy : (y : G) = 1
+    · <span class="kw">apply</span> Subtype.ext
+      <span class="kw">simp</span> only [hy, ↓reduceDIte, toClosure, fromClosure]
+    · <span class="kw">apply</span> Subtype.ext
+      <span class="kw">simp</span> only [hy, ↓reduceDIte, Subtype.coe_eta, toClosure, fromClosure]
+  <span class="kw">let</span> e : OnePoint X ≃ closure X :=
+    { toFun := toClosure
+      invFun := fromClosure
+      left_inv := hleft
+      right_inv := hright }
+  <span class="kw">have</span> hcont : Continuous e := <span class="kw">by</span>
+    <span class="kw">rw</span> [OnePoint.continuous_iff_from_discrete]
+    <span class="kw">rw</span> [tendsto_subtype_rng]
+    change Filter.Tendsto (<span class="kw">fun</span> x : X =&gt; ((toClosure (x : OnePoint X) : closure X) : G))
+      Filter.cofinite
+      (𝓝 (((toClosure OnePoint.infty : closure X) : G)))
+    change Filter.Tendsto (<span class="kw">fun</span> x : X =&gt; (x : G)) Filter.cofinite (𝓝 (1 : G))
+    <span class="kw">rw</span> [Filter.tendsto_def]
+    <span class="kw">intro</span> s hs
+    rcases mem_nhds_iff.mp hs <span class="kw">with</span> ⟨W, hWs, hWopen, h1W⟩
+    rcases exists_openNormalSubgroup_sub_open_nhds_of_one (G := G) hWopen h1W <span class="kw">with</span> ⟨U, hUW⟩
+    <span class="kw">have</span> hfinite : (X \ (U : Set G)).Finite := hX U.toOpenSubgroup
+    <span class="kw">have</span> hcof : ∀ᶠ x : X <span class="kw">in</span> Filter.cofinite, (x : G) ∈ (U : Set G) := <span class="kw">by</span>
+      <span class="kw">let</span> f : X ↪ G := ⟨Subtype.val, Subtype.val_injective⟩
+      <span class="kw">have</span> hpre : {x : X | (x : G) ∉ (U : Set G)}.Finite := <span class="kw">by</span>
+        simpa [f, Set.preimage] using hfinite.preimage_embedding f
+      <span class="kw">exact</span> Filter.eventually_cofinite.2 hpre
+    <span class="kw">exact</span> hcof.mono <span class="kw">fun</span> x hx =&gt; hWs (hUW hx)
+  <span class="kw">exact</span> Continuous.homeoOfEquivCompactToT2 (f := e) hcont</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>If \(X\) is infinite, converges to \(1\), and does not contain \(1\), then \(closure X\) is homeomorphic to the one-point compactification of the discrete space \(X\).</p></div></section>
+  </div>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Generation.Convergence"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

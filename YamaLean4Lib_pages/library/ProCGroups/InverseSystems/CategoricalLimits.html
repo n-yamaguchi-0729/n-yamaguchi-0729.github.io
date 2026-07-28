@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.InverseSystems.CategoricalLimits | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="This file connects the concrete compatible-family inverse limit used by `ProCGroups` with mathlib&#x27;s categorical limit API. Since the index and the stages may live in unrelated universes, each stage is moved to their c...">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/InverseSystems/CategoricalLimits.html">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.InverseSystems.CategoricalLimits</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/InverseSystems.html">InverseSystems</a><span class="sep">/</span><span>CategoricalLimits</span></div>
+      <h1 class="module-title">ProCGroups.InverseSystems.CategoricalLimits</h1>
+      <div class="module-meta">2 Theorems | 14 Definitions</div>
+      <div class="module-overview tex2jax_process"><p>This file connects the concrete compatible-family inverse limit used by <code>ProCGroups</code> with mathlib&#x27;s categorical limit API.  Since the index and the stages may live in unrelated universes, each stage is moved to their common universe with <code>ULift</code>; the public comparison formulas make that lift explicit.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>imports</summary><ul><li><a href="../../../library/ProCGroups/InverseSystems/Basic.html">ProCGroups.InverseSystems.Basic</a></li><li>Mathlib.Topology.Category.TopCat.Limits.Basic</li><li>Mathlib.Topology.Algebra.Category.ProfiniteGrp.Limits</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/InverseSystems.html">ProCGroups.InverseSystems</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.topCatTransition">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.topCatTransition">ProCGroups.InverseSystems.InverseSystem.topCatTransition</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> topCatTransition {i j : I} (hij : i ≤ j) :
+    TopCat.of (ULift.{u} (S.X j)) ⟶ TopCat.of (ULift.{u} (S.X i)) :=
+  TopCat.ofHom
+    { toFun := <span class="kw">fun</span> x =&gt; ULift.up (S.map hij x.down)
+      continuous_toFun :=
+        continuous_uliftUp.comp ((S.continuous_map hij).comp continuous_uliftDown) }</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A transition map after moving both stages to the common index/stage universe.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.topCatDiagram">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.topCatDiagram">ProCGroups.InverseSystems.InverseSystem.topCatDiagram</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> topCatDiagram : Iᵒᵖ ⥤ TopCat.{max u v} <span class="kw">where</span>
+  obj i := TopCat.of (ULift.{u} (S.X (unop i)))
+  map f := S.topCatTransition (leOfHom f.unop)
+  map_id i := <span class="kw">by</span>
+    <span class="kw">apply</span> ConcreteCategory.hom_ext
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> ULift.ext
+    <span class="kw">exact</span> S.map_id_apply (unop i) x.down
+  map_comp f g := <span class="kw">by</span>
+    <span class="kw">apply</span> ConcreteCategory.hom_ext
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> ULift.ext
+    <span class="kw">exact</span> (S.map_comp_apply (leOfHom g.unop) (leOfHom f.unop) x.down).symm</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The contravariant diagram of topological spaces associated to an inverse system.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.topCatProjection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.topCatProjection">ProCGroups.InverseSystems.InverseSystem.topCatProjection</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> topCatProjection (i : I) :
+    TopCat.of S.inverseLimit ⟶ TopCat.of (ULift.{u} (S.X i)) :=
+  TopCat.ofHom
+    { toFun := <span class="kw">fun</span> x =&gt; ULift.up (S.projection i x)
+      continuous_toFun := continuous_uliftUp.comp (S.continuous_projection i) }</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A concrete projection, with its codomain moved to the common universe.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.topCatCone">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.topCatCone">ProCGroups.InverseSystems.InverseSystem.topCatCone</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> topCatCone : Cone S.topCatDiagram <span class="kw">where</span>
+  pt := TopCat.of S.inverseLimit
+  π :=
+    { app := <span class="kw">fun</span> i =&gt; S.topCatProjection (unop i)
+      naturality := <span class="kw">by</span>
+        <span class="kw">intro</span> i j f
+        <span class="kw">apply</span> ConcreteCategory.hom_ext
+        <span class="kw">intro</span> x
+        <span class="kw">apply</span> ULift.ext
+        <span class="kw">exact</span> (S.projection_compatible x (unop j) (unop i) (leOfHom f.unop)).symm }</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The concrete compatible-family inverse limit as a cone in <code>TopCat</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.topCatConeIsLimit">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.topCatConeIsLimit">ProCGroups.InverseSystems.InverseSystem.topCatConeIsLimit</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> topCatConeIsLimit : IsLimit S.topCatCone <span class="kw">where</span>
+  lift c := TopCat.ofHom
+    { toFun := S.inverseLimitLift
+        (<span class="kw">fun</span> i (x : c.pt) =&gt; (c.π.app (op i) x).down)
+        (S.compatibleMapsOfTopCatCone c)
+      continuous_toFun := S.continuous_inverseLimitLift
+        (<span class="kw">fun</span> i (x : c.pt) =&gt; (c.π.app (op i) x).down)
+        (<span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+          change Continuous (<span class="kw">fun</span> x : c.pt =&gt; (c.π.app (op i) x).down)
+          <span class="kw">exact</span> continuous_uliftDown.comp (c.π.app (op i)).hom.continuous)
+        (S.compatibleMapsOfTopCatCone c) }
+  fac c i := <span class="kw">by</span>
+    <span class="kw">apply</span> ConcreteCategory.hom_ext
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> ULift.ext
+    <span class="kw">rfl</span>
+  uniq c f hf := <span class="kw">by</span>
+    <span class="kw">apply</span> ConcreteCategory.hom_ext
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> i
+    <span class="kw">exact</span> congrArg ULift.down (ConcreteCategory.congr_hom (hf (op i)) x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The concrete compatible-family cone is a limit cone in <code>TopCat</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.topCatIsoLimit">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.topCatIsoLimit">ProCGroups.InverseSystems.InverseSystem.topCatIsoLimit</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> topCatIsoLimit :
+    S.topCatCone.pt ≅ limit S.topCatDiagram :=
+  S.topCatConeIsLimit.conePointUniqueUpToIso (limit.isLimit _)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical categorical isomorphism from the concrete inverse limit to mathlib&#x27;s chosen limit object in <code>TopCat</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.homeomorphTopCatLimit">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.homeomorphTopCatLimit">ProCGroups.InverseSystems.InverseSystem.homeomorphTopCatLimit</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> homeomorphTopCatLimit :
+    S.inverseLimit ≃ₜ (limit S.topCatDiagram : TopCat.{max u v}) :=
+  TopCat.homeoOfIso S.topCatIsoLimit</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The concrete inverse limit is canonically homeomorphic to mathlib&#x27;s categorical limit in <code>TopCat</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.limit_u03c0_homeomorphTopCatLimit_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.limit_u03c0_homeomorphTopCatLimit_apply">ProCGroups.InverseSystems.InverseSystem.limitπ_homeomorphTopCatLimit_apply</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> limitπ_homeomorphTopCatLimit_apply (i : I) (x : S.inverseLimit) :
+    limit.π S.topCatDiagram (op i) (S.homeomorphTopCatLimit x) =
+      ULift.up (S.projection i x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical homeomorphism commutes with every lifted inverse-limit projection.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.InverseSystems.InverseSystem.limit_u03c0_homeomorphTopCatLimit_apply">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> ConcreteCategory.congr_hom
+    (S.topCatConeIsLimit.conePointUniqueUpToIso_hom_comp (limit.isLimit _) (op i)) x</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.transitionContinuousMonoidHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.transitionContinuousMonoidHom">ProCGroups.InverseSystems.InverseSystem.transitionContinuousMonoidHom</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> transitionContinuousMonoidHom {i j : I} (hij : i ≤ j) :
+    ULift.{u} (S.X j) →ₜ* ULift.{u} (S.X i) <span class="kw">where</span>
+  toFun := <span class="kw">fun</span> x =&gt; ULift.up (S.map hij x.down)
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> ULift.ext
+    <span class="kw">exact</span> IsGroupSystem.map_one (S := S) hij
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">apply</span> ULift.ext
+    <span class="kw">exact</span> IsGroupSystem.map_mul (S := S) hij x.down y.down
+  continuous_toFun :=
+    continuous_uliftUp.comp ((S.continuous_map hij).comp continuous_uliftDown)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A transition map of a profinite group inverse system, lifted to the common universe.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.projectionContinuousMonoidHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.projectionContinuousMonoidHom">ProCGroups.InverseSystems.InverseSystem.projectionContinuousMonoidHom</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> projectionContinuousMonoidHom (i : I) :
+    S.inverseLimit →ₜ* ULift.{u} (S.X i) <span class="kw">where</span>
+  toFun := <span class="kw">fun</span> x =&gt; ULift.up (S.projection i x)
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> ULift.ext
+    <span class="kw">exact</span> projection_one (S := S) i
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">apply</span> ULift.ext
+    <span class="kw">exact</span> projection_mul (S := S) i x y
+  continuous_toFun := continuous_uliftUp.comp (S.continuous_projection i)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A projection of a profinite group inverse limit, lifted to the common universe.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.profiniteGrpDiagram">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.profiniteGrpDiagram">ProCGroups.InverseSystems.InverseSystem.profiniteGrpDiagram</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> profiniteGrpDiagram : Iᵒᵖ ⥤ ProfiniteGrp.{max u v} <span class="kw">where</span>
+  obj i := ProfiniteGrp.of (ULift.{u} (S.X (unop i)))
+  map f := ProfiniteGrp.ofHom (S.transitionContinuousMonoidHom (leOfHom f.unop))
+  map_id i := <span class="kw">by</span>
+    <span class="kw">apply</span> ConcreteCategory.hom_ext
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> ULift.ext
+    <span class="kw">exact</span> S.map_id_apply (unop i) x.down
+  map_comp f g := <span class="kw">by</span>
+    <span class="kw">apply</span> ConcreteCategory.hom_ext
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> ULift.ext
+    <span class="kw">exact</span> (S.map_comp_apply (leOfHom g.unop) (leOfHom f.unop) x.down).symm</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The contravariant diagram in <code>ProfiniteGrp</code> associated to a profinite group inverse system.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.profiniteGrpCone">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.profiniteGrpCone">ProCGroups.InverseSystems.InverseSystem.profiniteGrpCone</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> profiniteGrpCone : Cone S.profiniteGrpDiagram <span class="kw">where</span>
+  pt := ProfiniteGrp.of S.inverseLimit
+  π :=
+    { app := <span class="kw">fun</span> i =&gt; ProfiniteGrp.ofHom (S.projectionContinuousMonoidHom (unop i))
+      naturality := <span class="kw">by</span>
+        <span class="kw">intro</span> i j f
+        <span class="kw">apply</span> ConcreteCategory.hom_ext
+        <span class="kw">intro</span> x
+        <span class="kw">apply</span> ULift.ext
+        <span class="kw">exact</span> (S.projection_compatible x (unop j) (unop i) (leOfHom f.unop)).symm }</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The concrete compatible-family inverse limit as a cone in <code>ProfiniteGrp</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.profiniteGrpConeIsLimit">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.profiniteGrpConeIsLimit">ProCGroups.InverseSystems.InverseSystem.profiniteGrpConeIsLimit</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> profiniteGrpConeIsLimit : IsLimit S.profiniteGrpCone <span class="kw">where</span>
+  lift c := ProfiniteGrp.ofHom
+    { toFun := S.inverseLimitLift
+        (<span class="kw">fun</span> i (x : c.pt) =&gt; (c.π.app (op i) x).down)
+        (S.compatibleMapsOfProfiniteGrpCone c)
+      map_one&#x27; := <span class="kw">by</span>
+        <span class="kw">apply</span> S.ext
+        <span class="kw">intro</span> i
+        change (c.π.app (op i) 1).down = 1
+        <span class="kw">exact</span> congrArg ULift.down (c.π.app (op i)).hom.map_one
+      map_mul&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> x y
+        <span class="kw">apply</span> S.ext
+        <span class="kw">intro</span> i
+        change (c.π.app (op i) (x * y)).down =
+          (c.π.app (op i) x).down * (c.π.app (op i) y).down
+        <span class="kw">exact</span> congrArg ULift.down ((c.π.app (op i)).hom.map_mul x y)
+      continuous_toFun := S.continuous_inverseLimitLift
+        (<span class="kw">fun</span> i (x : c.pt) =&gt; (c.π.app (op i) x).down)
+        (<span class="kw">fun</span> i =&gt; <span class="kw">by</span>
+          change Continuous (<span class="kw">fun</span> x : c.pt =&gt; (c.π.app (op i) x).down)
+          <span class="kw">exact</span> continuous_uliftDown.comp (c.π.app (op i)).hom.continuous_toFun)
+        (S.compatibleMapsOfProfiniteGrpCone c) }
+  fac c i := <span class="kw">by</span>
+    <span class="kw">apply</span> ConcreteCategory.hom_ext
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> ULift.ext
+    <span class="kw">rfl</span>
+  uniq c f hf := <span class="kw">by</span>
+    <span class="kw">apply</span> ConcreteCategory.hom_ext
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> i
+    <span class="kw">exact</span> congrArg ULift.down (ConcreteCategory.congr_hom (hf (op i)) x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The concrete compatible-family cone is a limit cone in <code>ProfiniteGrp</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.profiniteGrpIsoLimit">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.profiniteGrpIsoLimit">ProCGroups.InverseSystems.InverseSystem.profiniteGrpIsoLimit</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> profiniteGrpIsoLimit :
+    S.profiniteGrpCone.pt ≅ limit S.profiniteGrpDiagram :=
+  S.profiniteGrpConeIsLimit.conePointUniqueUpToIso (limit.isLimit _)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical isomorphism in <code>ProfiniteGrp</code> from the concrete inverse limit to mathlib&#x27;s chosen categorical limit.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.continuousMulEquivProfiniteGrpLimit">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.continuousMulEquivProfiniteGrpLimit">ProCGroups.InverseSystems.InverseSystem.continuousMulEquivProfiniteGrpLimit</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> continuousMulEquivProfiniteGrpLimit :
+    S.inverseLimit ≃ₜ* (limit S.profiniteGrpDiagram : ProfiniteGrp.{max u v}) :=
+  { CompHausLike.homeoOfIso
+      ((forget₂ ProfiniteGrp Profinite).mapIso S.profiniteGrpIsoLimit) <span class="kw">with</span>
+    map_mul&#x27; := S.profiniteGrpIsoLimit.hom.hom.map_mul }</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The concrete inverse limit is canonically continuously and multiplicatively equivalent to mathlib&#x27;s categorical limit in <code>ProfiniteGrp</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.limit_u03c0_continuousMulEquivProfiniteGrpLimit_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.limit_u03c0_continuousMulEquivProfiniteGrpLimit_apply">ProCGroups.InverseSystems.InverseSystem.limitπ_continuousMulEquivProfiniteGrpLimit_apply</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> limitπ_continuousMulEquivProfiniteGrpLimit_apply
+    (i : I) (x : S.inverseLimit) :
+    limit.π S.profiniteGrpDiagram (op i)
+        (S.continuousMulEquivProfiniteGrpLimit x) = ULift.up (S.projection i x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical continuous multiplicative equivalence commutes with every lifted projection.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.InverseSystems.InverseSystem.limit_u03c0_continuousMulEquivProfiniteGrpLimit_apply">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> ConcreteCategory.congr_hom
+    (S.profiniteGrpConeIsLimit.conePointUniqueUpToIso_hom_comp (limit.isLimit _) (op i)) x</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.InverseSystems.CategoricalLimits"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

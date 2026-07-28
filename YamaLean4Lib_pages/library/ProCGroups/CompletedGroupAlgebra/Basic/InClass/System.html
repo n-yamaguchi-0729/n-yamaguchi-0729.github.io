@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.CompletedGroupAlgebra.Basic.InClass.System | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="This module assembles the \(C\)-indexed stages into a topological inverse system and supplies the single `IsRingSystem` witness from which the completed carrier inherits its ring structure.">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/CompletedGroupAlgebra/Basic/InClass/System.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.CompletedGroupAlgebra.Basic.InClass.System</div>
+  <form class="search-form" action="../../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/CompletedGroupAlgebra.html">CompletedGroupAlgebra</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/CompletedGroupAlgebra/Basic.html">Basic</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/CompletedGroupAlgebra/Basic/InClass.html">InClass</a><span class="sep">/</span><span>System</span></div>
+      <h1 class="module-title">ProCGroups.CompletedGroupAlgebra.Basic.InClass.System</h1>
+      <div class="module-meta">1 Definition | 1 Instance</div>
+      <div class="module-overview tex2jax_process"><p>This module assembles the \(C\)-indexed stages into a topological inverse system and supplies the single <code>IsRingSystem</code> witness from which the completed carrier inherits its ring structure.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../../library/ProCGroups/CompletedGroupAlgebra/Basic/InClass/Stage.html">ProCGroups.CompletedGroupAlgebra.Basic.InClass.Stage</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../../library/ProCGroups/CompletedGroupAlgebra/Basic/InClass/LimitAlgebra.html">ProCGroups.CompletedGroupAlgebra.Basic.InClass.LimitAlgebra</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2></section>
+<div class="decl-list"><section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraSystemInClass">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraSystemInClass">CompletedGroupAlgebra.completedGroupAlgebraSystemInClass</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraSystemInClass
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R] [TopologicalSpace R] [IsTopologicalRing R]
+    [Group G] [TopologicalSpace G] [IsTopologicalGroup G] :
+    <a class="decl-ref" href="../../../../../library/ProCGroups/InverseSystems/Basic.html#decl-ProCGroups.InverseSystems.InverseSystem">ProCGroups.InverseSystems.InverseSystem</a> (I := CompletedGroupAlgebraIndexInClass G C) <span class="kw">where</span>
+  X := CompletedGroupAlgebraStageInClass C R G
+  topologicalSpace := <span class="kw">fun</span> U =&gt; <span class="kw">by</span>
+    letI : Finite (CompletedGroupAlgebraQuotientInClass G C U) :=
+      finite_completedGroupAlgebraQuotientInClass G C U
+    <span class="kw">exact</span> finiteGroupAlgebraTopology R (CompletedGroupAlgebraQuotientInClass G C U)
+  map := <span class="kw">fun</span> {U V} hUV =&gt; completedGroupAlgebraTransitionInClass C R G hUV
+  continuous_map := <span class="kw">by</span>
+    <span class="kw">intro</span> U V hUV
+    letI : Finite (CompletedGroupAlgebraQuotientInClass G C V) :=
+      finite_completedGroupAlgebraQuotientInClass G C V
+    letI : Finite (CompletedGroupAlgebraQuotientInClass G C U) :=
+      finite_completedGroupAlgebraQuotientInClass G C U
+    <span class="kw">exact</span> finiteGroupAlgebra_mapDomainRingHom_continuous R
+      (CompletedGroupAlgebraQuotientInClass G C V) (CompletedGroupAlgebraQuotientInClass G C U)
+      (OpenNormalSubgroupInClass.map
+        (C := C) (G := G) (U := OrderDual.ofDual U) (V := OrderDual.ofDual V) hUV)
+  map_id := <span class="kw">by</span>
+    <span class="kw">intro</span> U
+    funext x
+    <span class="kw">exact</span> congrFun
+      (congrArg DFunLike.coe
+        (completedGroupAlgebraTransitionInClass_id (R := R) (G := G) C U)) x
+  map_comp := <span class="kw">by</span>
+    <span class="kw">intro</span> U V W hUV hVW
+    funext x
+    <span class="kw">exact</span> congrFun
+      (congrArg DFunLike.coe
+        (completedGroupAlgebraTransitionInClass_comp (R := R) (G := G) C hUV hVW)) x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The \(C\)-indexed inverse system \(U\mapsto R[G/U]\). The hypothesis says that \(C\) really is a finite quotient class, so every stage carries the finite-product topology.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-CompletedGroupAlgebra.instIsRingSystemCompletedGroupAlgebraSystemInClass">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.instIsRingSystemCompletedGroupAlgebraSystemInClass">CompletedGroupAlgebra.instIsRingSystemCompletedGroupAlgebraSystemInClass</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instIsRingSystemCompletedGroupAlgebraSystemInClass
+    (C : ProCGroups.FiniteGroupClass.{v}) :
+    IsRingSystem (completedGroupAlgebraSystemInClass C R G) <span class="kw">where</span>
+  map_zero := <span class="kw">by</span>
+    <span class="kw">intro</span> U V hUV
+    <span class="kw">exact</span> map_zero (completedGroupAlgebraTransitionInClass C R G hUV)
+  map_one := <span class="kw">by</span>
+    <span class="kw">intro</span> U V hUV
+    <span class="kw">exact</span> map_one (completedGroupAlgebraTransitionInClass C R G hUV)
+  map_add := <span class="kw">by</span>
+    <span class="kw">intro</span> U V hUV x y
+    <span class="kw">exact</span> map_add (completedGroupAlgebraTransitionInClass C R G hUV) x y
+  map_mul := <span class="kw">by</span>
+    <span class="kw">intro</span> U V hUV x y
+    <span class="kw">exact</span> map_mul (completedGroupAlgebraTransitionInClass C R G hUV) x y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse system of finite-stage group algebras inherits a ring structure from the compatible finite-stage rings.</p></div></section>
+  </div>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.CompletedGroupAlgebra.Basic.InClass.System"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../../assets/site.js" data-root="../../../../../"></script>
+</body>
+</html>

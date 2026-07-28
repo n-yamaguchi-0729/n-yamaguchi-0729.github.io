@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.LocalWeight.GeneratingSetsConvergingToOne | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="Countable descending open-normal bases are characterized by generating sets that converge to the identity along open subgroups. For nonempty profinite groups this yields a characterization of metrizability by a counta...">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/LocalWeight/GeneratingSetsConvergingToOne.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.LocalWeight.GeneratingSetsConvergingToOne</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/LocalWeight.html">LocalWeight</a><span class="sep">/</span><span>GeneratingSetsConvergingToOne</span></div>
+      <h1 class="module-title">ProCGroups.LocalWeight.GeneratingSetsConvergingToOne</h1>
+      <div class="module-meta">2 Theorems</div>
+      <div class="module-overview tex2jax_process"><p>Countable descending open-normal bases are characterized by generating sets that converge to the identity along open subgroups. For nonempty profinite groups this yields a characterization of metrizability by a countable convergent generating set.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/LocalWeight/LocalWeightTheorems.html">ProCGroups.LocalWeight.LocalWeightTheorems</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/LocalWeight.html">ProCGroups.LocalWeight</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ProCGroups.LocalWeight.cardinal_le_aleph0_iff_hasCountableDescendingOpenNormalChainAtOne">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.LocalWeight.cardinal_le_aleph0_iff_hasCountableDescendingOpenNormalChainAtOne">ProCGroups.LocalWeight.cardinal_le_aleph0_iff_hasCountableDescendingOpenNormalChainAtOne</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> cardinal_le_aleph0_iff_hasCountableDescendingOpenNormalChainAtOne
+    {G : <span class="kw">Type</span> u}
+    [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G]
+    (X : Set G) (hX : GeneratesAndConvergesToOneAlongOpenSubgroups (G := G) X) :
+    Cardinal.mk X ≤ ℵ₀ ↔
+      <a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#decl-ProCGroups.ProC.HasCountableOpenNormalBasisAtOne">ProCGroups.ProC.HasCountableOpenNormalBasisAtOne</a> G</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A generating set converging to \(1\) is countable exactly when the profinite group admits a countable descending open-normal chain at the identity.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.LocalWeight.cardinal_le_aleph0_iff_hasCountableDescendingOpenNormalChainAtOne">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hXcount
+    by_cases hXinfinite : Set.Infinite X
+    · <span class="kw">have</span> hlocal : localWeight G ≤ ℵ₀ := <span class="kw">by</span>
+        simpa [cardinalEqLocalWeight_of_generatesAndConvergesToOneAlongOpenSubgroups_infinite
+          (G := G) X hX hXinfinite] using hXcount
+      <span class="kw">exact</span> hasCountableDescendingOpenNormalChainAtOne_of_localWeight_le_aleph0
+        (G := G) hlocal
+    · letI : Finite X := Set.not_infinite.mp hXinfinite
+      <span class="kw">have</span> hXfinite : X.Finite := Set.toFinite X
+      <span class="kw">let</span> s : Finset G := hXfinite.toFinset
+      <span class="kw">have</span> hsgen : TopologicallyFinitelyGenerated G := <span class="kw">by</span>
+        refine ⟨s, ?_⟩
+        simpa [s] using hX.1
+      <span class="kw">exact</span> hasCountableDescendingOpenNormalChainAtOne_of_topologicallyFinitelyGenerated
+        (G := G) hsgen
+  · <span class="kw">intro</span> hchain
+    rcases hchain <span class="kw">with</span> ⟨U, _hUanti, hUbasis⟩
+    <span class="kw">have</span> hBasis : IsNeighborhoodBasisAt (X := G) (1 : G)
+        (Set.range <span class="kw">fun</span> n : ℕ =&gt; (((U n : Subgroup G) : Set G))) := <span class="kw">by</span>
+      <span class="kw">constructor</span>
+      · <span class="kw">intro</span> V hV
+        rcases hV <span class="kw">with</span> ⟨n, <span class="kw">rfl</span>⟩
+        <span class="kw">exact</span> ⟨openNormalSubgroup_isOpen (G := G) (U n), (U n).one_mem&#x27;⟩
+      · <span class="kw">intro</span> V hVopen h1V
+        rcases hUbasis V hVopen h1V <span class="kw">with</span> ⟨n, hnV⟩
+        <span class="kw">exact</span> ⟨((U n : Subgroup G) : Set G), ⟨n, <span class="kw">rfl</span>⟩, hnV⟩
+    <span class="kw">have</span> hlocal : localWeight G ≤ ℵ₀ := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        localWeight G ≤
+            familyCardinal (X := G) (Set.range <span class="kw">fun</span> n : ℕ =&gt; (((U n : Subgroup G) : Set G))) := <span class="kw">by</span>
+          simpa [localWeight] using
+            localWeightAt_le_familyCardinal_of_basis (X := G) (x := (1 : G)) hBasis
+        _ ≤ ℵ₀ := <span class="kw">by</span>
+          unfold familyCardinal
+          <span class="kw">exact</span> Cardinal.mk_le_aleph0_iff.mpr
+            (Set.countable_range (<span class="kw">fun</span> n : ℕ =&gt; (((U n : Subgroup G) : Set G))))
+    by_cases hXinfinite : Set.Infinite X
+    · <span class="kw">calc</span>
+        Cardinal.mk X = localWeight G :=
+          cardinalEqLocalWeight_of_generatesAndConvergesToOneAlongOpenSubgroups_infinite
+            (G := G) X hX hXinfinite
+        _ ≤ ℵ₀ := hlocal
+    · letI : Finite X := Set.not_infinite.mp hXinfinite
+      <span class="kw">exact</span> ((Cardinal.lt_aleph0_iff_finite (α := X)).2 inferInstance).le</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.LocalWeight.nonempty_metrizableSpace_iff_exists_countable_generatingSetConvergingToOne">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.LocalWeight.nonempty_metrizableSpace_iff_exists_countable_generatingSetConvergingToOne">ProCGroups.LocalWeight.nonempty_metrizableSpace_iff_exists_countable_generatingSetConvergingToOne</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> nonempty_metrizableSpace_iff_exists_countable_generatingSetConvergingToOne
+    {G : <span class="kw">Type</span> u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] :
+    Nonempty (MetrizableSpace G) ↔
+      ∃ X : Set G, GeneratesAndConvergesToOneAlongOpenSubgroups (G := G) X ∧ Countable X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A profinite group is metrizable exactly when it admits a countable generating set converging to \(1\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.LocalWeight.nonempty_metrizableSpace_iff_exists_countable_generatingSetConvergingToOne">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hmetr
+    rcases exists_generatorsConvergingToOne (G := G) <span class="kw">with</span> ⟨X, hX⟩
+    refine ⟨X, hX, ?_⟩
+    <span class="kw">have</span> hchain : <a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#decl-ProCGroups.ProC.HasCountableOpenNormalBasisAtOne">ProCGroups.ProC.HasCountableOpenNormalBasisAtOne</a> G := <span class="kw">by</span>
+      <span class="kw">exact</span> (metrizable_iff_hasCountableDescendingOpenNormalChainAtOne
+        (G := G)).1 hmetr
+    <span class="kw">have</span> hXcount : Cardinal.mk X ≤ ℵ₀ := <span class="kw">by</span>
+      <span class="kw">exact</span>
+        ((cardinal_le_aleph0_iff_hasCountableDescendingOpenNormalChainAtOne
+            (G := G) X hX)).2 hchain
+    <span class="kw">exact</span> Cardinal.mk_le_aleph0_iff.mp hXcount
+  · rintro ⟨X, hX, hXcount⟩
+    <span class="kw">have</span> hchain : <a class="decl-ref" href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/CountableChains.html#decl-ProCGroups.ProC.HasCountableOpenNormalBasisAtOne">ProCGroups.ProC.HasCountableOpenNormalBasisAtOne</a> G := <span class="kw">by</span>
+      <span class="kw">exact</span>
+        ((cardinal_le_aleph0_iff_hasCountableDescendingOpenNormalChainAtOne
+            (G := G) X hX)).1
+          (Cardinal.mk_le_aleph0_iff.mpr hXcount)
+    <span class="kw">exact</span> (metrizable_iff_hasCountableDescendingOpenNormalChainAtOne
+      (G := G)).2 hchain</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.LocalWeight.GeneratingSetsConvergingToOne"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

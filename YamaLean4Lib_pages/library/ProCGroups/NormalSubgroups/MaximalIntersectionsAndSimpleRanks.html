@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.NormalSubgroups.MaximalIntersectionsAndSimpleRanks | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="This module proves that a proper normal subgroup maximal among normal subgroups yields a simple quotient.">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/NormalSubgroups/MaximalIntersectionsAndSimpleRanks.html">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.NormalSubgroups.MaximalIntersectionsAndSimpleRanks</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/NormalSubgroups.html">NormalSubgroups</a><span class="sep">/</span><span>MaximalIntersectionsAndSimpleRanks</span></div>
+      <h1 class="module-title">ProCGroups.NormalSubgroups.MaximalIntersectionsAndSimpleRanks</h1>
+      <div class="module-meta">1 Theorem</div>
+      <div class="module-overview tex2jax_process"><p>This module proves that a proper normal subgroup maximal among normal subgroups yields a simple quotient.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/NormalSubgroups/Framework.html">ProCGroups.NormalSubgroups.Framework</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/NormalSubgroups.html">ProCGroups.NormalSubgroups</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-ProCGroups.NormalSubgroups.maximal_normal_intersection_simple_quotient">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.NormalSubgroups.maximal_normal_intersection_simple_quotient">ProCGroups.NormalSubgroups.maximal_normal_intersection_simple_quotient</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> maximal_normal_intersection_simple_quotient
+    {G : <span class="kw">Type</span> u} [Group G] (M : Subgroup G) [M.Normal]
+    (hproper : M ≠ ⊤)
+    (hmax : ∀ N : Subgroup G, N.Normal → M &lt; N → N = ⊤) :
+    IsSimpleGroup (G ⧸ M)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A maximal normal subgroup gives a simple quotient.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.NormalSubgroups.maximal_normal_intersection_simple_quotient">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> hnotTopLe : ¬ (⊤ : Subgroup G) ≤ M := <span class="kw">by</span>
+    <span class="kw">intro</span> hle
+    <span class="kw">exact</span> hproper (le_antisymm le_top hle)
+  rcases SetLike.not_le_iff_exists.mp hnotTopLe <span class="kw">with</span> ⟨g, _hgTop, hgM⟩
+  refine
+    { exists_pair_ne := ⟨QuotientGroup.mk&#x27; M g, 1, ?_⟩
+      eq_bot_or_eq_top_of_normal := ?_ }
+  · <span class="kw">intro</span> hg
+    <span class="kw">exact</span> hgM ((QuotientGroup.eq_one_iff g).mp (<span class="kw">by</span> simpa using hg))
+  · <span class="kw">intro</span> H hH
+    <span class="kw">let</span> N : Subgroup G := Subgroup.comap (QuotientGroup.mk&#x27; M) H
+    <span class="kw">have</span> hMN : M ≤ N := <span class="kw">by</span>
+      dsimp [N]
+      <span class="kw">exact</span> QuotientGroup.le_comap_mk&#x27; M H
+    <span class="kw">have</span> hNnormal : N.Normal := <span class="kw">by</span>
+      dsimp [N]
+      infer_instance
+    by_cases hNM : N = M
+    · left
+      <span class="kw">apply</span> Subgroup.comap_injective (QuotientGroup.mk&#x27;_surjective M)
+      dsimp [N] at hNM
+      <span class="kw">rw</span> [hNM]
+      ext x
+      <span class="kw">simp</span> only [MonoidHom.comap_bot, QuotientGroup.ker_mk&#x27;]
+    · right
+      <span class="kw">have</span> hMNlt : M &lt; N := lt_of_le_of_ne hMN (<span class="kw">by</span>
+        <span class="kw">intro</span> hMN&#x27;
+        <span class="kw">exact</span> hNM hMN&#x27;.symm)
+      <span class="kw">have</span> hNtop : N = ⊤ := hmax N hNnormal hMNlt
+      <span class="kw">apply</span> Subgroup.comap_injective (QuotientGroup.mk&#x27;_surjective M)
+      dsimp [N] at hNtop
+      <span class="kw">rw</span> [hNtop, Subgroup.comap_top]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.NormalSubgroups.MaximalIntersectionsAndSimpleRanks"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

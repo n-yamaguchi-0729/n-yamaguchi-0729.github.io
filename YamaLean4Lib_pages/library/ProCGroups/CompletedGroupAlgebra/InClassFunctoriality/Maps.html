@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.CompletedGroupAlgebra.InClassFunctoriality.Maps | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="This module lifts hereditary \(C\)-indexed finite-stage maps to the named completed carrier and proves their algebraic, topological, and dense-subalgebra characterizations.">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/CompletedGroupAlgebra/InClassFunctoriality/Maps.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.CompletedGroupAlgebra.InClassFunctoriality.Maps</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../../library/ProCGroups/CompletedGroupAlgebra.html">CompletedGroupAlgebra</a><span class="sep">/</span><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/InClassFunctoriality.html">InClassFunctoriality</a><span class="sep">/</span><span>Maps</span></div>
+      <h1 class="module-title">ProCGroups.CompletedGroupAlgebra.InClassFunctoriality.Maps</h1>
+      <div class="module-meta">12 Theorems | 2 Definitions</div>
+      <div class="module-overview tex2jax_process"><p>This module lifts hereditary \(C\)-indexed finite-stage maps to the named completed carrier and proves their algebraic, topological, and dense-subalgebra characterizations.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/InClassFunctoriality/StageMaps.html">ProCGroups.CompletedGroupAlgebra.InClassFunctoriality.StageMaps</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/AllFiniteFunctoriality/InClassNaturality.html">ProCGroups.CompletedGroupAlgebra.AllFiniteFunctoriality.InClassNaturality</a></li><li><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/InClassFunctoriality/GroupLike.html">ProCGroups.CompletedGroupAlgebra.InClassFunctoriality.GroupLike</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass">CompletedGroupAlgebra.completedGroupAlgebraMapInClass</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraMapInClass
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (R : <span class="kw">Type</span> u) [CommRing R] [TopologicalSpace R] [IsTopologicalRing R]
+    (φ : G →* H) (hφ : Continuous φ) :
+    CompletedGroupAlgebraInClass C R G →+* CompletedGroupAlgebraInClass C R H <span class="kw">where</span>
+  toFun x :=
+    (completedGroupAlgebraInClassCompatibleFamilyEquiv
+      (R := R) (G := H) C).symm
+      ((completedGroupAlgebraSystemInClass C R H).inverseLimitLift
+        (<span class="kw">fun</span> V x =&gt;
+          completedGroupAlgebraFunctorialStageMapInClass
+            (G := G) (H := H) C hHer (R := R) φ hφ V
+            (completedGroupAlgebraProjectionInClass C R G
+              (completedGroupAlgebraComapIndexInClass
+                (G := G) (H := H) C hHer φ hφ V) x))
+        (<span class="kw">by</span>
+          <span class="kw">intro</span> V W hVW
+          funext x
+          <span class="kw">have</span> hcomp := congrFun
+            (congrArg DFunLike.coe
+              (completedGroupAlgebraFunctorialStageMapInClass_transition
+                (R := R) (G := G) (H := H) C hHer φ hφ hVW))
+            (completedGroupAlgebraProjectionInClass C R G
+              (completedGroupAlgebraComapIndexInClass
+                (G := G) (H := H) C hHer φ hφ W) x)
+          <span class="kw">rw</span> [RingHom.comp_apply, RingHom.comp_apply] at hcomp
+          <span class="kw">simp</span> only [Function.comp_apply]
+          <span class="kw">rw</span> [← completedGroupAlgebraProjectionInClass_compatible
+            (R := R) (G := G) C
+            (completedGroupAlgebraComapIndexInClass_mono
+              (G := G) (H := H) C hHer φ hφ hVW) x]
+          <span class="kw">exact</span> hcomp) x)
+  map_zero&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> completedGroupAlgebraInClass_ext (R := R) (G := H) C
+    <span class="kw">intro</span> V
+    <span class="kw">exact</span> map_zero (completedGroupAlgebraFunctorialStageMapInClass
+      (G := G) (H := H) C hHer (R := R) φ hφ V)
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> completedGroupAlgebraInClass_ext (R := R) (G := H) C
+    <span class="kw">intro</span> V
+    <span class="kw">exact</span> map_one (completedGroupAlgebraFunctorialStageMapInClass
+      (G := G) (H := H) C hHer (R := R) φ hφ V)
+  map_add&#x27; x y := <span class="kw">by</span>
+    <span class="kw">apply</span> completedGroupAlgebraInClass_ext (R := R) (G := H) C
+    <span class="kw">intro</span> V
+    <span class="kw">exact</span> map_add (completedGroupAlgebraFunctorialStageMapInClass
+      (G := G) (H := H) C hHer (R := R) φ hφ V)
+      (completedGroupAlgebraProjectionInClass C R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x)
+      (completedGroupAlgebraProjectionInClass C R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) y)
+  map_mul&#x27; x y := <span class="kw">by</span>
+    <span class="kw">apply</span> completedGroupAlgebraInClass_ext (R := R) (G := H) C
+    <span class="kw">intro</span> V
+    <span class="kw">exact</span> map_mul (completedGroupAlgebraFunctorialStageMapInClass
+      (G := G) (H := H) C hHer (R := R) φ hφ V)
+      (completedGroupAlgebraProjectionInClass C R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x)
+      (completedGroupAlgebraProjectionInClass C R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) y)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A continuous homomorphism of groups induces a ring homomorphism on \(C\)-indexed completed group algebras, when \(C\) is hereditary.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionInClass_map">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionInClass_map">CompletedGroupAlgebra.completedGroupAlgebraProjectionInClass_map</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span> 900]
+<span class="kw">theorem</span> completedGroupAlgebraProjectionInClass_map
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ)
+    (V : CompletedGroupAlgebraIndexInClass H C) (x : CompletedGroupAlgebraInClass C R G) :
+    completedGroupAlgebraProjectionInClass C R H V
+        (completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ x) =
+      completedGroupAlgebraFunctorialStageMapInClass
+        (G := G) (H := H) C hHer (R := R) φ hφ V
+        (completedGroupAlgebraProjectionInClass C R G
+          (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The in-class completed group-algebra map is characterized by its finite-stage projections.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionInClass_map">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass">CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraMapAlgHomInClass
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (R : <span class="kw">Type</span> u) [CommRing R] [TopologicalSpace R] [IsTopologicalRing R]
+    (φ : G →* H) (hφ : Continuous φ) :
+    CompletedGroupAlgebraInClass C R G →ₐ[R] CompletedGroupAlgebraInClass C R H <span class="kw">where</span>
+  toRingHom := completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ
+  commutes&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> r
+    <span class="kw">apply</span> completedGroupAlgebraInClass_ext (R := R) (G := H) C
+    <span class="kw">intro</span> V
+    change completedGroupAlgebraFunctorialStageMapInClass
+        (G := G) (H := H) C hHer (R := R) φ hφ V
+        (algebraMap R
+          (CompletedGroupAlgebraStageInClass C R G
+            (completedGroupAlgebraComapIndexInClass
+              (G := G) (H := H) C hHer φ hφ V)) r) =
+      algebraMap R (CompletedGroupAlgebraStageInClass C R H V) r
+    <span class="kw">exact</span> completedGroupAlgebraFunctorialStageMapInClass_algebraMap
+      (R := R) (G := G) (H := H) C hHer φ hφ V r</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A continuous group homomorphism \(\varphi:G\to H\) induces an \(R\)-algebra homomorphism between the corresponding \(C\)-indexed completed group algebras.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_apply">CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_apply</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraMapAlgHomInClass_apply
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ) (x : CompletedGroupAlgebraInClass C R G) :
+    completedGroupAlgebraMapAlgHomInClass (G := G) (H := H) C hHer R φ hφ x =
+      completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Evaluating the algebra homomorphism induced by \(\varphi\) at \(x\) gives <code>completedGroupAlgebraMapInClass</code> applied to \(x\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_apply">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass">CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_completedGroupAlgebraMapInClass
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ) :
+    Continuous (completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The induced \(C\)-indexed completed-group-algebra map is continuous.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.continuous_completedGroupAlgebraMapInClass">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> S := completedGroupAlgebraSystemInClass C R H
+  letI : ∀ V, TopologicalSpace (CompletedGroupAlgebraStageInClass C R H V) :=
+    <span class="kw">fun</span> V =&gt; (completedGroupAlgebraSystemInClass C R H).topologicalSpace V
+  <span class="kw">let</span> π : ∀ V : CompletedGroupAlgebraIndexInClass H C,
+      CompletedGroupAlgebraInClass C R G →
+        CompletedGroupAlgebraStageInClass C R H V :=
+    <span class="kw">fun</span> V x =&gt;
+      completedGroupAlgebraFunctorialStageMapInClass
+        (G := G) (H := H) C hHer (R := R) φ hφ V
+        (completedGroupAlgebraProjectionInClass C R G
+          (completedGroupAlgebraComapIndexInClass
+            (G := G) (H := H) C hHer φ hφ V) x)
+  <span class="kw">have</span> hπ : ∀ V, Continuous (π V) := <span class="kw">by</span>
+    <span class="kw">intro</span> V
+    letI : TopologicalSpace
+        (CompletedGroupAlgebraStageInClass C R G
+          (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V)) :=
+      (completedGroupAlgebraSystemInClass C R G).topologicalSpace
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V)
+    <span class="kw">exact</span> (continuous_completedGroupAlgebraFunctorialStageMapInClass
+      (R := R) (G := G) (H := H) C hHer φ hφ V).comp
+        ((completedGroupAlgebraSystemInClass C R G).continuous_projection
+          (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V))
+  <span class="kw">have</span> hcompat : S.CompatibleMaps π := <span class="kw">by</span>
+    <span class="kw">intro</span> V W hVW
+    funext x
+    <span class="kw">have</span> hcomp := congrFun
+      (congrArg DFunLike.coe
+        (completedGroupAlgebraFunctorialStageMapInClass_transition
+          (R := R) (G := G) (H := H) C hHer φ hφ hVW))
+      (completedGroupAlgebraProjectionInClass C R G
+        (completedGroupAlgebraComapIndexInClass
+          (G := G) (H := H) C hHer φ hφ W) x)
+    <span class="kw">rw</span> [RingHom.comp_apply, RingHom.comp_apply] at hcomp
+    <span class="kw">simp</span> only [S, π, Function.comp_apply]
+    <span class="kw">rw</span> [← completedGroupAlgebraProjectionInClass_compatible
+      (R := R) (G := G) C
+      (completedGroupAlgebraComapIndexInClass_mono
+        (G := G) (H := H) C hHer φ hφ hVW) x]
+    <span class="kw">exact</span> hcomp
+  change Continuous (S.inverseLimitLift π hcompat)
+  <span class="kw">exact</span> S.continuous_inverseLimitLift π hπ hcompat</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ) :
+    (completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ).comp
+        (toCompletedGroupAlgebraInClassRingHom C R G) =
+      (toCompletedGroupAlgebraInClassRingHom C R H).comp
+        (MonoidAlgebra.mapDomainRingHom R φ)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The in-class completed group-algebra map composes with the dense abstract map as expected.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> RingHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">apply</span> completedGroupAlgebraInClass_ext (R := R) (G := H) C
+  <span class="kw">intro</span> V
+  <span class="kw">have</span> hstage := congrFun
+    (congrArg DFunLike.coe
+      (completedGroupAlgebraFunctorialStageMapInClass_comp_stageMap
+        (R := R) (G := G) (H := H) C hHer φ hφ V))
+    x
+  change completedGroupAlgebraFunctorialStageMapInClass
+      (G := G) (H := H) C hHer (R := R) φ hφ V
+      (completedGroupAlgebraStageMapInClass C R G
+        (completedGroupAlgebraComapIndexInClass (G := G) (H := H) C hHer φ hφ V) x) =
+    completedGroupAlgebraStageMapInClass C R H V (MonoidAlgebra.mapDomainRingHom R φ x)
+  <span class="kw">exact</span> hstage</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_surjective_of_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_surjective_of_surjective">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_surjective_of_surjective</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapInClass_surjective_of_surjective
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hForm : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    [CompactSpace R] [T2Space R] [TotallyDisconnectedSpace R]
+    (hH : HasOpenNormalBasisInClass C H)
+    (φ : G →* H) (hφ : Continuous φ) (hφsurj : Function.Surjective φ) :
+    Function.Surjective
+      (completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A surjective continuous homomorphism onto a pro-\(C\) group induces a surjective map on \(C\)-indexed completed group algebras.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_surjective_of_surjective">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> f := completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ
+  letI : CompactSpace (CompletedGroupAlgebraInClass C R G) :=
+    completedGroupAlgebraInClass_compactSpace (R := R) (G := G) C
+  letI : T2Space (CompletedGroupAlgebraInClass C R H) :=
+    completedGroupAlgebraInClass_t2Space (R := R) (G := H) C
+  <span class="kw">have</span> hfcont : Continuous f :=
+    continuous_completedGroupAlgebraMapInClass (R := R) (G := G) (H := H)
+      C hHer φ hφ
+  <span class="kw">have</span> hclosed : IsClosed (Set.range f) := (isCompact_range hfcont).isClosed
+  <span class="kw">have</span> hdense : DenseRange (toCompletedGroupAlgebraInClassRingHom C R H) := <span class="kw">by</span>
+    change DenseRange (toCompletedGroupAlgebraInClass C R H)
+    <span class="kw">exact</span> denseRange_toCompletedGroupAlgebraInClass (R := R) (G := H) C hForm hH
+  <span class="kw">have</span> hcanonical_subset :
+      Set.range (toCompletedGroupAlgebraInClassRingHom C R H) ⊆ Set.range f := <span class="kw">by</span>
+    <span class="kw">intro</span> y hy
+    rcases hy <span class="kw">with</span> ⟨a, <span class="kw">rfl</span>⟩
+    obtain ⟨bCoeff, hbCoeff⟩ :=
+      Finsupp.mapDomain_surjective (M := R) hφsurj a.coeff
+    <span class="kw">let</span> b : MonoidAlgebra R G := MonoidAlgebra.ofCoeff bCoeff
+    <span class="kw">have</span> hb : MonoidAlgebra.mapDomainRingHom R φ b = a := <span class="kw">by</span>
+      <span class="kw">apply</span> MonoidAlgebra.coeff_injective
+      <span class="kw">exact</span> hbCoeff
+    refine ⟨toCompletedGroupAlgebraInClassRingHom C R G b, ?_⟩
+    <span class="kw">have</span> hcomp := congrFun
+      (congrArg DFunLike.coe
+        (completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass
+          (R := R) (G := G) (H := H) C hHer φ hφ))
+      b
+    simpa [f, RingHom.comp_apply, hb] using hcomp
+  <span class="kw">intro</span> y
+  <span class="kw">have</span> hycanonical :
+      y ∈ closure (Set.range (toCompletedGroupAlgebraInClassRingHom C R H)) := <span class="kw">by</span>
+    <span class="kw">rw</span> [hdense.closure_range]
+    <span class="kw">exact</span> Set.mem_univ y
+  <span class="kw">have</span> hyf : y ∈ closure (Set.range f) :=
+    closure_mono hcanonical_subset hycanonical
+  <span class="kw">exact</span> hclosed.closure_subset_iff.2 (<span class="kw">fun</span> z hz =&gt; hz) hyf</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted">CompletedGroupAlgebra.completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hForm : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    [CompactSpace R] [T2Space R] [TotallyDisconnectedSpace R]
+    (hG : HasOpenNormalBasisInClass C G)
+    {f g : CompletedGroupAlgebraInClass C R G →+*
+      CompletedGroupAlgebraInClass C R H}
+    (hf : Continuous f) (hg : Continuous g)
+    (hfg : f.comp (toCompletedGroupAlgebraInClassRingHom C R G) =
+      g.comp (toCompletedGroupAlgebraInClassRingHom C R G)) :
+    f = g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Continuous ring homomorphisms out of \(\widehat{R[G]}_C\) are determined by their values on the dense abstract group algebra.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  letI : T2Space (CompletedGroupAlgebraInClass C R H) :=
+    completedGroupAlgebraInClass_t2Space (R := R) (G := H) C
+  <span class="kw">have</span> hdense : DenseRange (toCompletedGroupAlgebraInClassRingHom C R G) := <span class="kw">by</span>
+    change DenseRange (toCompletedGroupAlgebraInClass C R G)
+    <span class="kw">exact</span> denseRange_toCompletedGroupAlgebraInClass (R := R) (G := G) C hForm hG
+  <span class="kw">have</span> hcomp : (f : CompletedGroupAlgebraInClass C R G →
+        CompletedGroupAlgebraInClass C R H) ∘
+        (toCompletedGroupAlgebraInClassRingHom C R G) =
+      (g : CompletedGroupAlgebraInClass C R G →
+        CompletedGroupAlgebraInClass C R H) ∘
+        (toCompletedGroupAlgebraInClassRingHom C R G) := <span class="kw">by</span>
+    funext x
+    <span class="kw">exact</span> congrFun (congrArg DFunLike.coe hfg) x
+  <span class="kw">have</span> hfun : (f : CompletedGroupAlgebraInClass C R G →
+        CompletedGroupAlgebraInClass C R H) = g :=
+    DenseRange.equalizer hdense hf hg hcomp
+  <span class="kw">exact</span> RingHom.ext <span class="kw">fun</span> x =&gt; congrFun hfun x</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_id">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_id">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_id</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapInClass_id
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hForm : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    [CompactSpace R] [T2Space R] [TotallyDisconnectedSpace R]
+    (hG : HasOpenNormalBasisInClass C G) :
+    completedGroupAlgebraMapInClass (G := G) (H := G) C hHer R
+        (MonoidHom.id G) continuous_id =
+      RingHom.id (CompletedGroupAlgebraInClass C R G)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Identity law for the \(C\)-indexed completed-group-algebra functor.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_id">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted
+    (R := R) (G := G) (H := G) C hForm hG
+  · <span class="kw">exact</span> continuous_completedGroupAlgebraMapInClass (R := R) (G := G) (H := G)
+      C hHer (MonoidHom.id G) continuous_id
+  · <span class="kw">exact</span> continuous_id
+  · <span class="kw">rw</span> [completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass,
+      finiteGroupAlgebra_mapDomainRingHom_id]
+    <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_id">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_id">CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_id</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapAlgHomInClass_id
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hForm : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    [CompactSpace R] [T2Space R] [TotallyDisconnectedSpace R]
+    (hG : HasOpenNormalBasisInClass C G) :
+    completedGroupAlgebraMapAlgHomInClass (G := G) (H := G) C hHer R
+        (MonoidHom.id G) continuous_id =
+      AlgHom.id R (CompletedGroupAlgebraInClass C R G)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Identity law for the \(C\)-indexed completed-group-algebra functor, as an \(R\)-algebra homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_id">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> AlgHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">have</span> h := congrFun
+    (congrArg DFunLike.coe
+      (completedGroupAlgebraMapInClass_id (R := R) (G := G) C hForm hHer hG))
+    x
+  simpa using h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapInClass_comp
+    {K : <span class="kw">Type</span> v} [Group K] [TopologicalSpace K] [IsTopologicalGroup K]
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hForm : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    [CompactSpace R] [T2Space R] [TotallyDisconnectedSpace R]
+    (hG : HasOpenNormalBasisInClass C G)
+    (φ : G →* H) (hφ : Continuous φ) (ψ : H →* K) (hψ : Continuous ψ) :
+    (completedGroupAlgebraMapInClass (G := H) (H := K) C hHer R ψ hψ).comp
+        (completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ) =
+      completedGroupAlgebraMapInClass (G := G) (H := K) C hHer R
+        (ψ.comp φ) (hψ.comp hφ)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Composition law for the \(C\)-indexed completed-group-algebra functor.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_comp">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> completedGroupAlgebraInClassRingHom_ext_of_comp_toCompleted
+    (R := R) (G := G) (H := K) C hForm hG
+  · <span class="kw">exact</span> (continuous_completedGroupAlgebraMapInClass (R := R) (G := H) (H := K)
+      C hHer ψ hψ).comp
+        (continuous_completedGroupAlgebraMapInClass (R := R) (G := G) (H := H)
+          C hHer φ hφ)
+  · <span class="kw">exact</span> continuous_completedGroupAlgebraMapInClass (R := R) (G := G) (H := K)
+      C hHer (ψ.comp φ) (hψ.comp hφ)
+  · <span class="kw">apply</span> RingHom.ext
+    <span class="kw">intro</span> x
+    <span class="kw">have</span> hφdense := congrFun
+      (congrArg DFunLike.coe
+        (completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass
+          (R := R) (G := G) (H := H) C hHer φ hφ))
+      x
+    <span class="kw">have</span> hψdense := congrFun
+      (congrArg DFunLike.coe
+        (completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass
+          (R := R) (G := H) (H := K) C hHer ψ hψ))
+      (MonoidAlgebra.mapDomainRingHom R φ x)
+    <span class="kw">have</span> hdomain := congrFun
+      (congrArg DFunLike.coe
+        (finiteGroupAlgebra_mapDomainRingHom_comp R G H K φ ψ))
+      x
+    <span class="kw">have</span> hcompdense := congrFun
+      (congrArg DFunLike.coe
+        (completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass
+          (R := R) (G := G) (H := K) C hHer (ψ.comp φ) (hψ.comp hφ)))
+      x
+    <span class="kw">calc</span>
+      (((completedGroupAlgebraMapInClass (G := H) (H := K) C hHer R ψ hψ).comp
+          (completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ)).comp
+          (toCompletedGroupAlgebraInClassRingHom C R G)) x
+          =
+        completedGroupAlgebraMapInClass (G := H) (H := K) C hHer R ψ hψ
+          (completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ
+            (toCompletedGroupAlgebraInClassRingHom C R G x)) := <span class="kw">rfl</span>
+      _ =
+        completedGroupAlgebraMapInClass (G := H) (H := K) C hHer R ψ hψ
+          (toCompletedGroupAlgebraInClassRingHom C R H
+            (MonoidAlgebra.mapDomainRingHom R φ x)) := <span class="kw">by</span>
+          <span class="kw">have</span> hφdense&#x27; :
+              completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ
+                  (toCompletedGroupAlgebraInClassRingHom C R G x) =
+                toCompletedGroupAlgebraInClassRingHom C R H
+                  (MonoidAlgebra.mapDomainRingHom R φ x) := <span class="kw">by</span>
+            simpa [RingHom.comp_apply] using hφdense
+          <span class="kw">exact</span> congrArg (completedGroupAlgebraMapInClass (G := H) (H := K)
+            C hHer R ψ hψ) hφdense&#x27;
+      _ =
+        toCompletedGroupAlgebraInClassRingHom C R K
+          (MonoidAlgebra.mapDomainRingHom R ψ (MonoidAlgebra.mapDomainRingHom R φ x)) := <span class="kw">by</span>
+          simpa [RingHom.comp_apply] using hψdense
+      _ =
+        toCompletedGroupAlgebraInClassRingHom C R K
+          (MonoidAlgebra.mapDomainRingHom R (ψ.comp φ) x) := <span class="kw">by</span>
+          <span class="kw">exact</span> congrArg (toCompletedGroupAlgebraInClassRingHom C R K) (<span class="kw">by</span>
+            change (MonoidAlgebra.mapDomainRingHom R ψ)
+                ((MonoidAlgebra.mapDomainRingHom R φ) x) =
+              (MonoidAlgebra.mapDomainRingHom R (ψ.comp φ)) x at hdomain
+            <span class="kw">exact</span> hdomain)
+      _ =
+        ((completedGroupAlgebraMapInClass (G := G) (H := K) C hHer R
+          (ψ.comp φ) (hψ.comp hφ)).comp
+          (toCompletedGroupAlgebraInClassRingHom C R G)) x := <span class="kw">by</span>
+          simpa [RingHom.comp_apply] using hcompdense.symm</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_comp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_comp">CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_comp</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMapAlgHomInClass_comp
+    {K : <span class="kw">Type</span> v} [Group K] [TopologicalSpace K] [IsTopologicalGroup K]
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hForm : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Formation">ProCGroups.FiniteGroupClass.Formation</a> C)
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    [CompactSpace R] [T2Space R] [TotallyDisconnectedSpace R]
+    (hG : HasOpenNormalBasisInClass C G)
+    (φ : G →* H) (hφ : Continuous φ) (ψ : H →* K) (hψ : Continuous ψ) :
+    (completedGroupAlgebraMapAlgHomInClass (G := H) (H := K) C hHer R ψ hψ).comp
+        (completedGroupAlgebraMapAlgHomInClass (G := G) (H := H) C hHer R φ hφ) =
+      completedGroupAlgebraMapAlgHomInClass (G := G) (H := K) C hHer R
+        (ψ.comp φ) (hψ.comp hφ)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Composition law for the \(C\)-indexed completed-group-algebra functor, as an \(R\)-algebra homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraMapAlgHomInClass_comp">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> AlgHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">have</span> h := congrFun
+    (congrArg DFunLike.coe
+      (completedGroupAlgebraMapInClass_comp (R := R) (G := G) (H := H) (K := K)
+        C hForm hHer hG φ hφ ψ hψ))
+    x
+  simpa using h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ) (g : G) :
+    completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ
+        (toCompletedGroupAlgebraInClass C R G (MonoidAlgebra.of R G g)) =
+      toCompletedGroupAlgebraInClass C R H (MonoidAlgebra.of R H (φ g))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The in-class completed group-algebra map sends group-like elements to group-like elements.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> h := congrFun
+    (congrArg DFunLike.coe
+      (completedGroupAlgebraMapInClass_comp_toCompletedGroupAlgebraInClass
+        (R := R) (G := G) (H := H) C hHer φ hφ))
+    (MonoidAlgebra.of R G g)
+  simpa [RingHom.comp_apply, finiteGroupAlgebra_mapDomainRingHom_of] using h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_sub_one_of">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_sub_one_of">CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_sub_one_of</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_sub_one_of
+    (C : ProCGroups.FiniteGroupClass.{v})
+    (hHer : <a class="decl-ref" href="../../../../library/ProCGroups/FiniteGroups/Classes.html#decl-ProCGroups.FiniteGroupClass.Hereditary">ProCGroups.FiniteGroupClass.Hereditary</a> C)
+    (φ : G →* H) (hφ : Continuous φ) (g : G) :
+    completedGroupAlgebraMapInClass (G := G) (H := H) C hHer R φ hφ
+        (toCompletedGroupAlgebraInClass C R G (MonoidAlgebra.of R G g) - 1) =
+      toCompletedGroupAlgebraInClass C R H (MonoidAlgebra.of R H (φ g)) - 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The in-class completed group-algebra map sends group-like augmentation generators to their images.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_sub_one_of">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [map_sub, completedGroupAlgebraMapInClass_toCompletedGroupAlgebraInClass_of, map_one]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.CompletedGroupAlgebra.InClassFunctoriality.Maps"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

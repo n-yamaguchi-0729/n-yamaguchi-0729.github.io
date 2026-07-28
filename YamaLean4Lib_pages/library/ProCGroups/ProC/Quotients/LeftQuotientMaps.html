@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.ProC.Quotients.LeftQuotientMaps | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="This file defines the canonical projection \(G/L \to G/H\) for nested subgroups and proves its formula, continuity, surjectivity, functoriality, and compatibility with the quotient action.">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/ProC/Quotients/LeftQuotientMaps.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.ProC.Quotients.LeftQuotientMaps</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../../library/ProCGroups/ProC.html">ProC</a><span class="sep">/</span><a href="../../../../library/ProCGroups/ProC/Quotients.html">Quotients</a><span class="sep">/</span><span>LeftQuotientMaps</span></div>
+      <h1 class="module-title">ProCGroups.ProC.Quotients.LeftQuotientMaps</h1>
+      <div class="module-meta">8 Theorems | 1 Definition</div>
+      <div class="module-overview tex2jax_process"><p>This file defines the canonical projection \(G/L \to G/H\) for nested subgroups and proves its formula, continuity, surjectivity, functoriality, and compatibility with the quotient action.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../library/ProCGroups/ProC/Subgroups/Products.html">ProCGroups.ProC.Subgroups.Products</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ProCGroups/ProC/Quotients.html">ProCGroups.ProC.Quotients</a></li><li><a href="../../../../library/ProCGroups/ProC/Quotients/ClosedSubgroupNeighborhoods.html">ProCGroups.ProC.Quotients.ClosedSubgroupNeighborhoods</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.ProC.leftQuotientProjection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.leftQuotientProjection">ProCGroups.ProC.leftQuotientProjection</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> leftQuotientProjection
+    {G : <span class="kw">Type</span> u} [Group G] (K H : Subgroup G) (hKH : K ≤ H) :
+    G ⧸ K → G ⧸ H :=
+  Quotient.map&#x27; id &lt;| <span class="kw">by</span>
+    <span class="kw">intro</span> a b hab
+    <span class="kw">rw</span> [QuotientGroup.leftRel_apply] at hab ⊢
+    <span class="kw">exact</span> hKH hab</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The natural projection \(G/K \to G/H\) for closed subgroups K \(\leq\) H is viewed as a quotient-space map on left cosets.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.leftQuotientProjection_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.leftQuotientProjection_mk">ProCGroups.ProC.leftQuotientProjection_mk</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> leftQuotientProjection_mk
+    (K H : Subgroup G) (hKH : K ≤ H) (g : G) :
+    leftQuotientProjection K H hKH (QuotientGroup.mk (s := K) g) =
+      QuotientGroup.mk (s := H) g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The projection on left quotients sends the class of \(g\) modulo \(K\) to the class of \(g\) modulo \(H\).</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ProC.leftQuotientProjection_mk">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.continuous_leftQuotientProjection">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.continuous_leftQuotientProjection">ProCGroups.ProC.continuous_leftQuotientProjection</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_leftQuotientProjection
+    [TopologicalSpace G]
+    (K H : Subgroup G) (hKH : K ≤ H) :
+    Continuous (leftQuotientProjection K H hKH : G ⧸ K → G ⧸ H)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The natural map between nested left quotients is continuous.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ProC.continuous_leftQuotientProjection">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  refine (QuotientGroup.isQuotientMap_mk K).continuous_iff.2 ?_
+  change Continuous (QuotientGroup.mk (s := H) : G → G ⧸ H)
+  <span class="kw">exact</span> QuotientGroup.continuous_mk</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.leftQuotientProjection_id">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.leftQuotientProjection_id">ProCGroups.ProC.leftQuotientProjection_id</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> leftQuotientProjection_id
+    (K : Subgroup G) :
+    leftQuotientProjection K K le_rfl = id</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The left-quotient projection to itself is the identity.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ProC.leftQuotientProjection_id">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  funext x
+  refine Quotient.inductionOn x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.leftQuotientProjection_comp">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.leftQuotientProjection_comp">ProCGroups.ProC.leftQuotientProjection_comp</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> leftQuotientProjection_comp
+    (K H L : Subgroup G) (hKH : K ≤ H) (hHL : H ≤ L) :
+    leftQuotientProjection H L hHL ∘ leftQuotientProjection K H hKH =
+      leftQuotientProjection K L (hKH.trans hHL)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Left-quotient projections compose along chains of subgroup inclusions.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ProC.leftQuotientProjection_comp">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  funext x
+  refine Quotient.inductionOn x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.leftQuotientProjection_comp_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.leftQuotientProjection_comp_apply">ProCGroups.ProC.leftQuotientProjection_comp_apply</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> leftQuotientProjection_comp_apply
+    (K H L : Subgroup G) (hKH : K ≤ H) (hHL : H ≤ L) (x : G ⧸ K) :
+    leftQuotientProjection H L hHL (leftQuotientProjection K H hKH x) =
+      leftQuotientProjection K L (hKH.trans hHL) x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Applying the projection map to a completed element returns its corresponding finite-stage coordinate.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ProC.leftQuotientProjection_comp_apply">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa using congrArg (<span class="kw">fun</span> f =&gt; f x) (leftQuotientProjection_comp (K := K) (H := H) (L := L)
+    hKH hHL)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.leftQuotientProjection_comp_apply_symm">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.leftQuotientProjection_comp_apply_symm">ProCGroups.ProC.leftQuotientProjection_comp_apply_symm</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> leftQuotientProjection_comp_apply_symm
+    (K H L : Subgroup G) (hKH : K ≤ H) (hHL : H ≤ L) (x : G ⧸ K) :
+    leftQuotientProjection K L (hKH.trans hHL) x =
+      leftQuotientProjection H L hHL (leftQuotientProjection K H hKH x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Symmetric pointwise form of the composition law for left-quotient projections.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ProC.leftQuotientProjection_comp_apply_symm">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> (leftQuotientProjection_comp_apply (K := K) (H := H) (L := L) hKH hHL x).symm</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.surjective_leftQuotientProjection">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.surjective_leftQuotientProjection">ProCGroups.ProC.surjective_leftQuotientProjection</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> surjective_leftQuotientProjection
+    (K H : Subgroup G) (hKH : K ≤ H) :
+    Function.Surjective (leftQuotientProjection K H hKH : G ⧸ K → G ⧸ H)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The natural map between nested left quotients is surjective.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ProC.surjective_leftQuotientProjection">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x
+  refine Quotient.inductionOn x ?_
+  <span class="kw">intro</span> g
+  <span class="kw">exact</span> ⟨QuotientGroup.mk (s := K) g, <span class="kw">rfl</span>⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.ProC.leftQuotientProjection_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.ProC.leftQuotientProjection_smul">ProCGroups.ProC.leftQuotientProjection_smul</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> leftQuotientProjection_smul
+    (K H : Subgroup G) (hKH : K ≤ H) (g : G) (x : G ⧸ K) :
+    leftQuotientProjection K H hKH (g • x) =
+      g • leftQuotientProjection K H hKH x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Left-quotient projections are equivariant for the ambient left action of G.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-ProCGroups.ProC.leftQuotientProjection_smul">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  refine Quotient.inductionOn x ?_
+  <span class="kw">intro</span> y
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.ProC.Quotients.LeftQuotientMaps"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

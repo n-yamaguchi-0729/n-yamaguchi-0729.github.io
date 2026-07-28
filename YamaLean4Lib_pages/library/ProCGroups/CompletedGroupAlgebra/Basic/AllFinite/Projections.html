@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.CompletedGroupAlgebra.Basic.AllFinite.Projections | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="This module bundles the canonical all-finite stage projections and proves continuity of the coefficient map through the inverse-limit lifting property.">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/CompletedGroupAlgebra/Basic/AllFinite/Projections.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.CompletedGroupAlgebra.Basic.AllFinite.Projections</div>
+  <form class="search-form" action="../../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/CompletedGroupAlgebra.html">CompletedGroupAlgebra</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/CompletedGroupAlgebra/Basic.html">Basic</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/CompletedGroupAlgebra/Basic/AllFinite.html">AllFinite</a><span class="sep">/</span><span>Projections</span></div>
+      <h1 class="module-title">ProCGroups.CompletedGroupAlgebra.Basic.AllFinite.Projections</h1>
+      <div class="module-meta">1 Theorem | 3 Definitions</div>
+      <div class="module-overview tex2jax_process"><p>This module bundles the canonical all-finite stage projections and proves continuity of the coefficient map through the inverse-limit lifting property.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../../library/ProCGroups/CompletedGroupAlgebra/Basic/AllFinite/Ring.html">ProCGroups.CompletedGroupAlgebra.Basic.AllFinite.Ring</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../../library/ProCGroups/CompletedGroupAlgebra/Basic/AllFinite/Topology.html">ProCGroups.CompletedGroupAlgebra.Basic.AllFinite.Topology</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-CompletedGroupAlgebra.continuous_completedGroupAlgebra_algebraMap">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.continuous_completedGroupAlgebra_algebraMap">CompletedGroupAlgebra.continuous_completedGroupAlgebra_algebraMap</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_completedGroupAlgebra_algebraMap :
+    Continuous (algebraMap R (CompletedGroupAlgebraCarrier R G))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The coefficient-ring map \(R \to \widehat{R[G]}\) is continuous.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.continuous_completedGroupAlgebra_algebraMap">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> S := completedGroupAlgebraSystem R G
+  letI : ∀ U, TopologicalSpace (CompletedGroupAlgebraStage R G U) :=
+    <span class="kw">fun</span> U =&gt; (completedGroupAlgebraSystem R G).topologicalSpace U
+  <span class="kw">let</span> π : ∀ U : CompletedGroupAlgebraIndex G,
+      R → CompletedGroupAlgebraStage R G U :=
+    <span class="kw">fun</span> U r =&gt; algebraMap R (CompletedGroupAlgebraStage R G U) r
+  <span class="kw">have</span> hπ : ∀ U, Continuous (π U) := <span class="kw">by</span>
+    <span class="kw">intro</span> U
+    <span class="kw">exact</span> finiteGroupAlgebra_algebraMap_continuous R
+      (CompletedGroupAlgebraQuotient G U)
+  <span class="kw">have</span> hcompat : S.CompatibleMaps π := <span class="kw">by</span>
+    <span class="kw">intro</span> U V hUV
+    funext r
+    <span class="kw">exact</span> completedGroupAlgebraTransition_algebraMap
+      (R := R) (G := G) hUV r
+  change Continuous (S.inverseLimitLift π hcompat)
+  <span class="kw">exact</span> S.continuous_inverseLimitLift π hπ hcompat</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionAlgHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionAlgHom">CompletedGroupAlgebra.completedGroupAlgebraProjectionAlgHom</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraProjectionAlgHom (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R]
+    [TopologicalSpace R] [IsTopologicalRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (U : CompletedGroupAlgebraIndex G) :
+    CompletedGroupAlgebraCarrier R G →ₐ[R] CompletedGroupAlgebraStage R G U <span class="kw">where</span>
+  toRingHom := completedGroupAlgebraProjection R G U
+  commutes&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> r
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical projection to a finite stage is bundled as an \(R\)-algebra homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionLinearMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionLinearMap">CompletedGroupAlgebra.completedGroupAlgebraProjectionLinearMap</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraProjectionLinearMap (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v) [CommRing R]
+    [TopologicalSpace R] [IsTopologicalRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (U : CompletedGroupAlgebraIndex G) :
+    CompletedGroupAlgebraCarrier R G →ₗ[R] CompletedGroupAlgebraStage R G U :=
+  (completedGroupAlgebraProjectionAlgHom R G U).toLinearMap</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical projection to a finite stage, viewed as an \(R\)-linear map.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionContinuousLinearMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraProjectionContinuousLinearMap">CompletedGroupAlgebra.completedGroupAlgebraProjectionContinuousLinearMap</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> completedGroupAlgebraProjectionContinuousLinearMap (R : <span class="kw">Type</span> u) (G : <span class="kw">Type</span> v)
+    [CommRing R] [TopologicalSpace R] [IsTopologicalRing R] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (U : CompletedGroupAlgebraIndex G) :
+    letI : TopologicalSpace (CompletedGroupAlgebraStage R G U) :=
+      (completedGroupAlgebraSystem R G).topologicalSpace U
+    CompletedGroupAlgebraCarrier R G →L[R] CompletedGroupAlgebraStage R G U := <span class="kw">by</span>
+  letI : TopologicalSpace (CompletedGroupAlgebraStage R G U) :=
+    (completedGroupAlgebraSystem R G).topologicalSpace U
+  <span class="kw">exact</span>
+    { toLinearMap := completedGroupAlgebraProjectionLinearMap R G U
+      cont := (completedGroupAlgebraSystem R G).continuous_projection U }</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The finite-stage projection, as a continuous \(R\)-linear map.</p></div></section>
+  </div>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.CompletedGroupAlgebra.Basic.AllFinite.Projections"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../../assets/site.js" data-root="../../../../../"></script>
+</body>
+</html>

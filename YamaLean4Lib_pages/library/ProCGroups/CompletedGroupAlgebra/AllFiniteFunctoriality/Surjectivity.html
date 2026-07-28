@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.CompletedGroupAlgebra.AllFiniteFunctoriality.Surjectivity | Yamaguchi Lean 4 Library</title>
+<meta name="description" content="A surjective continuous group homomorphism induces a surjective map of all-finite completed group algebras. The proof combines finite-stage surjectivity with the inverse-limit lifting argument.">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/library/ProCGroups/CompletedGroupAlgebra/AllFiniteFunctoriality/Surjectivity.html">
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">Yamaguchi Lean 4 Library</a>
+  <nav class="header-nav"><a href="https://n-yamaguchi-0729.github.io/homepage-en.html">Homepage</a></nav>
+  <div class="header-current">ProCGroups.CompletedGroupAlgebra.AllFiniteFunctoriality.Surjectivity</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../../library/ProCGroups/CompletedGroupAlgebra.html">CompletedGroupAlgebra</a><span class="sep">/</span><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/AllFiniteFunctoriality.html">AllFiniteFunctoriality</a><span class="sep">/</span><span>Surjectivity</span></div>
+      <h1 class="module-title">ProCGroups.CompletedGroupAlgebra.AllFiniteFunctoriality.Surjectivity</h1>
+      <div class="module-meta">1 Theorem</div>
+      <div class="module-overview tex2jax_process"><p>A surjective continuous group homomorphism induces a surjective map of all-finite completed group algebras. The proof combines finite-stage surjectivity with the inverse-limit lifting argument.</p></div>
+    </div>
+  </div>
+  <details class="imports"><summary>imports</summary><ul><li><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/AllFiniteFunctoriality/Map.html">ProCGroups.CompletedGroupAlgebra.AllFiniteFunctoriality.Map</a></li><li><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/OpenFiniteQuotientTopology/OpenFiniteComparison.html">ProCGroups.CompletedGroupAlgebra.OpenFiniteQuotientTopology.OpenFiniteComparison</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/AllFiniteAugmentation/AugmentationIdeal.html">ProCGroups.CompletedGroupAlgebra.AllFiniteAugmentation.AugmentationIdeal</a></li><li><a href="../../../../library/ProCGroups/CompletedGroupAlgebra/AllFiniteFunctoriality.html">ProCGroups.CompletedGroupAlgebra.AllFiniteFunctoriality</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-CompletedGroupAlgebra.completedGroupAlgebraMap_surjective_of_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-CompletedGroupAlgebra.completedGroupAlgebraMap_surjective_of_surjective">CompletedGroupAlgebra.completedGroupAlgebraMap_surjective_of_surjective</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> completedGroupAlgebraMap_surjective_of_surjective
+    [CompactSpace R] [T2Space R] [TotallyDisconnectedSpace R]
+    (φ : G →* H) (hφ : Continuous φ)
+    (hφsurj : Function.Surjective φ) :
+    Function.Surjective (completedGroupAlgebraMap (G := G) (H := H) R φ hφ)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A surjective continuous homomorphism of profinite groups induces a surjective map on completed group algebras.</p></div></section>
+  </div>
+  <details class="proof-details" data-proof-declaration="decl-CompletedGroupAlgebra.completedGroupAlgebraMap_surjective_of_surjective">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> f := completedGroupAlgebraMap (G := G) (H := H) R φ hφ
+  letI : CompactSpace (CompletedGroupAlgebraCarrier R G) :=
+    completedGroupAlgebra_compactSpace (R := R) (G := G)
+  letI : T2Space (CompletedGroupAlgebraCarrier R H) :=
+    completedGroupAlgebra_t2Space (R := R) (G := H)
+  <span class="kw">have</span> hfcont : Continuous f :=
+    continuous_completedGroupAlgebraMap (R := R) (G := G) (H := H) φ hφ
+  <span class="kw">have</span> hclosed : IsClosed (Set.range f) := (isCompact_range hfcont).isClosed
+  <span class="kw">have</span> hdense : DenseRange (toCompletedGroupAlgebraRingHom R H) :=
+    denseRange_toCompletedGroupAlgebraRingHom (R := R) (G := H)
+  <span class="kw">have</span> hcanonical_subset :
+      Set.range (toCompletedGroupAlgebraRingHom R H) ⊆ Set.range f := <span class="kw">by</span>
+    <span class="kw">intro</span> y hy
+    rcases hy <span class="kw">with</span> ⟨a, <span class="kw">rfl</span>⟩
+    obtain ⟨bCoeff, hbCoeff⟩ :=
+      Finsupp.mapDomain_surjective (M := R) hφsurj a.coeff
+    <span class="kw">let</span> b : MonoidAlgebra R G := MonoidAlgebra.ofCoeff bCoeff
+    <span class="kw">have</span> hb : MonoidAlgebra.mapDomainRingHom R φ b = a := <span class="kw">by</span>
+      <span class="kw">apply</span> MonoidAlgebra.coeff_injective
+      <span class="kw">exact</span> hbCoeff
+    refine ⟨toCompletedGroupAlgebraRingHom R G b, ?_⟩
+    <span class="kw">have</span> hcomp := congrFun
+      (congrArg DFunLike.coe
+        (completedGroupAlgebraMap_comp_toCompletedGroupAlgebra
+          (R := R) (G := G) (H := H) φ hφ))
+      b
+    simpa [f, RingHom.comp_apply, hb] using hcomp
+  <span class="kw">intro</span> y
+  <span class="kw">have</span> hycanonical : y ∈ closure (Set.range (toCompletedGroupAlgebraRingHom R H)) := <span class="kw">by</span>
+    <span class="kw">rw</span> [hdense.closure_range]
+    <span class="kw">exact</span> Set.mem_univ y
+  <span class="kw">have</span> hyf : y ∈ closure (Set.range f) :=
+    closure_mono hcanonical_subset hycanonical
+  <span class="kw">exact</span> hclosed.closure_subset_iff.2 (<span class="kw">fun</span> z hz =&gt; hz) hyf</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.CompletedGroupAlgebra.AllFiniteFunctoriality.Surjectivity"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>
