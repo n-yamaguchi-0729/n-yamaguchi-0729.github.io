@@ -1,4 +1,4 @@
-name: Static ProCGroups pages
+name: Static public pages
 
 on:
   push:
@@ -24,26 +24,11 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
-      - name: Validate generated ProCGroups documentation
+      - name: Verify the generated ProCGroups documentation
         run: >-
           python3 .github/validation/check_generated_site.py
           ProCGroups_pages
-      - name: Validate the public tree
-        shell: bash
-        run: |
-          test -f index.html
-          test -f homepage-jp.html
-          test -f homepage-en.html
-          test -f ProCGroups_pages/index.html
-          test ! -e YamaLean4Lib_pages
-          test "$(find ProCGroups_pages/library/ProCGroups -name '*.html' ! -path '*/src/*' | wc -l)" -eq 574
-          test "$(find ProCGroups_pages/library/ProCGroups/src -name '*.html' | wc -l)" -eq 574
-          test "$(grep -c '<url>' sitemap.xml)" -eq 1153
-          grep -q '作者はこの分野の専門家ではなく' ProCGroups_pages/index.html
-          grep -q 'not a subject-matter expert' ProCGroups_pages/index.html
-          ! grep -E -i 'YamaLean4Lib_pages|LCFT_pages|ClassFieldTheory_pages|449 files' \
-            README.md index.html homepage-en.html homepage-jp.html ProCGroups_pages/index.html
-          test "$(find . -type l -print -quit)" = ""
-          ! find . -type f -iname '*.zip' -print -quit | grep -q .
+      - name: Verify the public repository
+        run: python3 .github/validation/check_public_repository.py .
       - name: Check whitespace
         run: git diff-tree --check --root -r HEAD
