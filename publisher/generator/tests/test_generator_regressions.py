@@ -1064,6 +1064,19 @@ class DocumentationSourceRegressionTests(unittest.TestCase):
             self.assertIn("<summary>import</summary>", module_page)
             self.assertIn("<summary>Imported by</summary>", module_page)
 
+    def test_library_card_preserves_multiple_paragraphs(self) -> None:
+        single = "<p>One paragraph.</p>"
+        multiple = "<p>First paragraph.</p>\n<p>Second paragraph.</p>"
+
+        self.assertEqual(
+            build_site.strip_paragraph_wrapper(single),
+            "One paragraph.",
+        )
+        self.assertEqual(
+            build_site.strip_paragraph_wrapper(multiple),
+            multiple,
+        )
+
     def test_import_only_leaf_page_lists_imports_instead_of_empty_children(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

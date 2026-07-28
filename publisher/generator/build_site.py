@@ -1080,7 +1080,12 @@ def module_card_note(module: Module, modules_by_name: dict[str, Module]) -> str:
 
 def strip_paragraph_wrapper(html_text: str) -> str:
     text = html_text.strip()
-    if text.startswith("<p>") and text.endswith("</p>"):
+    if (
+        text.startswith("<p>")
+        and text.endswith("</p>")
+        and text.count("<p>") == 1
+        and text.count("</p>") == 1
+    ):
         return text[3:-4]
     return text
 
