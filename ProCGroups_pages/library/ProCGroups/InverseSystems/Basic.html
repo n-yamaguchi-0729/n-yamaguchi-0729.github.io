@@ -1,0 +1,1881 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.InverseSystems.Basic | ProCGroups Documentation</title>
+<meta name="description" content="This module defines preorder-indexed inverse systems of topological spaces and realizes their inverse limit as the subtype of compatible families. It proves the topological universal property and equips limits of grou...">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/ProCGroups_pages/library/ProCGroups/InverseSystems/Basic.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../index.html">ProCGroups Documentation</a>
+  <nav class="header-nav"><a href="https://github.com/n-yamaguchi-0729/ProCGroups" target="_blank" rel="noopener">GitHub repository</a></nav>
+  <div class="header-current">ProCGroups.InverseSystems.Basic</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/InverseSystems.html">InverseSystems</a><span class="sep">/</span><span>Basic</span></div>
+      <h1 class="module-title">ProCGroups.InverseSystems.Basic</h1>
+      <div class="module-meta">45 Theorems | 14 Definitions | 1 Abbreviation | 2 Structures | 4 Classes | 24 Instances</div>
+      <div class="module-overview tex2jax_process"><p>This module defines preorder-indexed inverse systems of topological spaces and realizes their inverse limit as the subtype of compatible families.  It proves the topological universal property and equips limits of group, additive-group, module, and ring systems with their coordinatewise algebraic structures and canonical projection homomorphisms.</p></div>
+      <div class="meta"><a href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean">Open this file on GitHub</a></div>
+    </div>
+  </div>
+  <details class="imports"><summary>imports</summary><ul><li>Mathlib.Topology.Algebra.Ring.Basic</li><li>Mathlib.Algebra.Module.Pi</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/FoxDifferential/Completed/Continuous/Universal/System.html">ProCGroups.FoxDifferential.Completed.Continuous.Universal.System</a></li><li><a href="../../../library/ProCGroups/InverseSystems/CategoricalLimits.html">ProCGroups.InverseSystems.CategoricalLimits</a></li><li><a href="../../../library/ProCGroups/InverseSystems/CompatibilityAndSurjectivity.html">ProCGroups.InverseSystems.CompatibilityAndSurjectivity</a></li><li><a href="../../../library/ProCGroups/ProC/OpenNormalSubgroups/ProCGroup.html">ProCGroups.ProC.OpenNormalSubgroups.ProCGroup</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl structure" id="decl-ProCGroups.InverseSystems.InverseSystem">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem">ProCGroups.InverseSystems.InverseSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L26">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> InverseSystem <span class="kw">where</span>
+  <span class="comment">/-- The topological space assigned to each index of the system. -/</span>
+  X : I → <span class="kw">Type</span> v
+  <span class="comment">/-- The chosen topology on every stage; this field supplies the stagewise topology instance. -/</span>
+  topologicalSpace : ∀ i, TopologicalSpace (X i)
+  <span class="comment">/-- The contravariant transition map from stage `j` to stage `i` whenever `i ≤ j`. -/</span>
+  map : ∀ {i j : I}, i ≤ j → X j → X i
+  <span class="comment">/-- Every transition map is continuous for the chosen stage topologies. -/</span>
+  continuous_map : ∀ {i j : I} (hij : i ≤ j), Continuous (map hij)
+  <span class="comment">/-- Transition along a reflexive comparison is the identity map. -/</span>
+  map_id : ∀ i, map (le_rfl : i ≤ i) = id
+  <span class="comment">/-- Transition maps compose according to transitivity of the indexing preorder. -/</span>
+  map_comp : ∀ {i j k : I} (hij : i ≤ j) (hjk : j ≤ k),
+    map hij ∘ map hjk = map (hij.trans hjk)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>An inverse system of topological spaces indexed by a preorder.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.map_id_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.map_id_apply">ProCGroups.InverseSystems.InverseSystem.map_id_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L48">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> map_id_apply (i : I) (x : S.X i) :
+    S.map (le_rfl : i ≤ i) x = x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The transition map along \(i \le i\) is the identity on points.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa using congrFun (S.map_id i) x</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.map_comp_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.map_comp_apply">ProCGroups.InverseSystems.InverseSystem.map_comp_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L56">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> map_comp_apply {i j k : I} (hij : i ≤ j) (hjk : j ≤ k) (x : S.X k) :
+    S.map hij (S.map hjk x) = S.map (hij.trans hjk) x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Following the transition from <code>k</code> to <code>j</code> by the transition from <code>j</code> to <code>i</code> agrees pointwise with the direct transition from <code>k</code> to <code>i</code>.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa [Function.comp] using congrFun (S.map_comp hij hjk) x</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.Compatible">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.Compatible">ProCGroups.InverseSystems.InverseSystem.Compatible</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L61">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> Compatible (x : ∀ i, S.X i) : <span class="kw">Prop</span> :=
+  ∀ i j, ∀ hij : i ≤ j, S.map hij (x j) = x i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Compatibility of a family of points in the product.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.CompatibleMaps">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.CompatibleMaps">ProCGroups.InverseSystems.InverseSystem.CompatibleMaps</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L65">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> CompatibleMaps {Y : <span class="kw">Type</span> w} (ψ : ∀ i, Y → S.X i) : <span class="kw">Prop</span> :=
+  ∀ i j, ∀ hij : i ≤ j, S.map hij ∘ ψ j = ψ i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Compatibility of a family of maps into an inverse system.</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-ProCGroups.InverseSystems.InverseSystem.inverseLimit">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.inverseLimit">ProCGroups.InverseSystems.InverseSystem.inverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L69">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> inverseLimit : <span class="kw">Type</span> _ := {x : ∀ i, S.X i // S.Compatible x}</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse limit realized as a subtype of the product.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.projection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.projection">ProCGroups.InverseSystems.InverseSystem.projection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L72">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> projection (i : I) : S.inverseLimit → S.X i := <span class="kw">fun</span> x =&gt; x.1 i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical projection from the inverse limit to the \(i\)-th component.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.IsLinearSystem">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsLinearSystem">ProCGroups.InverseSystems.InverseSystem.IsLinearSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L79">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> IsLinearSystem {R : <span class="kw">Type</span> w} [Semiring R] (S : InverseSystem (I := I))
+    [∀ i, AddCommMonoid (S.X i)] [∀ i, Module R (S.X i)]
+    [AddCommMonoid S.inverseLimit] [Module R S.inverseLimit] : <span class="kw">Prop</span> :=
+  (∀ {i j : I} (hij : i ≤ j) (r : R) (x : S.X j),
+    S.map hij (r • x) = r • S.map hij x) ∧
+  (∀ i (r : R) (x : S.inverseLimit), S.projection i (r • x) = r • S.projection i x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Linearity data for an inverse system and its concrete inverse-limit cone. This companion predicate packages the scalar-compatibility facts used by Hom-comparison formulations, without installing them as global typeclass instances.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.IsLinearSystem.map_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsLinearSystem.map_smul">ProCGroups.InverseSystems.InverseSystem.IsLinearSystem.map_smul</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L89">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_smul {R : <span class="kw">Type</span> w} [Semiring R] {S : InverseSystem (I := I)}
+    [∀ i, AddCommMonoid (S.X i)] [∀ i, Module R (S.X i)]
+    [AddCommMonoid S.inverseLimit] [Module R S.inverseLimit]
+    (hS : IsLinearSystem (R := R) S) {i j : I} (hij : i ≤ j) (r : R) (x : S.X j) :
+    S.map hij (r • x) = r • S.map hij x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Maps in a linear inverse system commute with scalar multiplication.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>hS.1 hij r x</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.IsLinearSystem.projection_smul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsLinearSystem.projection_smul">ProCGroups.InverseSystems.InverseSystem.IsLinearSystem.projection_smul</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L97">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> projection_smul {R : <span class="kw">Type</span> w} [Semiring R] {S : InverseSystem (I := I)}
+    [∀ i, AddCommMonoid (S.X i)] [∀ i, Module R (S.X i)]
+    [AddCommMonoid S.inverseLimit] [Module R S.inverseLimit]
+    (hS : IsLinearSystem (R := R) S) (i : I) (r : R) (x : S.inverseLimit) :
+    S.projection i (r • x) = r • S.projection i x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The finite-stage projection commutes with scalar multiplication by coefficients.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>hS.2 i r x</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.projection_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.projection_apply">ProCGroups.InverseSystems.InverseSystem.projection_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L107">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_apply (i : I) (x : S.inverseLimit) :
+    S.projection i x = x.1 i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Applying a projection to an inverse-limit element returns its corresponding stage coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.projection_compatible">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.projection_compatible">ProCGroups.InverseSystems.InverseSystem.projection_compatible</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L111">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> projection_compatible (x : S.inverseLimit) (i j : I) (hij : i ≤ j) :
+    S.map hij (S.projection j x) = S.projection i x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Projections from the inverse limit are compatible with the transition maps.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> x.2 i j hij</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.projection_compatibleMaps">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.projection_compatibleMaps">ProCGroups.InverseSystems.InverseSystem.projection_compatibleMaps</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L116">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> projection_compatibleMaps : S.CompatibleMaps S.projection</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical projections form a compatible family of maps.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> i j hij
+  funext x
+  <span class="kw">exact</span> S.projection_compatible x i j hij</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.continuous_projection">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.continuous_projection">ProCGroups.InverseSystems.InverseSystem.continuous_projection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L122">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_projection (i : I) : Continuous (S.projection i)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Each canonical projection from an inverse limit is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>(continuous_apply i).comp continuous_subtype_val</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.ext">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.ext">ProCGroups.InverseSystems.InverseSystem.ext</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L126">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[ext] <span class="kw">theorem</span> ext {x y : S.inverseLimit}
+    (h : ∀ i, S.projection i x = S.projection i y) : x = y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Two inverse-limit points are equal when all their projections are equal.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Subtype.ext
+  funext i
+  <span class="kw">exact</span> h i</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.inverseLimitLift">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.inverseLimitLift">ProCGroups.InverseSystems.InverseSystem.inverseLimitLift</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L133">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> inverseLimitLift {Y : <span class="kw">Type</span> w} (ψ : ∀ i, Y → S.X i)
+    (hcompat : S.CompatibleMaps ψ) :
+    Y → S.inverseLimit := <span class="kw">fun</span> y =&gt;
+      ⟨<span class="kw">fun</span> i =&gt; ψ i y, <span class="kw">by</span>
+      <span class="kw">intro</span> i j hij
+      <span class="kw">exact</span> congrFun (hcompat i j hij) y⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The concrete map induced by a compatible family of maps into the subtype inverse limit.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.projection_comp_inverseLimitLift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.projection_comp_inverseLimitLift">ProCGroups.InverseSystems.InverseSystem.projection_comp_inverseLimitLift</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L141">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_comp_inverseLimitLift {Y : <span class="kw">Type</span> w} (ψ : ∀ i, Y → S.X i)
+    (hcompat : S.CompatibleMaps ψ) (i : I) :
+    S.projection i ∘ S.inverseLimitLift ψ hcompat = ψ i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Composing a canonical projection with the lift recovers the corresponding compatible map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.projection_inverseLimitLift_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.projection_inverseLimitLift_apply">ProCGroups.InverseSystems.InverseSystem.projection_inverseLimitLift_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L146">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_inverseLimitLift_apply {Y : <span class="kw">Type</span> w} (ψ : ∀ i, Y → S.X i)
+    (hcompat : S.CompatibleMaps ψ) (i : I) (y : Y) :
+    S.projection i (S.inverseLimitLift ψ hcompat y) = ψ i y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Applying a projection to an inverse-limit lift returns the corresponding stage map value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.inverseLimitLift_unique">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.inverseLimitLift_unique">ProCGroups.InverseSystems.InverseSystem.inverseLimitLift_unique</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L151">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> inverseLimitLift_unique {Y : <span class="kw">Type</span> w} (ψ : ∀ i, Y → S.X i)
+    (hcompat : S.CompatibleMaps ψ) {f : Y → S.inverseLimit}
+    (hf : ∀ i, S.projection i ∘ f = ψ i) :
+    f = S.inverseLimitLift ψ hcompat</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A map into the subtype inverse limit is uniquely determined by its projections.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  funext y
+  <span class="kw">apply</span> S.ext
+  <span class="kw">intro</span> i
+  <span class="kw">exact</span>
+    (congrFun (hf i) y).trans
+      (S.projection_inverseLimitLift_apply ψ hcompat i y).symm</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.continuous_inverseLimitLift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.continuous_inverseLimitLift">ProCGroups.InverseSystems.InverseSystem.continuous_inverseLimitLift</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L163">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_inverseLimitLift {Y : <span class="kw">Type</span> w} [TopologicalSpace Y] (ψ : ∀ i, Y → S.X i)
+    (hψ : ∀ i, Continuous (ψ i))
+    (hcompat : S.CompatibleMaps ψ) :
+    Continuous (S.inverseLimitLift ψ hcompat)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A lift from a topological space is continuous when all of its component maps are continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> Continuous.subtype_mk (continuous_pi <span class="kw">fun</span> i =&gt; hψ i) <span class="kw">fun</span> y =&gt; <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">exact</span> congrFun (hcompat i j hij) y</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl structure" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L172">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> IsInverseLimit {L : <span class="kw">Type</span> w} [TopologicalSpace L] (π : ∀ i, L → S.X i) : <span class="kw">Prop</span> <span class="kw">where</span>
+  <span class="comment">/-- Each leg of the proposed limiting cone is continuous. -/</span>
+  continuous_proj : ∀ i, Continuous (π i)
+  <span class="comment">/-- The cone legs commute with every transition map of the inverse system. -/</span>
+  compatible : S.CompatibleMaps π
+  <span class="comment">/--</span>
+<span class="comment">  Every continuous compatible cone, including one in the designated larger source universe,</span>
+<span class="comment">  factors through `L` by a unique continuous map.</span>
+<span class="comment">  -/</span>
+  existsUnique_lift :
+    ∀ {Y : <span class="kw">Type</span> max u v w} [TopologicalSpace Y] (ψ : ∀ i, Y → S.X i)
+      (_hψ : ∀ i, Continuous (ψ i)) (_hcompat : S.CompatibleMaps ψ),
+      ∃! f : Y → L, Continuous f ∧ ∀ i, π i ∘ f = ψ i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The universal property of an inverse limit.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.existsUnique_lift_sameUniverse">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.existsUnique_lift_sameUniverse">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.existsUnique_lift_sameUniverse</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L194">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> existsUnique_lift_sameUniverse (hπ : S.IsInverseLimit π)
+    {Y : <span class="kw">Type</span> w} [TopologicalSpace Y]
+    (ψ : ∀ i, Y → S.X i) (hψ : ∀ i, Continuous (ψ i))
+    (hcompat : S.CompatibleMaps ψ) :
+    ∃! f : Y → L, Continuous f ∧ ∀ i, π i ∘ f = ψ i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The large-universe universal property induces the usual universal property for sources in the carrier universe.  The <code>ULift</code> is essential: universe levels cannot themselves be quantified inside a structure field.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> ψ&#x27; : ∀ i, ULift.{max u v} Y → S.X i :=
+    <span class="kw">fun</span> i y =&gt; ψ i y.down
+  <span class="kw">have</span> hψ&#x27; : ∀ i, Continuous (ψ&#x27; i) :=
+    <span class="kw">fun</span> i =&gt; (hψ i).comp continuous_uliftDown
+  <span class="kw">have</span> hcompat&#x27; : S.CompatibleMaps ψ&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext y
+    simpa [ψ&#x27;, Function.comp_apply] using congrFun (hcompat i j hij) y.down
+  obtain ⟨f, hf, huniq⟩ := hπ.existsUnique_lift ψ&#x27; hψ&#x27; hcompat&#x27;
+  refine ⟨f ∘ ULift.up, ?_, ?_⟩
+  · refine ⟨hf.1.comp continuous_uliftUp, ?_⟩
+    <span class="kw">intro</span> i
+    funext y
+    simpa [ψ&#x27;, Function.comp_apply] using congrFun (hf.2 i) (ULift.up y)
+  · <span class="kw">intro</span> g hg
+    <span class="kw">have</span> hg&#x27; : Continuous (g ∘ ULift.down) ∧
+        ∀ i, π i ∘ (g ∘ ULift.down) = ψ&#x27; i := <span class="kw">by</span>
+      <span class="kw">constructor</span>
+      · <span class="kw">exact</span> hg.1.comp continuous_uliftDown
+      · <span class="kw">intro</span> i
+        funext y
+        simpa [ψ&#x27;, Function.comp_apply] using congrFun (hg.2 i) y.down
+    <span class="kw">have</span> hgf : g ∘ ULift.down = f := huniq (g ∘ ULift.down) hg&#x27;
+    funext y
+    simpa [Function.comp_apply] using congrFun hgf (ULift.up y)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.lift">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.lift">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.lift</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L226">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> lift (hπ : S.IsInverseLimit π)
+    {Y : <span class="kw">Type</span> w} [TopologicalSpace Y]
+    (ψ : ∀ i, Y → S.X i) (hψ : ∀ i, Continuous (ψ i)) (hcompat : S.CompatibleMaps ψ) :
+    Y → L :=
+  Classical.choose (ExistsUnique.exists
+    (hπ.existsUnique_lift_sameUniverse ψ hψ hcompat))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A compatible family of maps to the stages lifts uniquely to a map into the inverse limit.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.lift_spec">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.lift_spec">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.lift_spec</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L234">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> lift_spec (hπ : S.IsInverseLimit π)
+    {Y : <span class="kw">Type</span> w} [TopologicalSpace Y]
+    (ψ : ∀ i, Y → S.X i) (hψ : ∀ i, Continuous (ψ i)) (hcompat : S.CompatibleMaps ψ) :
+    Continuous (hπ.lift ψ hψ hcompat) ∧
+      ∀ i, π i ∘ hπ.lift ψ hψ hcompat = ψ i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The universal-property lift is continuous and has the prescribed projections.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>Classical.choose_spec (ExistsUnique.exists
+    (hπ.existsUnique_lift_sameUniverse ψ hψ hcompat))</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.continuous_lift">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.continuous_lift">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.continuous_lift</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L243">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_lift (hπ : S.IsInverseLimit π)
+    {Y : <span class="kw">Type</span> w} [TopologicalSpace Y]
+    (ψ : ∀ i, Y → S.X i) (hψ : ∀ i, Continuous (ψ i)) (hcompat : S.CompatibleMaps ψ) :
+    Continuous (hπ.lift ψ hψ hcompat)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The lift into the inverse limit is continuous when all coordinate maps are continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>(hπ.lift_spec ψ hψ hcompat).1</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.fac">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.fac">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.fac</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L250">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> fac (hπ : S.IsInverseLimit π)
+    {Y : <span class="kw">Type</span> w} [TopologicalSpace Y]
+    (ψ : ∀ i, Y → S.X i) (hψ : ∀ i, Continuous (ψ i)) (hcompat : S.CompatibleMaps ψ)
+    (i : I) :
+    π i ∘ hπ.lift ψ hψ hcompat = ψ i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The universal-property lift has the prescribed i-th projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>(hπ.lift_spec ψ hψ hcompat).2 i</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.uniq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.uniq">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.uniq</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L258">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> uniq (hπ : S.IsInverseLimit π)
+    {Y : <span class="kw">Type</span> w} [TopologicalSpace Y]
+    (ψ : ∀ i, Y → S.X i) (hψ : ∀ i, Continuous (ψ i)) (hcompat : S.CompatibleMaps ψ)
+    {f : Y → L} (hf : Continuous f) (hfac : ∀ i, π i ∘ f = ψ i) :
+    f = hπ.lift ψ hψ hcompat</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The universal-property lift is the unique continuous map with the prescribed projections.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>(hπ.existsUnique_lift_sameUniverse ψ hψ hcompat).unique ⟨hf, hfac⟩
+    (hπ.lift_spec ψ hψ hcompat)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.lift_self">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.lift_self">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.lift_self</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L267">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> lift_self (hπ : S.IsInverseLimit π) :
+    hπ.lift (Y := L) π hπ.continuous_proj hπ.compatible = id</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Lifting the projection family of an inverse limit gives the identity map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  symm
+  <span class="kw">exact</span> hπ.uniq (Y := L) π hπ.continuous_proj hπ.compatible continuous_id <span class="kw">fun</span> _ =&gt; <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.existsUnique_lift_from_inverseLimit">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.existsUnique_lift_from_inverseLimit">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.existsUnique_lift_from_inverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L274">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> existsUnique_lift_from_inverseLimit (hπ : S.IsInverseLimit π) :
+    ∃! f : S.inverseLimit → L,
+      Continuous f ∧ ∀ i, π i ∘ f = S.projection i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The large-universe universal property also supplies the comparison map from the concrete compatible-family model; this is a theorem, not duplicate structure data.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> ψ&#x27; : ∀ i, ULift.{w} S.inverseLimit → S.X i :=
+    <span class="kw">fun</span> i x =&gt; S.projection i x.down
+  <span class="kw">have</span> hψ&#x27; : ∀ i, Continuous (ψ&#x27; i) :=
+    <span class="kw">fun</span> i =&gt; (S.continuous_projection i).comp continuous_uliftDown
+  <span class="kw">have</span> hcompat&#x27; : S.CompatibleMaps ψ&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext x
+    simpa [ψ&#x27;, Function.comp_apply] using
+      congrFun (S.projection_compatibleMaps i j hij) x.down
+  obtain ⟨f, hf, huniq⟩ := hπ.existsUnique_lift ψ&#x27; hψ&#x27; hcompat&#x27;
+  refine ⟨f ∘ ULift.up, ?_, ?_⟩
+  · refine ⟨hf.1.comp continuous_uliftUp, ?_⟩
+    <span class="kw">intro</span> i
+    funext x
+    simpa [ψ&#x27;, Function.comp_apply] using congrFun (hf.2 i) (ULift.up x)
+  · <span class="kw">intro</span> g hg
+    <span class="kw">have</span> hg&#x27; : Continuous (g ∘ ULift.down) ∧
+        ∀ i, π i ∘ (g ∘ ULift.down) = ψ&#x27; i := <span class="kw">by</span>
+      <span class="kw">constructor</span>
+      · <span class="kw">exact</span> hg.1.comp continuous_uliftDown
+      · <span class="kw">intro</span> i
+        funext x
+        simpa [ψ&#x27;, Function.comp_apply] using congrFun (hg.2 i) x.down
+    <span class="kw">have</span> hgf : g ∘ ULift.down = f := huniq (g ∘ ULift.down) hg&#x27;
+    funext x
+    simpa [Function.comp_apply] using congrFun hgf (ULift.up x)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.liftFromInverseLimit">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.liftFromInverseLimit">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.liftFromInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L305">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> liftFromInverseLimit (hπ : S.IsInverseLimit π) :
+    S.inverseLimit → L :=
+  Classical.choose (ExistsUnique.exists hπ.existsUnique_lift_from_inverseLimit)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The lift from the concrete compatible-family inverse limit.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.liftFromInverseLimit_spec">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.liftFromInverseLimit_spec">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.liftFromInverseLimit_spec</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L310">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> liftFromInverseLimit_spec (hπ : S.IsInverseLimit π) :
+    Continuous hπ.liftFromInverseLimit ∧
+      ∀ i, π i ∘ hπ.liftFromInverseLimit = S.projection i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The concrete inverse-limit lift is continuous and has the prescribed projections.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>Classical.choose_spec (ExistsUnique.exists hπ.existsUnique_lift_from_inverseLimit)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.homeomorphToInverseLimit">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.homeomorphToInverseLimit">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.homeomorphToInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L318">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> homeomorphToInverseLimit (hπ : S.IsInverseLimit π) :
+    L ≃ₜ S.inverseLimit <span class="kw">where</span>
+  toFun := S.inverseLimitLift π hπ.compatible
+  invFun := hπ.liftFromInverseLimit
+  left_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">let</span> f : L → S.inverseLimit := S.inverseLimitLift π hπ.compatible
+    <span class="kw">let</span> g : S.inverseLimit → L := hπ.liftFromInverseLimit
+    <span class="kw">have</span> hgf : g ∘ f = id := <span class="kw">by</span>
+      <span class="kw">exact</span> (hπ.existsUnique_lift_sameUniverse π hπ.continuous_proj hπ.compatible).unique
+        (<span class="kw">by</span>
+          refine ⟨hπ.liftFromInverseLimit_spec.1.comp
+            (S.continuous_inverseLimitLift π hπ.continuous_proj hπ.compatible), ?_⟩
+          <span class="kw">intro</span> i
+          <span class="kw">calc</span>
+            π i ∘ (g ∘ f) = (π i ∘ g) ∘ f := <span class="kw">by</span> <span class="kw">rfl</span>
+            _ = S.projection i ∘ f := <span class="kw">by</span>
+              <span class="kw">rw</span> [hπ.liftFromInverseLimit_spec.2 i]
+            _ = π i := S.projection_comp_inverseLimitLift π hπ.compatible i)
+        ⟨continuous_id, <span class="kw">fun</span> _ =&gt; <span class="kw">rfl</span>⟩
+    <span class="kw">exact</span> congrFun hgf x
+  right_inv := <span class="kw">by</span>
+    <span class="kw">intro</span> x
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> i
+    <span class="kw">rw</span> [S.projection_inverseLimitLift_apply]
+    <span class="kw">exact</span> congrFun
+      (hπ.liftFromInverseLimit_spec.2 i) x
+  continuous_toFun :=
+    S.continuous_inverseLimitLift π hπ.continuous_proj hπ.compatible
+  continuous_invFun := hπ.liftFromInverseLimit_spec.1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Every abstract inverse-limit cone is canonically homeomorphic to the concrete compatible-family model.  Factoring comparison through this model makes the construction independent of the carrier&#x27;s universe.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.homeomorph">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.homeomorph">ProCGroups.InverseSystems.InverseSystem.IsInverseLimit.homeomorph</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L351">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> homeomorph {L&#x27; : <span class="kw">Type</span> z} [TopologicalSpace L&#x27;] {π&#x27; : ∀ i, L&#x27; → S.X i}
+    (hπ : S.IsInverseLimit π) (hπ&#x27; : S.IsInverseLimit π&#x27;) :
+    L ≃ₜ L&#x27; :=
+  hπ.homeomorphToInverseLimit.trans hπ&#x27;.homeomorphToInverseLimit.symm</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Inverse limits are unique up to unique homeomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.isInverseLimit_projection">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.isInverseLimit_projection">ProCGroups.InverseSystems.InverseSystem.isInverseLimit_projection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L359">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isInverseLimit_projection : S.IsInverseLimit S.projection</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The subtype model carries the inverse-limit universal property.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  refine ⟨S.continuous_projection, S.projection_compatibleMaps, ?_⟩
+  <span class="kw">intro</span> Y _ ψ hψ hcompat
+  refine ⟨S.inverseLimitLift ψ hcompat, ?_, ?_⟩
+  · <span class="kw">exact</span> ⟨S.continuous_inverseLimitLift ψ hψ hcompat,
+      <span class="kw">fun</span> i =&gt; S.projection_comp_inverseLimitLift ψ hcompat i⟩
+  · <span class="kw">intro</span> f hf
+    <span class="kw">exact</span> S.inverseLimitLift_unique ψ hcompat hf.2</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.isClosed_setOf_compatible">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.isClosed_setOf_compatible">ProCGroups.InverseSystems.InverseSystem.isClosed_setOf_compatible</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L369">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isClosed_setOf_compatible [∀ i, T2Space (S.X i)] :
+    IsClosed {x : ∀ i, S.X i | S.Compatible x}</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse limit is a closed subspace of the product.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [Compatible, setOf_forall]
+  refine isClosed_iInter <span class="kw">fun</span> i =&gt; isClosed_iInter <span class="kw">fun</span> j =&gt; isClosed_iInter <span class="kw">fun</span> hij =&gt; ?_
+  <span class="kw">exact</span> isClosed_eq ((S.continuous_map hij).comp (continuous_apply j)) (continuous_apply i)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.InverseSystem.instCompactSpaceInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.instCompactSpaceInverseLimit">ProCGroups.InverseSystems.InverseSystem.instCompactSpaceInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L379">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instCompactSpaceInverseLimit [∀ i, CompactSpace (S.X i)] [∀ i, T2Space (S.X i)] :
+    CompactSpace S.inverseLimit := <span class="kw">by</span>
+  <span class="kw">let</span> hs : IsClosed {x : ∀ i, S.X i | S.Compatible x} := S.isClosed_setOf_compatible
+  <span class="kw">exact</span> hs.isClosedEmbedding_subtypeVal.compactSpace</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The constructed object carries the compact space structure inherited from its profinite construction.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.t2Space_inverseLimit">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.t2Space_inverseLimit">ProCGroups.InverseSystems.InverseSystem.t2Space_inverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L385">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> t2Space_inverseLimit [∀ i, T2Space (S.X i)] :
+    T2Space S.inverseLimit</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Inverse limits of Hausdorff spaces are Hausdorff.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>inferInstance</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.totallyDisconnectedSpace_inverseLimit">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.totallyDisconnectedSpace_inverseLimit">ProCGroups.InverseSystems.InverseSystem.totallyDisconnectedSpace_inverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L389">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> totallyDisconnectedSpace_inverseLimit [∀ i, TotallyDisconnectedSpace (S.X i)] :
+    TotallyDisconnectedSpace S.inverseLimit</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Inverse limits of totally disconnected spaces are totally disconnected.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>inferInstance</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.InverseSystem.isQuotientMap_projection_of_surjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.InverseSystem.isQuotientMap_projection_of_surjective">ProCGroups.InverseSystems.InverseSystem.isQuotientMap_projection_of_surjective</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L393">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isQuotientMap_projection_of_surjective [∀ i, CompactSpace (S.X i)]
+    [∀ i, T2Space (S.X i)] {i : I} (hsurj : Function.Surjective (S.projection i)) :
+    Topology.IsQuotientMap (S.projection i)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A surjective projection from a compact inverse limit to a Hausdorff stage is a quotient map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>Topology.IsQuotientMap.of_surjective_continuous hsurj (S.continuous_projection i)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl class" id="decl-ProCGroups.InverseSystems.IsGroupSystem">
+  <div class="decl-head">
+    <span class="kind class">Class</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.IsGroupSystem">ProCGroups.InverseSystems.IsGroupSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L405">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">class</span> IsGroupSystem (S : InverseSystem (I := I)) [∀ i, Group (S.X i)] : <span class="kw">Prop</span> <span class="kw">where</span>
+  <span class="comment">/-- Transition maps preserve the identity element at every pair of comparable stages. -/</span>
+  map_one : ∀ {i j : I} (hij : i ≤ j), S.map hij 1 = 1
+  <span class="comment">/-- Transition maps preserve products at every pair of comparable stages. -/</span>
+  map_mul : ∀ {i j : I} (hij : i ≤ j) (x y : S.X j),
+    S.map hij (x * y) = S.map hij x * S.map hij y
+  <span class="comment">/-- Transition maps preserve inverses at every pair of comparable stages. -/</span>
+  map_inv : ∀ {i j : I} (hij : i ≤ j) (x : S.X j),
+    S.map hij x⁻¹ = (S.map hij x)⁻¹</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A group-valued inverse system whose transition maps are group homomorphisms.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instOneInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instOneInverseLimit">ProCGroups.InverseSystems.instOneInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L418">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instOneInverseLimit : One S.inverseLimit <span class="kw">where</span>
+  one := ⟨<span class="kw">fun</span> i =&gt; 1, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    simpa using IsGroupSystem.map_one (S := S) hij⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The unit of the inverse limit is the compatible family of units at all stages.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instMulInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instMulInverseLimit">ProCGroups.InverseSystems.instMulInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L426">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instMulInverseLimit : Mul S.inverseLimit <span class="kw">where</span>
+  mul x y := ⟨<span class="kw">fun</span> i =&gt; S.projection i x * S.projection i y, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">calc</span>
+      S.map hij (S.projection j x * S.projection j y)
+          = S.map hij (S.projection j x) * S.map hij (S.projection j y) := <span class="kw">by</span>
+              simpa using IsGroupSystem.map_mul (S := S) hij (S.projection j x)
+                (S.projection j y)
+      _ = S.projection i x * S.projection i y := <span class="kw">by</span>
+          <span class="kw">rw</span> [S.projection_compatible x i j hij, S.projection_compatible y i j hij]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Multiplication on the inverse limit is defined coordinatewise through the stage multiplications.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instInvInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instInvInverseLimit">ProCGroups.InverseSystems.instInvInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L438">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instInvInverseLimit : Inv S.inverseLimit <span class="kw">where</span>
+  inv x := ⟨<span class="kw">fun</span> i =&gt; (S.projection i x)⁻¹, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">calc</span>
+      S.map hij ((S.projection j x)⁻¹) = (S.map hij (S.projection j x))⁻¹ := <span class="kw">by</span>
+        simpa using IsGroupSystem.map_inv (S := S) hij (S.projection j x)
+      _ = (S.projection i x)⁻¹ := <span class="kw">by</span> <span class="kw">rw</span> [S.projection_compatible x i j hij]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse-limit object carries the structure induced coordinatewise from the finite stages.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_one">ProCGroups.InverseSystems.projection_one</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L447">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_one (i : I) : S.projection i (1 : S.inverseLimit) = 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The projection of the identity element is the identity at each stage.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_mul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_mul">ProCGroups.InverseSystems.projection_mul</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L450">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_mul (i : I) (x y : S.inverseLimit) :
+    S.projection i (x * y) = S.projection i x * S.projection i y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Projection commutes with multiplication in a group-valued inverse system.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_inv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_inv">ProCGroups.InverseSystems.projection_inv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L454">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_inv (i : I) (x : S.inverseLimit) :
+    S.projection i x⁻¹ = (S.projection i x)⁻¹</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Projection commutes with inversion in a group-valued inverse system.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instGroupInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instGroupInverseLimit">ProCGroups.InverseSystems.instGroupInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L461">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instGroupInverseLimit : Group S.inverseLimit <span class="kw">where</span>
+  one := 1
+  mul := (· * ·)
+  inv := Inv.inv
+  mul_assoc x y z := <span class="kw">by</span>
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> i
+    change ((x.1 i * y.1 i) * z.1 i) = (x.1 i * (y.1 i * z.1 i))
+    <span class="kw">simp</span> only [mul_assoc]
+  one_mul x := <span class="kw">by</span>
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> i
+    change 1 * x.1 i = x.1 i
+    <span class="kw">simp</span> only [one_mul]
+  mul_one x := <span class="kw">by</span>
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> i
+    change x.1 i * 1 = x.1 i
+    <span class="kw">simp</span> only [mul_one]
+  inv_mul_cancel x := <span class="kw">by</span>
+    <span class="kw">apply</span> S.ext
+    <span class="kw">intro</span> i
+    change (x.1 i)⁻¹ * x.1 i = 1
+    <span class="kw">simp</span> only [inv_mul_cancel]</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The constructed carrier inherits its group structure from the coordinatewise group structure of the construction.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instIsTopologicalGroupInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instIsTopologicalGroupInverseLimit">ProCGroups.InverseSystems.instIsTopologicalGroupInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L487">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instIsTopologicalGroupInverseLimit [∀ i, IsTopologicalGroup (S.X i)] :
+    IsTopologicalGroup S.inverseLimit <span class="kw">where</span>
+  continuous_mul := <span class="kw">by</span>
+    <span class="kw">exact</span> Continuous.subtype_mk
+      (continuous_pi <span class="kw">fun</span> i =&gt;
+        ((S.continuous_projection i).comp continuous_fst).mul
+          ((S.continuous_projection i).comp continuous_snd))
+      (<span class="kw">fun</span> xy =&gt; <span class="kw">by</span>
+        <span class="kw">intro</span> i j hij
+        change S.map hij (S.projection j xy.1 * S.projection j xy.2) =
+          S.projection i xy.1 * S.projection i xy.2
+        <span class="kw">rw</span> [IsGroupSystem.map_mul (S := S) hij,
+          S.projection_compatible xy.1 i j hij, S.projection_compatible xy.2 i j hij])
+  continuous_inv := <span class="kw">by</span>
+    <span class="kw">exact</span> Continuous.subtype_mk
+      (continuous_pi <span class="kw">fun</span> i =&gt; continuous_inv.comp (S.continuous_projection i))
+      (<span class="kw">fun</span> x =&gt; <span class="kw">by</span>
+        <span class="kw">intro</span> i j hij
+        change S.map hij ((S.projection j x)⁻¹) = (S.projection i x)⁻¹
+        <span class="kw">rw</span> [IsGroupSystem.map_inv (S := S) hij, S.projection_compatible x i j hij])</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The object is a topological group with the induced group operations and topology.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.projectionHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projectionHom">ProCGroups.InverseSystems.projectionHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L509">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> projectionHom (i : I) : S.inverseLimit →* S.X i <span class="kw">where</span>
+  toFun := S.projection i
+  map_one&#x27; := projection_one (S := S) i
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">exact</span> projection_mul (S := S) i x y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical projections from a group-valued inverse limit are homomorphisms.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projectionHom_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projectionHom_apply">ProCGroups.InverseSystems.projectionHom_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L520">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projectionHom_apply (i : I) (x : S.inverseLimit) :
+    projectionHom (S := S) i x = S.projection i x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Applying a homomorphic projection to an inverse-limit element returns its corresponding stage coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl class" id="decl-ProCGroups.InverseSystems.IsAddGroupSystem">
+  <div class="decl-head">
+    <span class="kind class">Class</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.IsAddGroupSystem">ProCGroups.InverseSystems.IsAddGroupSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L530">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">class</span> IsAddGroupSystem (S : InverseSystem (I := I)) [∀ i, AddCommGroup (S.X i)] : <span class="kw">Prop</span> <span class="kw">where</span>
+  <span class="comment">/-- Transition maps preserve zero at every pair of comparable stages. -/</span>
+  map_zero : ∀ {i j : I} (hij : i ≤ j), S.map hij 0 = 0
+  <span class="comment">/-- Transition maps preserve addition at every pair of comparable stages. -/</span>
+  map_add : ∀ {i j : I} (hij : i ≤ j) (x y : S.X j),
+    S.map hij (x + y) = S.map hij x + S.map hij y
+  <span class="comment">/-- Transition maps preserve additive inverses at every pair of comparable stages. -/</span>
+  map_neg : ∀ {i j : I} (hij : i ≤ j) (x : S.X j),
+    S.map hij (-x) = -S.map hij x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>An additive-group-valued inverse system whose transition maps are additive homomorphisms.</p></div></section>
+  </div>
+</section>
+<section class="decl class" id="decl-ProCGroups.InverseSystems.IsModuleSystem">
+  <div class="decl-head">
+    <span class="kind class">Class</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.IsModuleSystem">ProCGroups.InverseSystems.IsModuleSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L543">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">class</span> IsModuleSystem (R : <span class="kw">Type</span> w) [Semiring R] (S : InverseSystem (I := I))
+    [∀ i, AddCommGroup (S.X i)] [∀ i, Module R (S.X i)] : <span class="kw">Prop</span> <span class="kw">where</span>
+  <span class="comment">/-- Transition maps commute with the fixed `R`-scalar action on all stages. -/</span>
+  map_smul : ∀ {i j : I} (hij : i ≤ j) (r : R) (x : S.X j),
+    S.map hij (r • x) = r • S.map hij x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A module-valued inverse system whose transition maps are linear over a fixed semiring.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instZeroAddInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instZeroAddInverseLimit">ProCGroups.InverseSystems.instZeroAddInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L552">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instZeroAddInverseLimit : Zero S.inverseLimit <span class="kw">where</span>
+  zero := ⟨<span class="kw">fun</span> i =&gt; 0, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    simpa using IsAddGroupSystem.map_zero (S := S) hij⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The zero element of the inverse limit is the compatible family of zero elements at all stages.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instAddAddInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instAddAddInverseLimit">ProCGroups.InverseSystems.instAddAddInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L558">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instAddAddInverseLimit : Add S.inverseLimit <span class="kw">where</span>
+  add x y := ⟨<span class="kw">fun</span> i =&gt; S.projection i x + S.projection i y, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">calc</span>
+      S.map hij (S.projection j x + S.projection j y)
+          = S.map hij (S.projection j x) + S.map hij (S.projection j y) := <span class="kw">by</span>
+              simpa using IsAddGroupSystem.map_add (S := S) hij (S.projection j x)
+                (S.projection j y)
+      _ = S.projection i x + S.projection i y := <span class="kw">by</span>
+          <span class="kw">rw</span> [S.projection_compatible x i j hij, S.projection_compatible y i j hij]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Addition in the additive inverse limit is defined coordinatewise.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instNegAddInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instNegAddInverseLimit">ProCGroups.InverseSystems.instNegAddInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L570">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instNegAddInverseLimit : Neg S.inverseLimit <span class="kw">where</span>
+  neg x := ⟨<span class="kw">fun</span> i =&gt; -S.projection i x, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">calc</span>
+      S.map hij (-S.projection j x) = -S.map hij (S.projection j x) := <span class="kw">by</span>
+        simpa using IsAddGroupSystem.map_neg (S := S) hij (S.projection j x)
+      _ = -S.projection i x := <span class="kw">by</span> <span class="kw">rw</span> [S.projection_compatible x i j hij]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Negation on an additive inverse limit is defined coordinatewise through the stage negations.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instSubAddInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instSubAddInverseLimit">ProCGroups.InverseSystems.instSubAddInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L579">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instSubAddInverseLimit : Sub S.inverseLimit <span class="kw">where</span>
+  sub x y := ⟨<span class="kw">fun</span> i =&gt; S.projection i x - S.projection i y, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    change S.map hij (S.projection j x - S.projection j y) =
+      S.projection i x - S.projection i y
+    <span class="kw">rw</span> [sub_eq_add_neg, IsAddGroupSystem.map_add, IsAddGroupSystem.map_neg,
+      S.projection_compatible x i j hij, S.projection_compatible y i j hij, sub_eq_add_neg]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Subtraction in the inverse limit is defined coordinatewise through the stage subtractions.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instSMulNatAddInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instSMulNatAddInverseLimit">ProCGroups.InverseSystems.instSMulNatAddInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L588">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instSMulNatAddInverseLimit : SMul ℕ S.inverseLimit <span class="kw">where</span>
+  smul n x := ⟨<span class="kw">fun</span> i =&gt; n • S.projection i x, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    change S.map hij (n • S.projection j x) = n • S.projection i x
+    <span class="kw">induction</span> n <span class="kw">with</span>
+    | zero =&gt;
+        <span class="kw">simp</span> only [InverseSystem.projection_apply, zero_nsmul, IsAddGroupSystem.map_zero]
+    | succ n ihn =&gt;
+        <span class="kw">rw</span> [succ_nsmul, succ_nsmul]
+        <span class="kw">calc</span>
+          S.map hij (n • S.projection j x + S.projection j x)
+              = S.map hij (n • S.projection j x) + S.map hij (S.projection j x) := <span class="kw">by</span>
+                  <span class="kw">exact</span> IsAddGroupSystem.map_add (S := S) hij (n • S.projection j x)
+                    (S.projection j x)
+          _ = n • S.projection i x + S.projection i x := <span class="kw">by</span>
+              <span class="kw">rw</span> [ihn, S.projection_compatible x i j hij]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>An additive inverse limit carries natural-number scalar multiplication coordinatewise.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instSMulIntAddInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instSMulIntAddInverseLimit">ProCGroups.InverseSystems.instSMulIntAddInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L606">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instSMulIntAddInverseLimit : SMul ℤ S.inverseLimit <span class="kw">where</span>
+  smul n x := ⟨<span class="kw">fun</span> i =&gt; n • S.projection i x, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    change S.map hij (n • S.projection j x) = n • S.projection i x
+    <span class="kw">let</span> f : S.X j →+ S.X i :=
+      { toFun := S.map hij
+        map_zero&#x27; := IsAddGroupSystem.map_zero (S := S) hij
+        map_add&#x27; := IsAddGroupSystem.map_add (S := S) hij }
+    <span class="kw">calc</span>
+      S.map hij (n • S.projection j x) = f (n • S.projection j x) := <span class="kw">rfl</span>
+      _ = n • f (S.projection j x) := f.map_zsmul n (S.projection j x)
+      _ = n • S.projection i x := <span class="kw">by</span>
+        change n • S.map hij (S.projection j x) = n • S.projection i x
+        <span class="kw">rw</span> [S.projection_compatible x i j hij]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>An additive inverse limit carries integer scalar multiplication coordinatewise.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_zero">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_zero">ProCGroups.InverseSystems.projection_zero</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L622">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_zero (i : I) : S.projection i (0 : S.inverseLimit) = 0</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The projection of zero is zero at each stage.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_add">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_add">ProCGroups.InverseSystems.projection_add</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L625">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_add (i : I) (x y : S.inverseLimit) :
+    S.projection i (x + y) = S.projection i x + S.projection i y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Projection commutes with addition in an additive inverse system.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_neg">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_neg">ProCGroups.InverseSystems.projection_neg</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L629">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_neg (i : I) (x : S.inverseLimit) :
+    S.projection i (-x) = -S.projection i x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Projection commutes with negation in an additive inverse system.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_sub">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_sub">ProCGroups.InverseSystems.projection_sub</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L633">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_sub (i : I) (x y : S.inverseLimit) :
+    S.projection i (x - y) = S.projection i x - S.projection i y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Projection commutes with subtraction in an additive inverse system.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.instAddCommGroupAddInverseLimit">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instAddCommGroupAddInverseLimit">ProCGroups.InverseSystems.instAddCommGroupAddInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L640">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[reducible] <span class="kw">def</span> instAddCommGroupAddInverseLimit : AddCommGroup S.inverseLimit := <span class="kw">by</span>
+  <span class="kw">let</span> f : S.inverseLimit → ∀ i, S.X i := Subtype.val
+  <span class="kw">apply</span> Subtype.val_injective.addCommGroup f <span class="kw">rfl</span> (<span class="kw">fun</span> _ _ =&gt; <span class="kw">rfl</span>) (<span class="kw">fun</span> _ =&gt; <span class="kw">rfl</span>)
+    (<span class="kw">fun</span> _ _ =&gt; <span class="kw">rfl</span>) (<span class="kw">fun</span> _ _ =&gt; <span class="kw">rfl</span>) (<span class="kw">fun</span> _ _ =&gt; <span class="kw">rfl</span>)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The additive-group structure on an additive inverse limit; kept named rather than global to avoid a parent-instance diamond with ring inverse limits.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instSMulInverseLimitOfIsModuleSystem">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instSMulInverseLimitOfIsModuleSystem">ProCGroups.InverseSystems.instSMulInverseLimitOfIsModuleSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L656">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instSMulInverseLimitOfIsModuleSystem : SMul R S.inverseLimit <span class="kw">where</span>
+  smul r x := ⟨<span class="kw">fun</span> i =&gt; r • S.projection i x, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    change S.map hij (r • S.projection j x) = r • S.projection i x
+    <span class="kw">rw</span> [IsModuleSystem.map_smul (S := S) hij, S.projection_compatible x i j hij]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>An inverse-limit module carries scalar multiplication by applying the scalar action at every stage.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_smul_of_isModuleSystem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_smul_of_isModuleSystem">ProCGroups.InverseSystems.projection_smul_of_isModuleSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L664">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsAddGroupSystem S] <span class="kw">in</span>
+@[<span class="kw">simp</span>] <span class="kw">theorem</span> projection_smul_of_isModuleSystem (i : I) (r : R) (x : S.inverseLimit) :
+    S.projection i (r • x) = r • S.projection i x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Projection commutes with scalar multiplication in a module-valued inverse system.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instModuleInverseLimitOfIsModuleSystem">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instModuleInverseLimitOfIsModuleSystem">ProCGroups.InverseSystems.instModuleInverseLimitOfIsModuleSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L669">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instModuleInverseLimitOfIsModuleSystem : Module R S.inverseLimit := <span class="kw">by</span>
+  <span class="kw">let</span> f : S.inverseLimit →+ ∀ i, S.X i :=
+    { toFun := Subtype.val
+      map_zero&#x27; := <span class="kw">rfl</span>
+      map_add&#x27; := <span class="kw">fun</span> _ _ =&gt; <span class="kw">rfl</span> }
+  <span class="kw">exact</span> Function.Injective.module R f Subtype.val_injective (<span class="kw">fun</span> _ _ =&gt; <span class="kw">rfl</span>)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse limit is a module when all stages form a compatible module system.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instContinuousSMulInverseLimitOfIsModuleSystem">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instContinuousSMulInverseLimitOfIsModuleSystem">ProCGroups.InverseSystems.instContinuousSMulInverseLimitOfIsModuleSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L677">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instContinuousSMulInverseLimitOfIsModuleSystem
+    [TopologicalSpace R] [∀ i, ContinuousSMul R (S.X i)] :
+    ContinuousSMul R S.inverseLimit <span class="kw">where</span>
+  continuous_smul := <span class="kw">by</span>
+    <span class="kw">exact</span> Continuous.subtype_mk
+      (continuous_pi <span class="kw">fun</span> i =&gt;
+        continuous_fst.smul ((S.continuous_projection i).comp continuous_snd))
+      (<span class="kw">fun</span> p =&gt; <span class="kw">by</span>
+        <span class="kw">intro</span> i j hij
+        change S.map hij (p.1 • S.projection j p.2) = p.1 • S.projection i p.2
+        <span class="kw">rw</span> [IsModuleSystem.map_smul (S := S) hij, S.projection_compatible p.2 i j hij])</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Scalar multiplication is continuous for the relevant inverse-limit topology.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instIsTopologicalAddGroupAddInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instIsTopologicalAddGroupAddInverseLimit">ProCGroups.InverseSystems.instIsTopologicalAddGroupAddInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L692">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instIsTopologicalAddGroupAddInverseLimit [∀ i, IsTopologicalAddGroup (S.X i)] :
+    IsTopologicalAddGroup S.inverseLimit <span class="kw">where</span>
+  continuous_add := <span class="kw">by</span>
+    <span class="kw">exact</span> Continuous.subtype_mk
+      (continuous_pi <span class="kw">fun</span> i =&gt;
+        ((S.continuous_projection i).comp continuous_fst).add
+          ((S.continuous_projection i).comp continuous_snd))
+      (<span class="kw">fun</span> xy =&gt; <span class="kw">by</span>
+        <span class="kw">intro</span> i j hij
+        change S.map hij (S.projection j xy.1 + S.projection j xy.2) =
+          S.projection i xy.1 + S.projection i xy.2
+        <span class="kw">rw</span> [IsAddGroupSystem.map_add (S := S) hij,
+          S.projection_compatible xy.1 i j hij, S.projection_compatible xy.2 i j hij])
+  continuous_neg := <span class="kw">by</span>
+    <span class="kw">exact</span> Continuous.subtype_mk
+      (continuous_pi <span class="kw">fun</span> i =&gt; continuous_neg.comp (S.continuous_projection i))
+      (<span class="kw">fun</span> x =&gt; <span class="kw">by</span>
+        <span class="kw">intro</span> i j hij
+        change S.map hij (-S.projection j x) = -S.projection i x
+        <span class="kw">rw</span> [IsAddGroupSystem.map_neg (S := S) hij, S.projection_compatible x i j hij])</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The additive inverse-limit object has addition defined coordinatewise on compatible families.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.projectionAddHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projectionAddHom">ProCGroups.InverseSystems.projectionAddHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L714">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> projectionAddHom (i : I) : S.inverseLimit →+ S.X i <span class="kw">where</span>
+  toFun := S.projection i
+  map_zero&#x27; := projection_zero (S := S) i
+  map_add&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">exact</span> projection_add (S := S) i x y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical projections from an additive inverse limit are additive homomorphisms.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projectionAddHom_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projectionAddHom_apply">ProCGroups.InverseSystems.projectionAddHom_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L725">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> projectionAddHom_apply (i : I) (x : S.inverseLimit) :
+    projectionAddHom (S := S) i x = S.projection i x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Applying an additive projection to an inverse-limit element returns its corresponding stage coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl class" id="decl-ProCGroups.InverseSystems.IsRingSystem">
+  <div class="decl-head">
+    <span class="kind class">Class</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.IsRingSystem">ProCGroups.InverseSystems.IsRingSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L735">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">class</span> IsRingSystem (S : InverseSystem (I := I)) [∀ i, Ring (S.X i)] : <span class="kw">Prop</span> <span class="kw">where</span>
+  <span class="comment">/-- Transition maps preserve the additive identity. -/</span>
+  map_zero : ∀ {i j : I} (hij : i ≤ j), S.map hij 0 = 0
+  <span class="comment">/-- Transition maps preserve the multiplicative identity. -/</span>
+  map_one : ∀ {i j : I} (hij : i ≤ j), S.map hij 1 = 1
+  <span class="comment">/-- Transition maps preserve addition. -/</span>
+  map_add : ∀ {i j : I} (hij : i ≤ j) (x y : S.X j),
+    S.map hij (x + y) = S.map hij x + S.map hij y
+  <span class="comment">/-- Transition maps preserve multiplication. -/</span>
+  map_mul : ∀ {i j : I} (hij : i ≤ j) (x y : S.X j),
+    S.map hij (x * y) = S.map hij x * S.map hij y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A ring-valued inverse system whose transition maps are ring homomorphisms.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.mapRingHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.mapRingHom">ProCGroups.InverseSystems.mapRingHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L750">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> mapRingHom {i j : I} (hij : i ≤ j) : S.X j →+* S.X i <span class="kw">where</span>
+  toFun := S.map hij
+  map_zero&#x27; := IsRingSystem.map_zero (S := S) hij
+  map_one&#x27; := IsRingSystem.map_one (S := S) hij
+  map_add&#x27; := IsRingSystem.map_add (S := S) hij
+  map_mul&#x27; := IsRingSystem.map_mul (S := S) hij</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A transition map in a ring-valued inverse system is bundled as a ring homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.mapRingHom_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.mapRingHom_apply">ProCGroups.InverseSystems.mapRingHom_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L762">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> mapRingHom_apply {i j : I} (hij : i ≤ j) (x : S.X j) :
+    mapRingHom (S := S) hij x = S.map hij x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The bundled ring homomorphism has the same underlying function as the coordinatewise construction.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.isAddGroupSystemOfIsRingSystem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.isAddGroupSystemOfIsRingSystem">ProCGroups.InverseSystems.isAddGroupSystemOfIsRingSystem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L767">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> isAddGroupSystemOfIsRingSystem : IsAddGroupSystem S <span class="kw">where</span>
+  map_zero</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The additive system underlying a ring system. This remains explicit so that importing ring systems does not install a second global path to the additive inverse-limit instances.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>IsRingSystem.map_zero (S := S)
+  map_add := IsRingSystem.map_add (S := S)
+  map_neg := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij x
+    <span class="kw">exact</span> (mapRingHom (S := S) hij).map_neg x</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instMulRingInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instMulRingInverseLimit">ProCGroups.InverseSystems.instMulRingInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L782">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instMulRingInverseLimit : Mul S.inverseLimit <span class="kw">where</span>
+  mul x y := ⟨<span class="kw">fun</span> i =&gt; S.projection i x * S.projection i y, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">calc</span>
+      S.map hij (S.projection j x * S.projection j y)
+          = S.map hij (S.projection j x) * S.map hij (S.projection j y) := <span class="kw">by</span>
+              <span class="kw">exact</span> IsRingSystem.map_mul (S := S) hij (S.projection j x)
+                (S.projection j y)
+      _ = S.projection i x * S.projection i y := <span class="kw">by</span>
+          <span class="kw">rw</span> [S.projection_compatible x i j hij, S.projection_compatible y i j hij]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Ring multiplication on the inverse limit is defined coordinatewise through the stage ring multiplications.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instOneRingInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instOneRingInverseLimit">ProCGroups.InverseSystems.instOneRingInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L794">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instOneRingInverseLimit : One S.inverseLimit <span class="kw">where</span>
+  one := ⟨<span class="kw">fun</span> i =&gt; 1, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">exact</span> IsRingSystem.map_one (S := S) hij⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The unit of the ring inverse limit is the compatible family of units at all stages.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instPowNatRingInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instPowNatRingInverseLimit">ProCGroups.InverseSystems.instPowNatRingInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L800">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instPowNatRingInverseLimit : Pow S.inverseLimit ℕ <span class="kw">where</span>
+  pow x n := ⟨<span class="kw">fun</span> i =&gt; S.projection i x ^ n, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    change S.map hij (S.projection j x ^ n) = S.projection i x ^ n
+    <span class="kw">rw</span> [← mapRingHom_apply (S := S) hij, map_pow, mapRingHom_apply,
+      S.projection_compatible x i j hij]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Powers in the inverse-limit ring are computed at every stage coordinate.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instNatCastRingInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instNatCastRingInverseLimit">ProCGroups.InverseSystems.instNatCastRingInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L811">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instNatCastRingInverseLimit : NatCast S.inverseLimit <span class="kw">where</span>
+  natCast n := ⟨<span class="kw">fun</span> _ =&gt; n, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    change S.map hij (Nat.cast n) = Nat.cast n
+    <span class="kw">exact</span> map_natCast (mapRingHom (S := S) hij) n⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Natural number casts in a ring inverse limit are computed coordinatewise from finite-stage natural number casts.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instIntCastRingInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instIntCastRingInverseLimit">ProCGroups.InverseSystems.instIntCastRingInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L821">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instIntCastRingInverseLimit : IntCast S.inverseLimit <span class="kw">where</span>
+  intCast n := ⟨<span class="kw">fun</span> _ =&gt; n, <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    change S.map hij (Int.cast n) = Int.cast n
+    <span class="kw">exact</span> map_intCast (mapRingHom (S := S) hij) n⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Integer casts in a ring inverse limit are computed coordinatewise from finite-stage integer casts.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_ring_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_ring_one">ProCGroups.InverseSystems.projection_ring_one</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L829">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> projection_ring_one (i : I) : S.projection i (1 : S.inverseLimit) = 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse-limit projection preserves \(1\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_ring_mul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_ring_mul">ProCGroups.InverseSystems.projection_ring_mul</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L833">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> projection_ring_mul (i : I) (x y : S.inverseLimit) :
+    S.projection i (x * y) = S.projection i x * S.projection i y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse-limit projection preserves multiplication.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_ring_pow">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_ring_pow">ProCGroups.InverseSystems.projection_ring_pow</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L838">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> projection_ring_pow (i : I) (x : S.inverseLimit) (n : ℕ) :
+    S.projection i (x ^ n) = S.projection i x ^ n</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse-limit projection preserves powers.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_ring_natCast">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_ring_natCast">ProCGroups.InverseSystems.projection_ring_natCast</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L843">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> projection_ring_natCast (i : I) (n : ℕ) :
+    S.projection i (Nat.cast n : S.inverseLimit) = Nat.cast n</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse-limit projection preserves natural number casts.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projection_ring_intCast">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projection_ring_intCast">ProCGroups.InverseSystems.projection_ring_intCast</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L848">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> projection_ring_intCast (i : I) (n : ℤ) :
+    S.projection i (Int.cast n : S.inverseLimit) = Int.cast n</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse-limit projection preserves integer casts.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instRingInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instRingInverseLimit">ProCGroups.InverseSystems.instRingInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L855">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instRingInverseLimit : Ring S.inverseLimit :=
+  Function.Injective.ring
+    (<span class="kw">fun</span> x : S.inverseLimit =&gt; (x : ∀ i, S.X i))
+    Subtype.val_injective
+    (<span class="kw">by</span> funext i; <span class="kw">rfl</span>)
+    (<span class="kw">by</span> funext i; <span class="kw">rfl</span>)
+    (<span class="kw">by</span> <span class="kw">intro</span> x y; funext i; <span class="kw">rfl</span>)
+    (<span class="kw">by</span> <span class="kw">intro</span> x y; funext i; <span class="kw">rfl</span>)
+    (<span class="kw">by</span> <span class="kw">intro</span> x; funext i; <span class="kw">rfl</span>)
+    (<span class="kw">by</span> <span class="kw">intro</span> x y; funext i; <span class="kw">rfl</span>)
+    (<span class="kw">by</span> <span class="kw">intro</span> n x; funext i; <span class="kw">rfl</span>)
+    (<span class="kw">by</span> <span class="kw">intro</span> n x; funext i; <span class="kw">rfl</span>)
+    (<span class="kw">by</span> <span class="kw">intro</span> x n; funext i; <span class="kw">rfl</span>)
+    (<span class="kw">by</span> <span class="kw">intro</span> n; funext i; <span class="kw">rfl</span>)
+    (<span class="kw">by</span> <span class="kw">intro</span> n; funext i; <span class="kw">rfl</span>)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A ring inverse limit is a ring because all operations and axioms are inherited coordinatewise from the stage rings.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instContinuousMulRingInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instContinuousMulRingInverseLimit">ProCGroups.InverseSystems.instContinuousMulRingInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L872">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instContinuousMulRingInverseLimit [∀ i, ContinuousMul (S.X i)] :
+    ContinuousMul S.inverseLimit <span class="kw">where</span>
+  continuous_mul := <span class="kw">by</span>
+    <span class="kw">exact</span> Continuous.subtype_mk
+      (continuous_pi <span class="kw">fun</span> i =&gt;
+        ((S.continuous_projection i).comp continuous_fst).mul
+          ((S.continuous_projection i).comp continuous_snd))
+      (<span class="kw">fun</span> xy =&gt; <span class="kw">by</span>
+        <span class="kw">intro</span> i j hij
+        change S.map hij (S.projection j xy.1 * S.projection j xy.2) =
+          S.projection i xy.1 * S.projection i xy.2
+        <span class="kw">rw</span> [IsRingSystem.map_mul (S := S) hij,
+          S.projection_compatible xy.1 i j hij, S.projection_compatible xy.2 i j hij])</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Multiplication in a ring inverse limit is continuous for the inverse-limit topology.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.InverseSystems.instIsTopologicalRingRingInverseLimit">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.instIsTopologicalRingRingInverseLimit">ProCGroups.InverseSystems.instIsTopologicalRingRingInverseLimit</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L890">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instIsTopologicalRingRingInverseLimit [∀ i, IsTopologicalRing (S.X i)] :
+    IsTopologicalRing S.inverseLimit := <span class="kw">by</span>
+  letI : IsTopologicalAddGroup S.inverseLimit :=
+    instIsTopologicalAddGroupAddInverseLimit S
+  letI : ContinuousMul S.inverseLimit := instContinuousMulRingInverseLimit S
+  letI : IsTopologicalSemiring S.inverseLimit := IsTopologicalSemiring.mk
+  <span class="kw">exact</span> IsTopologicalRing.mk</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A ring inverse limit inherits a topological-ring structure from the compatible stage topological rings.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.InverseSystems.projectionRingHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projectionRingHom">ProCGroups.InverseSystems.projectionRingHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L899">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> projectionRingHom (i : I) : S.inverseLimit →+* S.X i <span class="kw">where</span>
+  toFun := S.projection i
+  map_zero&#x27; := projection_zero (S := S) i
+  map_one&#x27; := projection_ring_one (S := S) i
+  map_add&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">exact</span> projection_add (S := S) i x y
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> x y
+    <span class="kw">exact</span> projection_ring_mul (S := S) i x y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The canonical projection from a ring-valued inverse limit is bundled as a ring homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.projectionRingHom_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.projectionRingHom_apply">ProCGroups.InverseSystems.projectionRingHom_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L915">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> projectionRingHom_apply (i : I) (x : S.inverseLimit) :
+    projectionRingHom (S := S) i x = S.projection i x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The ring-homomorphism projection has the same underlying coordinate map as the finite-stage projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.InverseSystems.mapRingHom_comp_projectionRingHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.InverseSystems.mapRingHom_comp_projectionRingHom">ProCGroups.InverseSystems.mapRingHom_comp_projectionRingHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/InverseSystems/Basic.lean#L922">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> mapRingHom_comp_projectionRingHom {i j : I} (hij : i ≤ j) :
+    (mapRingHom (S := S) hij).comp (projectionRingHom (S := S) j) =
+      projectionRingHom (S := S) i</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Composing the ring-valued transition from \(j\) to \(i\) with the projection at \(j\) gives the projection at \(i\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> RingHom.ext
+  <span class="kw">intro</span> x
+  <span class="kw">exact</span> S.projection_compatible x i j hij</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.InverseSystems.Basic"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

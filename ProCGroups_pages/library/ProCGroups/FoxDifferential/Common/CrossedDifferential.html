@@ -1,0 +1,1267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.FoxDifferential.Common.CrossedDifferential | ProCGroups Documentation</title>
+<meta name="description" content="This module defines crossed homomorphisms for an additive group action and their scalar-character specialization. It supplies the Fox product, inverse, conjugation, commutator, and power rules; restriction to coeffici...">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/ProCGroups_pages/library/ProCGroups/FoxDifferential/Common/CrossedDifferential.html">
+<link rel="stylesheet" href="../../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../../index.html">ProCGroups Documentation</a>
+  <nav class="header-nav"><a href="https://github.com/n-yamaguchi-0729/ProCGroups" target="_blank" rel="noopener">GitHub repository</a></nav>
+  <div class="header-current">ProCGroups.FoxDifferential.Common.CrossedDifferential</div>
+  <form class="search-form" action="../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../../library/ProCGroups/FoxDifferential.html">FoxDifferential</a><span class="sep">/</span><a href="../../../../library/ProCGroups/FoxDifferential/Common.html">Common</a><span class="sep">/</span><span>CrossedDifferential</span></div>
+      <h1 class="module-title">ProCGroups.FoxDifferential.Common.CrossedDifferential</h1>
+      <div class="module-meta">41 Theorems | 9 Definitions | 2 Abbreviations | 1 Structure | 8 Instances</div>
+      <div class="module-overview tex2jax_process"><p>This module defines crossed homomorphisms for an additive group action and their scalar-character specialization.  It supplies the Fox product, inverse, conjugation, commutator, and power rules; restriction to coefficient-trivial subgroups; linear pushforward and group-homomorphism pullback; the standard semidirect-product representation; and the additive-group structure on the space of crossed homomorphisms.</p>
+<p><code>CrossedHom</code> and <code>ScalarCrossedHom</code> are the only crossed-differential representations exposed by this module.  The former parallel raw-function predicate and its conversion layer have been removed, so downstream APIs operate on the bundled maps directly.</p></div>
+      <div class="meta"><a href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean">Open this file on GitHub</a></div>
+    </div>
+  </div>
+  <details class="imports"><summary>imports</summary><ul><li>Mathlib.Algebra.Group.Commutator</li><li>Mathlib.Algebra.Group.Units.Hom</li><li>Mathlib.Algebra.GroupWithZero.Action.Basic</li><li>Mathlib.Algebra.Group.Subgroup.Lattice</li><li>Mathlib.Algebra.Module.BigOperators</li><li>Mathlib.Algebra.Module.LinearMap.Basic</li><li>Mathlib.GroupTheory.SemidirectProduct</li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../library/ProCGroups/FoxDifferential/Common.html">ProCGroups.FoxDifferential.Common</a></li><li><a href="../../../../library/ProCGroups/FoxDifferential/Common/CrossedDifferentialModule.html">ProCGroups.FoxDifferential.Common.CrossedDifferentialModule</a></li><li><a href="../../../../library/ProCGroups/FoxDifferential/Common/FreeCrossedDifferential.html">ProCGroups.FoxDifferential.Common.FreeCrossedDifferential</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-FoxDifferential.scalarCrossedAction">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.scalarCrossedAction">FoxDifferential.scalarCrossedAction</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L31">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> scalarCrossedAction
+    {R G A : <span class="kw">Type</span>*} [Semiring R] [Group G] [AddCommGroup A] [Module R A]
+    (coeff : G →* R) : G →* Multiplicative (AddAut A) :=
+  (DistribMulAction.toAddAut Rˣ A).comp coeff.toHomUnits</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Scalar multiplication by a character <code>coeff : G →* R</code>, expressed as an additive action.</p>
+<p>Because <code>G</code> is a group, every <code>coeff g</code> is automatically a unit; <code>toHomUnits</code> records that fact and produces actual additive automorphisms rather than mere additive endomorphisms.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.scalarCrossedAction_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.scalarCrossedAction_apply">FoxDifferential.scalarCrossedAction_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L38">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> scalarCrossedAction_apply
+    {R G A : <span class="kw">Type</span>*} [Semiring R] [Group G] [AddCommGroup A] [Module R A]
+    (coeff : G →* R) (g : G) (a : A) :
+    scalarCrossedAction (A := A) coeff g a = coeff g • a</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The action induced by a scalar character evaluates as scalar multiplication.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.crossedSemidirectMulAction">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedSemidirectMulAction">FoxDifferential.crossedSemidirectMulAction</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L46">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> crossedSemidirectMulAction
+    {G A : <span class="kw">Type</span>*} [Group G] [AddCommGroup A]
+    (action : G →* Multiplicative (AddAut A)) : G →* MulAut (Multiplicative A) :=
+  (MulAutMultiplicative A).symm.toMonoidHom.comp action</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Convert an additive action to the multiplicative action used by Mathlib&#x27;s standard <code>SemidirectProduct</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-FoxDifferential.CrossedSemidirectProduct">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedSemidirectProduct">FoxDifferential.CrossedSemidirectProduct</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L52">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> CrossedSemidirectProduct
+    {G A : <span class="kw">Type</span>*} [Group G] [AddCommGroup A]
+    (action : G →* Multiplicative (AddAut A)) :=
+  SemidirectProduct (Multiplicative A) G (crossedSemidirectMulAction action)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The standard Mathlib semidirect product attached to an additive action.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedSemidirectMulAction_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedSemidirectMulAction_apply">FoxDifferential.crossedSemidirectMulAction_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L59">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> crossedSemidirectMulAction_apply
+    {G A : <span class="kw">Type</span>*} [Group G] [AddCommGroup A]
+    (action : G →* Multiplicative (AddAut A)) (g : G) (a : A) :
+    crossedSemidirectMulAction action g (Multiplicative.ofAdd a) =
+      Multiplicative.ofAdd (action g a)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The multiplicative form of an additive action agrees with the original action on elements.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.crossedSemidirectMulAction_toAdd">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.crossedSemidirectMulAction_toAdd">FoxDifferential.crossedSemidirectMulAction_toAdd</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L68">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> crossedSemidirectMulAction_toAdd
+    {G A : <span class="kw">Type</span>*} [Group G] [AddCommGroup A]
+    (action : G →* Multiplicative (AddAut A)) (g : G) (a : Multiplicative A) :
+    Multiplicative.toAdd (crossedSemidirectMulAction action g a) =
+      action g (Multiplicative.toAdd a)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Read the multiplicative presentation of the action back in the original additive group.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl structure" id="decl-FoxDifferential.CrossedHom">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom">FoxDifferential.CrossedHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L76">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> CrossedHom
+    {G A : <span class="kw">Type</span>*} [Group G] [AddCommGroup A]
+    (action : G →* Multiplicative (AddAut A)) <span class="kw">where</span>
+  <span class="comment">/-- The function from the source group to the additive target. -/</span>
+  toFun : G → A
+  <span class="comment">/-- The crossed-homomorphism law with respect to the specified action. -/</span>
+  map_mul&#x27; : ∀ g h, toFun (g * h) = toFun g + action g (toFun h)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A crossed homomorphism bundled with its acting representation and Fox--Leibniz law.</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-FoxDifferential.ScalarCrossedHom">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom">FoxDifferential.ScalarCrossedHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L86">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> ScalarCrossedHom
+    {R G : <span class="kw">Type</span>*} [Semiring R] [Group G]
+    (coeff : G →* R) (A : <span class="kw">Type</span>*) [AddCommGroup A] [Module R A] :=
+  CrossedHom (scalarCrossedAction (A := A) coeff)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Scalar-character crossed homomorphisms are a specialization of general crossed homomorphisms for the action <code>scalarCrossedAction coeff</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-FoxDifferential.CrossedHom.instFunLike">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.instFunLike">FoxDifferential.CrossedHom.instFunLike</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L97">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instFunLike : FunLike (CrossedHom action) G A <span class="kw">where</span>
+  coe := CrossedHom.toFun
+  coe_injective f g h := <span class="kw">by</span>
+    <span class="kw">cases</span> f
+    <span class="kw">cases</span> g
+    simp_all</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Crossed homomorphisms coerce to their underlying functions.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.toFun_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.toFun_apply">FoxDifferential.CrossedHom.toFun_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L106">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> toFun_apply (d : CrossedHom action) (g : G) : d.toFun g = d g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The underlying function of a crossed homomorphism agrees with its coercion to a function.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.ext">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.ext">FoxDifferential.CrossedHom.ext</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L110">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[ext]
+<span class="kw">theorem</span> ext {d e : CrossedHom action} (h : ∀ g, d g = e g) : d = e</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Equality of crossed homomorphisms is pointwise equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> DFunLike.ext d e
+  <span class="kw">exact</span> h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.map_mul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.map_mul">FoxDifferential.CrossedHom.map_mul</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L116">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> map_mul (d : CrossedHom action) (g h : G) :
+    d (g * h) = d g + action g (d h)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The bundled Fox--Leibniz rule for a general additive action.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>d.map_mul&#x27; g h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.map_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.map_one">FoxDifferential.CrossedHom.map_one</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L122">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> map_one (d : CrossedHom action) : d 1 = 0</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A crossed homomorphism vanishes at the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> h := d.map_mul 1 1
+  <span class="kw">have</span> hmul : d 1 = d 1 + d 1 := <span class="kw">by</span>
+    simpa only [one_mul, action.map_one, toAdd_one, AddAut.zero_apply] using h
+  <span class="kw">have</span> h&#x27; := congrArg (<span class="kw">fun</span> z : A =&gt; z - d 1) hmul
+  <span class="kw">have</span> hzero : 0 = d 1 := <span class="kw">by</span>
+    simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using h&#x27;
+  <span class="kw">exact</span> hzero.symm</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.map_inv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.map_inv">FoxDifferential.CrossedHom.map_inv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L132">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_inv (d : CrossedHom action) (g : G) :
+    d g⁻¹ = -(action g⁻¹ (d g))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Inverse rule for a crossed homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> h := d.map_mul g⁻¹ g
+  <span class="kw">rw</span> [inv_mul_cancel, map_one] at h
+  <span class="kw">rw</span> [eq_neg_iff_add_eq_zero]
+  <span class="kw">exact</span> h.symm</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.map_inv_mul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.map_inv_mul">FoxDifferential.CrossedHom.map_inv_mul</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L140">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_inv_mul (d : CrossedHom action) (g h : G) :
+    d (g⁻¹ * h) = -(action g⁻¹ (d g)) + action g⁻¹ (d h)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Formula for multiplying by an inverse on the left.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [d.map_mul, d.map_inv]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.map_mul_inv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.map_mul_inv">FoxDifferential.CrossedHom.map_mul_inv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L145">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_mul_inv (d : CrossedHom action) (g h : G) :
+    d (g * h⁻¹) = d g - action (g * h⁻¹) (d h)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Formula for multiplying by an inverse on the right.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [d.map_mul, d.map_inv]
+  <span class="kw">simp</span> only [map_neg, sub_eq_add_neg, ← AddAut.add_apply]
+  <span class="kw">rw</span> [← toAdd_mul, ← action.map_mul]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.map_div">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.map_div">FoxDifferential.CrossedHom.map_div</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L152">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_div (d : CrossedHom action) (g h : G) :
+    d (g / h) = d g - action (g / h) (d h)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Division rule for a crossed homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa [div_eq_mul_inv] using d.map_mul_inv g h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.map_conj">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.map_conj">FoxDifferential.CrossedHom.map_conj</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L157">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_conj (d : CrossedHom action) (g h : G) :
+    d (g * h * g⁻¹) =
+      d g + action g (d h) - action (g * h * g⁻¹) (d g)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Conjugation rule for a crossed homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [d.map_mul_inv (g * h) g, d.map_mul g h]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.map_commutator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.map_commutator">FoxDifferential.CrossedHom.map_commutator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L163">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_commutator (d : CrossedHom action) (g h : G) :
+    d ⁅g, h⁆ =
+      d g + action g (d h) - action (g * h * g⁻¹) (d g) -
+        action ⁅g, h⁆ (d h)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Commutator rule for a crossed homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [commutatorElement_def, d.map_mul_inv (g * h * g⁻¹) h, d.map_conj g h]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.map_pow">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.map_pow">FoxDifferential.CrossedHom.map_pow</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L170">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_pow (d : CrossedHom action) (g : G) (n : ℕ) :
+    d (g ^ n) = (Finset.range n).sum (<span class="kw">fun</span> k =&gt; action (g ^ k) (d g))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Positive-power rule for a crossed homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">induction</span> n <span class="kw">with</span>
+  | zero =&gt; <span class="kw">simp</span> only [pow_zero, map_one, Finset.range_zero, Finset.sum_empty]
+  | succ n ih =&gt;
+      <span class="kw">rw</span> [pow_succ, d.map_mul, ih, Finset.sum_range_succ]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.CrossedHom.toSemidirectMonoidHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.toSemidirectMonoidHom">FoxDifferential.CrossedHom.toSemidirectMonoidHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L179">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> toSemidirectMonoidHom (d : CrossedHom action) :
+    G →* CrossedSemidirectProduct action <span class="kw">where</span>
+  toFun g := ⟨Multiplicative.ofAdd (d g), g⟩
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">apply</span> SemidirectProduct.ext
+    · change d 1 = 0
+      <span class="kw">exact</span> d.map_one
+    · <span class="kw">rfl</span>
+  map_mul&#x27; g h := <span class="kw">by</span>
+    <span class="kw">apply</span> SemidirectProduct.ext
+    · change d (g * h) = d g + action g (d h)
+      <span class="kw">exact</span> d.map_mul g h
+    · <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The graph of a crossed homomorphism is an ordinary homomorphism into the standard semidirect product.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.toSemidirectMonoidHom_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.toSemidirectMonoidHom_left">FoxDifferential.CrossedHom.toSemidirectMonoidHom_left</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L195">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> toSemidirectMonoidHom_left (d : CrossedHom action) (g : G) :
+    Multiplicative.toAdd (d.toSemidirectMonoidHom g).left = d g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The left component of the semidirect-product graph is the value of the crossed homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.toSemidirectMonoidHom_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.toSemidirectMonoidHom_right">FoxDifferential.CrossedHom.toSemidirectMonoidHom_right</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L201">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> toSemidirectMonoidHom_right (d : CrossedHom action) (g : G) :
+    (d.toSemidirectMonoidHom g).right = g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The right component of the semidirect-product graph is the original group element.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.CrossedHom.ofSemidirectMonoidHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.ofSemidirectMonoidHom">FoxDifferential.CrossedHom.ofSemidirectMonoidHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L207">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> ofSemidirectMonoidHom
+    (f : G →* CrossedSemidirectProduct action)
+    (hright : ∀ g, (f g).right = g) : CrossedHom action <span class="kw">where</span>
+  toFun g := Multiplicative.toAdd (f g).left
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> g h
+    <span class="kw">have</span> hleft := congrArg SemidirectProduct.left (f.map_mul g h)
+    <span class="kw">rw</span> [SemidirectProduct.mul_left] at hleft
+    <span class="kw">have</span> hleftAdd := congrArg Multiplicative.toAdd hleft
+    simpa only [toAdd_mul, crossedSemidirectMulAction_toAdd, hright] using hleftAdd</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Recover a crossed homomorphism from a semidirect-product homomorphism whose right component is the identity.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.ofSemidirectMonoidHom_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.ofSemidirectMonoidHom_apply">FoxDifferential.CrossedHom.ofSemidirectMonoidHom_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L220">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> ofSemidirectMonoidHom_apply
+    (f : G →* CrossedSemidirectProduct action)
+    (hright : ∀ g, (f g).right = g) (g : G) :
+    ofSemidirectMonoidHom f hright g = Multiplicative.toAdd (f g).left</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Recovering a crossed homomorphism takes the additive form of the graph&#x27;s left component.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.ofSemidirectMonoidHom_toSemidirectMonoidHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.ofSemidirectMonoidHom_toSemidirectMonoidHom">FoxDifferential.CrossedHom.ofSemidirectMonoidHom_toSemidirectMonoidHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L228">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> ofSemidirectMonoidHom_toSemidirectMonoidHom (d : CrossedHom action) :
+    ofSemidirectMonoidHom d.toSemidirectMonoidHom
+      (<span class="kw">fun</span> g =&gt; toSemidirectMonoidHom_right d g) = d</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Recovering a crossed homomorphism from its semidirect-product graph returns the original map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> CrossedHom.ext
+  <span class="kw">intro</span> g
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.toSemidirectMonoidHom_ofSemidirectMonoidHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.toSemidirectMonoidHom_ofSemidirectMonoidHom">FoxDifferential.CrossedHom.toSemidirectMonoidHom_ofSemidirectMonoidHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L237">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> toSemidirectMonoidHom_ofSemidirectMonoidHom
+    (f : G →* CrossedSemidirectProduct action)
+    (hright : ∀ g, (f g).right = g) :
+    (ofSemidirectMonoidHom f hright).toSemidirectMonoidHom = f</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The graph construction loses no information: a semidirect-product homomorphism over the identity is exactly the graph of the crossed homomorphism obtained from its left component.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> MonoidHom.ext
+  <span class="kw">intro</span> g
+  <span class="kw">apply</span> SemidirectProduct.ext
+  · <span class="kw">rfl</span>
+  · <span class="kw">exact</span> (hright g).symm</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.CrossedHom.compMonoidHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.compMonoidHom">FoxDifferential.CrossedHom.compMonoidHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L248">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> compMonoidHom {K : <span class="kw">Type</span>*} [Group K]
+    (d : CrossedHom action) (φ : K →* G) : CrossedHom (action.comp φ) <span class="kw">where</span>
+  toFun k := d (φ k)
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> g h
+    change d (φ (g * h)) = d (φ g) + action (φ g) (d (φ h))
+    <span class="kw">rw</span> [φ.map_mul]
+    <span class="kw">exact</span> d.map_mul (φ g) (φ h)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Pull back a crossed homomorphism along a group homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.compMonoidHom_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.compMonoidHom_apply">FoxDifferential.CrossedHom.compMonoidHom_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L259">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> compMonoidHom_apply {K : <span class="kw">Type</span>*} [Group K]
+    (d : CrossedHom action) (φ : K →* G) (k : K) :
+    d.compMonoidHom φ k = d (φ k)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Pullback along a group homomorphism evaluates by precomposition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.CrossedHom.mapAddEquivariant">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.mapAddEquivariant">FoxDifferential.CrossedHom.mapAddEquivariant</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L265">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> mapAddEquivariant (d : CrossedHom action) {B : <span class="kw">Type</span>*} [AddCommGroup B]
+    (actionB : G →* Multiplicative (AddAut B)) (f : A →+ B)
+    (hf : ∀ g a, f (action g a) = actionB g (f a))
+    : CrossedHom actionB <span class="kw">where</span>
+  toFun g := f (d g)
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> g h
+    <span class="kw">rw</span> [d.map_mul g h, map_add, hf]</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Push a crossed homomorphism through an equivariant additive homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.mapAddEquivariant_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.mapAddEquivariant_apply">FoxDifferential.CrossedHom.mapAddEquivariant_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L276">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> mapAddEquivariant_apply {B : <span class="kw">Type</span>*} [AddCommGroup B]
+    (actionB : G →* Multiplicative (AddAut B)) (f : A →+ B)
+    (hf : ∀ g a, f (action g a) = actionB g (f a))
+    (d : CrossedHom action) (g : G) :
+    d.mapAddEquivariant actionB f hf g = f (d g)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Equivariant pushforward evaluates by applying the additive homomorphism to each value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.eqOn_closure">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.eqOn_closure">FoxDifferential.CrossedHom.eqOn_closure</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L284">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> eqOn_closure (d e : CrossedHom action) {s : Set G}
+    (hs : Set.EqOn d e s) :
+    Set.EqOn d e ((Subgroup.closure s : Subgroup G) : Set G)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Crossed homomorphisms agreeing on a set agree on the subgroup it generates.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> g hg
+  <span class="kw">exact</span> Subgroup.closure_induction
+    (p := <span class="kw">fun</span> g _ =&gt; d g = e g)
+    (<span class="kw">fun</span> x hx =&gt; hs hx)
+    (<span class="kw">by</span>
+      <span class="kw">rw</span> [d.map_one, e.map_one])
+    (<span class="kw">fun</span> x y _ _ hx hy =&gt; <span class="kw">by</span>
+      <span class="kw">rw</span> [d.map_mul x y, e.map_mul x y, hx, hy])
+    (<span class="kw">fun</span> x _ hx =&gt; <span class="kw">by</span>
+      <span class="kw">rw</span> [d.map_inv x, e.map_inv x, hx]) hg</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.eq_of_closure_eq_top">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.eq_of_closure_eq_top">FoxDifferential.CrossedHom.eq_of_closure_eq_top</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L299">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> eq_of_closure_eq_top (d e : CrossedHom action) {s : Set G}
+    (hsgen : Subgroup.closure s = ⊤) (hs : Set.EqOn d e s) : d = e</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Crossed homomorphisms are determined by their values on a generating set.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> CrossedHom.ext
+  <span class="kw">intro</span> g
+  <span class="kw">exact</span> d.eqOn_closure e hs (<span class="kw">by</span> <span class="kw">simp</span> only [hsgen, Subgroup.coe_top, Set.mem_univ])</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-FoxDifferential.CrossedHom.instZero">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.instZero">FoxDifferential.CrossedHom.instZero</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L306">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instZero : Zero (CrossedHom action) <span class="kw">where</span>
+  zero := ⟨<span class="kw">fun</span> _ =&gt; 0, <span class="kw">by</span> <span class="kw">intro</span> g h; <span class="kw">simp</span> only [map_zero, add_zero]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The zero crossed homomorphism.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-FoxDifferential.CrossedHom.instAdd">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.instAdd">FoxDifferential.CrossedHom.instAdd</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L310">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instAdd : Add (CrossedHom action) <span class="kw">where</span>
+  add d e := ⟨<span class="kw">fun</span> g =&gt; d g + e g, <span class="kw">by</span>
+    <span class="kw">intro</span> g h
+    <span class="kw">rw</span> [d.map_mul g h, e.map_mul g h, map_add]
+    ac_rfl⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Pointwise addition of crossed homomorphisms.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.zero_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.zero_apply">FoxDifferential.CrossedHom.zero_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L318">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> zero_apply (g : G) : (0 : CrossedHom action) g = 0</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The zero crossed homomorphism vanishes at every group element.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.add_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.add_apply">FoxDifferential.CrossedHom.add_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L322">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> add_apply (d e : CrossedHom action) (g : G) : (d + e) g = d g + e g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Addition of crossed homomorphisms is computed pointwise.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-FoxDifferential.CrossedHom.instSMulNat">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.instSMulNat">FoxDifferential.CrossedHom.instSMulNat</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L325">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instSMulNat : SMul ℕ (CrossedHom action) := ⟨nsmulRec⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Natural-number scalar multiplication of crossed homomorphisms is repeated pointwise addition.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.nsmul_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.nsmul_apply">FoxDifferential.CrossedHom.nsmul_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L329">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> nsmul_apply (n : ℕ) (d : CrossedHom action) (g : G) :
+    (n • d) g = n • d g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Natural-number scalar multiplication of crossed homomorphisms is computed pointwise.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  change (nsmulRec n d).toFun g = n • d g
+  <span class="kw">induction</span> n <span class="kw">with</span>
+  | zero =&gt; <span class="kw">simp</span> only [zero_nsmul]; <span class="kw">rfl</span>
+  | succ n ih =&gt;
+      <span class="kw">rw</span> [nsmulRec, succ_nsmul]
+      change (nsmulRec n d).toFun g + d.toFun g = n • d.toFun g + d.toFun g
+      simpa only [toFun_apply] using congrArg (<span class="kw">fun</span> x : A =&gt; x + d.toFun g) ih</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-FoxDifferential.CrossedHom.instNeg">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.instNeg">FoxDifferential.CrossedHom.instNeg</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L347">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instNeg : Neg (CrossedHom action) <span class="kw">where</span>
+  neg d := ⟨<span class="kw">fun</span> g =&gt; -d g, <span class="kw">by</span>
+    <span class="kw">intro</span> g h
+    <span class="kw">rw</span> [d.map_mul g h, map_neg]
+    <span class="kw">simp</span> only [neg_add_rev, add_comm]⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Negation of crossed homomorphisms is computed pointwise.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-FoxDifferential.CrossedHom.instSub">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.instSub">FoxDifferential.CrossedHom.instSub</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L354">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instSub : Sub (CrossedHom action) <span class="kw">where</span>
+  sub d e := ⟨<span class="kw">fun</span> g =&gt; d g - e g, <span class="kw">by</span>
+    <span class="kw">intro</span> g h
+    <span class="kw">rw</span> [d.map_mul g h, e.map_mul g h, map_sub]
+    <span class="kw">simp</span> only [sub_eq_add_neg, neg_add_rev]
+    ac_rfl⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Subtraction of crossed homomorphisms is computed pointwise.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.neg_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.neg_apply">FoxDifferential.CrossedHom.neg_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L363">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> neg_apply (d : CrossedHom action) (g : G) : (-d) g = -d g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Evaluating a negated crossed homomorphism negates its value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.sub_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.sub_apply">FoxDifferential.CrossedHom.sub_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L367">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> sub_apply (d e : CrossedHom action) (g : G) : (d - e) g = d g - e g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Evaluating a difference of crossed homomorphisms subtracts their values.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-FoxDifferential.CrossedHom.instSMulInt">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.instSMulInt">FoxDifferential.CrossedHom.instSMulInt</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L371">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instSMulInt : SMul ℤ (CrossedHom action) :=
+  ⟨zsmulRec (nsmul := nsmulRec)⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Integer scalar multiplication of crossed homomorphisms is repeated pointwise addition or subtraction.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.zsmul_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.zsmul_apply">FoxDifferential.CrossedHom.zsmul_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L376">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> zsmul_apply (z : ℤ) (d : CrossedHom action) (g : G) :
+    (z • d) g = z • d g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Integer scalar multiplication of crossed homomorphisms is computed pointwise.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  change (zsmulRec (nsmul := nsmulRec) z d).toFun g = z • d g
+  <span class="kw">cases</span> z <span class="kw">with</span>
+  | ofNat n =&gt; <span class="kw">rw</span> [zsmulRec]; change (n • d) g = (n : ℤ) • d g; <span class="kw">rw</span> [nsmul_apply, natCast_zsmul]
+  | negSucc n =&gt;
+      <span class="kw">rw</span> [zsmulRec]
+      change (-(n.succ • d)) g = Int.negSucc n • d g
+      <span class="kw">rw</span> [neg_apply, nsmul_apply, negSucc_zsmul]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-FoxDifferential.CrossedHom.instAddCommGroup">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.instAddCommGroup">FoxDifferential.CrossedHom.instAddCommGroup</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L387">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instAddCommGroup : AddCommGroup (CrossedHom action) :=
+  Function.Injective.addCommGroup
+    (<span class="kw">fun</span> d : CrossedHom action =&gt; d.toFun)
+    (<span class="kw">by</span> <span class="kw">intro</span> d e h; <span class="kw">exact</span> CrossedHom.ext (congrFun h))
+    <span class="kw">rfl</span> (<span class="kw">fun</span> _ _ =&gt; <span class="kw">rfl</span>) (<span class="kw">fun</span> _ =&gt; <span class="kw">rfl</span>) (<span class="kw">fun</span> _ _ =&gt; <span class="kw">rfl</span>)
+    (<span class="kw">fun</span> d n =&gt; <span class="kw">by</span> funext g; <span class="kw">exact</span> nsmul_apply n d g)
+    (<span class="kw">fun</span> d z =&gt; <span class="kw">by</span> funext g; <span class="kw">exact</span> zsmul_apply z d g)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Pointwise operations make crossed homomorphisms an additive commutative group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.map_mul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.map_mul">FoxDifferential.ScalarCrossedHom.map_mul</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L404">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> map_mul (d : ScalarCrossedHom coeff A) (g h : G) :
+    d (g * h) = d g + coeff g • d h</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Scalar crossed homomorphisms satisfy the scalar Fox--Leibniz product rule.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa only [scalarCrossedAction_apply] using CrossedHom.map_mul d g h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.map_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.map_one">FoxDifferential.ScalarCrossedHom.map_one</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L410">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> map_one (d : ScalarCrossedHom coeff A) : d 1 = 0</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A scalar crossed homomorphism vanishes at the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>CrossedHom.map_one d</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.map_inv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.map_inv">FoxDifferential.ScalarCrossedHom.map_inv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L414">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_inv (d : ScalarCrossedHom coeff A) (g : G) :
+    d g⁻¹ = -(coeff g⁻¹ • d g)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The value of a scalar crossed homomorphism at an inverse is the transported negative value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa only [scalarCrossedAction_apply] using CrossedHom.map_inv d g</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.map_inv_mul">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.map_inv_mul">FoxDifferential.ScalarCrossedHom.map_inv_mul</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L419">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_inv_mul (d : ScalarCrossedHom coeff A) (g h : G) :
+    d (g⁻¹ * h) = -(coeff g⁻¹ • d g) + coeff g⁻¹ • d h</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Formula for a scalar crossed homomorphism on a product with an inverse on the left.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa only [scalarCrossedAction_apply] using CrossedHom.map_inv_mul d g h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.map_mul_inv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.map_mul_inv">FoxDifferential.ScalarCrossedHom.map_mul_inv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L424">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_mul_inv (d : ScalarCrossedHom coeff A) (g h : G) :
+    d (g * h⁻¹) = d g - coeff (g * h⁻¹) • d h</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Formula for a scalar crossed homomorphism on a product with an inverse on the right.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa only [scalarCrossedAction_apply] using CrossedHom.map_mul_inv d g h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.map_div">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.map_div">FoxDifferential.ScalarCrossedHom.map_div</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L429">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_div (d : ScalarCrossedHom coeff A) (g h : G) :
+    d (g / h) = d g - coeff (g / h) • d h</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The scalar Fox rule written for group division.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa only [scalarCrossedAction_apply] using CrossedHom.map_div d g h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.map_conj">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.map_conj">FoxDifferential.ScalarCrossedHom.map_conj</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L434">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_conj (d : ScalarCrossedHom coeff A) (g h : G) :
+    d (g * h * g⁻¹) = d g + coeff g • d h - coeff (g * h * g⁻¹) • d g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The scalar crossed-homomorphism formula for a conjugate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa only [scalarCrossedAction_apply] using CrossedHom.map_conj d g h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.map_commutator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.map_commutator">FoxDifferential.ScalarCrossedHom.map_commutator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L439">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_commutator (d : ScalarCrossedHom coeff A) (g h : G) :
+    d ⁅g, h⁆ = d g + coeff g • d h - coeff (g * h * g⁻¹) • d g -
+      coeff ⁅g, h⁆ • d h</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The scalar crossed-homomorphism formula for a commutator.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa only [scalarCrossedAction_apply] using CrossedHom.map_commutator d g h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.map_pow">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.map_pow">FoxDifferential.ScalarCrossedHom.map_pow</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L445">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> map_pow (d : ScalarCrossedHom coeff A) (g : G) (n : ℕ) :
+    d (g ^ n) = (Finset.range n).sum (<span class="kw">fun</span> k =&gt; coeff (g ^ k) • d g)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The value on a positive power is the sum of the translates of the value on its base.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa only [scalarCrossedAction_apply] using CrossedHom.map_pow d g n</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.ScalarCrossedHom.restrictTrivialSubgroupAddMonoidHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.restrictTrivialSubgroupAddMonoidHom">FoxDifferential.ScalarCrossedHom.restrictTrivialSubgroupAddMonoidHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L450">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> restrictTrivialSubgroupAddMonoidHom
+    (d : ScalarCrossedHom coeff A) (N : Subgroup G)
+    (hN : ∀ n : N, coeff n = 1) :
+    Additive N →+ A <span class="kw">where</span>
+  toFun n := d ((Additive.toMul n : N) : G)
+  map_zero&#x27; := <span class="kw">by</span>
+    change d (1 : G) = 0
+    <span class="kw">exact</span> map_one d
+  map_add&#x27; g h := <span class="kw">by</span>
+    change d (((Additive.toMul g : N) * (Additive.toMul h : N) : N) : G) =
+      d ((Additive.toMul g : N) : G) + d ((Additive.toMul h : N) : G)
+    <span class="kw">have</span> hmul :=
+      d.map_mul ((Additive.toMul g : N) : G) ((Additive.toMul h : N) : G)
+    simpa only [Subgroup.coe_mul, hN (Additive.toMul g), one_smul] using hmul</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Restrict a scalar crossed homomorphism to a subgroup on which its coefficient is trivial.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.restrictTrivialSubgroupAddMonoidHom_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.restrictTrivialSubgroupAddMonoidHom_apply">FoxDifferential.ScalarCrossedHom.restrictTrivialSubgroupAddMonoidHom_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L467">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> restrictTrivialSubgroupAddMonoidHom_apply
+    (d : ScalarCrossedHom coeff A) (N : Subgroup G)
+    (hN : ∀ n : N, coeff n = 1) (g : N) :
+    restrictTrivialSubgroupAddMonoidHom d N hN (Additive.ofMul g) = d g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Restriction to a coefficient-trivial subgroup evaluates as the original crossed homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.ScalarCrossedHom.mapLinear">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.mapLinear">FoxDifferential.ScalarCrossedHom.mapLinear</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L475">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> mapLinear (d : ScalarCrossedHom coeff A) {B : <span class="kw">Type</span>*} [AddCommGroup B] [Module R B]
+    (f : A →ₗ[R] B) : ScalarCrossedHom coeff B :=
+  d.mapAddEquivariant (scalarCrossedAction (A := B) coeff) f.toAddMonoidHom
+    (<span class="kw">by</span>
+      <span class="kw">intro</span> g a
+      change f (coeff g • a) = coeff g • f a
+      <span class="kw">exact</span> f.map_smul (coeff g) a)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A linear map is equivariant for scalar crossed actions and hence maps scalar crossed homomorphisms to scalar crossed homomorphisms.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.mapLinear_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.mapLinear_apply">FoxDifferential.ScalarCrossedHom.mapLinear_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L485">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> mapLinear_apply {B : <span class="kw">Type</span>*} [AddCommGroup B] [Module R B]
+    (d : ScalarCrossedHom coeff A) (f : A →ₗ[R] B) (g : G) :
+    d.mapLinear f g = f (d g)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Linear pushforward evaluates by applying the linear map to each crossed-homomorphism value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.ScalarCrossedHom.compMonoidHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.compMonoidHom">FoxDifferential.ScalarCrossedHom.compMonoidHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L491">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> compMonoidHom {K : <span class="kw">Type</span>*} [Group K]
+    (d : ScalarCrossedHom coeff A) (φ : K →* G) : ScalarCrossedHom (coeff.comp φ) A <span class="kw">where</span>
+  toFun k := d (φ k)
+  map_mul&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> g h
+    change d (φ (g * h)) = d (φ g) + coeff (φ g) • d (φ h)
+    <span class="kw">rw</span> [φ.map_mul]
+    <span class="kw">exact</span> d.map_mul (φ g) (φ h)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Pull back a scalar crossed homomorphism while retaining its scalar specialization.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.ScalarCrossedHom.compMonoidHom_apply">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.ScalarCrossedHom.compMonoidHom_apply">FoxDifferential.ScalarCrossedHom.compMonoidHom_apply</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Common/CrossedDifferential.lean#L502">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> compMonoidHom_apply {K : <span class="kw">Type</span>*} [Group K]
+    (d : ScalarCrossedHom coeff A) (φ : K →* G) (k : K) :
+    d.compMonoidHom φ k = d (φ k)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Pullback of a scalar crossed homomorphism evaluates by precomposition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.FoxDifferential.Common.CrossedDifferential"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../assets/site.js" data-root="../../../../"></script>
+</body>
+</html>

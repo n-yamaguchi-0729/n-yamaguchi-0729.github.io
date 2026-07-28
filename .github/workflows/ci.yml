@@ -1,0 +1,49 @@
+name: Static ProCGroups pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: static-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate generated ProCGroups documentation
+        run: >-
+          python3 .github/validation/check_generated_site.py
+          ProCGroups_pages
+      - name: Validate the public tree
+        shell: bash
+        run: |
+          test -f index.html
+          test -f homepage-jp.html
+          test -f homepage-en.html
+          test -f ProCGroups_pages/index.html
+          test ! -e YamaLean4Lib_pages
+          test "$(find ProCGroups_pages/library/ProCGroups -name '*.html' ! -path '*/src/*' | wc -l)" -eq 574
+          test "$(find ProCGroups_pages/library/ProCGroups/src -name '*.html' | wc -l)" -eq 574
+          test "$(grep -c '<url>' sitemap.xml)" -eq 1153
+          grep -q '作者はこの分野の専門家ではなく' ProCGroups_pages/index.html
+          grep -q 'not a subject-matter expert' ProCGroups_pages/index.html
+          ! grep -E -i 'YamaLean4Lib_pages|LCFT_pages|ClassFieldTheory_pages|449 files' \
+            README.md index.html homepage-en.html homepage-jp.html ProCGroups_pages/index.html
+          test "$(find . -type l -print -quit)" = ""
+          ! find . -type f -iname '*.zip' -print -quit | grep -q .
+      - name: Check whitespace
+        run: git diff-tree --check --root -r HEAD

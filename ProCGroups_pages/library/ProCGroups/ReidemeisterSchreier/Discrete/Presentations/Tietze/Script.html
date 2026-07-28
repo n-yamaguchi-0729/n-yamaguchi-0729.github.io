@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.ReidemeisterSchreier.Discrete.Presentations.Tietze.Script | ProCGroups Documentation</title>
+<meta name="description" content="`ElementaryTietzeMove` records genuine presentation transformations with indexed source and target presentations. `VerifiedTietzeScript` is the typed sequence of those moves; it evaluates to a semantic `PresentationEq...">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/ProCGroups_pages/library/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.html">
+<link rel="stylesheet" href="../../../../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../../../../index.html">ProCGroups Documentation</a>
+  <nav class="header-nav"><a href="https://github.com/n-yamaguchi-0729/ProCGroups" target="_blank" rel="noopener">GitHub repository</a></nav>
+  <div class="header-current">ProCGroups.ReidemeisterSchreier.Discrete.Presentations.Tietze.Script</div>
+  <form class="search-form" action="../../../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../../../../library/ProCGroups/ReidemeisterSchreier.html">ReidemeisterSchreier</a><span class="sep">/</span><a href="../../../../../../library/ProCGroups/ReidemeisterSchreier/Discrete.html">Discrete</a><span class="sep">/</span><a href="../../../../../../library/ProCGroups/ReidemeisterSchreier/Discrete/Presentations.html">Presentations</a><span class="sep">/</span><a href="../../../../../../library/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze.html">Tietze</a><span class="sep">/</span><span>Script</span></div>
+      <h1 class="module-title">ProCGroups.ReidemeisterSchreier.Discrete.Presentations.Tietze.Script</h1>
+      <div class="module-meta">10 Theorems | 16 Definitions | 3 Inductive types</div>
+      <div class="module-overview tex2jax_process"><p><code>ElementaryTietzeMove</code> records genuine presentation transformations with indexed source and target presentations.  <code>VerifiedTietzeScript</code> is the typed sequence of those moves; it evaluates to a semantic <code>PresentationEquivCertificate</code> and exposes an inspectable trace, move count, and weighted cost.</p>
+<p>Semantic equivalence constructors live in the Tietze core and operation modules.  They are not re-exported here as a parallel family of “script” wrappers.</p></div>
+      <div class="meta"><a href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean">Open this file on GitHub</a></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../../../../library/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/GeneratorDeletion.html">ProCGroups.ReidemeisterSchreier.Discrete.Presentations.Tietze.GeneratorDeletion</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../../../library/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/KernelQuotient.html">ProCGroups.ReidemeisterSchreier.Discrete.Presentations.KernelQuotient</a></li><li><a href="../../../../../../library/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze.html">ProCGroups.ReidemeisterSchreier.Discrete.Presentations.Tietze</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl inductive" id="decl-ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove">
+  <div class="decl-head">
+    <span class="kind inductive">Inductive</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove">ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L28">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">inductive</span> ElementaryTietzeMove :
+    Presentation.{u} → Presentation.{u} → <span class="kw">Type</span> (u + 1) <span class="kw">where</span>
+  <span class="comment">/-- Replace a relator set by another set generating the same normal closure. -/</span>
+  | replaceRelators
+      {X : <span class="kw">Type</span> u} {R S : Set (FreeGroup X)}
+      (hR_to_S : ∀ r ∈ R, RelatorEquivalent S r 1)
+      (hS_to_R : ∀ s ∈ S, RelatorEquivalent R s 1) :
+      ElementaryTietzeMove
+        (Presentation.ofRelators R) (Presentation.ofRelators S)
+  <span class="comment">/-- Rename every generator through an equivalence of generator types. -/</span>
+  | renameGenerators
+      {X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup X)) (e : X ≃ Y) :
+      ElementaryTietzeMove
+        (Presentation.ofRelators R)
+        (Presentation.ofRelators (FreeGroup.freeGroupCongr e &#x27;&#x27; R))
+  <span class="comment">/-- Adjoin generators together with relators identifying them with prescribed words. -/</span>
+  | adjoinGenerators
+      {X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup X)) (word : Y → FreeGroup X) :
+      ElementaryTietzeMove
+        (Presentation.ofRelators R)
+        (Presentation.ofRelators (Presented.adjoinGeneratorsRelators R word))
+  <span class="comment">/-- Eliminate a family of generators by substituting their defining words. -/</span>
+  | substituteDefinedGenerators
+      {X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup (Sum X Y)))
+      (word : Y → FreeGroup X) :
+      ElementaryTietzeMove
+        (Presentation.ofRelators
+          (Presented.relatorsWithDefinedGenerators R word))
+        (Presentation.ofRelators
+          (Presented.relatorsAfterSubstitutingDefinedGenerators R word))
+  <span class="comment">/-- Delete a family of generators whose defining relators make them trivial. -/</span>
+  | deleteTrivialGenerators
+      {X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup (Sum X Y))) :
+      ElementaryTietzeMove
+        (Presentation.ofRelators (Presented.relatorsWithTrivialGenerators R))
+        (Presentation.ofRelators
+          (Presented.relatorsAfterDeletingTrivialGenerators R))
+  <span class="comment">/--</span>
+<span class="comment">  Transport to a sum decomposition of the generator type and then substitute the defining words.</span>
+<span class="comment">  -/</span>
+  | substituteDefinedGeneratorsAlongEquiv
+      {Z X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup Z)) (e : Z ≃ Sum X Y)
+      (word : Y → FreeGroup X) :
+      ElementaryTietzeMove
+        (Presentation.ofRelators
+          (Presented.relatorsWithDefinedGeneratorsAlongEquiv R e word))
+        (Presentation.ofRelators
+          (Presented.relatorsAfterSubstitutingDefinedGeneratorsAlongEquiv R e word))
+  <span class="comment">/-- Transport to a sum decomposition and then delete the generators made trivial by relators. -/</span>
+  | deleteTrivialGeneratorsAlongEquiv
+      {Z X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup Z)) (e : Z ≃ Sum X Y) :
+      ElementaryTietzeMove
+        (Presentation.ofRelators
+          (Presented.relatorsWithTrivialGeneratorsAlongEquiv R e))
+        (Presentation.ofRelators
+          (Presented.relatorsAfterDeletingTrivialGeneratorsAlongEquiv R e))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>An inspectable, indexed Tietze move whose endpoints are determined by the mathematical construction which produces its semantic certificate.</p>
+<p>In particular, the generator moves do not accept an equivalence or a desired conclusion as an extra field: their certificates are computed from the generator-adjunction and generator-elimination constructions in this library.</p></div></section>
+  </div>
+</section>
+<section class="decl inductive" id="decl-ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove.Kind">
+  <div class="decl-head">
+    <span class="kind inductive">Inductive</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove.Kind">ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove.Kind</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L88">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">inductive</span> Kind <span class="kw">where</span>
+  <span class="comment">/-- A relator-set replacement. -/</span>
+  | replaceRelators
+  <span class="comment">/-- A renaming of generators. -/</span>
+  | renameGenerators
+  <span class="comment">/-- An adjunction of generators with defining relators. -/</span>
+  | adjoinGenerators
+  <span class="comment">/-- A substitution eliminating generators with specified defining words. -/</span>
+  | substituteDefinedGenerators
+  <span class="comment">/-- A deletion of generators made trivial by their defining relators. -/</span>
+  | deleteTrivialGenerators
+<span class="kw">deriving</span> DecidableEq, Repr</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Stable tags for script traces and cost functions.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove.kind">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove.kind">ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove.kind</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L102">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> kind {P Q : Presentation.{u}} : ElementaryTietzeMove P Q → Kind
+  | .replaceRelators _ _ =&gt; .replaceRelators
+  | .renameGenerators _ _ =&gt; .renameGenerators
+  | .adjoinGenerators _ _ =&gt; .adjoinGenerators
+  | .substituteDefinedGenerators _ _ =&gt; .substituteDefinedGenerators
+  | .deleteTrivialGenerators _ =&gt; .deleteTrivialGenerators
+  | .substituteDefinedGeneratorsAlongEquiv _ _ _ =&gt; .substituteDefinedGenerators
+  | .deleteTrivialGeneratorsAlongEquiv _ _ =&gt; .deleteTrivialGenerators</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Inspect the mathematical kind of an elementary move.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove.toCertificate">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove.toCertificate">ReidemeisterSchreier.Discrete.Presentations.ElementaryTietzeMove.toCertificate</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L113">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> toCertificate {P Q : Presentation.{u}}
+    (m : ElementaryTietzeMove P Q) : PresentationEquivCertificate P Q := <span class="kw">by</span>
+  <span class="kw">cases</span> m <span class="kw">with</span>
+  | replaceRelators hR_to_S hS_to_R =&gt;
+      <span class="kw">exact</span> (Presented.replaceRelatorsTietzeEquiv hR_to_S hS_to_R).toCertificate
+  | renameGenerators R e =&gt;
+      <span class="kw">exact</span> (Presented.renameGeneratorsTietzeEquiv R e).toCertificate
+  | adjoinGenerators R word =&gt;
+      <span class="kw">exact</span> (Presented.adjoinGeneratorsTietzeEquiv R word).toCertificate
+  | substituteDefinedGenerators R word =&gt;
+      <span class="kw">exact</span> (Presented.substituteDefinedGeneratorsTietzeEquiv R word).toCertificate
+  | deleteTrivialGenerators R =&gt;
+      <span class="kw">exact</span> (Presented.deleteTrivialGeneratorsTietzeEquiv R).toCertificate
+  | substituteDefinedGeneratorsAlongEquiv R e word =&gt;
+      <span class="kw">exact</span>
+        (Presented.substituteDefinedGeneratorsAlongEquivTietzeEquiv R e word).toCertificate
+  | deleteTrivialGeneratorsAlongEquiv R e =&gt;
+      <span class="kw">exact</span> (Presented.deleteTrivialGeneratorsAlongEquivTietzeEquiv R e).toCertificate</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Evaluate one indexed move using its source-producing semantic construction.</p></div></section>
+  </div>
+</section>
+<section class="decl inductive" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript">
+  <div class="decl-head">
+    <span class="kind inductive">Inductive</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L136">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">inductive</span> VerifiedTietzeScript :
+    Presentation.{u} → Presentation.{u} → <span class="kw">Type</span> (u + 1) <span class="kw">where</span>
+  <span class="comment">/-- The empty script at a presentation. -/</span>
+  | nil (P : Presentation.{u}) : VerifiedTietzeScript P P
+  <span class="comment">/-- Prepend an elementary move to a verified script beginning at its target presentation. -/</span>
+  | cons {P Q R : Presentation.{u}}
+      (head : ElementaryTietzeMove P Q)
+      (tail : VerifiedTietzeScript Q R) : VerifiedTietzeScript P R</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A well-typed sequence of genuine Tietze moves.  The indexed intermediate presentations make an ill-typed move chain unrepresentable.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.singleton">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.singleton">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.singleton</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L148">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> singleton {P Q : Presentation.{u}} (m : ElementaryTietzeMove P Q) :
+    VerifiedTietzeScript P Q :=
+  .cons m (.nil Q)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A one-move verified script.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.replaceRelators">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.replaceRelators">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.replaceRelators</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L153">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> replaceRelators
+    {X : <span class="kw">Type</span> u} {R S : Set (FreeGroup X)}
+    (hR_to_S : ∀ r ∈ R, RelatorEquivalent S r 1)
+    (hS_to_R : ∀ s ∈ S, RelatorEquivalent R s 1) :
+    VerifiedTietzeScript
+      (Presentation.ofRelators R) (Presentation.ofRelators S) :=
+  singleton (.replaceRelators hR_to_S hS_to_R)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A verified relator-replacement move.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.renameGenerators">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.renameGenerators">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.renameGenerators</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L162">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> renameGenerators
+    {X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup X)) (e : X ≃ Y) :
+    VerifiedTietzeScript
+      (Presentation.ofRelators R)
+      (Presentation.ofRelators (FreeGroup.freeGroupCongr e &#x27;&#x27; R)) :=
+  singleton (.renameGenerators R e)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Rename the complete generator family by an equivalence.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.adjoinGenerators">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.adjoinGenerators">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.adjoinGenerators</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L171">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> adjoinGenerators
+    {X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup X)) (word : Y → FreeGroup X) :
+    VerifiedTietzeScript
+      (Presentation.ofRelators R)
+      (Presentation.ofRelators (Presented.adjoinGeneratorsRelators R word)) :=
+  singleton (.adjoinGenerators R word)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Adjoin a family of generators together with the defining words which make the extension a Tietze equivalence.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.substituteDefinedGenerators">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.substituteDefinedGenerators">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.substituteDefinedGenerators</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L180">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> substituteDefinedGenerators
+    {X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup (Sum X Y)))
+    (word : Y → FreeGroup X) :
+    VerifiedTietzeScript
+      (Presentation.ofRelators (Presented.relatorsWithDefinedGenerators R word))
+      (Presentation.ofRelators
+        (Presented.relatorsAfterSubstitutingDefinedGenerators R word)) :=
+  singleton (.substituteDefinedGenerators R word)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Eliminate a family of generators whose defining words have been included in the relator family.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.deleteTrivialGenerators">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.deleteTrivialGenerators">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.deleteTrivialGenerators</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L190">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> deleteTrivialGenerators
+    {X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup (Sum X Y))) :
+    VerifiedTietzeScript
+      (Presentation.ofRelators (Presented.relatorsWithTrivialGenerators R))
+      (Presentation.ofRelators (Presented.relatorsAfterDeletingTrivialGenerators R)) :=
+  singleton (.deleteTrivialGenerators R)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Delete a family of generators carrying the relators <code>y = 1</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.substituteDefinedGeneratorsAlongEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.substituteDefinedGeneratorsAlongEquiv">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.substituteDefinedGeneratorsAlongEquiv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L199">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> substituteDefinedGeneratorsAlongEquiv
+    {Z X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup Z)) (e : Z ≃ Sum X Y)
+    (word : Y → FreeGroup X) :
+    VerifiedTietzeScript
+      (Presentation.ofRelators
+        (Presented.relatorsWithDefinedGeneratorsAlongEquiv R e word))
+      (Presentation.ofRelators
+        (Presented.relatorsAfterSubstitutingDefinedGeneratorsAlongEquiv R e word)) :=
+  singleton (.substituteDefinedGeneratorsAlongEquiv R e word)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Eliminate a family of defined generators after an explicit splitting of an arbitrary generator type.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.deleteTrivialGeneratorsAlongEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.deleteTrivialGeneratorsAlongEquiv">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.deleteTrivialGeneratorsAlongEquiv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L211">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> deleteTrivialGeneratorsAlongEquiv
+    {Z X Y : <span class="kw">Type</span> u} (R : Set (FreeGroup Z)) (e : Z ≃ Sum X Y) :
+    VerifiedTietzeScript
+      (Presentation.ofRelators
+        (Presented.relatorsWithTrivialGeneratorsAlongEquiv R e))
+      (Presentation.ofRelators
+        (Presented.relatorsAfterDeletingTrivialGeneratorsAlongEquiv R e)) :=
+  singleton (.deleteTrivialGeneratorsAlongEquiv R e)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Delete trivial generators after an explicit splitting of an arbitrary generator type.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.deleteTrivialGeneratorsOfPredicate">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.deleteTrivialGeneratorsOfPredicate">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.deleteTrivialGeneratorsOfPredicate</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L221">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> deleteTrivialGeneratorsOfPredicate
+    {Z : <span class="kw">Type</span> u} (R : Set (FreeGroup Z)) (delete : Z → <span class="kw">Prop</span>)
+    [DecidablePred delete] :
+    VerifiedTietzeScript
+      (Presentation.ofRelators
+        (Presented.relatorsWithTrivialGeneratorsOfPredicate R delete))
+      (Presentation.ofRelators
+        (Presented.relatorsAfterDeletingTrivialGeneratorsOfPredicate R delete)) :=
+  deleteTrivialGeneratorsAlongEquiv R
+    (X := Presented.GeneratorPartition.Kept delete)
+    (Y := Presented.GeneratorPartition.Deleted delete)
+    (Presented.GeneratorPartition.equiv delete)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Delete exactly the generators selected by a decidable predicate.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trans">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trans">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trans</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L235">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> trans {P Q R : Presentation.{u}}
+    (s : VerifiedTietzeScript P Q) (t : VerifiedTietzeScript Q R) :
+    VerifiedTietzeScript P R :=
+  <span class="kw">match</span> s <span class="kw">with</span>
+  | .nil _ =&gt; t
+  | .cons head tail =&gt; .cons head (tail.trans t)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Concatenate two verified scripts.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.toCertificate">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.toCertificate">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.toCertificate</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L243">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> toCertificate {P Q : Presentation.{u}}
+    (s : VerifiedTietzeScript P Q) : PresentationEquivCertificate P Q :=
+  <span class="kw">match</span> s <span class="kw">with</span>
+  | .nil P =&gt; PresentationEquivCertificate.refl P
+  | .cons head tail =&gt;
+      PresentationEquivCertificate.trans head.toCertificate tail.toCertificate</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Evaluate a complete move sequence to its semantic certificate.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L251">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> trace {P Q : Presentation.{u}}
+    (s : VerifiedTietzeScript P Q) : List ElementaryTietzeMove.Kind :=
+  <span class="kw">match</span> s <span class="kw">with</span>
+  | .nil _ =&gt; []
+  | .cons head tail =&gt; head.kind :: tail.trace</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inspectable sequence of move kinds.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L258">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> moveCount {P Q : Presentation.{u}} (s : VerifiedTietzeScript P Q) : ℕ :=
+  s.trace.length</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The number of elementary moves in a verified script.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L262">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> cost {P Q : Presentation.{u}}
+    (s : VerifiedTietzeScript P Q)
+    (weight : ElementaryTietzeMove.Kind → ℕ) : ℕ :=
+  (s.trace.map weight).sum</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A customizable additive script cost.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace_nil">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace_nil">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace_nil</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L268">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> trace_nil (P : Presentation.{u}) :
+    (VerifiedTietzeScript.nil P).trace = []</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The empty verified script has an empty move trace.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace_cons">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace_cons">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace_cons</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L272">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> trace_cons
+    {P Q R : Presentation.{u}} (head : ElementaryTietzeMove P Q)
+    (tail : VerifiedTietzeScript Q R) :
+    (VerifiedTietzeScript.cons head tail).trace = head.kind :: tail.trace</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The trace of a script begins with the kind of its head move.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace_singleton">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace_singleton">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.trace_singleton</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L278">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> trace_singleton
+    {P Q : Presentation.{u}} (move : ElementaryTietzeMove P Q) :
+    (singleton move).trace = [move.kind]</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A singleton script records exactly the kind of its sole move.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_nil">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_nil">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_nil</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L283">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> moveCount_nil (P : Presentation.{u}) :
+    (VerifiedTietzeScript.nil P).moveCount = 0</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The empty verified script contains no moves.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_cons">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_cons">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_cons</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L287">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> moveCount_cons
+    {P Q R : Presentation.{u}} (head : ElementaryTietzeMove P Q)
+    (tail : VerifiedTietzeScript Q R) :
+    (VerifiedTietzeScript.cons head tail).moveCount = tail.moveCount + 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Prepending a move increases the length of a verified script by one.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">simp</span> [moveCount, trace, Nat.add_comm]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_singleton">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_singleton">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_singleton</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L294">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> moveCount_singleton
+    {P Q : Presentation.{u}} (move : ElementaryTietzeMove P Q) :
+    (singleton move).moveCount = 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A singleton verified script contains one move.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_trans">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_trans">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.moveCount_trans</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L299">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> moveCount_trans
+    {P Q R : Presentation.{u}} (s : VerifiedTietzeScript P Q)
+    (t : VerifiedTietzeScript Q R) :
+    (s.trans t).moveCount = s.moveCount + t.moveCount</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Concatenating verified scripts adds their move counts.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">induction</span> s <span class="kw">with</span>
+  | nil =&gt; <span class="kw">simp</span> [trans, moveCount, trace]
+  | cons head tail ih =&gt;
+      <span class="kw">simp</span> [trans, ih, Nat.add_assoc, Nat.add_comm]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost_nil">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost_nil">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost_nil</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L309">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> cost_nil
+    (weight : ElementaryTietzeMove.Kind → ℕ) (P : Presentation.{u}) :
+    (VerifiedTietzeScript.nil P).cost weight = 0</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The empty verified script has zero cost for every weighting.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost_cons">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost_cons">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost_cons</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L314">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> cost_cons
+    (weight : ElementaryTietzeMove.Kind → ℕ)
+    {P Q R : Presentation.{u}} (head : ElementaryTietzeMove P Q)
+    (tail : VerifiedTietzeScript Q R) :
+    (VerifiedTietzeScript.cons head tail).cost weight =
+      weight head.kind + tail.cost weight</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The cost of a nonempty script is the head move&#x27;s weight plus the tail cost.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost_singleton">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost_singleton">ReidemeisterSchreier.Discrete.Presentations.VerifiedTietzeScript.cost_singleton</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Discrete/Presentations/Tietze/Script.lean#L322">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> cost_singleton
+    (weight : ElementaryTietzeMove.Kind → ℕ)
+    {P Q : Presentation.{u}} (move : ElementaryTietzeMove P Q) :
+    (singleton move).cost weight = weight move.kind</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The cost of a singleton script is the weight assigned to its sole move.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">simp</span> [singleton]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.ReidemeisterSchreier.Discrete.Presentations.Tietze.Script"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../../../assets/site.js" data-root="../../../../../../"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+name: Pages
+
+on:
+  workflow_run:
+    workflows: ["Static ProCGroups pages"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+      - name: Stage the public site
+        shell: bash
+        run: |
+          mkdir _site
+          cp -- \
+            .nojekyll \
+            googlee8a500422e0afa27.html \
+            homepage-en.html \
+            homepage-jp.html \
+            index.html \
+            robots.txt \
+            sitemap.xml \
+            _site/
+          cp -a -- ProCGroups_pages _site/
+          rm -- _site/ProCGroups_pages/.site-manifest.json
+          test "$(find _site -type l -print -quit)" = ""
+          test "$(find _site -type f -iname '*.zip' -print -quit)" = ""
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

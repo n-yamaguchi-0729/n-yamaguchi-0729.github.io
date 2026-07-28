@@ -1,0 +1,1940 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Generation.QuotientGeneratorConvergingPairs | ProCGroups Documentation</title>
+<meta name="description" content="`QuotientGeneratorConvergingPair` records a convergent generating family in a closed-normal quotient together with coherent refinement maps. Chain upper bounds and strict extensions feed a maximality argument producin...">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/ProCGroups_pages/library/ProCGroups/Generation/QuotientGeneratorConvergingPairs.html">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../index.html">ProCGroups Documentation</a>
+  <nav class="header-nav"><a href="https://github.com/n-yamaguchi-0729/ProCGroups" target="_blank" rel="noopener">GitHub repository</a></nav>
+  <div class="header-current">ProCGroups.Generation.QuotientGeneratorConvergingPairs</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Generation.html">Generation</a><span class="sep">/</span><span>QuotientGeneratorConvergingPairs</span></div>
+      <h1 class="module-title">ProCGroups.Generation.QuotientGeneratorConvergingPairs</h1>
+      <div class="module-meta">22 Theorems | 8 Definitions | 1 Abbreviation | 1 Structure | 3 Instances</div>
+      <div class="module-overview tex2jax_process"><p><code>QuotientGeneratorConvergingPair</code> records a convergent generating family in a closed-normal quotient together with coherent refinement maps.  Chain upper bounds and strict extensions feed a maximality argument producing generators converging to one; the final results transport this property and the resulting topological rank across surjections and continuous equivalences.</p></div>
+      <div class="meta"><a href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean">Open this file on GitHub</a></div>
+    </div>
+  </div>
+  <details class="imports"><summary>imports</summary><ul><li><a href="../../../library/ProCGroups/Generation/Convergence.html">ProCGroups.Generation.Convergence</a></li><li><a href="../../../library/ProCGroups/Generation/GeneratorConvergingPairs.html">ProCGroups.Generation.GeneratorConvergingPairs</a></li><li><a href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html">ProCGroups.ProC.Quotients.ClosedNormal</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/CompletedGroupAlgebra/ProfiniteModules/Basic/Generators.html">ProCGroups.CompletedGroupAlgebra.ProfiniteModules.Basic.Generators</a></li><li><a href="../../../library/ProCGroups/FiniteGeneration/Basic.html">ProCGroups.FiniteGeneration.Basic</a></li><li><a href="../../../library/ProCGroups/Generation.html">ProCGroups.Generation</a></li><li><a href="../../../library/ProCGroups/LocalWeight/MetrizabilityAndQuotients.html">ProCGroups.LocalWeight.MetrizabilityAndQuotients</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl structure" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair">ProCGroups.Generation.QuotientGeneratorConvergingPair</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L30">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> QuotientGeneratorConvergingPair <span class="kw">where</span>
+  <span class="comment">/-- The subgroup used to form the quotient carrying the generator family. -/</span>
+  N : Subgroup G
+  <span class="comment">/-- The quotienting subgroup is normal. -/</span>
+  normal_N : N.Normal
+  <span class="comment">/-- The quotienting subgroup is closed, so the quotient has the intended profinite topology. -/</span>
+  closed_N : IsClosed (N : Set G)
+  <span class="comment">/-- The distinguished generator set in `G ⧸ N`. -/</span>
+  Y : Set (G ⧸ N)
+  <span class="comment">/-- The quotient identity is excluded from the distinguished generator set. -/</span>
+  subset_compl : Y ⊆ ({1} : Set (G ⧸ N))ᶜ
+  <span class="comment">/-- The generator set converges to the quotient identity along open subgroups. -/</span>
+  converges : ConvergesToOneAlongOpenSubgroups (G := G ⧸ N) Y
+  <span class="comment">/-- The distinguished set topologically generates the entire quotient `G ⧸ N`. -/</span>
+  generates : TopologicallyGenerates (G := G ⧸ N) Y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A quotient generator converging pair records compatible source and quotient generator data.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.sourceSet">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.sourceSet">ProCGroups.Generation.QuotientGeneratorConvergingPair.sourceSet</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L49">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> QuotientGeneratorConvergingPair.sourceSet
+    (A : QuotientGeneratorConvergingPair (G := G)) :
+    Set (G ⧸ A.N) :=
+  ({1} : Set (G ⧸ A.N)) ∪ A.Y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The source set is the set of generators carried by the quotient generator pair.</p></div></section>
+  </div>
+</section>
+<section class="decl abbrev" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.Source">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.Source">ProCGroups.Generation.QuotientGeneratorConvergingPair.Source</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L58">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">abbrev</span> QuotientGeneratorConvergingPair.Source
+    (A : QuotientGeneratorConvergingPair (G := G)) :=
+  ↥(A.sourceSet)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The source of a quotient generator-converging pair consists of the original group, index data, and generator family before passage to the quotient.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.Generation.instTopologicalSpaceQuotientGeneratorConvergingPairSource">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.instTopologicalSpaceQuotientGeneratorConvergingPairSource">ProCGroups.Generation.instTopologicalSpaceQuotientGeneratorConvergingPairSource</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L65">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instTopologicalSpaceQuotientGeneratorConvergingPairSource
+    (A : QuotientGeneratorConvergingPair (G := G)) :
+    TopologicalSpace A.Source :=
+  inferInstanceAs (TopologicalSpace ↥(A.sourceSet))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The constructed object carries the topological space structure inherited from its construction.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.sourceOne">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.sourceOne">ProCGroups.Generation.QuotientGeneratorConvergingPair.sourceOne</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L71">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> QuotientGeneratorConvergingPair.sourceOne
+    (A : QuotientGeneratorConvergingPair (G := G)) : A.Source :=
+  ⟨1, Or.inl <span class="kw">rfl</span>⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The identity element belongs to the source data of the quotient generator pair.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.sourceOfY">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.sourceOfY">ProCGroups.Generation.QuotientGeneratorConvergingPair.sourceOfY</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L76">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> QuotientGeneratorConvergingPair.sourceOfY
+    (A : QuotientGeneratorConvergingPair (G := G)) (y : A.Y) : A.Source :=
+  ⟨y.1, Or.inr y.2⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The source of the selected generator is the source specified by the quotient generator pair.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.source_cases">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.source_cases">ProCGroups.Generation.QuotientGeneratorConvergingPair.source_cases</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L85">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+<span class="kw">theorem</span> QuotientGeneratorConvergingPair.source_cases
+    (A : QuotientGeneratorConvergingPair (G := G)) (x : A.Source) :
+    x = A.sourceOne ∨ ∃ y : A.Y, x = A.sourceOfY y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Every source element of a quotient generator pair is either the distinguished identity source or comes from an element of the generator set.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  rcases x <span class="kw">with</span> ⟨x, hx⟩
+  rcases hx <span class="kw">with</span> hx1 | hxY
+  · left
+    ext
+    simpa [QuotientGeneratorConvergingPair.sourceOne] using hx1
+  · right
+    refine ⟨⟨x, hxY⟩, ?_⟩
+    ext
+    <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.yImage">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.yImage">ProCGroups.Generation.QuotientGeneratorConvergingPair.yImage</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L102">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> QuotientGeneratorConvergingPair.yImage
+    (A B : QuotientGeneratorConvergingPair (G := G))
+    (σ : A.Source → G ⧸ B.N) : Set (G ⧸ B.N) :=
+  Set.range <span class="kw">fun</span> y : A.Y =&gt; σ (A.sourceOfY y)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The image of the distinguished generator set of one quotient generator pair under a chosen source map into another quotient.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.Le">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.Le">ProCGroups.Generation.QuotientGeneratorConvergingPair.Le</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L108">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> QuotientGeneratorConvergingPair.Le
+    (A B : QuotientGeneratorConvergingPair (G := G)) : <span class="kw">Prop</span> :=
+  ∃ hBA : B.N ≤ A.N,
+    ∃ σ : A.Source → (G ⧸ B.N),
+      Continuous σ ∧
+      (∀ x : A.Source, leftQuotientProjection (B.N) (A.N) hBA (σ x) = x.1) ∧
+      σ A.sourceOne = 1 ∧
+      (∀ y : A.Y, σ (A.sourceOfY y) ∈ B.Y) ∧
+      B.Y \ A.yImage B σ ⊆
+        {q : G ⧸ B.N | leftQuotientProjection (B.N) (A.N) hBA q = 1}</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>This relation orders quotient generator pairs by refinement of their quotient data.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.Generation.instLEQuotientGeneratorConvergingPair">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.instLEQuotientGeneratorConvergingPair">ProCGroups.Generation.instLEQuotientGeneratorConvergingPair</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L120">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instLEQuotientGeneratorConvergingPair :
+    LE (QuotientGeneratorConvergingPair (G := G)) <span class="kw">where</span>
+  le := QuotientGeneratorConvergingPair.Le</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The order relation is the refinement relation on the corresponding data.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ProCGroups.Generation.instPreorderQuotientGeneratorConvergingPair">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.instPreorderQuotientGeneratorConvergingPair">ProCGroups.Generation.instPreorderQuotientGeneratorConvergingPair</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L125">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instPreorderQuotientGeneratorConvergingPair :
+    Preorder (QuotientGeneratorConvergingPair (G := G)) <span class="kw">where</span>
+  le_refl A := <span class="kw">by</span>
+    refine ⟨le_rfl, Subtype.val, ?_, ?_, <span class="kw">rfl</span>, ?_, ?_⟩
+    · change Continuous (<span class="kw">fun</span> x : A.Source =&gt; (x : G ⧸ A.N))
+      <span class="kw">exact</span> continuous_subtype_val
+    · <span class="kw">intro</span> q
+      <span class="kw">simp</span> only [leftQuotientProjection_id, id_eq]
+    · <span class="kw">intro</span> y
+      <span class="kw">simp</span> only [QuotientGeneratorConvergingPair.sourceOfY, Subtype.coe_prop]
+    · <span class="kw">simp</span> only [QuotientGeneratorConvergingPair.yImage, QuotientGeneratorConvergingPair.sourceOfY,
+  Subtype.range_coe_subtype, setOf_mem_eq, sdiff_self, leftQuotientProjection_id, id_eq,
+  setOf_eq_eq_singleton, subset_singleton_iff, mem_empty_iff_false, IsEmpty.forall_iff,
+      implies_true]
+  le_trans A B C hAB hBC := <span class="kw">by</span>
+    classical
+    rcases hAB <span class="kw">with</span> ⟨hBA, σAB, hσABcont, hσABright, hσABone, hσABmem, hσABdiff⟩
+    rcases hBC <span class="kw">with</span> ⟨hCB, σBC, hσBCcont, hσBCright, hσBCone, hσBCmem, hσBCdiff⟩
+    <span class="kw">let</span> τ : A.Source → B.Source := <span class="kw">fun</span> x =&gt;
+      ⟨σAB x, <span class="kw">by</span>
+        rcases A.source_cases x <span class="kw">with</span> h1 | ⟨y, <span class="kw">rfl</span>⟩
+        · <span class="kw">rw</span> [h1]
+          <span class="kw">exact</span> Or.inl hσABone
+        · <span class="kw">exact</span> Or.inr (hσABmem y)⟩
+    <span class="kw">have</span> hτcont : Continuous τ := <span class="kw">by</span>
+      <span class="kw">exact</span> hσABcont.subtype_mk &lt;| <span class="kw">by</span>
+        <span class="kw">intro</span> x
+        rcases A.source_cases x <span class="kw">with</span> h1 | ⟨y, <span class="kw">rfl</span>⟩
+        · <span class="kw">rw</span> [h1]
+          <span class="kw">exact</span> Or.inl hσABone
+        · <span class="kw">exact</span> Or.inr (hσABmem y)
+    <span class="kw">have</span> hτone : τ A.sourceOne = B.sourceOne := <span class="kw">by</span>
+      <span class="kw">apply</span> Subtype.ext
+      <span class="kw">exact</span> hσABone
+    <span class="kw">have</span> hτofY (y : A.Y) :
+        τ (A.sourceOfY y) = B.sourceOfY ⟨σAB (A.sourceOfY y), hσABmem y⟩ := <span class="kw">by</span>
+      <span class="kw">apply</span> Subtype.ext
+      <span class="kw">rfl</span>
+    <span class="kw">have</span> hEqBC :
+        ∀ (y : B.Y) {q : G ⧸ C.N},
+          q ∈ C.Y →
+          leftQuotientProjection (C.N) (B.N) hCB q = y.1 →
+            q = σBC (B.sourceOfY y) := <span class="kw">by</span>
+      <span class="kw">intro</span> y q hqY hqproj
+      by_cases hqim : q ∈ B.yImage C σBC
+      · rcases hqim <span class="kw">with</span> ⟨y&#x27;, hy&#x27;Eq⟩
+        <span class="kw">have</span> hproj&#x27; :
+            leftQuotientProjection (C.N) (B.N) hCB q = y&#x27;.1 := <span class="kw">by</span>
+          <span class="kw">calc</span>
+            leftQuotientProjection (C.N) (B.N) hCB q =
+                leftQuotientProjection (C.N) (B.N) hCB
+                  (σBC (B.sourceOfY y&#x27;)) := congrArg
+                    (leftQuotientProjection (C.N) (B.N) hCB) hy&#x27;Eq.symm
+            _ = y&#x27;.1 := <span class="kw">by</span>
+              <span class="kw">exact</span> hσBCright (B.sourceOfY y&#x27;)
+        <span class="kw">have</span> hyEq : y&#x27; = y := <span class="kw">by</span>
+          <span class="kw">apply</span> Subtype.ext
+          <span class="kw">exact</span> hproj&#x27;.symm.trans hqproj
+        simpa [hyEq] using hy&#x27;Eq.symm
+      · <span class="kw">have</span> hker :
+          leftQuotientProjection (C.N) (B.N) hCB q = 1 := hσBCdiff ⟨hqY, hqim⟩
+        <span class="kw">have</span> hyne : y.1 ≠ 1 := <span class="kw">by</span>
+          simpa using B.subset_compl y.2
+        <span class="kw">exact</span> False.elim (hyne (hqproj.symm.trans hker))
+    refine ⟨hCB.trans hBA, <span class="kw">fun</span> x =&gt; σBC (τ x), hσBCcont.comp hτcont, ?_, ?_, ?_, ?_⟩
+    · <span class="kw">intro</span> x
+      <span class="kw">calc</span>
+        leftQuotientProjection (C.N) (A.N) (hCB.trans hBA) (σBC (τ x)) =
+            leftQuotientProjection (B.N) (A.N) hBA
+              (leftQuotientProjection (C.N) (B.N) hCB (σBC (τ x))) := <span class="kw">by</span>
+                <span class="kw">exact</span> leftQuotientProjection_comp_apply_symm
+                  (K := (C.N : Subgroup G)) (H := (B.N : Subgroup G))
+                  (L := (A.N : Subgroup G)) hCB hBA (σBC (τ x))
+        _ = leftQuotientProjection (B.N) (A.N) hBA ((τ x).1) := <span class="kw">by</span>
+              <span class="kw">rw</span> [hσBCright (τ x)]
+        _ = leftQuotientProjection (B.N) (A.N) hBA (σAB x) := <span class="kw">by</span>
+              <span class="kw">rfl</span>
+        _ = x.1 := hσABright x
+    · simpa [hτone] using hσBCone
+    · <span class="kw">intro</span> y
+      <span class="kw">let</span> yB : B.Y := ⟨σAB (A.sourceOfY y), hσABmem y⟩
+      simpa [hτofY, yB] using hσBCmem yB
+    · <span class="kw">intro</span> q hq
+      rcases hq <span class="kw">with</span> ⟨hqY, hqnotAC⟩
+      by_cases hqimB : q ∈ B.yImage C σBC
+      · rcases hqimB <span class="kw">with</span> ⟨z, hzEq⟩
+        <span class="kw">have</span> hzNotInA : z.1 ∉ A.yImage B σAB := <span class="kw">by</span>
+          <span class="kw">intro</span> hzInA
+          rcases hzInA <span class="kw">with</span> ⟨y, hyEq⟩
+          <span class="kw">let</span> yB : B.Y := ⟨σAB (A.sourceOfY y), hσABmem y⟩
+          <span class="kw">have</span> hprojqz :
+              leftQuotientProjection (C.N) (B.N) hCB q = z.1 := <span class="kw">by</span>
+            <span class="kw">calc</span>
+              leftQuotientProjection (C.N) (B.N) hCB q =
+                  leftQuotientProjection (C.N) (B.N) hCB
+                    (σBC (B.sourceOfY z)) := congrArg
+                      (leftQuotientProjection (C.N) (B.N) hCB) hzEq.symm
+              _ = z.1 := <span class="kw">by</span>
+                <span class="kw">exact</span> hσBCright (B.sourceOfY z)
+          <span class="kw">have</span> hprojq :
+              leftQuotientProjection (C.N) (B.N) hCB q = yB.1 := <span class="kw">by</span>
+            <span class="kw">calc</span>
+              leftQuotientProjection (C.N) (B.N) hCB q = z.1 := hprojqz
+              _ = yB.1 := <span class="kw">by</span>
+                    simpa [yB] using hyEq.symm
+          <span class="kw">have</span> hqEq : q = σBC (B.sourceOfY yB) := hEqBC yB hqY hprojq
+          <span class="kw">have</span> hqInAC : q ∈ A.yImage C (<span class="kw">fun</span> x =&gt; σBC (τ x)) := <span class="kw">by</span>
+            refine ⟨y, ?_⟩
+            simpa [hτofY] using hqEq.symm
+          <span class="kw">exact</span> hqnotAC hqInAC
+        <span class="kw">have</span> hzProjA :
+            leftQuotientProjection (B.N) (A.N) hBA z.1 = 1 :=
+          hσABdiff ⟨z.2, hzNotInA⟩
+        <span class="kw">have</span> hprojqB :
+            leftQuotientProjection (C.N) (B.N) hCB q = z.1 := <span class="kw">by</span>
+          <span class="kw">calc</span>
+            leftQuotientProjection (C.N) (B.N) hCB q =
+                leftQuotientProjection (C.N) (B.N) hCB
+                  (σBC (B.sourceOfY z)) := congrArg
+                    (leftQuotientProjection (C.N) (B.N) hCB) hzEq.symm
+            _ = z.1 := <span class="kw">by</span>
+              <span class="kw">exact</span> hσBCright (B.sourceOfY z)
+        <span class="kw">calc</span>
+          leftQuotientProjection (C.N) (A.N) (hCB.trans hBA) q =
+              leftQuotientProjection (B.N) (A.N) hBA
+                (leftQuotientProjection (C.N) (B.N) hCB q) := <span class="kw">by</span>
+                  <span class="kw">exact</span> leftQuotientProjection_comp_apply_symm
+                    (K := (C.N : Subgroup G)) (H := (B.N : Subgroup G))
+                    (L := (A.N : Subgroup G)) hCB hBA q
+          _ = leftQuotientProjection (B.N) (A.N) hBA z.1 := <span class="kw">by</span>
+                <span class="kw">rw</span> [hprojqB]
+          _ = 1 := hzProjA
+      · <span class="kw">have</span> hprojqB :
+          leftQuotientProjection (C.N) (B.N) hCB q = 1 := hσBCdiff ⟨hqY, hqimB⟩
+        <span class="kw">calc</span>
+          leftQuotientProjection (C.N) (A.N) (hCB.trans hBA) q =
+              leftQuotientProjection (B.N) (A.N) hBA
+                (leftQuotientProjection (C.N) (B.N) hCB q) := <span class="kw">by</span>
+                  <span class="kw">exact</span> leftQuotientProjection_comp_apply_symm
+                    (K := (C.N : Subgroup G)) (H := (B.N : Subgroup G))
+                    (L := (A.N : Subgroup G)) hCB hBA q
+          _ = leftQuotientProjection (B.N) (A.N) hBA 1 := <span class="kw">by</span>
+                <span class="kw">rw</span> [hprojqB]
+          _ = 1 := <span class="kw">by</span>
+                <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The preorder is induced by refinement of the corresponding data.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_hBA">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_hBA">ProCGroups.Generation.QuotientGeneratorConvergingPair.le_hBA</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L278">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+<span class="kw">theorem</span> QuotientGeneratorConvergingPair.le_hBA
+    {A B : QuotientGeneratorConvergingPair (G := G)} (hAB : A ≤ B) :
+    B.N ≤ A.N</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The refinement relation includes the required compatibility between the source and target quotient data.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>Classical.choose hAB</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map">ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L286">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> QuotientGeneratorConvergingPair.le_map
+    {A B : QuotientGeneratorConvergingPair (G := G)} (hAB : A ≤ B) :
+    A.Source → G ⧸ B.N :=
+  Classical.choose (Classical.choose_spec hAB)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The refinement relation provides the induced map between quotient generator pairs.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_continuous">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_continuous">ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_continuous</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L296">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+<span class="kw">theorem</span> QuotientGeneratorConvergingPair.le_map_continuous
+    {A B : QuotientGeneratorConvergingPair (G := G)} (hAB : A ≤ B) :
+    Continuous (A.le_map hAB)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>For a refinement of quotient generator pairs, the chosen lift map between source sets is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>(Classical.choose_spec (Classical.choose_spec hAB)).1</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_right">ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_right</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L303">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+@[<span class="kw">simp</span>] <span class="kw">theorem</span> QuotientGeneratorConvergingPair.le_map_right
+    {A B : QuotientGeneratorConvergingPair (G := G)} (hAB : A ≤ B)
+    (x : A.Source) :
+    leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB) (A.le_map hAB x) = x.1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The quotient generator pair is compatible with the specified quotient map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>(Classical.choose_spec (Classical.choose_spec hAB)).2.1 x</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_one">ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_one</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L311">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+@[<span class="kw">simp</span>] <span class="kw">theorem</span> QuotientGeneratorConvergingPair.le_map_one
+    {A B : QuotientGeneratorConvergingPair (G := G)} (hAB : A ≤ B) :
+    A.le_map hAB A.sourceOne = 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A refinement map sends the distinguished source element over <code>1</code> to the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>(Classical.choose_spec (Classical.choose_spec hAB)).2.2.1</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_mem">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_mem">ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_mem</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L321">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+@[<span class="kw">simp</span>] <span class="kw">theorem</span> QuotientGeneratorConvergingPair.le_map_mem
+    {A B : QuotientGeneratorConvergingPair (G := G)} (hAB : A ≤ B)
+    (y : A.Y) :
+    A.le_map hAB (A.sourceOfY y) ∈ B.Y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Under a refinement, the chosen lift map sends every distinguished generator of the smaller pair into the distinguished set of the larger pair.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>(Classical.choose_spec (Classical.choose_spec hAB)).2.2.2.1 y</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_diff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_diff">ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_diff</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L332">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+<span class="kw">theorem</span> QuotientGeneratorConvergingPair.le_map_diff
+    {A B : QuotientGeneratorConvergingPair (G := G)} (hAB : A ≤ B) :
+    B.Y \ A.yImage B (A.le_map hAB) ⊆
+      {q : G ⧸ B.N |
+        leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB) q = 1}</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Elements of the larger distinguished set not in the lifted image project to the identity in the smaller quotient.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>(Classical.choose_spec (Classical.choose_spec hAB)).2.2.2.2</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.eq_le_map_of_mem_of_proj_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.eq_le_map_of_mem_of_proj_eq">ProCGroups.Generation.QuotientGeneratorConvergingPair.eq_le_map_of_mem_of_proj_eq</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L341">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+<span class="kw">theorem</span> QuotientGeneratorConvergingPair.eq_le_map_of_mem_of_proj_eq
+    {A B : QuotientGeneratorConvergingPair (G := G)} (hAB : A ≤ B)
+    (y : A.Y) {q : G ⧸ B.N}
+    (hqY : q ∈ B.Y)
+    (hqproj : leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB) q = y.1) :
+    q = A.le_map hAB (A.sourceOfY y)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The quotient generator comparison respects membership and projection equality.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  by_cases hqim : q ∈ A.yImage B (A.le_map hAB)
+  · rcases hqim <span class="kw">with</span> ⟨y&#x27;, hy&#x27;Eq⟩
+    <span class="kw">have</span> hproj&#x27; :
+          leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB) q = y&#x27;.1 := <span class="kw">by</span>
+            <span class="kw">calc</span>
+              leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB) q =
+                  leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB)
+                    (A.le_map hAB (A.sourceOfY y&#x27;)) := congrArg
+                      (leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB))
+                      hy&#x27;Eq.symm
+              _ = y&#x27;.1 := <span class="kw">by</span>
+                <span class="kw">exact</span> A.le_map_right hAB (A.sourceOfY y&#x27;)
+    <span class="kw">have</span> hyEq : y&#x27; = y := <span class="kw">by</span>
+      ext
+      <span class="kw">exact</span> hproj&#x27;.symm.trans hqproj
+    simpa [hyEq] using hy&#x27;Eq.symm
+  · <span class="kw">have</span> hker :
+      leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB) q = 1 :=
+      A.le_map_diff hAB ⟨hqY, hqim⟩
+    <span class="kw">have</span> hyne : y.1 ≠ 1 := <span class="kw">by</span>
+      simpa using A.subset_compl y.2
+    <span class="kw">exact</span> False.elim (hyne (hqproj.symm.trans hker))</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_compat">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_compat">ProCGroups.Generation.QuotientGeneratorConvergingPair.le_map_compat</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L372">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+<span class="kw">theorem</span> QuotientGeneratorConvergingPair.le_map_compat
+    {A B C : QuotientGeneratorConvergingPair (G := G)}
+    (hAB : A ≤ B) (hAC : A ≤ C) (hBC : B ≤ C)
+    (y : A.Y) :
+    leftQuotientProjection (C.N) (B.N) (B.le_hBA hBC)
+      (A.le_map hAC (A.sourceOfY y)) =
+      A.le_map hAB (A.sourceOfY y)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The induced map between quotient generator pairs is compatible with refinement.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> hCy :
+      A.le_map hAC (A.sourceOfY y) ∈ C.Y := A.le_map_mem hAC y
+  <span class="kw">have</span> hIn :
+      A.le_map hAC (A.sourceOfY y) ∈ B.yImage C (B.le_map hBC) := <span class="kw">by</span>
+    by_contra hNot
+    <span class="kw">have</span> hker :
+        leftQuotientProjection (C.N) (B.N) (B.le_hBA hBC)
+          (A.le_map hAC (A.sourceOfY y)) = 1 :=
+      B.le_map_diff hBC ⟨hCy, hNot⟩
+    <span class="kw">have</span> hy1 : y.1 = 1 := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        y.1 = leftQuotientProjection (C.N) (A.N) (A.le_hBA hAC)
+              (A.le_map hAC (A.sourceOfY y)) := <span class="kw">by</span>
+                <span class="kw">exact</span> (A.le_map_right hAC (A.sourceOfY y)).symm
+        _ = leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB)
+              (leftQuotientProjection (C.N) (B.N) (B.le_hBA hBC)
+                (A.le_map hAC (A.sourceOfY y))) := <span class="kw">by</span>
+              <span class="kw">exact</span>
+                (leftQuotientProjection_comp_apply_symm
+                  (K := (C.N : Subgroup G)) (H := (B.N : Subgroup G))
+                  (L := (A.N : Subgroup G)) (B.le_hBA hBC) (A.le_hBA hAB)
+                  (A.le_map hAC (A.sourceOfY y)))
+        _ = leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB) 1 := <span class="kw">by</span> <span class="kw">rw</span> [hker]
+        _ = 1 := <span class="kw">by</span> <span class="kw">rfl</span>
+    <span class="kw">have</span> hyne : y.1 ≠ 1 := <span class="kw">by</span>
+      simpa using A.subset_compl y.2
+    <span class="kw">exact</span> hyne hy1
+  rcases hIn <span class="kw">with</span> ⟨z, hzEq⟩
+  <span class="kw">have</span> hqY :
+      leftQuotientProjection (C.N) (B.N) (B.le_hBA hBC)
+        (A.le_map hAC (A.sourceOfY y)) ∈ B.Y := <span class="kw">by</span>
+    <span class="kw">have</span> hEq :
+        leftQuotientProjection (C.N) (B.N) (B.le_hBA hBC)
+          (A.le_map hAC (A.sourceOfY y)) = z.1 := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        leftQuotientProjection (C.N) (B.N) (B.le_hBA hBC)
+            (A.le_map hAC (A.sourceOfY y)) =
+            leftQuotientProjection (C.N) (B.N) (B.le_hBA hBC)
+              (B.le_map hBC (B.sourceOfY z)) := congrArg
+                (leftQuotientProjection (C.N) (B.N) (B.le_hBA hBC))
+                hzEq.symm
+        _ = z.1 := <span class="kw">by</span>
+          <span class="kw">exact</span> B.le_map_right hBC (B.sourceOfY z)
+    <span class="kw">exact</span> hEq ▸ z.2
+  <span class="kw">have</span> hqproj :
+      leftQuotientProjection (B.N) (A.N) (A.le_hBA hAB)
+        (leftQuotientProjection (C.N) (B.N) (B.le_hBA hBC)
+          (A.le_map hAC (A.sourceOfY y))) = y.1 := <span class="kw">by</span>
+    <span class="kw">exact</span> (leftQuotientProjection_comp_apply
+      (K := (C.N : Subgroup G)) (H := (B.N : Subgroup G))
+      (L := (A.N : Subgroup G)) (B.le_hBA hBC) (A.le_hBA hAB)
+      (A.le_map hAC (A.sourceOfY y))).trans
+      (A.le_map_right hAC (A.sourceOfY y))
+  <span class="kw">exact</span> A.eq_le_map_of_mem_of_proj_eq hAB y hqY hqproj</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.range_subtype_pointed">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.range_subtype_pointed">ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.range_subtype_pointed</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L436">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [T2Space G] <span class="kw">in</span>
+<span class="kw">theorem</span> ConvergesToOneAlongOpenSubgroups.range_subtype_pointed
+    {H : <span class="kw">Type</span> v} [Group H] [TopologicalSpace H]
+    {X : Set G}
+    {f : ↥((({1} : Set G) ∪ X)) → H}
+    (hf : Continuous f)
+    (hf1 : f ⟨1, Or.inl <span class="kw">rfl</span>⟩ = 1)
+    (hX : ConvergesToOneAlongOpenSubgroups (G := G) X) :
+    ConvergesToOneAlongOpenSubgroups (G := H)
+      (Set.range <span class="kw">fun</span> x : X =&gt; f ⟨x.1, Or.inr x.2⟩)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The range subtype of a pointed map contains the chosen basepoint.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> S : Set G := ({1} : Set G) ∪ X
+  <span class="kw">let</span> g : X → H := <span class="kw">fun</span> x =&gt; f ⟨x.1, Or.inr x.2⟩
+  <span class="kw">intro</span> U
+  <span class="kw">have</span> hpre : IsOpen (f ⁻¹&#x27; (U : Set H)) :=
+    (openSubgroup_isOpen (G := H) U).preimage hf
+  <span class="kw">have</span> h1pre : (⟨1, Or.inl <span class="kw">rfl</span>⟩ : ↥S) ∈ f ⁻¹&#x27; (U : Set H) := <span class="kw">by</span>
+    change f ⟨1, Or.inl <span class="kw">rfl</span>⟩ ∈ U
+    <span class="kw">rw</span> [hf1]
+    <span class="kw">exact</span> U.one_mem&#x27;
+  rcases isOpen_induced_iff.mp hpre <span class="kw">with</span> ⟨W, hWopen, hWeq⟩
+  <span class="kw">have</span> h1W : (1 : G) ∈ W := <span class="kw">by</span>
+    <span class="kw">have</span> : (⟨1, Or.inl <span class="kw">rfl</span>⟩ : ↥S) ∈ Subtype.val ⁻¹&#x27; W := <span class="kw">by</span>
+      <span class="kw">exact</span> hWeq.symm ▸ h1pre
+    simpa using this
+  rcases exists_openNormalSubgroup_sub_open_nhds_of_one (G := G) hWopen h1W <span class="kw">with</span> ⟨V, hVW⟩
+  <span class="kw">have</span> hsubset :
+      Set.range g \ (U : Set H) ⊆ g &#x27;&#x27; {x : X | (x : G) ∉ (V : Set G)} := <span class="kw">by</span>
+    <span class="kw">intro</span> y hy
+    rcases hy <span class="kw">with</span> ⟨hyY, hyU⟩
+    rcases hyY <span class="kw">with</span> ⟨x, <span class="kw">rfl</span>⟩
+    refine ⟨x, ?_, <span class="kw">rfl</span>⟩
+    <span class="kw">intro</span> hxV
+    <span class="kw">have</span> hxW : (x : G) ∈ W := hVW hxV
+    <span class="kw">have</span> hxpre : (⟨x.1, Or.inr x.2⟩ : ↥S) ∈ Subtype.val ⁻¹&#x27; W := <span class="kw">by</span>
+      change (x : G) ∈ W
+      <span class="kw">exact</span> hxW
+    <span class="kw">have</span> hxpreU : (⟨x.1, Or.inr x.2⟩ : ↥S) ∈ f ⁻¹&#x27; (U : Set H) := <span class="kw">by</span>
+      <span class="kw">exact</span> hWeq ▸ hxpre
+    <span class="kw">have</span> : g x ∈ (U : Set H) := <span class="kw">by</span>
+      change f ⟨x.1, Or.inr x.2⟩ ∈ U
+      <span class="kw">exact</span> hxpreU
+    <span class="kw">exact</span> hyU this
+  <span class="kw">have</span> hfinite_pre : {x : X | (x : G) ∉ (V : Set G)}.Finite := <span class="kw">by</span>
+    <span class="kw">let</span> e : X ↪ G := ⟨Subtype.val, Subtype.val_injective⟩
+    <span class="kw">have</span> hfinite : (X \ (V : Set G)).Finite := hX V.toOpenSubgroup
+    <span class="kw">have</span> hfinite&#x27; : {x : X | e x ∈ X ∧ e x ∉ (V : Set G)}.Finite := <span class="kw">by</span>
+      simpa [Set.preimage] using hfinite.preimage_embedding e
+    <span class="kw">have</span> hEq : {x : X | e x ∈ X ∧ e x ∉ (V : Set G)} = {x : X | (x : G) ∉ (V : Set G)} := <span class="kw">by</span>
+      ext x
+      <span class="kw">simp</span> only [Function.Embedding.coeFn_mk, Subtype.coe_prop, SetLike.mem_coe, true_and,
+          mem_setOf_eq, e]
+    <span class="kw">exact</span> hEq ▸ hfinite&#x27;
+  <span class="kw">exact</span> hfinite_pre.image g |&gt;.subset hsubset</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.exists_quotientPair_le_openSubgroup_of_chain_iInf_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.exists_quotientPair_le_openSubgroup_of_chain_iInf_le">ProCGroups.Generation.exists_quotientPair_le_openSubgroup_of_chain_iInf_le</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L494">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+<span class="kw">theorem</span> exists_quotientPair_le_openSubgroup_of_chain_iInf_le
+    {c : Set (QuotientGeneratorConvergingPair (G := G))}
+    (hc : IsChain (· ≤ ·) c) (hcne : c.Nonempty)
+    (U : OpenSubgroup G)
+    (hInf : iInf (<span class="kw">fun</span> p : c =&gt; p.1.N) ≤ (U : Subgroup G)) :
+    ∃ p : c, p.1.N ≤ (U : Subgroup G)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The quotient generator-converging-pair construction is compatible with open-normal finite quotients and refinement maps.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  <span class="kw">have</span> hInter :
+      (⋂ p : c, (((p.1.N : Subgroup G) : Set G))) ⊆ ((U : Subgroup G) : Set G) := <span class="kw">by</span>
+    <span class="kw">intro</span> x hx
+    <span class="kw">exact</span> hInf (<span class="kw">by</span> simpa [Subgroup.mem_iInf] using hx)
+  rcases finite_iInter_subgroup_subset_openSubgroup (G := G)
+      (H := <span class="kw">fun</span> p : c =&gt; p.1.N)
+      (hclosed := <span class="kw">fun</span> p =&gt; p.1.closed_N)
+      U hInter <span class="kw">with</span> ⟨s, hs⟩
+  by_cases hsne : s.Nonempty
+  · <span class="kw">have</span> hc&#x27; : IsChain (· ≤ ·) (Set.univ : Set c) := <span class="kw">by</span>
+      <span class="kw">intro</span> a ha b hb hne
+      <span class="kw">have</span> hne&#x27; : (a : QuotientGeneratorConvergingPair (G := G)) ≠ b := <span class="kw">by</span>
+        <span class="kw">intro</span> h
+        <span class="kw">exact</span> hne (Subtype.ext h)
+      simpa using hc a.2 b.2 hne&#x27;
+    rcases finite_subset_chain_has_upper hc&#x27; s (<span class="kw">by</span> <span class="kw">intro</span> z hz; <span class="kw">simp</span> only [mem_univ]) hsne <span class="kw">with</span>
+        ⟨m, hm, hmax⟩
+    refine ⟨m, ?_⟩
+    <span class="kw">intro</span> x hx
+    <span class="kw">have</span> hx&#x27; :
+        x ∈ ⋂ p ∈ s, (((p.1.N : Subgroup G) : Set G)) := <span class="kw">by</span>
+      refine mem_iInter₂.2 ?_
+      <span class="kw">intro</span> p hp
+      <span class="kw">exact</span> (QuotientGeneratorConvergingPair.le_hBA (hmax p hp)) hx
+    <span class="kw">exact</span> hs hx&#x27;
+  · rcases hcne <span class="kw">with</span> ⟨p, hp⟩
+    refine ⟨⟨p, hp⟩, ?_⟩
+    <span class="kw">have</span> htop : ((⊤ : Subgroup G) : Set G) ⊆ ((U : Subgroup G) : Set G) := <span class="kw">by</span>
+      <span class="kw">have</span> :
+          (⋂ p ∈ s, (((p.1.N : Subgroup G) : Set G))) ⊆ ((U : Subgroup G) : Set G) := hs
+      simpa [Finset.not_nonempty_iff_eq_empty.mp hsne] using this
+    <span class="kw">intro</span> x hx
+    <span class="kw">exact</span> htop (<span class="kw">by</span> <span class="kw">simp</span> only [Subgroup.coe_top, mem_univ])</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.quotientGeneratorPair_exists_liftToInf">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.quotientGeneratorPair_exists_liftToInf">ProCGroups.Generation.quotientGeneratorPair_exists_liftToInf</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L539">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+<span class="kw">theorem</span> quotientGeneratorPair_exists_liftToInf
+    {c : Set (QuotientGeneratorConvergingPair (G := G))}
+    (hc : IsChain (· ≤ ·) c) (a : c) :
+    <span class="kw">let</span> K : Subgroup G := iInf <span class="kw">fun</span> p : c =&gt; p.1.N
+    letI : K.Normal := Subgroup.normal_iInf_normal <span class="kw">fun</span> p : c =&gt; p.1.normal_N
+    ∃ σ : a.1.Source → G ⧸ K,
+      Continuous σ ∧
+      (∀ b : c, ∀ hab : a.1 ≤ b.1,
+        leftQuotientProjection K b.1.N
+          (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b) ∘ σ =
+          a.1.le_map hab) ∧
+      σ a.1.sourceOne = 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A chain of quotient generator pairs has a refinement lifting to the intersection of its kernels.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  <span class="kw">let</span> K : Subgroup G := iInf <span class="kw">fun</span> p : c =&gt; p.1.N
+  letI : K.Normal := Subgroup.normal_iInf_normal <span class="kw">fun</span> p : c =&gt; p.1.normal_N
+  <span class="kw">let</span> Tail := {b : c // a.1 ≤ b.1}
+  letI : Nonempty Tail := ⟨⟨a, le_rfl⟩⟩
+  <span class="kw">let</span> L : Tail → ClosedSubgroup G := <span class="kw">fun</span> b =&gt;
+    ⟨b.1.1.N, b.1.1.closed_N⟩
+  <span class="kw">have</span> hL : ∀ {i j : Tail}, i ≤ j → (L j : Subgroup G) ≤ (L i : Subgroup G) := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    <span class="kw">exact</span> QuotientGeneratorConvergingPair.le_hBA hij
+  <span class="kw">have</span> hdir : Directed (· ≤ ·) (id : Tail → Tail) := <span class="kw">by</span>
+    <span class="kw">intro</span> i j
+    by_cases hij : i ≤ j
+    · <span class="kw">exact</span> ⟨j, hij, le_rfl⟩
+    · <span class="kw">have</span> hji : j ≤ i := <span class="kw">by</span>
+        by_cases hEq : i = j
+        · <span class="kw">exact</span> hEq ▸ le_rfl
+        · rcases hc i.1.2 j.1.2 (<span class="kw">by</span>
+            <span class="kw">intro</span> h
+            <span class="kw">exact</span> hEq (Subtype.ext (Subtype.ext h))) <span class="kw">with</span> hij&#x27; | hji&#x27;
+          · <span class="kw">exact</span> False.elim (hij hij&#x27;)
+          · <span class="kw">exact</span> hji&#x27;
+      <span class="kw">exact</span> ⟨i, le_rfl, hji⟩
+  <span class="kw">let</span> η : ∀ b : Tail, a.1.Source → G ⧸ (L b : Subgroup G) := <span class="kw">fun</span> b =&gt;
+    a.1.le_map b.2
+  <span class="kw">have</span> hηcont : ∀ b : Tail, Continuous (η b) := <span class="kw">by</span>
+    <span class="kw">intro</span> b
+    <span class="kw">exact</span> a.1.le_map_continuous b.2
+  <span class="kw">have</span> hηcompat : ∀ {i j : Tail} (hij : i ≤ j),
+      leftQuotientProjection (L j : Subgroup G) (L i : Subgroup G) (hL hij) ∘ η j = η i := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext x
+    rcases a.1.source_cases x <span class="kw">with</span> <span class="kw">rfl</span> | ⟨y, <span class="kw">rfl</span>⟩
+    · <span class="kw">have</span> h1j : η j a.1.sourceOne = 1 := <span class="kw">by</span>
+        change a.1.le_map j.2 a.1.sourceOne = 1
+        <span class="kw">exact</span> a.1.le_map_one j.2
+      <span class="kw">have</span> h1i : η i a.1.sourceOne = 1 := <span class="kw">by</span>
+        change a.1.le_map i.2 a.1.sourceOne = 1
+        <span class="kw">exact</span> a.1.le_map_one i.2
+      <span class="kw">calc</span>
+        (leftQuotientProjection (L j : Subgroup G) (L i : Subgroup G) (hL hij) ∘ η j)
+            a.1.sourceOne
+            = leftQuotientProjection (L j : Subgroup G) (L i : Subgroup G) (hL hij)
+                (η j a.1.sourceOne) := <span class="kw">by</span>
+                    <span class="kw">simp</span> only [Function.comp]
+        _ = leftQuotientProjection (L j : Subgroup G) (L i : Subgroup G) (hL hij) 1 := <span class="kw">by</span>
+              <span class="kw">rw</span> [h1j]
+        _ = 1 := <span class="kw">by</span> <span class="kw">rfl</span>
+        _ = η i a.1.sourceOne := <span class="kw">by</span> <span class="kw">rw</span> [h1i]
+    · simpa [η] using a.1.le_map_compat i.2 j.2 hij y
+  <span class="kw">have</span> hηone : ∀ b : Tail, η b a.1.sourceOne = 1 := <span class="kw">by</span>
+    <span class="kw">intro</span> b
+    change a.1.le_map b.2 a.1.sourceOne = 1
+    <span class="kw">exact</span> a.1.le_map_one b.2
+  obtain ⟨ηinf, hηinf_continuous, hηinf_fac, hηinf_one⟩ :=
+    exists_continuous_leftQuotient_lift_of_directed
+      (G := G) L hL hdir η hηcont hηcompat a.1.sourceOne hηone
+  <span class="kw">let</span> H : Subgroup G := ((closedSubgroup_sInf L : ClosedSubgroup G) : Subgroup G)
+  <span class="kw">have</span> hKeq : H = K := <span class="kw">by</span>
+    <span class="kw">apply</span> le_antisymm
+    · refine le_iInf ?_
+      <span class="kw">intro</span> p
+      by_cases hap : a.1 ≤ p.1
+      · <span class="kw">exact</span> iInf_le (<span class="kw">fun</span> b : Tail =&gt; (L b : Subgroup G)) ⟨p, hap⟩
+      · <span class="kw">have</span> hKa :
+          H ≤ a.1.N :=
+          iInf_le (<span class="kw">fun</span> b : Tail =&gt; (L b : Subgroup G)) ⟨a, le_rfl⟩
+        by_cases hEq : p = a
+        · simpa [K, hEq] using hKa
+        · rcases hc p.2 a.2 (<span class="kw">by</span>
+            <span class="kw">intro</span> h
+            <span class="kw">exact</span> hEq (Subtype.ext h)) <span class="kw">with</span> hpa | hap&#x27;
+          · <span class="kw">exact</span> hKa.trans (QuotientGeneratorConvergingPair.le_hBA hpa)
+          · <span class="kw">exact</span> False.elim (hap hap&#x27;)
+    · refine le_iInf ?_
+      <span class="kw">intro</span> b
+      <span class="kw">exact</span> iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b.1
+  letI : H.Normal := <span class="kw">by</span>
+    <span class="kw">exact</span> Subgroup.normal_iInf_normal <span class="kw">fun</span> b : Tail =&gt; b.1.1.normal_N
+  <span class="kw">have</span> hGoal :
+      ∃ σ : a.1.Source → G ⧸ H,
+        Continuous σ ∧
+        (∀ b : c, ∀ hab : a.1 ≤ b.1,
+          leftQuotientProjection H b.1.N
+              (closedSubgroup_sInf_le (L := L) ⟨b, hab⟩) ∘ σ =
+            a.1.le_map hab) ∧
+        σ a.1.sourceOne = 1 := <span class="kw">by</span>
+    refine ⟨ηinf, hηinf_continuous, ?_, hηinf_one⟩
+    <span class="kw">intro</span> b hab
+    simpa [Tail, L, η] using hηinf_fac ⟨b, hab⟩
+  <span class="kw">have</span> hGoal&#x27; :
+      ∃ σ : a.1.Source → G ⧸ H,
+        Continuous σ ∧
+        (∀ b : c, ∀ hab : a.1 ≤ b.1,
+          leftQuotientProjection H b.1.N
+              (hKeq.trans_le (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b)) ∘ σ =
+            a.1.le_map hab) ∧
+        σ a.1.sourceOne = 1 := <span class="kw">by</span>
+    rcases hGoal <span class="kw">with</span> ⟨σ, hσcont, hσfac, hσone⟩
+    refine ⟨σ, hσcont, ?_, hσone⟩
+    <span class="kw">intro</span> b hab
+    simpa using hσfac b hab
+  change
+    ∃ σ : a.1.Source → G ⧸ K,
+      Continuous σ ∧
+      (∀ b : c, ∀ hab : a.1 ≤ b.1,
+        leftQuotientProjection K b.1.N
+          (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b) ∘ σ =
+          a.1.le_map hab) ∧
+      σ a.1.sourceOne = 1
+  <span class="kw">let</span> Data : <span class="kw">Type</span> _ := { J : Subgroup G // J.Normal ∧ ∀ b : c, J ≤ b.1.N }
+  <span class="kw">let</span> P : Data → <span class="kw">Prop</span> := <span class="kw">fun</span> d =&gt;
+    letI : d.1.Normal := d.2.1
+    ∃ σ : a.1.Source → G ⧸ d.1,
+      Continuous σ ∧
+      (∀ b : c, ∀ hab : a.1 ≤ b.1,
+        leftQuotientProjection d.1 b.1.N (d.2.2 b) ∘ σ =
+          a.1.le_map hab) ∧
+      σ a.1.sourceOne = 1
+  <span class="kw">let</span> dH : Data :=
+    ⟨H, ⟨inferInstance, <span class="kw">fun</span> b =&gt; hKeq.trans_le (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b)⟩⟩
+  <span class="kw">let</span> dK : Data :=
+    ⟨K, ⟨inferInstance, <span class="kw">fun</span> b =&gt; iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b⟩⟩
+  <span class="kw">have</span> hd : dH = dK := <span class="kw">by</span>
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">exact</span> hKeq
+  <span class="kw">have</span> hPdH : P dH := <span class="kw">by</span>
+    simpa [P, dH] using hGoal&#x27;
+  <span class="kw">have</span> hPdK : P dK := <span class="kw">by</span>
+    <span class="kw">exact</span> Eq.mp (congrArg P hd) hPdH
+  simpa [P, dK] using hPdK</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Generation.quotientGeneratorPairTop">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.quotientGeneratorPairTop">ProCGroups.Generation.quotientGeneratorPairTop</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L684">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> quotientGeneratorPairTop :
+    QuotientGeneratorConvergingPair (G := G) <span class="kw">where</span>
+  N := ⊤
+  normal_N := <span class="kw">by</span> infer_instance
+  closed_N := isClosed_univ
+  Y := ∅
+  subset_compl := <span class="kw">by</span> <span class="kw">intro</span> q hq; <span class="kw">simp</span> only [mem_empty_iff_false] at hq
+  converges := <span class="kw">by</span> <span class="kw">intro</span> U; <span class="kw">simp</span> only [empty_sdiff, finite_empty]
+  generates := <span class="kw">by</span>
+    classical
+    <span class="kw">rw</span> [TopologicallyGenerates]
+    <span class="kw">apply</span> top_unique
+    <span class="kw">intro</span> q hq
+    rcases Quotient.exists_rep q <span class="kw">with</span> ⟨g, <span class="kw">rfl</span>⟩
+    <span class="kw">have</span> hg1 : QuotientGroup.mk&#x27; (⊤ : Subgroup G) g = (1 : G ⧸ (⊤ : Subgroup G)) := <span class="kw">by</span>
+      <span class="kw">exact</span> (QuotientGroup.eq_one_iff (N := (⊤ : Subgroup G)) g).2 (<span class="kw">by</span> <span class="kw">simp</span> only [Subgroup.mem_top])
+    <span class="kw">have</span> hbot :
+        QuotientGroup.mk&#x27; (⊤ : Subgroup G) g ∈ (⊥ : Subgroup (G ⧸ (⊤ : Subgroup G))) := <span class="kw">by</span>
+      change QuotientGroup.mk&#x27; (⊤ : Subgroup G) g = (1 : G ⧸ (⊤ : Subgroup G))
+      <span class="kw">exact</span> hg1
+    simpa [Subgroup.closure_eq] using
+      (Subgroup.le_topologicalClosure (⊥ : Subgroup (G ⧸ (⊤ : Subgroup G))) hbot)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The top quotient generator pair is the maximal object in the quotient-generator construction.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.quotientGeneratorPair_exists_strictExtension">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.quotientGeneratorPair_exists_strictExtension">ProCGroups.Generation.quotientGeneratorPair_exists_strictExtension</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L708">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientGeneratorPair_exists_strictExtension
+    (p : QuotientGeneratorConvergingPair (G := G))
+    (hne : p.N ≠ ⊥) :
+    ∃ p&#x27; : QuotientGeneratorConvergingPair (G := G), p ≤ p&#x27; ∧ ¬ p&#x27; ≤ p</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A nonmaximal quotient generator pair admits a strict extension refining its quotient data.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  rcases (Subgroup.ne_bot_iff_exists_ne_one).1 hne <span class="kw">with</span> ⟨m, hmne⟩
+  <span class="kw">have</span> hmne&#x27; : (m : G) ≠ 1 := <span class="kw">by</span>
+    <span class="kw">intro</span> hm1
+    <span class="kw">apply</span> hmne
+    ext
+    simpa using hm1
+  rcases exists_openNormalSubgroup_not_mem (G := G) hmne&#x27; <span class="kw">with</span> ⟨U, hmU⟩
+  <span class="kw">let</span> N&#x27; : Subgroup G := (U : Subgroup G) ⊓ p.N
+  <span class="kw">have</span> hN&#x27;closed : IsClosed (N&#x27; : Set G) := <span class="kw">by</span>
+    <span class="kw">exact</span> (openNormalSubgroup_isClosed (G := G) U).inter p.closed_N
+  <span class="kw">have</span> hN&#x27;proper : ¬ p.N ≤ N&#x27; := <span class="kw">by</span>
+    <span class="kw">intro</span> hp
+    <span class="kw">exact</span> hmU (hp m.2).1
+  obtain ⟨σ, hσcont, hσright, hσone⟩ :=
+    leftQuotientProjection_hasContinuousSection
+      (G := G)
+      ⟨N&#x27;, hN&#x27;closed⟩
+      ⟨p.N, p.closed_N⟩
+      inf_le_right
+  rcases exists_finite_subset_generating_subgroup_mod_openNormal (G := G)
+      (M := p.N) (hMclosed := p.closed_N) U <span class="kw">with</span> ⟨T, hTfin, hTsub, hTgen⟩
+  <span class="kw">let</span> Tbar : Set (G ⧸ N&#x27;) := (QuotientGroup.mk&#x27; N&#x27;) &#x27;&#x27; T
+  <span class="kw">let</span> Y&#x27; : Set (G ⧸ N&#x27;) := σ &#x27;&#x27; p.Y ∪ Tbar
+  <span class="kw">have</span> hY&#x27;compl : Y&#x27; ⊆ ({1} : Set (G ⧸ N&#x27;))ᶜ := <span class="kw">by</span>
+    <span class="kw">intro</span> q hq
+    rcases hq <span class="kw">with</span> hq | hq
+    · rcases hq <span class="kw">with</span> ⟨y, hy, <span class="kw">rfl</span>⟩
+      <span class="kw">intro</span> hq1
+      <span class="kw">have</span> hσy1 : σ y = 1 := <span class="kw">by</span>
+        simpa using hq1
+      <span class="kw">have</span> : y = 1 := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          y = leftQuotientProjection (N&#x27;) (p.N) inf_le_right (σ y) := (hσright y).symm
+          _ = leftQuotientProjection (N&#x27;) (p.N) inf_le_right 1 := <span class="kw">by</span> <span class="kw">rw</span> [hσy1]
+          _ = 1 := <span class="kw">rfl</span>
+      <span class="kw">exact</span> p.subset_compl hy this
+    · rcases hq <span class="kw">with</span> ⟨t, ht, <span class="kw">rfl</span>⟩
+      <span class="kw">intro</span> hq1
+      <span class="kw">have</span> htN&#x27; : t ∈ N&#x27; := (QuotientGroup.eq_one_iff (N := N&#x27;) t).1 hq1
+      <span class="kw">exact</span> (hTsub ht).2 htN&#x27;
+  <span class="kw">have</span> hY&#x27;conv : ConvergesToOneAlongOpenSubgroups (G := G ⧸ N&#x27;) Y&#x27; := <span class="kw">by</span>
+    letI : IsClosed (p.N : Set G) := p.closed_N
+    letI : TotallyDisconnectedSpace (G ⧸ p.N) :=
+      <a class="decl-ref" href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html#decl-ProCGroups.totallyDisconnectedSpace_quotient_closedNormal">ProCGroups.totallyDisconnectedSpace_quotient_closedNormal</a> p.N p.closed_N
+    <span class="kw">intro</span> V
+    <span class="kw">have</span> hσconv :
+        ((σ &#x27;&#x27; p.Y) \ (V : Set (G ⧸ N&#x27;))).Finite := <span class="kw">by</span>
+      <span class="kw">exact</span>
+        (ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed
+          (G := G ⧸ p.N) (H := G ⧸ N&#x27;)
+          hσcont hσone p.converges) V
+    <span class="kw">have</span> hTconv : (Tbar \ (V : Set (G ⧸ N&#x27;))).Finite :=
+      (hTfin.image (QuotientGroup.mk&#x27; N&#x27;)).subset (<span class="kw">by</span>
+        <span class="kw">intro</span> q hq
+        <span class="kw">exact</span> hq.1)
+    <span class="kw">exact</span> (hσconv.union hTconv).subset (<span class="kw">by</span>
+      <span class="kw">intro</span> q hq
+      rcases hq <span class="kw">with</span> ⟨hqY, hqV⟩
+      rcases hqY <span class="kw">with</span> hqσ | hqT
+      · <span class="kw">exact</span> Or.inl ⟨hqσ, hqV⟩
+      · <span class="kw">exact</span> Or.inr ⟨hqT, hqV⟩)
+  <span class="kw">have</span> hY&#x27;gen :
+      TopologicallyGenerates (G := G ⧸ N&#x27;) Y&#x27; := <span class="kw">by</span>
+    <span class="kw">exact</span> topologicallyGenerates_of_quotient_section_union_kernel
+      (G := G) p.closed_N hN&#x27;closed inf_le_right
+      p.generates hσright hTgen
+  refine ⟨{ N := N&#x27;
+            normal_N := <span class="kw">by</span> infer_instance
+            closed_N := hN&#x27;closed
+            Y := Y&#x27;
+            subset_compl := hY&#x27;compl
+            converges := hY&#x27;conv
+            generates := hY&#x27;gen }, ?_, ?_⟩
+  · <span class="kw">let</span> σ&#x27; : p.Source → G ⧸ N&#x27; := <span class="kw">fun</span> x =&gt; σ x.1
+    refine ⟨inf_le_right, σ&#x27;, ?_, ?_, ?_, ?_, ?_⟩
+    · change Continuous (<span class="kw">fun</span> x : p.Source =&gt; σ x.1)
+      <span class="kw">exact</span> hσcont.comp continuous_subtype_val
+    · <span class="kw">intro</span> x
+      <span class="kw">exact</span> hσright x.1
+    · <span class="kw">exact</span> hσone
+    · <span class="kw">intro</span> q
+      <span class="kw">exact</span> Or.inl ⟨q.1, q.2, <span class="kw">rfl</span>⟩
+    · <span class="kw">intro</span> q hq
+      rcases hq <span class="kw">with</span> ⟨hqY&#x27;, hqnotσ⟩
+      rcases hqY&#x27; <span class="kw">with</span> hqσ | hqT
+      · rcases hqσ <span class="kw">with</span> ⟨y, hy, <span class="kw">rfl</span>⟩
+        <span class="kw">exact</span> False.elim (hqnotσ ⟨⟨y, hy⟩, <span class="kw">rfl</span>⟩)
+      · rcases hqT <span class="kw">with</span> ⟨t, ht, <span class="kw">rfl</span>⟩
+        <span class="kw">have</span> htN : t ∈ p.N := (hTsub ht).1
+        simpa [leftQuotientProjection_mk] using
+          (QuotientGroup.eq_one_iff (N := p.N) t).2 htN
+  · <span class="kw">intro</span> hp&#x27;
+    <span class="kw">exact</span> hN&#x27;proper hp&#x27;.1</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.closedNormalQuotientSection_bot_eq">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.closedNormalQuotientSection_bot_eq">ProCGroups.Generation.closedNormalQuotientSection_bot_eq</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L808">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> closedNormalQuotientSection_bot_eq
+    (hbotClosed : IsClosed (((⊥ : Subgroup G) : Set G))) :
+    closedNormalQuotientSection (G := G)
+      (N := (⊥ : Subgroup G)) hbotClosed =
+      (quotientBotContinuousMulEquiv (G := G)).symm</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The closed-normal quotient section at the bottom subgroup is the identity section.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  funext q
+  <span class="kw">apply</span> (quotientBotContinuousMulEquiv (G := G)).injective
+  <span class="kw">have</span> h1 :
+      quotientBotContinuousMulEquiv (G := G)
+        (closedNormalQuotientSection (G := G)
+          (N := (⊥ : Subgroup G)) hbotClosed q) = q := <span class="kw">by</span>
+    simpa [quotientBotContinuousMulEquiv] using
+      (closedNormalQuotientSection_rightInverse (G := G)
+        (N := (⊥ : Subgroup G)) hbotClosed q)
+  <span class="kw">have</span> h2 :
+      quotientBotContinuousMulEquiv (G := G)
+        ((quotientBotContinuousMulEquiv (G := G)).symm q) = q := <span class="kw">by</span>
+    <span class="kw">simp</span> only [ContinuousMulEquiv.apply_symm_apply]
+  <span class="kw">exact</span> h1.trans h2.symm</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.toAmbientSet">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.toAmbientSet">ProCGroups.Generation.QuotientGeneratorConvergingPair.toAmbientSet</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L829">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> QuotientGeneratorConvergingPair.toAmbientSet
+    (p : QuotientGeneratorConvergingPair (G := G)) : Set G :=
+  closedNormalQuotientSection (G := G) (N := p.N) p.closed_N &#x27;&#x27; p.Y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The quotient generator pair maps its source set into the ambient generating set.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.toAmbientSet_generatesAndConvergesToOneAlongOpenSubgroups">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.QuotientGeneratorConvergingPair.toAmbientSet_generatesAndConvergesToOneAlongOpenSubgroups">ProCGroups.Generation.QuotientGeneratorConvergingPair.toAmbientSet_generatesAndConvergesToOneAlongOpenSubgroups</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L837">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> QuotientGeneratorConvergingPair.toAmbientSet_generatesAndConvergesToOneAlongOpenSubgroups
+    (p : QuotientGeneratorConvergingPair (G := G))
+    (hbot : p.N = ⊥) :
+    GeneratesAndConvergesToOneAlongOpenSubgroups (G := G) p.toAmbientSet</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The ambient representatives attached to a quotient generator pair topologically generate and converge to one.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  rcases p <span class="kw">with</span> ⟨N, hNnormal, hNclosed, Y, hYcompl, hYconv, hYgen⟩
+  <span class="kw">cases</span> hbot
+  <span class="kw">have</span> hbotClosed : IsClosed (((⊥ : Subgroup G) : Set G)) :=
+    (isClosed_singleton : IsClosed ({(1 : G)} : Set G))
+  <span class="kw">constructor</span>
+  · <span class="kw">let</span> e : (G ⧸ (⊥ : Subgroup G)) ≃ₜ* G := (quotientBotContinuousMulEquiv (G := G)).symm
+    <span class="kw">have</span> hgen :
+        TopologicallyGenerates (G := G)
+          (e &#x27;&#x27; Y) := topologicallyGenerates_continuousMulEquiv_image
+            (G := G ⧸ (⊥ : Subgroup G)) e hYgen
+    <span class="kw">rw</span> [QuotientGeneratorConvergingPair.toAmbientSet,
+      closedNormalQuotientSection_bot_eq (G := G) hbotClosed]
+    simpa using hgen
+  · letI : IsClosed (((⊥ : Subgroup G) : Set G)) := hbotClosed
+    letI : TotallyDisconnectedSpace (G ⧸ (⊥ : Subgroup G)) :=
+      <a class="decl-ref" href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html#decl-ProCGroups.totallyDisconnectedSpace_quotient_closedNormal">ProCGroups.totallyDisconnectedSpace_quotient_closedNormal</a>
+        (⊥ : Subgroup G) hbotClosed
+    <span class="kw">have</span> hconv :
+        ConvergesToOneAlongOpenSubgroups (G := G)
+          ((closedNormalQuotientSection (G := G)
+            (N := (⊥ : Subgroup G)) hbotClosed) &#x27;&#x27; Y) := <span class="kw">by</span>
+      <span class="kw">exact</span> ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed
+        (G := G ⧸ (⊥ : Subgroup G)) (H := G)
+        (closedNormalQuotientSection_continuous (G := G)
+          (N := (⊥ : Subgroup G)) hbotClosed)
+        (closedNormalQuotientSection_one (G := G)
+          (N := (⊥ : Subgroup G)) hbotClosed)
+        hYconv
+    <span class="kw">rw</span> [QuotientGeneratorConvergingPair.toAmbientSet]
+    <span class="kw">exact</span> hconv</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.quotientGeneratorPair_exists_upperBound_of_chain">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.quotientGeneratorPair_exists_upperBound_of_chain">ProCGroups.Generation.quotientGeneratorPair_exists_upperBound_of_chain</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L880">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientGeneratorPair_exists_upperBound_of_chain
+    (c : Set (QuotientGeneratorConvergingPair (G := G)))
+    (hc : IsChain (· ≤ ·) c) (hcn : c.Nonempty) :
+    ∃ ub : QuotientGeneratorConvergingPair (G := G), ∀ a ∈ c, a ≤ ub</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Every nonempty chain of quotient generator pairs has an upper bound.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  <span class="kw">let</span> K : Subgroup G := iInf <span class="kw">fun</span> p : c =&gt; p.1.N
+  letI : K.Normal := Subgroup.normal_iInf_normal <span class="kw">fun</span> p : c =&gt; p.1.normal_N
+  <span class="kw">have</span> hKclosed : IsClosed (K : Set G) := <span class="kw">by</span>
+    simpa [K] using isClosed_iInter (<span class="kw">fun</span> p : c =&gt; p.1.closed_N)
+  letI : IsClosed (K : Set G) := hKclosed
+  letI : TotallyDisconnectedSpace (G ⧸ K) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html#decl-ProCGroups.totallyDisconnectedSpace_quotient_closedNormal">ProCGroups.totallyDisconnectedSpace_quotient_closedNormal</a> K hKclosed
+  <span class="kw">let</span> lift : (a : c) → a.1.Source → G ⧸ K := <span class="kw">fun</span> a =&gt;
+    Classical.choose (quotientGeneratorPair_exists_liftToInf (G := G) hc a)
+  <span class="kw">have</span> hlift_continuous : ∀ a : c, Continuous (lift a) := <span class="kw">by</span>
+    <span class="kw">intro</span> a
+    <span class="kw">exact</span> (Classical.choose_spec
+      (quotientGeneratorPair_exists_liftToInf (G := G) hc a)).1
+  <span class="kw">have</span> hlift_fac :
+      ∀ (a b : c) (hab : a.1 ≤ b.1),
+        leftQuotientProjection K b.1.N
+          (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b) ∘ lift a =
+        a.1.le_map hab := <span class="kw">by</span>
+    <span class="kw">intro</span> a b hab
+    <span class="kw">exact</span> (Classical.choose_spec
+      (quotientGeneratorPair_exists_liftToInf (G := G) hc a)).2.1 b hab
+  <span class="kw">have</span> hlift_one : ∀ a : c, lift a a.1.sourceOne = 1 := <span class="kw">by</span>
+    <span class="kw">intro</span> a
+    <span class="kw">exact</span> (Classical.choose_spec
+      (quotientGeneratorPair_exists_liftToInf (G := G) hc a)).2.2
+  <span class="kw">have</span> exists_stage_above_le_open :
+      ∀ (a : c) {U : OpenSubgroup G}, K ≤ (U : Subgroup G) →
+        ∃ b : c, a.1 ≤ b.1 ∧ b.1.N ≤ (U : Subgroup G) := <span class="kw">by</span>
+    <span class="kw">intro</span> a U hKU
+    <span class="kw">let</span> d : Set (QuotientGeneratorConvergingPair (G := G)) :=
+      {p | p ∈ c ∧ a.1 ≤ p}
+    <span class="kw">have</span> hdchain : IsChain (· ≤ ·) d := <span class="kw">by</span>
+      <span class="kw">intro</span> x hx y hy hxy
+      <span class="kw">exact</span> hc hx.1 hy.1 hxy
+    <span class="kw">have</span> hdne : d.Nonempty := ⟨a.1, a.2, le_rfl⟩
+    <span class="kw">have</span> hdEq : iInf (<span class="kw">fun</span> p : d =&gt; p.1.N) = K := <span class="kw">by</span>
+      <span class="kw">apply</span> le_antisymm
+      · refine le_iInf ?_
+        <span class="kw">intro</span> p
+        by_cases hap : a.1 ≤ p.1
+        · <span class="kw">exact</span> iInf_le (<span class="kw">fun</span> q : d =&gt; q.1.N) ⟨p.1, p.2, hap⟩
+        · <span class="kw">have</span> hda :
+            iInf (<span class="kw">fun</span> q : d =&gt; q.1.N) ≤ a.1.N :=
+            iInf_le (<span class="kw">fun</span> q : d =&gt; q.1.N) ⟨a.1, a.2, le_rfl⟩
+          by_cases hEq : p.1 = a.1
+          · simpa [hEq] using hda
+          · rcases hc p.2 a.2 hEq <span class="kw">with</span> hpa | hap&#x27;
+            · <span class="kw">exact</span> hda.trans (QuotientGeneratorConvergingPair.le_hBA hpa)
+            · <span class="kw">exact</span> False.elim (hap hap&#x27;)
+      · refine le_iInf ?_
+        <span class="kw">intro</span> p
+        <span class="kw">exact</span> iInf_le (<span class="kw">fun</span> q : c =&gt; q.1.N) ⟨p.1, p.2.1⟩
+    <span class="kw">have</span> hdKU : iInf (<span class="kw">fun</span> p : d =&gt; p.1.N) ≤ (U : Subgroup G) := <span class="kw">by</span>
+      simpa [hdEq] using hKU
+    rcases exists_quotientPair_le_openSubgroup_of_chain_iInf_le
+        (G := G) hdchain hdne U hdKU <span class="kw">with</span> ⟨b, hbU⟩
+    <span class="kw">exact</span> ⟨⟨b.1, b.2.1⟩, b.2.2, hbU⟩
+  <span class="kw">let</span> stageImage : c → Set (G ⧸ K) := <span class="kw">fun</span> a =&gt;
+    Set.range <span class="kw">fun</span> y : a.1.Y =&gt; lift a (a.1.sourceOfY y)
+  <span class="kw">have</span> hlift_eq_of_le :
+      ∀ {a b : c} (hAB : a.1 ≤ b.1) (y : a.1.Y),
+        lift a (a.1.sourceOfY y) =
+          lift b (b.1.sourceOfY
+            ⟨a.1.le_map hAB (a.1.sourceOfY y), a.1.le_map_mem hAB y⟩) := <span class="kw">by</span>
+    <span class="kw">intro</span> a b hAB y
+    <span class="kw">let</span> yb : b.1.Y :=
+      ⟨a.1.le_map hAB (a.1.sourceOfY y), a.1.le_map_mem hAB y⟩
+    <span class="kw">let</span> q1 := lift a (a.1.sourceOfY y)
+    <span class="kw">let</span> q2 := lift b (b.1.sourceOfY yb)
+    <span class="kw">have</span> hmem :
+        ∀ W : OpenNormalSubgroup (G ⧸ K), q1⁻¹ * q2 ∈ (W : Set (G ⧸ K)) := <span class="kw">by</span>
+      <span class="kw">intro</span> W
+      <span class="kw">let</span> V : OpenNormalSubgroup G :=
+        OpenNormalSubgroup.comap (QuotientGroup.mk&#x27; K) QuotientGroup.continuous_mk W
+      <span class="kw">have</span> hKV : K ≤ (V : Subgroup G) := <span class="kw">by</span>
+        <span class="kw">intro</span> g hg
+        change QuotientGroup.mk&#x27; K g ∈ W
+        <span class="kw">have</span> hg1 : QuotientGroup.mk&#x27; K g = (1 : G ⧸ K) :=
+          (QuotientGroup.eq_one_iff (N := K) g).2 hg
+        <span class="kw">rw</span> [hg1]
+        <span class="kw">exact</span> W.one_mem&#x27;
+      obtain ⟨p, hbp, hpV⟩ := exists_stage_above_le_open b hKV
+      <span class="kw">have</span> hcompat :
+          a.1.le_map (hAB.trans hbp) (a.1.sourceOfY y) =
+            b.1.le_map hbp (b.1.sourceOfY yb) := <span class="kw">by</span>
+        <span class="kw">have</span> hqY :
+            a.1.le_map (hAB.trans hbp) (a.1.sourceOfY y) ∈ p.1.Y :=
+          a.1.le_map_mem (hAB.trans hbp) y
+        <span class="kw">have</span> hqproj :
+            leftQuotientProjection (p.1.N) (b.1.N) (b.1.le_hBA hbp)
+              (a.1.le_map (hAB.trans hbp) (a.1.sourceOfY y)) = yb.1 := <span class="kw">by</span>
+          simpa [yb] using a.1.le_map_compat hAB (hAB.trans hbp) hbp y
+        <span class="kw">exact</span> b.1.eq_le_map_of_mem_of_proj_eq hbp yb hqY hqproj
+      <span class="kw">have</span> hEqp :
+          leftQuotientProjection K p.1.N
+              (iInf_le (<span class="kw">fun</span> r : c =&gt; r.1.N) p) q1 =
+            leftQuotientProjection K p.1.N
+              (iInf_le (<span class="kw">fun</span> r : c =&gt; r.1.N) p) q2 := <span class="kw">by</span>
+        <span class="kw">have</span> hq1 :=
+          congrFun (hlift_fac a p (hAB.trans hbp)) (a.1.sourceOfY y)
+        <span class="kw">have</span> hq2 :=
+          congrFun (hlift_fac b p hbp) (b.1.sourceOfY yb)
+        <span class="kw">calc</span>
+          leftQuotientProjection K p.1.N
+              (iInf_le (<span class="kw">fun</span> r : c =&gt; r.1.N) p) q1
+              = a.1.le_map (hAB.trans hbp) (a.1.sourceOfY y) := <span class="kw">by</span>
+                  simpa [q1] using hq1
+          _ = b.1.le_map hbp (b.1.sourceOfY yb) := hcompat
+          _ = leftQuotientProjection K p.1.N
+                (iInf_le (<span class="kw">fun</span> r : c =&gt; r.1.N) p) q2 := <span class="kw">by</span>
+                  simpa [q2] using hq2.symm
+      <span class="kw">have</span> hEqV :
+          leftQuotientProjection K (V : Subgroup G) hKV q1 =
+            leftQuotientProjection K (V : Subgroup G) hKV q2 := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          leftQuotientProjection K (V : Subgroup G) hKV q1
+              = leftQuotientProjection (p.1.N) (V : Subgroup G) hpV
+                  (leftQuotientProjection K p.1.N
+                    (iInf_le (<span class="kw">fun</span> r : c =&gt; r.1.N) p) q1) := <span class="kw">by</span>
+                      <span class="kw">exact</span>
+                        leftQuotientProjection_comp_apply_symm
+                          (K := (K : Subgroup G)) (H := (p.1.N : Subgroup G))
+                          (L := (V : Subgroup G)) (iInf_le (<span class="kw">fun</span> r : c =&gt; r.1.N) p)
+                          hpV q1
+        _ = leftQuotientProjection (p.1.N) (V : Subgroup G) hpV
+                (leftQuotientProjection K p.1.N
+                  (iInf_le (<span class="kw">fun</span> r : c =&gt; r.1.N) p) q2) := <span class="kw">by</span>
+                    <span class="kw">rw</span> [hEqp]
+          _ = leftQuotientProjection K (V : Subgroup G) hKV q2 := <span class="kw">by</span>
+                <span class="kw">exact</span> (leftQuotientProjection_comp_apply_symm
+                  (K := (K : Subgroup G)) (H := (p.1.N : Subgroup G))
+                  (L := (V : Subgroup G)) (iInf_le (<span class="kw">fun</span> r : c =&gt; r.1.N) p) hpV q2).symm
+      revert hEqV
+      refine Quotient.inductionOn₂&#x27; q1 q2 ?_
+      <span class="kw">intro</span> g1 g2 hEqV
+      change QuotientGroup.mk&#x27; K (g1⁻¹ * g2) ∈ W
+      <span class="kw">have</span> hEqV&#x27; :
+          QuotientGroup.mk&#x27; (V : Subgroup G) g1 =
+            QuotientGroup.mk&#x27; (V : Subgroup G) g2 := <span class="kw">by</span>
+        simpa [leftQuotientProjection_mk] using hEqV
+      <span class="kw">have</span> hgV : g1⁻¹ * g2 ∈ (V : Subgroup G) := (QuotientGroup.eq).1 hEqV&#x27;
+      change QuotientGroup.mk&#x27; K (g1⁻¹ * g2) ∈ W at hgV
+      <span class="kw">exact</span> hgV
+    <span class="kw">have</span> hq1 :
+        q1⁻¹ * q2 = 1 := <span class="kw">by</span>
+      <span class="kw">exact</span> ProfiniteGrp.eq_one_of_mem_all_openNormalSubgroups
+        (G := G ⧸ K) hmem
+    <span class="kw">calc</span>
+      q1 = q1 * 1 := <span class="kw">by</span> <span class="kw">simp</span> only [mul_one]
+      _ = q1 * (q1⁻¹ * q2) := <span class="kw">by</span> <span class="kw">rw</span> [hq1]
+      _ = q2 := <span class="kw">by</span> <span class="kw">simp</span> only [mul_inv_cancel_left]
+  <span class="kw">have</span> hstage_mono :
+      ∀ {a b : c} (hAB : a.1 ≤ b.1), stageImage a ⊆ stageImage b := <span class="kw">by</span>
+    <span class="kw">intro</span> a b hAB q hq
+    rcases hq <span class="kw">with</span> ⟨y, <span class="kw">rfl</span>⟩
+    refine ⟨⟨a.1.le_map hAB (a.1.sourceOfY y), a.1.le_map_mem hAB y⟩, ?_⟩
+    <span class="kw">exact</span> (hlift_eq_of_le hAB y).symm
+  <span class="kw">have</span> hstage_diff :
+      ∀ {a b : c} (hAB : a.1 ≤ b.1),
+        stageImage b \ stageImage a ⊆
+          {q : G ⧸ K |
+            leftQuotientProjection K a.1.N
+              (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a) q = 1} := <span class="kw">by</span>
+    <span class="kw">intro</span> a b hAB q hq
+    rcases hq.1 <span class="kw">with</span> ⟨yb, <span class="kw">rfl</span>⟩
+    by_cases hybim : yb.1 ∈ a.1.yImage b.1 (a.1.le_map hAB)
+    · rcases hybim <span class="kw">with</span> ⟨y, hyEq⟩
+      <span class="kw">have</span> hEq :
+          lift b (b.1.sourceOfY yb) = lift a (a.1.sourceOfY y) := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          lift b (b.1.sourceOfY yb)
+              = lift b (b.1.sourceOfY
+                  ⟨a.1.le_map hAB (a.1.sourceOfY y), a.1.le_map_mem hAB y⟩) := <span class="kw">by</span>
+                    <span class="kw">simp</span> only [hyEq, Subtype.coe_eta]
+          _ = lift a (a.1.sourceOfY y) := (hlift_eq_of_le hAB y).symm
+      <span class="kw">exact</span> False.elim (hq.2 ⟨y, hEq.symm⟩)
+    · <span class="kw">have</span> hybker :
+          leftQuotientProjection (b.1.N) (a.1.N) (a.1.le_hBA hAB) yb.1 = 1 :=
+        a.1.le_map_diff hAB ⟨yb.2, hybim⟩
+      <span class="kw">have</span> hqb :
+          leftQuotientProjection K b.1.N
+            (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b)
+            (lift b (b.1.sourceOfY yb)) = yb.1 := <span class="kw">by</span>
+        <span class="kw">calc</span>
+          leftQuotientProjection K b.1.N
+              (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b)
+              (lift b (b.1.sourceOfY yb)) = b.1.le_map le_rfl (b.1.sourceOfY yb) := <span class="kw">by</span>
+            <span class="kw">exact</span> congrFun (hlift_fac b b le_rfl) (b.1.sourceOfY yb)
+          _ = yb.1 := <span class="kw">by</span>
+            simpa only [leftQuotientProjection_id, id_eq,
+              QuotientGeneratorConvergingPair.sourceOfY] using
+              b.1.le_map_right le_rfl (b.1.sourceOfY yb)
+      <span class="kw">calc</span>
+        leftQuotientProjection K a.1.N
+            (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a)
+            (lift b (b.1.sourceOfY yb))
+            = leftQuotientProjection (b.1.N) (a.1.N) (a.1.le_hBA hAB)
+                (leftQuotientProjection K b.1.N
+                  (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b)
+                  (lift b (b.1.sourceOfY yb))) := <span class="kw">by</span>
+            <span class="kw">exact</span>
+              (leftQuotientProjection_comp_apply
+                (K := (K : Subgroup G)) (H := (b.1.N : Subgroup G))
+                (L := (a.1.N : Subgroup G)) (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) b)
+                (a.1.le_hBA hAB) (lift b (b.1.sourceOfY yb))).symm
+        _ = leftQuotientProjection (b.1.N) (a.1.N) (a.1.le_hBA hAB) yb.1 := <span class="kw">by</span>
+            <span class="kw">rw</span> [hqb]
+        _ = 1 := hybker
+  <span class="kw">let</span> Y : Set (G ⧸ K) := ⋃ a : c, stageImage a
+  <span class="kw">have</span> hYcompl : Y ⊆ ({1} : Set (G ⧸ K))ᶜ := <span class="kw">by</span>
+    <span class="kw">intro</span> q hq
+    rcases mem_iUnion.mp hq <span class="kw">with</span> ⟨a, hqa⟩
+    rcases hqa <span class="kw">with</span> ⟨y, <span class="kw">rfl</span>⟩
+    <span class="kw">have</span> hqy :
+        leftQuotientProjection K a.1.N
+          (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a)
+          (lift a (a.1.sourceOfY y)) = y.1 := <span class="kw">by</span>
+      <span class="kw">have</span> hliftProjection := congrFun (hlift_fac a a le_rfl) (a.1.sourceOfY y)
+      <span class="kw">calc</span>
+        leftQuotientProjection K a.1.N
+            (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a)
+            (lift a (a.1.sourceOfY y))
+            = a.1.le_map le_rfl (a.1.sourceOfY y) := <span class="kw">by</span>
+                simpa using hliftProjection
+        _ = y.1 := <span class="kw">by</span>
+            simpa only [leftQuotientProjection_id, id_eq,
+              QuotientGeneratorConvergingPair.sourceOfY] using
+              a.1.le_map_right le_rfl (a.1.sourceOfY y)
+    <span class="kw">intro</span> hq1
+    <span class="kw">have</span> hq1&#x27; : lift a (a.1.sourceOfY y) = 1 := <span class="kw">by</span> simpa using hq1
+    <span class="kw">have</span> hy1 : y.1 = 1 := <span class="kw">by</span>
+      <span class="kw">calc</span>
+        y.1 = leftQuotientProjection K a.1.N
+              (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a)
+              (lift a (a.1.sourceOfY y)) := hqy.symm
+        _ = leftQuotientProjection K a.1.N
+              (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a) 1 := <span class="kw">by</span> <span class="kw">rw</span> [hq1&#x27;]
+        _ = 1 := <span class="kw">by</span> <span class="kw">rfl</span>
+    <span class="kw">exact</span> a.1.subset_compl y.2 hy1
+  <span class="kw">have</span> hYconv : ConvergesToOneAlongOpenSubgroups (G := G ⧸ K) Y := <span class="kw">by</span>
+    <span class="kw">intro</span> W
+    <span class="kw">let</span> V : OpenSubgroup G :=
+      OpenSubgroup.comap (QuotientGroup.mk&#x27; K) QuotientGroup.continuous_mk W
+    <span class="kw">have</span> hKV : K ≤ (V : Subgroup G) := <span class="kw">by</span>
+      <span class="kw">intro</span> g hg
+      change QuotientGroup.mk&#x27; K g ∈ W
+      <span class="kw">have</span> hg1 : QuotientGroup.mk&#x27; K g = (1 : G ⧸ K) :=
+        (QuotientGroup.eq_one_iff (N := K) g).2 hg
+      <span class="kw">rw</span> [hg1]
+      <span class="kw">exact</span> W.one_mem&#x27;
+    rcases exists_quotientPair_le_openSubgroup_of_chain_iInf_le
+        (G := G) hc hcn V (<span class="kw">by</span> simpa [K] using hKV) <span class="kw">with</span> ⟨a, haV⟩
+    <span class="kw">have</span> hstageconv : ConvergesToOneAlongOpenSubgroups (G := G ⧸ K) (stageImage a) := <span class="kw">by</span>
+      letI : IsClosed (a.1.N : Set G) := a.1.closed_N
+      letI : TotallyDisconnectedSpace (G ⧸ a.1.N) :=
+        <a class="decl-ref" href="../../../library/ProCGroups/ProC/Quotients/ClosedNormal.html#decl-ProCGroups.totallyDisconnectedSpace_quotient_closedNormal">ProCGroups.totallyDisconnectedSpace_quotient_closedNormal</a>
+          a.1.N a.1.closed_N
+      <span class="kw">have</span> hconv :=
+        ConvergesToOneAlongOpenSubgroups.range_subtype_pointed
+          (G := G ⧸ a.1.N) (H := G ⧸ K)
+          (hf := hlift_continuous a) (hf1 := hlift_one a) (hX := a.1.converges)
+      <span class="kw">have</span> himage :
+          stageImage a =
+            Set.range (<span class="kw">fun</span> y : a.1.Y =&gt;
+              lift a ⟨y.1, Or.inr y.2⟩) := <span class="kw">by</span>
+        ext q
+        <span class="kw">constructor</span> &lt;;&gt; rintro ⟨y, <span class="kw">rfl</span>⟩ &lt;;&gt; <span class="kw">exact</span> ⟨y, <span class="kw">rfl</span>⟩
+      <span class="kw">rw</span> [himage]
+      <span class="kw">exact</span> hconv
+    <span class="kw">have</span> hsubset : Y \ (W : Set (G ⧸ K)) ⊆ stageImage a \ (W : Set (G ⧸ K)) := <span class="kw">by</span>
+      <span class="kw">intro</span> q hq
+      rcases hq <span class="kw">with</span> ⟨hqY, hqW⟩
+      rcases mem_iUnion.mp hqY <span class="kw">with</span> ⟨b, hbq⟩
+      by_cases hba : b.1 ≤ a.1
+      · <span class="kw">exact</span> ⟨hstage_mono hba hbq, hqW⟩
+      · <span class="kw">have</span> hcmp : a.1 ≤ b.1 := <span class="kw">by</span>
+          by_cases hEq : a = b
+          · <span class="kw">exact</span> hEq ▸ le_rfl
+          · rcases hc a.2 b.2 (<span class="kw">by</span>
+              <span class="kw">intro</span> h
+              <span class="kw">exact</span> hEq (Subtype.ext h)) <span class="kw">with</span> hab | hba&#x27;
+            · <span class="kw">exact</span> hab
+            · <span class="kw">exact</span> False.elim (hba hba&#x27;)
+        by_cases hqa : q ∈ stageImage a
+        · <span class="kw">exact</span> ⟨hqa, hqW⟩
+        · <span class="kw">have</span> hq1 :
+            leftQuotientProjection K a.1.N
+              (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a) q = 1 :=
+            hstage_diff hcmp ⟨hbq, hqa⟩
+          <span class="kw">have</span> hqWin : q ∈ W := <span class="kw">by</span>
+            rcases Quotient.exists_rep q <span class="kw">with</span> ⟨g, <span class="kw">rfl</span>⟩
+            change QuotientGroup.mk&#x27; K g ∈ W
+            <span class="kw">have</span> hgA : g ∈ a.1.N := <span class="kw">by</span>
+              simpa [leftQuotientProjection_mk] using
+                (QuotientGroup.eq_one_iff (N := a.1.N) g).1 hq1
+            <span class="kw">have</span> hgV : g ∈ (V : Subgroup G) := haV hgA
+            simpa [V, OpenSubgroup.mem_comap] using hgV
+          <span class="kw">exact</span> False.elim (hqW hqWin)
+    <span class="kw">exact</span> (hstageconv W).subset hsubset
+  <span class="kw">have</span> hYgen : TopologicallyGenerates (G := G ⧸ K) Y := <span class="kw">by</span>
+    <span class="kw">have</span> hbotclosed : IsClosed ((⊥ : Subgroup (G ⧸ K)) : Set (G ⧸ K)) := <span class="kw">by</span>
+      change IsClosed ({(1 : G ⧸ K)} : Set (G ⧸ K))
+      <span class="kw">simp</span> only [finite_singleton, Finite.isClosed]
+    <span class="kw">have</span> hgen1 :
+        TopologicallyGenerates (G := G ⧸ K) (Y ∪ ({1} : Set (G ⧸ K))) := <span class="kw">by</span>
+      <span class="kw">apply</span> (topologicallyGenerates_union_subgroup_iff_forall_openNormalQuotient
+        (G := G ⧸ K)
+        (N := (⊥ : Subgroup (G ⧸ K))) (X := Y)).2
+      <span class="kw">intro</span> W hbotW
+      <span class="kw">let</span> V : OpenNormalSubgroup G :=
+        OpenNormalSubgroup.comap (QuotientGroup.mk&#x27; K) QuotientGroup.continuous_mk W
+      <span class="kw">have</span> hKV : K ≤ (V : Subgroup G) := <span class="kw">by</span>
+        <span class="kw">intro</span> g hg
+        change QuotientGroup.mk&#x27; K g ∈ W
+        <span class="kw">have</span> hg1 : QuotientGroup.mk&#x27; K g = (1 : G ⧸ K) :=
+          (QuotientGroup.eq_one_iff (N := K) g).2 hg
+        <span class="kw">rw</span> [hg1]
+        <span class="kw">exact</span> W.one_mem&#x27;
+      rcases exists_quotientPair_le_openSubgroup_of_chain_iInf_le
+          (G := G) hc hcn V.toOpenSubgroup (<span class="kw">by</span> simpa [K] using hKV) <span class="kw">with</span> ⟨a, haV⟩
+      <span class="kw">have</span> hVaClosed : IsClosed ((V : Subgroup G) : Set G) :=
+        openNormalSubgroup_isClosed (G := G) V
+      <span class="kw">have</span> hmapW :
+          ((V : Subgroup G).map (QuotientGroup.mk&#x27; K)) = (W : Subgroup (G ⧸ K)) := <span class="kw">by</span>
+        ext q
+        rcases Quotient.exists_rep q <span class="kw">with</span> ⟨g, <span class="kw">rfl</span>⟩
+        <span class="kw">constructor</span>
+        · rintro ⟨g&#x27;, hg&#x27;V, hg&#x27;q⟩
+          <span class="kw">have</span> : QuotientGroup.mk&#x27; K g&#x27; ∈ W := <span class="kw">by</span>
+            change QuotientGroup.mk&#x27; K g&#x27; ∈ W at hg&#x27;V
+            <span class="kw">exact</span> hg&#x27;V
+          change QuotientGroup.mk&#x27; K g ∈ W
+          <span class="kw">have</span> hg&#x27;q&#x27; :
+              QuotientGroup.mk&#x27; K g&#x27; = QuotientGroup.mk&#x27; K g := hg&#x27;q
+          <span class="kw">exact</span> hg&#x27;q&#x27; ▸ this
+        · <span class="kw">intro</span> hgW
+          refine ⟨g, ?_, <span class="kw">rfl</span>⟩
+          change QuotientGroup.mk&#x27; K g ∈ W
+          <span class="kw">exact</span> hgW
+      <span class="kw">let</span> QV : Subgroup (G ⧸ K) := (V : Subgroup G).map (QuotientGroup.mk&#x27; K)
+      <span class="kw">let</span> Wmap : OpenNormalSubgroup (G ⧸ K) :=
+        { toOpenSubgroup :=
+            { toSubgroup := QV
+              isOpen&#x27; := <span class="kw">by</span>
+                simpa [QV, hmapW] using W.isOpen&#x27; }
+          isNormal&#x27; := <span class="kw">by</span>
+            simpa [QV, hmapW] using (<span class="kw">show</span> (W : Subgroup (G ⧸ K)).Normal from inferInstance) }
+      <span class="kw">have</span> hWmap : Wmap = W := <span class="kw">by</span>
+        ext q
+        change q ∈ QV ↔ q ∈ (W : Subgroup (G ⧸ K))
+        <span class="kw">simp</span> only [hmapW, OpenSubgroup.mem_toSubgroup, QV]
+      <span class="kw">let</span> e0 :
+          ((G ⧸ K) ⧸ QV) ≃ₜ* G ⧸ (V : Subgroup G) :=
+        quotientQuotientContinuousMulEquiv
+          (G := G) hVaClosed hKV
+      <span class="kw">have</span> hstageProj :
+          ∀ y : a.1.Y,
+            leftQuotientProjection K (V : Subgroup G) hKV
+              (lift a (a.1.sourceOfY y)) =
+              leftQuotientProjection a.1.N (V : Subgroup G) haV y.1 := <span class="kw">by</span>
+        <span class="kw">intro</span> y
+        <span class="kw">have</span> hqy0 :=
+          congrFun (hlift_fac a a le_rfl) (a.1.sourceOfY y)
+        <span class="kw">have</span> hqy :
+            leftQuotientProjection K a.1.N
+              (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a)
+              (lift a (a.1.sourceOfY y)) = y.1 := <span class="kw">by</span>
+          <span class="kw">calc</span>
+            leftQuotientProjection K a.1.N
+                (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a)
+                (lift a (a.1.sourceOfY y)) = a.1.le_map le_rfl (a.1.sourceOfY y) := <span class="kw">by</span>
+              <span class="kw">exact</span> hqy0
+            _ = y.1 := <span class="kw">by</span>
+              simpa only [leftQuotientProjection_id, id_eq,
+                QuotientGeneratorConvergingPair.sourceOfY] using
+                a.1.le_map_right le_rfl (a.1.sourceOfY y)
+        <span class="kw">calc</span>
+          leftQuotientProjection K (V : Subgroup G) hKV
+              (lift a (a.1.sourceOfY y))
+              = leftQuotientProjection (a.1.N) (V : Subgroup G) haV
+                  (leftQuotientProjection K a.1.N
+                    (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a)
+                    (lift a (a.1.sourceOfY y))) := <span class="kw">by</span>
+                      <span class="kw">exact</span>
+                        leftQuotientProjection_comp_apply_symm
+                          (K := (K : Subgroup G)) (H := (a.1.N : Subgroup G))
+                          (L := (V : Subgroup G)) (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a) haV
+                          (lift a (a.1.sourceOfY y))
+          _ = leftQuotientProjection (a.1.N) (V : Subgroup G) haV y.1 := <span class="kw">by</span>
+                <span class="kw">rw</span> [hqy]
+      <span class="kw">have</span> hstageImgEq :
+          (leftQuotientProjection K (V : Subgroup G) hKV) &#x27;&#x27; stageImage a =
+            (leftQuotientProjection a.1.N (V : Subgroup G) haV) &#x27;&#x27; a.1.Y := <span class="kw">by</span>
+        ext q
+        <span class="kw">constructor</span>
+        · rintro ⟨x, ⟨y, <span class="kw">rfl</span>⟩, <span class="kw">rfl</span>⟩
+          <span class="kw">exact</span> ⟨y.1, y.2, (hstageProj y).symm⟩
+        · rintro ⟨y, hyY, hyq⟩
+          <span class="kw">let</span> y&#x27; : a.1.Y := ⟨y, hyY⟩
+          refine ⟨lift a (a.1.sourceOfY y&#x27;), ⟨y&#x27;, <span class="kw">rfl</span>⟩, ?_⟩
+          <span class="kw">calc</span>
+            leftQuotientProjection K (V : Subgroup G) hKV
+                (lift a (a.1.sourceOfY y&#x27;))
+                = leftQuotientProjection a.1.N (V : Subgroup G) haV y := <span class="kw">by</span>
+                    simpa [y&#x27;] using hstageProj y&#x27;
+            _ = q := hyq
+      <span class="kw">have</span> hstageGenV :
+          TopologicallyGenerates (G := G ⧸ (V : Subgroup G))
+            ((leftQuotientProjection K (V : Subgroup G) hKV) &#x27;&#x27; stageImage a) := <span class="kw">by</span>
+        <span class="kw">let</span> fV : (G ⧸ a.1.N) →* G ⧸ (V : Subgroup G) :=
+          { toFun := leftQuotientProjection a.1.N (V : Subgroup G) haV
+            map_one&#x27; := <span class="kw">rfl</span>
+            map_mul&#x27; := <span class="kw">by</span>
+              <span class="kw">intro</span> x y
+              refine Quotient.inductionOn₂&#x27; x y ?_
+              <span class="kw">intro</span> g h
+              <span class="kw">rfl</span> }
+        <span class="kw">have</span> hgenV :
+            TopologicallyGenerates (G := G ⧸ (V : Subgroup G))
+              (fV &#x27;&#x27; a.1.Y) := <span class="kw">by</span>
+          <span class="kw">exact</span> topologicallyGenerates_image_of_continuousSurjective
+            (G := G ⧸ a.1.N) (H := G ⧸ (V : Subgroup G)) fV
+            (<span class="kw">by</span>
+              simpa [fV] using
+                (continuous_leftQuotientProjection
+                  (G := G) (K := a.1.N) (H := (V : Subgroup G)) haV))
+            (<span class="kw">by</span>
+              simpa [fV] using
+                (surjective_leftQuotientProjection
+                  (G := G) (K := a.1.N) (H := (V : Subgroup G)) haV))
+            a.1.generates
+        <span class="kw">rw</span> [hstageImgEq]
+        simpa [fV] using hgenV
+      <span class="kw">have</span> hquotProj0 :
+          ∀ y : G ⧸ K,
+            e0 ((QuotientGroup.mk&#x27; QV) y) =
+              leftQuotientProjection K (V : Subgroup G) hKV y := <span class="kw">by</span>
+        <span class="kw">intro</span> y
+        refine Quotient.inductionOn y ?_
+        <span class="kw">intro</span> g
+        <span class="kw">rfl</span>
+      <span class="kw">have</span> hquotPreimgEq0 :
+          e0.symm &#x27;&#x27; ((leftQuotientProjection K (V : Subgroup G) hKV) &#x27;&#x27; Y) =
+            (QuotientGroup.mk&#x27; QV &#x27;&#x27; Y) := <span class="kw">by</span>
+        ext q
+        <span class="kw">constructor</span>
+        · rintro ⟨z, ⟨y, hy, hzy⟩, hqz⟩
+          refine ⟨y, hy, ?_⟩
+          <span class="kw">have</span> hzq : z = e0 q := <span class="kw">by</span>
+            <span class="kw">calc</span>
+              z = e0 (e0.symm z) := <span class="kw">by</span> symm; <span class="kw">exact</span> e0.right_inv z
+              _ = e0 q := <span class="kw">by</span> <span class="kw">rw</span> [hqz]
+          <span class="kw">have</span> heqy : e0 ((QuotientGroup.mk&#x27; QV) y) = z := <span class="kw">by</span>
+            <span class="kw">exact</span> (hquotProj0 y).trans hzy
+          <span class="kw">exact</span> e0.injective (heqy.trans hzq)
+        · rintro ⟨y, hy, <span class="kw">rfl</span>⟩
+          refine ⟨leftQuotientProjection K (V : Subgroup G) hKV y, ⟨y, hy, <span class="kw">rfl</span>⟩, ?_⟩
+          <span class="kw">calc</span>
+            e0.symm (leftQuotientProjection K (V : Subgroup G) hKV y)
+                = e0.symm (e0 ((QuotientGroup.mk&#x27; QV) y)) := <span class="kw">by</span>
+                    <span class="kw">rw</span> [hquotProj0 y]
+            _ = QuotientGroup.mk&#x27; QV y := e0.left_inv _
+      <span class="kw">have</span> hgenYV :
+          TopologicallyGenerates (G := G ⧸ (V : Subgroup G))
+            ((leftQuotientProjection K (V : Subgroup G) hKV) &#x27;&#x27; Y) := <span class="kw">by</span>
+        <span class="kw">exact</span> topologicallyGenerates_mono hstageGenV (<span class="kw">by</span>
+          <span class="kw">intro</span> q hq
+          rcases hq <span class="kw">with</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+          <span class="kw">exact</span> ⟨x, mem_iUnion.mpr ⟨a, hx⟩, <span class="kw">rfl</span>⟩)
+      <span class="kw">have</span> hgenQuot0 :
+          TopologicallyGenerates (G := ((G ⧸ K) ⧸ QV))
+            ((QuotientGroup.mk&#x27; QV) &#x27;&#x27; Y) := <span class="kw">by</span>
+        <span class="kw">rw</span> [← hquotPreimgEq0]
+        <span class="kw">exact</span> topologicallyGenerates_continuousMulEquiv_image
+          (G := G ⧸ (V : Subgroup G)) e0.symm hgenYV
+      <span class="kw">have</span> hgenQuotMap :
+          TopologicallyGenerates
+            (G := ((G ⧸ K) ⧸ (Wmap : Subgroup (G ⧸ K))))
+            ((QuotientGroup.mk&#x27; (Wmap : Subgroup (G ⧸ K))) &#x27;&#x27; Y) := <span class="kw">by</span>
+        simpa [QV, Wmap] using hgenQuot0
+      <span class="kw">have</span> hgenQuot :
+          TopologicallyGenerates (G := ((G ⧸ K) ⧸ (W : Subgroup (G ⧸ K))))
+            ((QuotientGroup.mk&#x27; (W : Subgroup (G ⧸ K))) &#x27;&#x27; Y) := <span class="kw">by</span>
+        simpa using (hWmap ▸ hgenQuotMap)
+      <span class="kw">exact</span> hgenQuot
+    <span class="kw">exact</span> (topologicallyGenerates_union_one_iff (G := G ⧸ K) (X := Y)).1 hgen1
+  refine ⟨{ N := K
+            normal_N := inferInstance
+            closed_N := hKclosed
+            Y := Y
+            subset_compl := hYcompl
+            converges := hYconv
+            generates := hYgen }, ?_⟩
+  <span class="kw">intro</span> a ha
+  <span class="kw">let</span> a&#x27; : c := ⟨a, ha⟩
+  refine ⟨iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a&#x27;, lift a&#x27;, ?_, ?_, ?_, ?_, ?_⟩
+  · <span class="kw">exact</span> hlift_continuous a&#x27;
+  · <span class="kw">intro</span> x
+    <span class="kw">have</span> hliftProjection := congrFun (hlift_fac a&#x27; a&#x27; le_rfl) x
+    <span class="kw">calc</span>
+      leftQuotientProjection K a.N (iInf_le (<span class="kw">fun</span> p : c =&gt; p.1.N) a&#x27;)
+          (lift a&#x27; x) = a.le_map le_rfl x := <span class="kw">by</span>
+          simpa using hliftProjection
+      _ = x.1 := <span class="kw">by</span>
+            simpa [QuotientGeneratorConvergingPair.le_map,
+              QuotientGeneratorConvergingPair.le_hBA] using
+              a.le_map_right le_rfl x
+  · <span class="kw">exact</span> hlift_one a&#x27;
+  · <span class="kw">intro</span> y
+    <span class="kw">exact</span> mem_iUnion.mpr ⟨a&#x27;, ⟨y, <span class="kw">rfl</span>⟩⟩
+  · <span class="kw">intro</span> q hq
+    rcases mem_iUnion.mp hq.1 <span class="kw">with</span> ⟨b, hbq⟩
+    by_cases hba : b.1 ≤ a
+    · <span class="kw">exact</span> False.elim (hq.2 (hstage_mono (a := b) (b := a&#x27;) hba hbq))
+    · <span class="kw">have</span> hab : a ≤ b.1 := <span class="kw">by</span>
+        by_cases hEq : a = b.1
+        · <span class="kw">exact</span> hEq ▸ le_rfl
+        · rcases hc ha b.2 (<span class="kw">by</span>
+            <span class="kw">intro</span> h
+            <span class="kw">exact</span> hEq h) <span class="kw">with</span> hab | hba&#x27;
+          · <span class="kw">exact</span> hab
+          · <span class="kw">exact</span> False.elim (hba hba&#x27;)
+      <span class="kw">exact</span> hstage_diff (a := a&#x27;) (b := b) hab ⟨hbq, hq.2⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.exists_generatorsConvergingToOne">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.exists_generatorsConvergingToOne">ProCGroups.Generation.exists_generatorsConvergingToOne</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L1410">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exists_generatorsConvergingToOne :
+    ∃ X : Set G, GeneratesAndConvergesToOneAlongOpenSubgroups (G := G) X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>4.4. Existence theorem used by the public theorem.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  <span class="kw">let</span> Pair := QuotientGeneratorConvergingPair (G := G)
+  letI : Nonempty Pair := ⟨quotientGeneratorPairTop (G := G)⟩
+  obtain ⟨m, hmmax⟩ := zorn_le_nonempty (α := Pair) &lt;| <span class="kw">by</span>
+    <span class="kw">intro</span> c hc hcn
+    rcases quotientGeneratorPair_exists_upperBound_of_chain (G := G) c hc hcn <span class="kw">with</span>
+      ⟨ub, hub⟩
+    <span class="kw">exact</span> ⟨ub, hub⟩
+  <span class="kw">have</span> hmbot : m.N = ⊥ := <span class="kw">by</span>
+    by_contra hne
+    rcases quotientGeneratorPair_exists_strictExtension (G := G) m hne <span class="kw">with</span>
+      ⟨m&#x27;, hmm&#x27;, hm&#x27;m⟩
+    <span class="kw">exact</span> hm&#x27;m (hmmax hmm&#x27;)
+  <span class="kw">exact</span> ⟨m.toAmbientSet, m.toAmbientSet_generatesAndConvergesToOneAlongOpenSubgroups hmbot⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousSurjective">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousSurjective">ProCGroups.Generation.GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousSurjective</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L1431">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [T2Space G] <span class="kw">in</span>
+<span class="kw">theorem</span> GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousSurjective
+    {H : <span class="kw">Type</span> v} [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
+    (f : G →* H) (hf : Continuous f) (hfsurj : Function.Surjective f)
+    {X : Set G} (hX : GeneratesAndConvergesToOneAlongOpenSubgroups (G := G) X) :
+    GeneratesAndConvergesToOneAlongOpenSubgroups (G := H) (f &#x27;&#x27; X)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A surjective continuous homomorphism preserves generating sets converging to <code>1</code>.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · <span class="kw">exact</span> topologicallyGenerates_image_of_continuousSurjective
+      (G := G) (H := H) f hf hfsurj hX.1
+  · <span class="kw">exact</span> ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed
+      (G := G) (H := H) hf (<span class="kw">by</span> <span class="kw">simp</span> only [map_one]) hX.2</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv">ProCGroups.Generation.GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L1444">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [T2Space G] <span class="kw">in</span>
+<span class="kw">theorem</span> GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv
+    {H : <span class="kw">Type</span> v} [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
+    (e : G ≃ₜ* H) {X : Set G}
+    (hX : GeneratesAndConvergesToOneAlongOpenSubgroups (G := G) X) :
+    GeneratesAndConvergesToOneAlongOpenSubgroups (G := H) (e &#x27;&#x27; X)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A continuous multiplicative equivalence preserves generating sets converging to <code>1</code>.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  refine ⟨?_, ?_⟩
+  · <span class="kw">exact</span> topologicallyGenerates_continuousMulEquiv_image
+      (G := G) e hX.1
+  · <span class="kw">exact</span> ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed
+      (G := G) (H := H) e.continuous (<span class="kw">by</span> <span class="kw">simp</span> only [Homeomorph.homeomorph_mk_coe,
+          ContinuousMulEquiv.toMulEquiv_eq_coe, MulEquiv.toEquiv_eq_coe,
+  EquivLike.coe_coe, map_one]) hX.2</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv_iff">ProCGroups.Generation.ConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv_iff</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L1459">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [T2Space G] <span class="kw">in</span>
+<span class="kw">theorem</span> ConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv_iff
+    {H : <span class="kw">Type</span> v} [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
+    [CompactSpace H] [T2Space H] [TotallyDisconnectedSpace H]
+    (e : G ≃ₜ* H) {X : Set G} :
+    ConvergesToOneAlongOpenSubgroups (G := H) (e &#x27;&#x27; X) ↔ ConvergesToOneAlongOpenSubgroups (G :=
+        G) X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A continuous multiplicative equivalence preserves and reflects convergence to <code>1</code>.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> h
+    <span class="kw">have</span> hback : ConvergesToOneAlongOpenSubgroups (G := G) (e.symm &#x27;&#x27; (e &#x27;&#x27; X)) :=
+      ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed
+        (G := H) (H := G) e.symm.continuous (<span class="kw">by</span> <span class="kw">simp</span> only [Homeomorph.homeomorph_mk_coe,
+            ContinuousMulEquiv.toMulEquiv_eq_coe, MulEquiv.toEquiv_eq_coe,
+  EquivLike.coe_coe, map_one]) (X := e &#x27;&#x27; X) h
+    <span class="kw">have</span> himage : e.symm &#x27;&#x27; (e &#x27;&#x27; X) = X := <span class="kw">by</span>
+      ext x
+      <span class="kw">constructor</span>
+      · rintro ⟨y, ⟨z, hz, <span class="kw">rfl</span>⟩, <span class="kw">rfl</span>⟩
+        simpa using hz
+      · <span class="kw">intro</span> hx
+        <span class="kw">exact</span> ⟨e x, ⟨x, hx, <span class="kw">rfl</span>⟩, <span class="kw">by</span> <span class="kw">simp</span> only [ContinuousMulEquiv.symm_apply_apply]⟩
+    simpa [himage] using hback
+  · <span class="kw">intro</span> h
+    <span class="kw">exact</span> ConvergesToOneAlongOpenSubgroups.image_of_continuous_pointed
+      (G := G) (H := H) e.continuous (<span class="kw">by</span> <span class="kw">simp</span> only [Homeomorph.homeomorph_mk_coe,
+          ContinuousMulEquiv.toMulEquiv_eq_coe, MulEquiv.toEquiv_eq_coe,
+  EquivLike.coe_coe, map_one]) h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv_iff">ProCGroups.Generation.GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv_iff</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L1488">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [T2Space G] <span class="kw">in</span>
+<span class="kw">theorem</span> GeneratesAndConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv_iff
+    {H : <span class="kw">Type</span> v} [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
+    [CompactSpace H] [T2Space H] [TotallyDisconnectedSpace H]
+    (e : G ≃ₜ* H) {X : Set G} :
+    GeneratesAndConvergesToOneAlongOpenSubgroups (G := H) (e &#x27;&#x27; X) ↔
+        GeneratesAndConvergesToOneAlongOpenSubgroups (G := G) X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A continuous multiplicative equivalence preserves and reflects the combined predicate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> h
+    <span class="kw">exact</span> ⟨
+      (topologicallyGenerates_continuousMulEquiv_image_iff (G := G) (H := H) e (X := X)).1 h.1,
+      (ConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv_iff
+        (G := G) (H := H) e (X := X)).1 h.2⟩
+  · <span class="kw">intro</span> h
+    <span class="kw">exact</span> ⟨
+      (topologicallyGenerates_continuousMulEquiv_image_iff (G := G) (H := H) e (X := X)).2 h.1,
+      (ConvergesToOneAlongOpenSubgroups.image_of_continuousMulEquiv_iff
+        (G := G) (H := H) e (X := X)).2 h.2⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Generation.topologicalRank_eq_of_continuousMulEquiv">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Generation.topologicalRank_eq_of_continuousMulEquiv">ProCGroups.Generation.topologicalRank_eq_of_continuousMulEquiv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Generation/QuotientGeneratorConvergingPairs.lean#L1508">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [CompactSpace G] [T2Space G] [TotallyDisconnectedSpace G] <span class="kw">in</span>
+<span class="kw">theorem</span> topologicalRank_eq_of_continuousMulEquiv
+    {H : <span class="kw">Type</span> u} [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
+    [CompactSpace H] [T2Space H] [TotallyDisconnectedSpace H]
+    (e : G ≃ₜ* H) :
+    topologicalRank G = topologicalRank H</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Topological rank is invariant under continuous multiplicative equivalence.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> le_antisymm
+  · rcases exists_topologicallyGenerates_card_eq_topologicalRank (G := H) <span class="kw">with</span>
+      ⟨Ymin, hYmin, hYcard⟩
+    <span class="kw">calc</span>
+      topologicalRank G ≤ Cardinal.mk (e.symm &#x27;&#x27; Ymin) := <span class="kw">by</span>
+        <span class="kw">exact</span> topologicalRank_le_mk_of_topologicallyGenerates
+          (G := G)
+          (topologicallyGenerates_continuousMulEquiv_image
+            (G := H) e.symm hYmin)
+      _ ≤ Cardinal.mk Ymin := Cardinal.mk_image_le
+      _ = topologicalRank H := hYcard
+  · rcases exists_topologicallyGenerates_card_eq_topologicalRank (G := G) <span class="kw">with</span>
+      ⟨Xmin, hXmin, hXcard⟩
+    <span class="kw">calc</span>
+      topologicalRank H ≤ Cardinal.mk (e &#x27;&#x27; Xmin) := <span class="kw">by</span>
+        <span class="kw">exact</span> topologicalRank_le_mk_of_topologicallyGenerates
+          (G := H)
+          (topologicallyGenerates_continuousMulEquiv_image
+            (G := G) e hXmin)
+      _ ≤ Cardinal.mk Xmin := Cardinal.mk_image_le
+      _ = topologicalRank G := hXcard</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Generation.QuotientGeneratorConvergingPairs"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

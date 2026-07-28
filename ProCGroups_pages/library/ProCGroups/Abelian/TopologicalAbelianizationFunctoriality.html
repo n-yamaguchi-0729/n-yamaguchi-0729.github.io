@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Abelian.TopologicalAbelianizationFunctoriality | ProCGroups Documentation</title>
+<meta name="description" content="Topological abelianization defines a functor from topological groups to commutative topological groups. Its universal property is expressed directly as an equivalence of morphism types for \(T_1\) targets.">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/ProCGroups_pages/library/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../index.html">ProCGroups Documentation</a>
+  <nav class="header-nav"><a href="https://github.com/n-yamaguchi-0729/ProCGroups" target="_blank" rel="noopener">GitHub repository</a></nav>
+  <div class="header-current">ProCGroups.Abelian.TopologicalAbelianizationFunctoriality</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Abelian.html">Abelian</a><span class="sep">/</span><span>TopologicalAbelianizationFunctoriality</span></div>
+      <h1 class="module-title">ProCGroups.Abelian.TopologicalAbelianizationFunctoriality</h1>
+      <div class="module-meta">18 Theorems | 11 Definitions</div>
+      <div class="module-overview tex2jax_process"><p>Topological abelianization defines a functor from topological groups to commutative topological groups.  Its universal property is expressed directly as an equivalence of morphism types for \(T_1\) targets.</p></div>
+      <div class="meta"><a href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean">Open this file on GitHub</a></div>
+    </div>
+  </div>
+  <details class="imports"><summary>imports</summary><ul><li><a href="../../../library/ProCGroups/Topologies/OpenSubgroup.html">ProCGroups.Topologies.OpenSubgroup</a></li><li><a href="../../../library/ProCGroups/Topologies/Conjugation.html">ProCGroups.Topologies.Conjugation</a></li><li><a href="../../../library/ProCGroups/TopologicalGroups.html">ProCGroups.TopologicalGroups</a></li><li><a href="../../../library/ProCGroups/Abelian/TopologicalAbelianization.html">ProCGroups.Abelian.TopologicalAbelianization</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/Abelian.html">ProCGroups.Abelian</a></li><li><a href="../../../library/ProCGroups/Abelian/TopologicalAbelianizationLimits.html">ProCGroups.Abelian.TopologicalAbelianizationLimits</a></li><li><a href="../../../library/ProCGroups/FiniteStepSolvableQuotients/Abelianization.html">ProCGroups.FiniteStepSolvableQuotients.Abelianization</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.Abelian.topologicalAbelianizationFunctor">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationFunctor">ProCGroups.Abelian.topologicalAbelianizationFunctor</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L25">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> topologicalAbelianizationFunctor : TopGrp.{u} ⥤ CommTopGrp.{u} <span class="kw">where</span>
+  obj G := CommTopGrp.of (TopologicalAbelianization G)
+  map {G H} f := CommTopGrp.ofHom (TopologicalAbelianization.map f.hom)
+  map_id G := <span class="kw">by</span>
+    <span class="kw">apply</span> CommTopGrp.hom_ext
+    <span class="kw">exact</span> TopologicalAbelianization.map_id G
+  map_comp f g := <span class="kw">by</span>
+    <span class="kw">apply</span> CommTopGrp.hom_ext
+    <span class="kw">exact</span> TopologicalAbelianization.map_comp g.hom f.hom</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Topological abelianization as a functor from topological groups to commutative topological groups.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.topologicalAbelianizationFunctor_map_apply_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationFunctor_map_apply_mk">ProCGroups.Abelian.topologicalAbelianizationFunctor_map_apply_mk</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L39">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> topologicalAbelianizationFunctor_map_apply_mk
+    {G H : TopGrp.{u}} (f : G ⟶ H) (x : G) :
+    topologicalAbelianizationFunctor.map f (TopologicalAbelianization.mk G x) =
+      TopologicalAbelianization.mk H (f x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The induced map on topological abelianizations sends a representative class to the class of its image.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.topologicalAbelianizationHomEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationHomEquiv">ProCGroups.Abelian.topologicalAbelianizationHomEquiv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L49">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> topologicalAbelianizationHomEquiv
+    (G : TopGrp.{u}) (A : CommTopGrp.{u}) [T1Space A] :
+    (topologicalAbelianizationFunctor.obj G ⟶ A) ≃
+      (G ⟶ commTopGrpForgetToTopGrp.obj A) <span class="kw">where</span>
+  toFun φ := TopGrp.ofHom (φ.hom.comp (TopologicalAbelianization.mkₜ G))
+  invFun f := CommTopGrp.ofHom (TopologicalAbelianization.lift f.hom)
+  left_inv φ := <span class="kw">by</span>
+    <span class="kw">apply</span> CommTopGrp.hom_ext
+    <span class="kw">apply</span> TopologicalAbelianization.hom_ext
+    <span class="kw">intro</span> x
+    <span class="kw">rfl</span>
+  right_inv f := <span class="kw">by</span>
+    <span class="kw">apply</span> TopGrp.hom_ext
+    ext x
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Category-level Hom equivalence expressing the universal property of topological abelianization for commutative \(T_1\) targets.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.topologicalAbelianizationHomEquiv_apply_hom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationHomEquiv_apply_hom">ProCGroups.Abelian.topologicalAbelianizationHomEquiv_apply_hom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L69">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> topologicalAbelianizationHomEquiv_apply_hom
+    (G : TopGrp.{u}) (A : CommTopGrp.{u}) [T1Space A]
+    (φ : topologicalAbelianizationFunctor.obj G ⟶ A) :
+    (topologicalAbelianizationHomEquiv G A φ).hom =
+      φ.hom.comp (TopologicalAbelianization.mkₜ G)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The topological-abelianization hom equivalence evaluates a homomorphism by its induced map on representatives.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.topologicalAbelianizationHomEquiv_symm_apply_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationHomEquiv_symm_apply_mk">ProCGroups.Abelian.topologicalAbelianizationHomEquiv_symm_apply_mk</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L80">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> topologicalAbelianizationHomEquiv_symm_apply_mk
+    (G : TopGrp.{u}) (A : CommTopGrp.{u}) [T1Space A]
+    (f : G ⟶ commTopGrpForgetToTopGrp.obj A) (x : G) :
+    (topologicalAbelianizationHomEquiv G A).symm f
+      (TopologicalAbelianization.mk G x) = f x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The inverse topological-abelianization hom equivalence sends a coset representative to the corresponding homomorphism value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.topologicalAbelianizationTopMulEquiv">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationTopMulEquiv">ProCGroups.Abelian.topologicalAbelianizationTopMulEquiv</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L91">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> topologicalAbelianizationTopMulEquiv
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G] :
+    TopologicalAbelianization ↥((⊤ : OpenSubgroup G) : Subgroup G) ≃ₜ*
+      TopologicalAbelianization G :=
+  TopologicalAbelianization.congr
+    (G := ↥((⊤ : OpenSubgroup G) : Subgroup G))
+    (H := G)
+    (OpenSubgroup.topContinuousMulEquiv G)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The topological abelianization of the \(\top\) open subgroup is canonically the same as the topological abelianization of the ambient group.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.topologicalAbelianizationTopMulEquiv_apply_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationTopMulEquiv_apply_mk">ProCGroups.Abelian.topologicalAbelianizationTopMulEquiv_apply_mk</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L104">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> topologicalAbelianizationTopMulEquiv_apply_mk
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+    (x : ↥((⊤ : OpenSubgroup G) : Subgroup G)) :
+    topologicalAbelianizationTopMulEquiv
+        (G := G) (TopologicalAbelianization.mk ↥((⊤ : OpenSubgroup G) : Subgroup G) x) =
+      TopologicalAbelianization.mk G x.1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The abelianization equivalence for a topological group equivalence sends representatives to representatives.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">calc</span>
+    topologicalAbelianizationTopMulEquiv
+          (G := G) (TopologicalAbelianization.mk ↥((⊤ : OpenSubgroup G) : Subgroup G) x) =
+        TopologicalAbelianization.mk G ((OpenSubgroup.topContinuousMulEquiv G) x) :=
+      TopologicalAbelianization.congr_apply_mk
+        (OpenSubgroup.topContinuousMulEquiv G) x
+    _ = TopologicalAbelianization.mk G x.1 := <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap">ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L119">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> quotientConjugationTopologicalAbelianizationMap
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+    (N : Subgroup G) [N.Normal] :
+    (G ⧸ N) →* MulAut (TopologicalAbelianization N) := <span class="kw">by</span>
+  <span class="kw">let</span> K : Subgroup N := <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N
+  <span class="kw">have</span> hKchar : K.TopologicallyCharacteristic :=
+    <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator_topologicallyCharacteristic">Subgroup.closedCommutator_topologicallyCharacteristic</a> (G := N)
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/Topologies/Conjugation.html#decl-ProCGroups.Topologies.quotientConjugationOnTopologicallyCharacteristicQuotient">ProCGroups.Topologies.quotientConjugationOnTopologicallyCharacteristicQuotient</a>
+    (G := G) N K
+    (<span class="kw">fun</span> n x =&gt; <span class="kw">by</span>
+      <span class="kw">have</span> hcomm :
+          ⁅n, x⁆ ∈ <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N :=
+        <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.commutator_le_closedCommutator">Subgroup.commutator_le_closedCommutator</a> N
+          (Subgroup.commutator_mem_commutator (Subgroup.mem_top n) (Subgroup.mem_top x))
+      <span class="kw">have</span> hconj : (MulAut.conjNormal (n : G)) x = n * x * n⁻¹ := <span class="kw">by</span>
+        ext
+        <span class="kw">simp</span> only [MulAut.conjNormal_apply, Subgroup.coe_mul, InvMemClass.coe_inv]
+      <span class="kw">rw</span> [hconj]
+      simpa [K, commutatorElement_def, mul_assoc] using hcomm)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The quotient G/N acts on the topological abelianization of N by conjugation.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.conjugationTopologicalAbelianizationContinuousAut">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.conjugationTopologicalAbelianizationContinuousAut">ProCGroups.Abelian.conjugationTopologicalAbelianizationContinuousAut</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L143">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> conjugationTopologicalAbelianizationContinuousAut
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+    (N : Subgroup G) [N.Normal] (g : G) :
+    TopologicalAbelianization N ≃ₜ* TopologicalAbelianization N :=
+  TopologicalAbelianization.congr (Subgroup.conjNormalContinuousMulEquiv (G := G) N g)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The continuous self-equivalence of topological abelianization induced by conjugation by a representative.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.conjugationTopologicalAbelianizationContinuousAut_toMulAut_apply_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.conjugationTopologicalAbelianizationContinuousAut_toMulAut_apply_mk">ProCGroups.Abelian.conjugationTopologicalAbelianizationContinuousAut_toMulAut_apply_mk</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L153">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> conjugationTopologicalAbelianizationContinuousAut_toMulAut_apply_mk
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+    (N : Subgroup G) [N.Normal] (g : G) (n : N) :
+    conjugationTopologicalAbelianizationContinuousAut (G := G) N g
+      (TopologicalAbelianization.mk N n) =
+        quotientConjugationTopologicalAbelianizationMap (G := G) (N := N)
+          (QuotientGroup.mk&#x27; N g) (TopologicalAbelianization.mk N n)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The representative-wise continuous automorphism has the same underlying algebraic action as quotientConjugationTopologicalAbelianizationMap.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_apply_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_apply_mk">ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_apply_mk</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L166">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> quotientConjugationTopologicalAbelianizationMap_mk_apply_mk
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+    (N : Subgroup G) [N.Normal] (g : G) (n : N) :
+    quotientConjugationTopologicalAbelianizationMap (G := G) (N := N)
+      (QuotientGroup.mk&#x27; N g) (TopologicalAbelianization.mk N n) =
+        TopologicalAbelianization.mk N ((MulAut.conjNormal g) n)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The conjugation action on a quotient induces the expected map on topological abelianization representatives.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  dsimp [quotientConjugationTopologicalAbelianizationMap, TopologicalAbelianization.mk,
+    TopologicalAbelianization.mkₜ]
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_eq_one_of_commutator_mem_closure">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_eq_one_of_commutator_mem_closure">ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_eq_one_of_commutator_mem_closure</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L180">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientConjugationTopologicalAbelianizationMap_mk_eq_one_of_commutator_mem_closure
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+    (N : Subgroup G) [N.Normal] {x : G}
+    (hx :
+      ∀ n : N,
+        (((MulAut.conjNormal x) n) * n⁻¹ : N) ∈ <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N) :
+    quotientConjugationTopologicalAbelianizationMap (G := G) (N := N)
+      (QuotientGroup.mk&#x27; N x) = 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>If every commutator correction lies in the closed commutator subgroup, the induced conjugation action on the topological abelianization is trivial.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  ext a
+  obtain ⟨n, <span class="kw">rfl</span>⟩ := QuotientGroup.mk&#x27;_surjective (<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N) a
+  <span class="kw">exact</span>
+    (QuotientGroup.eq_iff_div_mem (N := <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N)
+      (x := (MulAut.conjNormal x) n) (y := n)).2 (<span class="kw">by</span>
+        simpa [div_eq_mul_inv] using hx n)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_apply_mk_eq_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_apply_mk_eq_iff">ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_apply_mk_eq_iff</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L199">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientConjugationTopologicalAbelianizationMap_mk_apply_mk_eq_iff
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+    {N : Subgroup G} [N.Normal] {x : G} {n : N} :
+    quotientConjugationTopologicalAbelianizationMap (G := G) (N := N)
+        (QuotientGroup.mk&#x27; N x) (TopologicalAbelianization.mk N n) =
+      TopologicalAbelianization.mk N n ↔
+    (((MulAut.conjNormal x) n) * n⁻¹ : N) ∈ <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The conjugation action fixes a representative exactly when the correction term lies in the closed commutator subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [quotientConjugationTopologicalAbelianizationMap_mk_apply_mk]
+  change
+    QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N) ((MulAut.conjNormal x) n) =
+        QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N) n ↔
+      (((MulAut.conjNormal x) n) * n⁻¹ : N) ∈
+        <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N
+  <span class="kw">rw</span> [<span class="kw">show</span>
+      QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N) ((MulAut.conjNormal x) n) =
+        ((MulAut.conjNormal x) n : TopologicalAbelianization N) <span class="kw">by</span> <span class="kw">rfl</span>,
+    <span class="kw">show</span>
+      QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N) n =
+        (n : TopologicalAbelianization N) <span class="kw">by</span> <span class="kw">rfl</span>,
+    QuotientGroup.eq_iff_div_mem, div_eq_mul_inv]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_eq_one_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_eq_one_iff">ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_eq_one_iff</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L224">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientConjugationTopologicalAbelianizationMap_mk_eq_one_iff
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+    {N : Subgroup G} [N.Normal] {x : G} :
+    quotientConjugationTopologicalAbelianizationMap (G := G) (N := N)
+        (QuotientGroup.mk&#x27; N x) = 1 ↔
+      ∀ n : N,
+        (((MulAut.conjNormal x) n) * n⁻¹ : N) ∈ <a class="decl-ref" href="../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> N</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The induced conjugation action is trivial exactly when every correction term lies in the closed commutator subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> h n
+    <span class="kw">have</span> hpoint :=
+      congrArg
+        (<span class="kw">fun</span> φ : MulAut (TopologicalAbelianization N) =&gt; φ (TopologicalAbelianization.mk N n))
+        h
+    <span class="kw">exact</span>
+      (quotientConjugationTopologicalAbelianizationMap_mk_apply_mk_eq_iff
+        (G := G) (N := N) (x := x) (n := n)).1 (<span class="kw">by</span> simpa using hpoint)
+  · <span class="kw">intro</span> hx
+    <span class="kw">exact</span> quotientConjugationTopologicalAbelianizationMap_mk_eq_one_of_commutator_mem_closure
+      (G := G) (N := N) (x := x) hx</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_eq_one_of_mem_center">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_eq_one_of_mem_center">ProCGroups.Abelian.quotientConjugationTopologicalAbelianizationMap_mk_eq_one_of_mem_center</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L245">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientConjugationTopologicalAbelianizationMap_mk_eq_one_of_mem_center
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+    (N : Subgroup G) [N.Normal] {x : G} (hx : x ∈ Subgroup.center G) :
+    quotientConjugationTopologicalAbelianizationMap (G := G) (N := N)
+      (QuotientGroup.mk&#x27; N x) = 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Central elements act trivially on the topological abelianization of a normal subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> quotientConjugationTopologicalAbelianizationMap_mk_eq_one_of_commutator_mem_closure
+    (G := G) (N := N)
+  <span class="kw">intro</span> n
+  <span class="kw">have</span> hxn : x * (n : G) = (n : G) * x := <span class="kw">by</span>
+    <span class="kw">exact</span> (Subgroup.mem_center_iff.mp hx (n : G)).symm
+  <span class="kw">have</span> hconj : MulAut.conjNormal x n = n := <span class="kw">by</span>
+    ext
+    <span class="kw">rw</span> [MulAut.conjNormal_apply]
+    <span class="kw">simp</span> only [hxn, mul_assoc, mul_inv_cancel, mul_one]
+  <span class="kw">simp</span> only [hconj, mul_inv_cancel, one_mem]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.quotientConjAbMap_apply_mk_of_commute">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.quotientConjAbMap_apply_mk_of_commute">ProCGroups.Abelian.quotientConjAbMap_apply_mk_of_commute</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L265">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> quotientConjAbMap_apply_mk_of_commute
+    {G : <span class="kw">Type</span> u} [TopologicalSpace G] [Group G] [IsTopologicalGroup G]
+    (N : Subgroup G) [N.Normal] {g : G} {x : N}
+    (hgx : g * (x : G) = (x : G) * g) :
+    quotientConjugationTopologicalAbelianizationMap (G := G) (N := N)
+      (QuotientGroup.mk&#x27; N g) (TopologicalAbelianization.mk N x) =
+        TopologicalAbelianization.mk N x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>If a representative commutes with an element of N, then the induced action fixes its class in the topological abelianization.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> hconj : (MulAut.conjNormal g) x = x := <span class="kw">by</span>
+    ext
+    <span class="kw">rw</span> [MulAut.conjNormal_apply]
+    <span class="kw">simp</span> only [hgx, mul_assoc, mul_inv_cancel, mul_one]
+  <span class="kw">rw</span> [quotientConjugationTopologicalAbelianizationMap_mk_apply_mk, hconj]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.subgroupImageInTopologicalAbelianization">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.subgroupImageInTopologicalAbelianization">ProCGroups.Abelian.subgroupImageInTopologicalAbelianization</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L279">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> subgroupImageInTopologicalAbelianization
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    (S : Subgroup Q) (U : OpenNormalSubgroup Q) :
+    Subgroup (TopologicalAbelianization ↥(U : Subgroup Q)) :=
+  (((S ⊓ (U : Subgroup Q)).subgroupOf (U : Subgroup Q)).map
+    (TopologicalAbelianization.mk ↥(U : Subgroup Q)))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The image of \(S\cap U\) in the topological abelianization of \(U\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.mem_subgroupImageInTopologicalAbelianization_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.mem_subgroupImageInTopologicalAbelianization_iff">ProCGroups.Abelian.mem_subgroupImageInTopologicalAbelianization_iff</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L290">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> mem_subgroupImageInTopologicalAbelianization_iff
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    {S : Subgroup Q} {U : OpenNormalSubgroup Q}
+    {y : TopologicalAbelianization ↥(U : Subgroup Q)} :
+    y ∈ subgroupImageInTopologicalAbelianization (Q := Q) S U ↔
+      ∃ x : ↥(U : Subgroup Q), (x : Q) ∈ S ∧ TopologicalAbelianization.mk _ x = y</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Membership in the subgroup image inside the topological abelianization is equivalent to the displayed coordinate condition.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [subgroupImageInTopologicalAbelianization, ContinuousMonoidHom.coe_toMonoidHom,
+  Subgroup.inf_subgroupOf_right, Subgroup.mem_map, Subgroup.mem_subgroupOf, MonoidHom.coe_coe,
+      Subtype.exists,
+  OpenSubgroup.mem_toSubgroup, exists_and_left]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.subgroupImageInTopologicalAbelianization_mono_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.subgroupImageInTopologicalAbelianization_mono_left">ProCGroups.Abelian.subgroupImageInTopologicalAbelianization_mono_left</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L302">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> subgroupImageInTopologicalAbelianization_mono_left
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    {S T : Subgroup Q} (hST : S ≤ T) (U : OpenNormalSubgroup Q) :
+    subgroupImageInTopologicalAbelianization (Q := Q) S U ≤
+      subgroupImageInTopologicalAbelianization (Q := Q) T U</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Enlarging the ambient subgroup \(S\) enlarges its image in the abelianization of \(U\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> y hy
+  rcases (mem_subgroupImageInTopologicalAbelianization_iff
+    (Q := Q) (S := S) (U := U) (y := y)).1 hy <span class="kw">with</span>
+    ⟨x, hxS, hxy⟩
+  <span class="kw">exact</span> (mem_subgroupImageInTopologicalAbelianization_iff
+    (Q := Q) (S := T) (U := U) (y := y)).2
+    ⟨x, hST hxS, hxy⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.topologicalAbelianizationMapOfOpenNormalSubgroupLe">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationMapOfOpenNormalSubgroupLe">ProCGroups.Abelian.topologicalAbelianizationMapOfOpenNormalSubgroupLe</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L319">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> topologicalAbelianizationMapOfOpenNormalSubgroupLe
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    {U V : OpenNormalSubgroup Q} (hUV : (U : Subgroup Q) ≤ (V : Subgroup Q)) :
+    TopologicalAbelianization ↥(U : Subgroup Q) →ₜ*
+      TopologicalAbelianization ↥(V : Subgroup Q) :=
+  TopologicalAbelianization.map
+    { toMonoidHom := Subgroup.inclusion hUV
+      continuous_toFun := <span class="kw">by</span>
+        <span class="kw">apply</span> Continuous.subtype_mk
+        <span class="kw">exact</span> continuous_subtype_val }</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>An inclusion of open normal subgroups induces the corresponding map on topological abelianizations.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.topologicalAbelianizationMapOfOpenNormalSubgroupLe_apply_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.topologicalAbelianizationMapOfOpenNormalSubgroupLe_apply_mk">ProCGroups.Abelian.topologicalAbelianizationMapOfOpenNormalSubgroupLe_apply_mk</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L334">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> topologicalAbelianizationMapOfOpenNormalSubgroupLe_apply_mk
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    {U V : OpenNormalSubgroup Q} (hUV : (U : Subgroup Q) ≤ (V : Subgroup Q))
+    (x : ↥(U : Subgroup Q)) :
+    topologicalAbelianizationMapOfOpenNormalSubgroupLe (Q := Q) hUV
+      (TopologicalAbelianization.mk ↥(U : Subgroup Q) x) =
+        TopologicalAbelianization.mk ↥(V : Subgroup Q) ⟨x.1, hUV x.2⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The induced map on topological abelianizations sends a representative class to the class of its image.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.subgroupImageInTopologicalAbelianization_map_le_of_openNormalSubgroup_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.subgroupImageInTopologicalAbelianization_map_le_of_openNormalSubgroup_le">ProCGroups.Abelian.subgroupImageInTopologicalAbelianization_map_le_of_openNormalSubgroup_le</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L344">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> subgroupImageInTopologicalAbelianization_map_le_of_openNormalSubgroup_le
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    (S : Subgroup Q) {U V : OpenNormalSubgroup Q}
+    (hUV : (U : Subgroup Q) ≤ (V : Subgroup Q)) :
+    (subgroupImageInTopologicalAbelianization (Q := Q) S U).map
+        (topologicalAbelianizationMapOfOpenNormalSubgroupLe (Q := Q) hUV).toMonoidHom ≤
+      subgroupImageInTopologicalAbelianization (Q := Q) S V</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Under an inclusion U \(\leq\) V, the image from U maps into the image from V.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> y hy
+  rcases hy <span class="kw">with</span> ⟨x, hx, <span class="kw">rfl</span>⟩
+  rcases (mem_subgroupImageInTopologicalAbelianization_iff
+    (Q := Q) (S := S) (U := U) (y := x)).1 hx <span class="kw">with</span>
+    ⟨a, haS, hax⟩
+  <span class="kw">rw</span> [← hax]
+  <span class="kw">exact</span> (mem_subgroupImageInTopologicalAbelianization_iff
+    (Q := Q) (S := S) (U := V) (y := _)).2
+    ⟨⟨a.1, hUV a.2⟩, haS, <span class="kw">rfl</span>⟩</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.subgroupImageInTopologicalAbelianization_le_comap_of_openNormalSubgroup_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.subgroupImageInTopologicalAbelianization_le_comap_of_openNormalSubgroup_le">ProCGroups.Abelian.subgroupImageInTopologicalAbelianization_le_comap_of_openNormalSubgroup_le</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L362">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> subgroupImageInTopologicalAbelianization_le_comap_of_openNormalSubgroup_le
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    (S : Subgroup Q) {U V : OpenNormalSubgroup Q}
+    (hUV : (U : Subgroup Q) ≤ (V : Subgroup Q)) :
+    subgroupImageInTopologicalAbelianization (Q := Q) S U ≤
+      (subgroupImageInTopologicalAbelianization (Q := Q) S V).comap
+        (topologicalAbelianizationMapOfOpenNormalSubgroupLe (Q := Q) hUV).toMonoidHom</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Comap form of subgroupImageInTopologicalAbelianization_map_le_of_openNormalSubgroup_le.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>Subgroup.map_le_iff_le_comap.mp
+    (subgroupImageInTopologicalAbelianization_map_le_of_openNormalSubgroup_le
+      (Q := Q) S hUV)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.FiniteAbstractIndex">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.FiniteAbstractIndex">ProCGroups.Abelian.OpenNormalAbelianizationImage.FiniteAbstractIndex</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L379">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> FiniteAbstractIndex
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    (S K : Subgroup Q) : <span class="kw">Prop</span> :=
+  ∀ U : OpenNormalSubgroup Q, K ≤ (U : Subgroup Q) →
+    Finite
+      ((TopologicalAbelianization ↥(U : Subgroup Q)) ⧸
+        subgroupImageInTopologicalAbelianization (Q := Q) S U)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The image of \(S\) has finite abstract index in the topological abelianization of every open normal supergroup of \(K\).</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.closedSubgroupImageInTopologicalAbelianization">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.closedSubgroupImageInTopologicalAbelianization">ProCGroups.Abelian.OpenNormalAbelianizationImage.closedSubgroupImageInTopologicalAbelianization</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L390">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> closedSubgroupImageInTopologicalAbelianization
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    (S : Subgroup Q) (U : OpenNormalSubgroup Q) :
+    Subgroup (TopologicalAbelianization ↥(U : Subgroup Q)) :=
+  (subgroupImageInTopologicalAbelianization (Q := Q) S U).topologicalClosure</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The topological closure of the image of \(S \cap U\) in the topological abelianization of \(U\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.closedSubgroupImageInTopologicalAbelianization_eq_topologicalClosure">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.closedSubgroupImageInTopologicalAbelianization_eq_topologicalClosure">ProCGroups.Abelian.OpenNormalAbelianizationImage.closedSubgroupImageInTopologicalAbelianization_eq_topologicalClosure</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L400">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>] <span class="kw">theorem</span> closedSubgroupImageInTopologicalAbelianization_eq_topologicalClosure
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    (S : Subgroup Q) (U : OpenNormalSubgroup Q) :
+    closedSubgroupImageInTopologicalAbelianization (Q := Q) S U =
+      (subgroupImageInTopologicalAbelianization (Q := Q) S U).topologicalClosure</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The image of a closed subgroup in the topological abelianization is the corresponding topological closure.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.OpenClosure">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.OpenClosure">ProCGroups.Abelian.OpenNormalAbelianizationImage.OpenClosure</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L408">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> OpenClosure
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    (S K : Subgroup Q) : <span class="kw">Prop</span> :=
+  ∀ U : OpenNormalSubgroup Q, K ≤ (U : Subgroup Q) →
+    IsOpen
+      ((closedSubgroupImageInTopologicalAbelianization (Q := Q) S U :
+          Subgroup (TopologicalAbelianization ↥(U : Subgroup Q))) : Set
+          (TopologicalAbelianization ↥(U : Subgroup Q)))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The closed image of \(S\) is open in every open normal supergroup of \(K\).</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.FiniteTopologicalIndex">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.FiniteTopologicalIndex">ProCGroups.Abelian.OpenNormalAbelianizationImage.FiniteTopologicalIndex</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L420">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> FiniteTopologicalIndex
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    (S K : Subgroup Q) : <span class="kw">Prop</span> :=
+  ∀ U : OpenNormalSubgroup Q, K ≤ (U : Subgroup Q) →
+    IsClosed
+        ((subgroupImageInTopologicalAbelianization (Q := Q) S U :
+            Subgroup (TopologicalAbelianization ↥(U : Subgroup Q))) : Set
+            (TopologicalAbelianization ↥(U : Subgroup Q))) ∧
+      Finite
+        ((TopologicalAbelianization ↥(U : Subgroup Q)) ⧸
+          subgroupImageInTopologicalAbelianization (Q := Q) S U)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The image of \(S\) is closed and has finite quotient in every open normal supergroup of \(K\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.finiteAbstractIndex_of_finiteTopologicalIndex">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Abelian.OpenNormalAbelianizationImage.finiteAbstractIndex_of_finiteTopologicalIndex">ProCGroups.Abelian.OpenNormalAbelianizationImage.finiteAbstractIndex_of_finiteTopologicalIndex</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Abelian/TopologicalAbelianizationFunctoriality.lean#L433">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> finiteAbstractIndex_of_finiteTopologicalIndex
+    {Q : <span class="kw">Type</span> u} [TopologicalSpace Q] [Group Q] [IsTopologicalGroup Q]
+    {S K : Subgroup Q}
+    (h : FiniteTopologicalIndex (Q := Q) S K) :
+    FiniteAbstractIndex (Q := Q) S K</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Finite topological index includes finite abstract index as its quotient-size component.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">fun</span> U hKU =&gt; (h U hKU).2</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Abelian.TopologicalAbelianizationFunctoriality"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>

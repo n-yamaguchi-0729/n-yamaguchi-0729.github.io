@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.FoxDifferential.Completed.Continuous.TopologicalGeneration | ProCGroups Documentation</title>
+<meta name="description" content="Continuous crossed homomorphisms into Hausdorff targets are determined by their values on a topologically generating set. This module applies that principle to bundled completed Fox differentials: it constructs their ...">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/ProCGroups_pages/library/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../../../index.html">ProCGroups Documentation</a>
+  <nav class="header-nav"><a href="https://github.com/n-yamaguchi-0729/ProCGroups" target="_blank" rel="noopener">GitHub repository</a></nav>
+  <div class="header-current">ProCGroups.FoxDifferential.Completed.Continuous.TopologicalGeneration</div>
+  <form class="search-form" action="../../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/FoxDifferential.html">FoxDifferential</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/FoxDifferential/Completed.html">Completed</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/FoxDifferential/Completed/Continuous.html">Continuous</a><span class="sep">/</span><span>TopologicalGeneration</span></div>
+      <h1 class="module-title">ProCGroups.FoxDifferential.Completed.Continuous.TopologicalGeneration</h1>
+      <div class="module-meta">16 Theorems | 3 Definitions | 1 Instance</div>
+      <div class="module-overview tex2jax_process"><p>Continuous crossed homomorphisms into Hausdorff targets are determined by their values on a topologically generating set.  This module applies that principle to bundled completed Fox differentials: it constructs their kernel restrictions, compares the resulting kernel map with the topological abelianization, derives closed-commutator criteria, and proves the completed fundamental and Euler formulas from generator values.</p>
+<p>The free pro-\(C\) specializations are parameterized by the canonical finite-group class <code>C</code>; there is no predicate-to-class conversion or raw crossed-differential compatibility layer.</p></div>
+      <div class="meta"><a href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean">Open this file on GitHub</a></div>
+    </div>
+  </div>
+  <details class="imports"><summary>imports</summary><ul><li><a href="../../../../../library/ProCGroups/FoxDifferential/Completed/Continuous/Topology.html">ProCGroups.FoxDifferential.Completed.Continuous.Topology</a></li><li><a href="../../../../../library/ProCGroups/ProC/Kernels.html">ProCGroups.ProC.Kernels</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../../library/ProCGroups/FoxDifferential/Completed/Continuous.html">ProCGroups.FoxDifferential.Completed.Continuous</a></li><li><a href="../../../../../library/ProCGroups/FoxDifferential/Completed/Continuous/ClosedGeneratedCoordinates/Basic.html">ProCGroups.FoxDifferential.Completed.Continuous.ClosedGeneratedCoordinates.Basic</a></li><li><a href="../../../../../library/ProCGroups/FoxDifferential/Completed/Continuous/Magnus/ClosedGeneratedVector.html">ProCGroups.FoxDifferential.Completed.Continuous.Magnus.ClosedGeneratedVector</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl theorem" id="decl-FoxDifferential.CrossedHom.eq_of_continuous_of_topologicallyGenerates">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.eq_of_continuous_of_topologicallyGenerates">FoxDifferential.CrossedHom.eq_of_continuous_of_topologicallyGenerates</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L39">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> eq_of_continuous_of_topologicallyGenerates
+    (delta epsilon : CrossedHom action)
+    (hdelta_continuous : Continuous delta) (hepsilon_continuous : Continuous epsilon)
+    {s : Set G} (hsgen : TopologicallyGenerates (G := G) s)
+    (hs : Set.EqOn delta epsilon s) :
+    delta = epsilon</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Continuous crossed differentials with the same coefficients are determined by a topological generating set.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> K : Subgroup G :=
+    { carrier := {g | delta g = epsilon g}
+      one_mem&#x27; := <span class="kw">by</span>
+        change delta 1 = epsilon 1
+        <span class="kw">rw</span> [delta.map_one, epsilon.map_one]
+      mul_mem&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> a b ha hb
+        change delta (a * b) = epsilon (a * b)
+        <span class="kw">rw</span> [delta.map_mul a b, epsilon.map_mul a b, ha, hb]
+      inv_mem&#x27; := <span class="kw">by</span>
+        <span class="kw">intro</span> a ha
+        change delta a⁻¹ = epsilon a⁻¹
+        <span class="kw">rw</span> [delta.map_inv a, epsilon.map_inv a, ha] }
+  <span class="kw">have</span> hKclosed : IsClosed ((K : Subgroup G) : Set G) := <span class="kw">by</span>
+    change IsClosed {g | delta g = epsilon g}
+    <span class="kw">exact</span> isClosed_eq hdelta_continuous hepsilon_continuous
+  <span class="kw">have</span> hsub : Subgroup.closure s ≤ K := <span class="kw">by</span>
+    <span class="kw">rw</span> [Subgroup.closure_le]
+    <span class="kw">intro</span> x hx
+    <span class="kw">exact</span> hs hx
+  <span class="kw">have</span> htop : (⊤ : Subgroup G) ≤ K := <span class="kw">by</span>
+    <span class="kw">have</span> hcl : (Subgroup.closure s).topologicalClosure ≤ K :=
+      Subgroup.topologicalClosure_minimal _ hsub hKclosed
+    <span class="kw">rw</span> [TopologicallyGenerates] at hsgen
+    simpa [hsgen] using hcl
+  <span class="kw">apply</span> CrossedHom.ext
+  <span class="kw">intro</span> g
+  simpa [K] using htop (<span class="kw">show</span> g ∈ (⊤ : Subgroup G) from <span class="kw">by</span> <span class="kw">simp</span> only [Subgroup.mem_top])</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.CrossedHom.eq_of_freeProC_of_continuous">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.CrossedHom.eq_of_freeProC_of_continuous">FoxDifferential.CrossedHom.eq_of_freeProC_of_continuous</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L88">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> eq_of_freeProC_of_continuous
+    {ι : X → F} (hι : <a class="decl-ref" href="../../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.FreeProC.IsFreeProCGroup">ProCGroups.FreeProC.IsFreeProCGroup</a> (C := C) ι)
+    {action : F →* Multiplicative (AddAut A)} (delta epsilon : CrossedHom action)
+    (hdelta_continuous : Continuous delta) (hepsilon_continuous : Continuous epsilon)
+    (hbasis : ∀ x : X, delta (ι x) = epsilon (ι x)) :
+    delta = epsilon</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Continuous crossed differentials on a free pro-\(C\) source are determined by their values on the free pro-\(C\) generators.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  refine
+    eq_of_continuous_of_topologicallyGenerates
+      delta epsilon hdelta_continuous hepsilon_continuous hι.generates_range ?_
+  rintro _ ⟨x, <span class="kw">rfl</span>⟩
+  <span class="kw">exact</span> hbasis x</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.zcUniversalDifferential_kernel_le_closedCommutator_of_crossedDifferential">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.zcUniversalDifferential_kernel_le_closedCommutator_of_crossedDifferential">FoxDifferential.zcUniversalDifferential_kernel_le_closedCommutator_of_crossedDifferential</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L116">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> zcUniversalDifferential_kernel_le_closedCommutator_of_crossedDifferential
+    (ψ : G →ₜ* H)
+    (D : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ.toMonoidHom) A)
+    (hkerD :
+      ∀ n : ProfiniteKernelSubgroup ψ, D n.1 = 0 →
+        n ∈ <a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)) :
+    ∀ n : ProfiniteKernelSubgroup ψ,
+      zcUniversalDifferential C ψ.toMonoidHom n.1 = 0 →
+        n ∈ <a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The completed Magnus-kernel criterion for the universal differential transfers to every crossed differential represented by it.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> n hn
+  <span class="kw">exact</span> hkerD n
+    (crossedDifferential_eq_zero_of_zcUniversalDifferential_eq_zero
+      (C := C) ψ.toMonoidHom D hn)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-FoxDifferential.instT1SpaceMultiplicativeTarget">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-FoxDifferential.instT1SpaceMultiplicativeTarget">FoxDifferential.instT1SpaceMultiplicativeTarget</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L142">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instT1SpaceMultiplicativeTarget : T1Space (Multiplicative A) := <span class="kw">by</span>
+  change T1Space A
+  infer_instance</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The multiplicative target object is \(T_1\) for its finite-stage topology.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FoxDifferential.zcCrossedDifferentialKernelHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.zcCrossedDifferentialKernelHom">FoxDifferential.zcCrossedDifferentialKernelHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L150">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> zcCrossedDifferentialKernelHom
+    (ψ : G →ₜ* H)
+    (D : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ.toMonoidHom) A) :
+    ProfiniteKernelSubgroup ψ →* Multiplicative A <span class="kw">where</span>
+  toFun n := Multiplicative.ofAdd (D n.1)
+  map_one&#x27; := <span class="kw">by</span>
+    <span class="kw">rw</span> [Submonoid.coe_one]
+    <span class="kw">exact</span> congrArg Multiplicative.ofAdd (ScalarCrossedHom.map_one D)
+  map_mul&#x27; n m := <span class="kw">by</span>
+    <span class="kw">apply</span> Multiplicative.ext
+    change D ((n * m : ProfiniteKernelSubgroup ψ) : G) = D n.1 + D m.1
+    <span class="kw">rw</span> [Submonoid.coe_mul, ScalarCrossedHom.map_mul D n.1 m.1]
+    <span class="kw">have</span> hn : ψ n.1 = 1 := n.2
+    <span class="kw">simp</span> only [ContinuousMonoidHom.coe_toMonoidHom, zcCompletedGroupAlgebraScalar_apply,
+        MonoidHom.coe_coe, hn,
+  map_one, one_smul]</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The restriction of a completed crossed differential to the kernel of its coefficient homomorphism, multiplicatively valued in the additive target.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.continuous_zcCrossedDifferentialKernelHom">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.continuous_zcCrossedDifferentialKernelHom">FoxDifferential.continuous_zcCrossedDifferentialKernelHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L172">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup G] [IsTopologicalAddGroup A] [T1Space A] <span class="kw">in</span>
+<span class="kw">theorem</span> continuous_zcCrossedDifferentialKernelHom
+    (ψ : G →ₜ* H)
+    (D : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ.toMonoidHom) A)
+    (hcont : Continuous D) :
+    Continuous (zcCrossedDifferentialKernelHom (C := C) ψ D)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The crossed-differential kernel homomorphism is continuous for the topology determined by the completed Fox coordinates.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  change Continuous <span class="kw">fun</span> n : ProfiniteKernelSubgroup ψ =&gt; Multiplicative.ofAdd (D n.1)
+  <span class="kw">exact</span> continuous_ofAdd.comp (hcont.comp continuous_subtype_val)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationHom">FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L184">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> zcCrossedDifferentialProfiniteKernelAbelianizationHom
+    (ψ : G →ₜ* H)
+    (D : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ.toMonoidHom) A)
+    (hcont : Continuous D) :
+    ProfiniteKernelAbelianization ψ →* Multiplicative A :=
+  (<a class="decl-ref" href="../../../../../library/ProCGroups/Abelian/TopologicalAbelianization.html#decl-ProCGroups.Abelian.TopologicalAbelianization.lift">ProCGroups.Abelian.TopologicalAbelianization.lift</a>
+    { toMonoidHom := zcCrossedDifferentialKernelHom (C := C) ψ D
+      continuous_toFun :=
+        continuous_zcCrossedDifferentialKernelHom (C := C) ψ D hcont }).toMonoidHom</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A continuous crossed differential on G descends along the completed kernel abelianization of its coefficient homomorphism. This is the natural target of the completed relation-module map.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom">FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L195">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom
+    (ψ : G →ₜ* H)
+    (D : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ.toMonoidHom) A)
+    (hcont : Continuous D) :
+    ProfiniteKernelAbelianizationAdd ψ →+ A :=
+  (zcCrossedDifferentialProfiniteKernelAbelianizationHom
+    (C := C) ψ D hcont).toAdditiveLeft</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Additive form of \(\mathrm{zcCrossedDifferentialProfiniteKernelAbelianizationHom}\).</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom_mk">FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom_mk</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L209">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalAddGroup A] <span class="kw">in</span>
+@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom_mk
+    (ψ : G →ₜ* H)
+    (D : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ.toMonoidHom) A)
+    (hcont : Continuous D) (n : ProfiniteKernelSubgroup ψ) :
+    zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom
+      (C := C) ψ D hcont
+        (Additive.ofMul (QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> _) n)) =
+      D n.1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The completed crossed differential induces an additive monoid homomorphism from the topological kernel abelianization.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> h :=
+    <a class="decl-ref" href="../../../../../library/ProCGroups/Abelian/TopologicalAbelianization.html#decl-ProCGroups.Abelian.TopologicalAbelianization.lift_apply_mk">ProCGroups.Abelian.TopologicalAbelianization.lift_apply_mk</a>
+      ({ toMonoidHom := zcCrossedDifferentialKernelHom (C := C) ψ D
+         continuous_toFun :=
+          continuous_zcCrossedDifferentialKernelHom (C := C) ψ D hcont } :
+        ProfiniteKernelSubgroup ψ →ₜ* Multiplicative A) n
+  <span class="kw">have</span> h&#x27; := congrArg (<span class="kw">fun</span> a : Multiplicative A =&gt; a.toAdd) h
+  convert h&#x27; using 1 &lt;;&gt; <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.zcCrossedDifferential_eq_zero_of_mem_closedCommutator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.zcCrossedDifferential_eq_zero_of_mem_closedCommutator">FoxDifferential.zcCrossedDifferential_eq_zero_of_mem_closedCommutator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L231">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalAddGroup A] <span class="kw">in</span>
+<span class="kw">theorem</span> zcCrossedDifferential_eq_zero_of_mem_closedCommutator
+    (ψ : G →ₜ* H)
+    (D : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ.toMonoidHom) A)
+    (hcont : Continuous D) {n : ProfiniteKernelSubgroup ψ}
+    (hn : n ∈ <a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)) :
+    D n.1 = 0</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A continuous completed crossed differential kills the closed commutator subgroup of the kernel of its coefficient homomorphism.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> F :=
+    zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom
+      (C := C) ψ D hcont
+  <span class="kw">have</span> hnq :
+      QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)) n = 1 :=
+    (QuotientGroup.eq_one_iff
+      (N := <a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)) n).2 hn
+  <span class="kw">have</span> h :=
+    congrArg (<span class="kw">fun</span> q : ProfiniteKernelAbelianization ψ =&gt; F (Additive.ofMul q)) hnq
+  <span class="kw">rw</span> [← zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom_mk
+    (C := C) ψ D hcont n]
+  simpa [F] using h</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.zcCrossedDiffProfiniteKernelAbelianizationAddMonoidHom_inj_of_kernel_le_closedCommutator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.zcCrossedDiffProfiniteKernelAbelianizationAddMonoidHom_inj_of_kernel_le_closedCommutator">FoxDifferential.zcCrossedDiffProfiniteKernelAbelianizationAddMonoidHom_inj_of_kernel_le_closedCommutator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L255">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalAddGroup A] <span class="kw">in</span>
+<span class="kw">theorem</span> zcCrossedDiffProfiniteKernelAbelianizationAddMonoidHom_inj_of_kernel_le_closedCommutator
+    (ψ : G →ₜ* H)
+    (D : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ.toMonoidHom) A)
+    (hcont : Continuous D)
+    (hker :
+      ∀ n : ProfiniteKernelSubgroup ψ, D n.1 = 0 →
+        n ∈ <a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)) :
+    Function.Injective
+      (zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom
+        (C := C) ψ D hcont)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The induced map from the topological kernel abelianization is injective when the kernel of the crossed differential is contained in the closed commutator subgroup.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> x y hxy
+  suffices x - y = 0 <span class="kw">by</span> <span class="kw">exact</span> sub_eq_zero.mp this
+  <span class="kw">let</span> F :=
+    zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom
+      (C := C) ψ D hcont
+  <span class="kw">have</span> hmap : F (x - y) = 0 := <span class="kw">by</span>
+    <span class="kw">rw</span> [map_sub, hxy, sub_self]
+  <span class="kw">have</span> hzero_of_map_zero :
+      ∀ z : ProfiniteKernelAbelianizationAdd ψ, F z = 0 → z = 0 := <span class="kw">by</span>
+    <span class="kw">intro</span> z hz
+    <span class="kw">apply</span> Additive.toMul.injective
+    change (Additive.toMul z : ProfiniteKernelAbelianization ψ) = 1
+    revert hz
+    change
+      (<span class="kw">fun</span> q : ProfiniteKernelAbelianization ψ =&gt;
+        F (Additive.ofMul q) = 0 → q = 1) (Additive.toMul z)
+    refine QuotientGroup.induction_on (Additive.toMul z) ?_
+    <span class="kw">intro</span> n hn
+    change QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> _) n = 1
+    <span class="kw">exact</span> (QuotientGroup.eq_one_iff
+      (N := <a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)) n).2
+        (hker n (<span class="kw">by</span>
+          <span class="kw">rw</span> [← zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom_mk
+            (C := C) ψ D hcont n]
+          simpa [F] using hn))
+  <span class="kw">exact</span> hzero_of_map_zero (x - y) hmap</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom_injective_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom_injective_iff">FoxDifferential.zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom_injective_iff</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L297">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalAddGroup A] <span class="kw">in</span>
+<span class="kw">theorem</span> zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom_injective_iff
+    {ψ : G →ₜ* H}
+    (D : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ.toMonoidHom) A)
+    (hcont : Continuous D) :
+    Function.Injective
+        (zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom
+          (C := C) ψ D hcont) ↔
+      ∀ n : ProfiniteKernelSubgroup ψ, D n.1 = 0 →
+        n ∈ <a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Injectivity of the induced map on the topological kernel abelianization is equivalent to the continuous Magnus-kernel criterion.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hinj n hn
+    <span class="kw">let</span> F :=
+      zcCrossedDifferentialProfiniteKernelAbelianizationAddMonoidHom
+        (C := C) ψ D hcont
+    <span class="kw">have</span> hzero :
+        F (Additive.ofMul
+            (QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)) n)) =
+          F 0 := <span class="kw">by</span>
+      simpa [F, hn]
+    <span class="kw">have</span> hclass :
+        Additive.ofMul
+            (QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)) n) =
+          0 := hinj hzero
+    <span class="kw">have</span> hmk :
+        QuotientGroup.mk&#x27; (<a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)) n = 1 := <span class="kw">by</span>
+      simpa using congrArg Additive.toMul hclass
+    <span class="kw">exact</span> (QuotientGroup.eq_one_iff
+      (N := <a class="decl-ref" href="../../../../../library/ProCGroups/Topologies/TopologicallyCharacteristicSubgroups.html#decl-Subgroup.closedCommutator">Subgroup.closedCommutator</a> (ProfiniteKernelSubgroup ψ)) n).1 hmk
+  · <span class="kw">intro</span> hker
+    <span class="kw">exact</span>
+      zcCrossedDiffProfiniteKernelAbelianizationAddMonoidHom_inj_of_kernel_le_closedCommutator
+        (C := C) ψ D hcont hker</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.freeProCZCBoundary_of_topologicalGeneration">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.freeProCZCBoundary_of_topologicalGeneration">FoxDifferential.freeProCZCBoundary_of_topologicalGeneration</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L345">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeProCZCBoundary_of_topologicalGeneration
+    {ι : X → G}
+    (hgen : TopologicallyGenerates (G := G) (Set.range ι))
+    (ψ : G →* H)
+    (delta : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ)
+      (ZCFreeFoxCoordinates C (X := X) (H := H)))
+    (hdelta_continuous : Continuous delta) (hψ_continuous : Continuous ψ)
+    (hbasis :
+      ∀ x : X, delta (ι x) = Pi.single x (1 : ZCCompletedGroupAlgebra C H))
+    (g : G) :
+    freeProCZCCompletedFoxBoundary C (<span class="kw">fun</span> x : X =&gt; ψ (ι x)) (delta g) =
+      zcCompletedGroupAlgebraBoundary C ψ g</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Source-shaped completed Fox boundary formula from continuity and topological generation. This is the abstract form of the completed Fox fundamental formula: no free pro-\(C\) universal property is needed once the source generators topologically generate the source.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> beta : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ)
+      (ZCCompletedGroupAlgebra C H) :=
+    delta.mapLinear
+      (freeProCZCCompletedFoxBoundary C (<span class="kw">fun</span> x : X =&gt; ψ (ι x)))
+  <span class="kw">have</span> hbeta_continuous : Continuous beta :=
+    (continuous_freeProCZCCompletedFoxBoundary C (<span class="kw">fun</span> x : X =&gt; ψ (ι x))).comp hdelta_continuous
+  <span class="kw">have</span> hboundary_continuous : Continuous (zcCompletedGroupAlgebraBoundary C ψ) :=
+    continuous_zcCompletedGroupAlgebraBoundary (C := C) (G := H) ψ hψ_continuous
+  <span class="kw">have</span> hEqOn :
+      Set.EqOn beta (zcCompletedGroupAlgebraBoundary C ψ) (Set.range ι) := <span class="kw">by</span>
+    <span class="kw">intro</span> y hy
+    rcases hy <span class="kw">with</span> ⟨x, <span class="kw">rfl</span>⟩
+    change
+      freeProCZCCompletedFoxBoundary C (<span class="kw">fun</span> x : X =&gt; ψ (ι x)) (delta (ι x)) =
+        zcGroupLike C H (ψ (ι x)) - 1
+    <span class="kw">rw</span> [hbasis x, freeProCZCCompletedFoxBoundary_single]
+  <span class="kw">have</span> hEq :=
+    CrossedHom.eq_of_continuous_of_topologicallyGenerates
+      beta (zcCompletedGroupAlgebraBoundary C ψ)
+      hbeta_continuous hboundary_continuous hgen hEqOn
+  <span class="kw">exact</span> congrArg
+    (<span class="kw">fun</span> d : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ)
+      (ZCCompletedGroupAlgebra C H) =&gt; d g) hEq</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.exact_zcCrossedDiffKernelAddMonoidHom_freeProCZCCompletedFoxBoundary_of_surj_semi">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.exact_zcCrossedDiffKernelAddMonoidHom_freeProCZCCompletedFoxBoundary_of_surj_semi">FoxDifferential.exact_zcCrossedDiffKernelAddMonoidHom_freeProCZCCompletedFoxBoundary_of_surj_semi</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L389">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [DecidableEq X] [TopologicalSpace G]
+  [IsTopologicalGroup G] <span class="kw">in</span>
+<span class="kw">theorem</span> exact_zcCrossedDiffKernelAddMonoidHom_freeProCZCCompletedFoxBoundary_of_surj_semi
+    (φ : X → H)
+    (ψ : G →* H)
+    (delta : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ)
+      (ZCFreeFoxCoordinates C (X := X) (H := H)))
+    (hboundary :
+      ∀ g : G,
+        freeProCZCCompletedFoxBoundary C φ (delta g) =
+          zcCompletedGroupAlgebraBoundary C ψ g)
+    (hgraph :
+      Function.Surjective
+        (<span class="kw">fun</span> g : G =&gt;
+          ({ left := delta g, right := ψ g } :
+            ZCCompletedFoxSemidirect C X H))) :
+    Function.Exact
+      (ScalarCrossedHom.restrictTrivialSubgroupAddMonoidHom
+        delta ψ.ker
+        (zcCompletedGroupAlgebraScalar_subtype_ker (C := C) (ψ := ψ)))
+      (freeProCZCCompletedFoxBoundary C φ)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Exactness at the finite completed Fox-coordinate term from a surjective semidirect graph. The hypothesis says that the crossed-differential graph g \(\mapsto\) (delta g, \(\psi(g)\)) fills \(\mathbb{Z}_C\llbracket H\rrbracket^{X}\) \(\rtimes\) H. Then every vector killed by the source-shaped Fox boundary is the derivative of an element of \(\ker \psi\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> v
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> hv
+    rcases hgraph
+        ({ left := v, right := 1 } :
+          ZCCompletedFoxSemidirect C X H) <span class="kw">with</span>
+      ⟨g, hg⟩
+    <span class="kw">have</span> hdelta_g : delta g = v := congrArg ZCCompletedFoxSemidirect.left hg
+    <span class="kw">have</span> hψ_g : ψ g = 1 := congrArg ZCCompletedFoxSemidirect.right hg
+    refine ⟨Additive.ofMul (⟨g, hψ_g⟩ : ψ.ker), ?_⟩
+    <span class="kw">simp</span> only [ScalarCrossedHom.restrictTrivialSubgroupAddMonoidHom_apply, hdelta_g]
+  · rintro ⟨n, hn⟩
+    <span class="kw">rw</span> [← hn]
+    change
+      freeProCZCCompletedFoxBoundary C φ
+        (delta (((Additive.toMul n : ψ.ker) : G))) = 0
+    <span class="kw">rw</span> [hboundary (((Additive.toMul n : ψ.ker) : G))]
+    <span class="kw">exact</span> zcCompletedGroupAlgebraBoundary_eq_zero_of_mem_ker
+      (C := C) (ψ := ψ) (g := ((Additive.toMul n : ψ.ker) : G))
+      (Additive.toMul n).2</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.zcCompletedFoxSemidirect_surjective_forces_generator_boundary_zero">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.zcCompletedFoxSemidirect_surjective_forces_generator_boundary_zero">FoxDifferential.zcCompletedFoxSemidirect_surjective_forces_generator_boundary_zero</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L437">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [DecidableEq X] [TopologicalSpace G]
+  [IsTopologicalGroup G] <span class="kw">in</span>
+<span class="kw">theorem</span> zcCompletedFoxSemidirect_surjective_forces_generator_boundary_zero
+    (φ : X → H)
+    (ψ : G →* H) (delta : G → ZCFreeFoxCoordinates C (X := X) (H := H))
+    (hboundary :
+      ∀ g : G,
+        freeProCZCCompletedFoxBoundary C φ (delta g) =
+          zcCompletedGroupAlgebraBoundary C ψ g)
+    (hgraph :
+      Function.Surjective
+        (<span class="kw">fun</span> g : G =&gt;
+          ({ left := delta g, right := ψ g } :
+            ZCCompletedFoxSemidirect C X H))) (x : X) :
+    zcGroupLike C H (φ x) - 1 = 0</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>If a completed semidirect Fox lift onto \(\mathbb{Z}_C\llbracket H\rrbracket^{X} \rtimes H\) is actually surjective, then every generator boundary \([\varphi(x)]-1\) must vanish. This is a useful diagnostic obstruction: the graph generators of a free source cannot generally topologically generate the whole semidirect product.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  classical
+  rcases hgraph
+      ({ left := Pi.single x (1 : ZCCompletedGroupAlgebra C H), right := 1 } :
+        ZCCompletedFoxSemidirect C X H) <span class="kw">with</span>
+    ⟨g, hg⟩
+  <span class="kw">have</span> hdelta_g : delta g = Pi.single x (1 : ZCCompletedGroupAlgebra C H) :=
+    congrArg ZCCompletedFoxSemidirect.left hg
+  <span class="kw">have</span> hψ_g : ψ g = 1 := congrArg ZCCompletedFoxSemidirect.right hg
+  <span class="kw">calc</span>
+    zcGroupLike C H (φ x) - 1 =
+        freeProCZCCompletedFoxBoundary C φ
+          (Pi.single x (1 : ZCCompletedGroupAlgebra C H)) := <span class="kw">by</span>
+      <span class="kw">rw</span> [freeProCZCCompletedFoxBoundary_single]
+    _ = freeProCZCCompletedFoxBoundary C φ (delta g) := <span class="kw">by</span> <span class="kw">rw</span> [hdelta_g]
+    _ = zcCompletedGroupAlgebraBoundary C ψ g := hboundary g
+    _ = 0 := zcCompletedGroupAlgebraBoundary_eq_zero_of_mem_ker C ψ hψ_g</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.exact_zcKernelAdd_freeProCZCFoxBoundary_of_topGen">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.exact_zcKernelAdd_freeProCZCFoxBoundary_of_topGen">FoxDifferential.exact_zcKernelAdd_freeProCZCFoxBoundary_of_topGen</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L471">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> exact_zcKernelAdd_freeProCZCFoxBoundary_of_topGen
+    {ι : X → G}
+    (hgen : TopologicallyGenerates (G := G) (Set.range ι))
+    (ψ : G →* H)
+    (delta : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ)
+      (ZCFreeFoxCoordinates C (X := X) (H := H)))
+    (hdelta_continuous : Continuous delta) (hψ_continuous : Continuous ψ)
+    (hbasis :
+      ∀ x : X, delta (ι x) = Pi.single x (1 : ZCCompletedGroupAlgebra C H))
+    (hgraph :
+      Function.Surjective
+        (<span class="kw">fun</span> g : G =&gt;
+          ({ left := delta g, right := ψ g } :
+            ZCCompletedFoxSemidirect C X H))) :
+    Function.Exact
+      (ScalarCrossedHom.restrictTrivialSubgroupAddMonoidHom
+        delta ψ.ker
+        (zcCompletedGroupAlgebraScalar_subtype_ker (C := C) (ψ := ψ)))
+      (freeProCZCCompletedFoxBoundary C (<span class="kw">fun</span> x : X =&gt; ψ (ι x)))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Exactness at the finite completed Fox-coordinate term, with the boundary identity supplied by continuity and topological generation of the source generators.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span>
+    exact_zcCrossedDiffKernelAddMonoidHom_freeProCZCCompletedFoxBoundary_of_surj_semi
+      (C := C) (X := X) (G := G) (H := H)
+      (<span class="kw">fun</span> x : X =&gt; ψ (ι x)) ψ delta
+      (freeProCZCBoundary_of_topologicalGeneration
+        (C := C) (X := X) (G := G) (H := H)
+        hgen ψ delta hdelta_continuous hψ_continuous hbasis)
+      hgraph</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.freeProCZCFundamentalFormula_of_topologicalGeneration">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.freeProCZCFundamentalFormula_of_topologicalGeneration">FoxDifferential.freeProCZCFundamentalFormula_of_topologicalGeneration</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L500">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeProCZCFundamentalFormula_of_topologicalGeneration
+    {ι : X → G}
+    (hgen : TopologicallyGenerates (G := G) (Set.range ι))
+    (ψ : G →* H)
+    (delta : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ)
+      (ZCFreeFoxCoordinates C (X := X) (H := H)))
+    (hdelta_continuous : Continuous delta) (hψ_continuous : Continuous ψ)
+    (hbasis :
+      ∀ x : X, delta (ι x) = Pi.single x (1 : ZCCompletedGroupAlgebra C H))
+    (g : G) :
+    zcCompletedGroupAlgebraBoundary C ψ g =
+      ∑ x : X, delta g x * (zcGroupLike C H (ψ (ι x)) - 1)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Source-shaped completed Fox fundamental formula from continuity and topological generation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa [freeProCZCCompletedFoxBoundary_apply] using
+    (freeProCZCBoundary_of_topologicalGeneration
+      (X := X) (G := G) (H := H) C hgen ψ delta
+        hdelta_continuous hψ_continuous hbasis g).symm</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.freeProCZCFundamentalFormula_stage_of_topologicalGeneration">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.freeProCZCFundamentalFormula_stage_of_topologicalGeneration">FoxDifferential.freeProCZCFundamentalFormula_stage_of_topologicalGeneration</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L521">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeProCZCFundamentalFormula_stage_of_topologicalGeneration
+    {ι : X → G}
+    (hgen : TopologicallyGenerates (G := G) (Set.range ι))
+    (ψ : G →* H)
+    (delta : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ)
+      (ZCFreeFoxCoordinates C (X := X) (H := H)))
+    (hdelta_continuous : Continuous delta) (hψ_continuous : Continuous ψ)
+    (hbasis :
+      ∀ x : X, delta (ι x) = Pi.single x (1 : ZCCompletedGroupAlgebra C H))
+    (j : ZCCompletedGroupAlgebraIndex C H) (g : G) :
+    zcCompletedGroupAlgebraProjection C H j
+        (zcCompletedGroupAlgebraBoundary C ψ g) =
+      zcCompletedGroupAlgebraProjection C H j
+        (∑ x : X, delta g x * (zcGroupLike C H (ψ (ι x)) - 1))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The finite-stage projection of the source-shaped completed Fox formula obtained from continuity and topological generation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> congrArg (zcCompletedGroupAlgebraProjection C H j)
+    (freeProCZCFundamentalFormula_of_topologicalGeneration
+      (X := X) (G := G) (H := H) C hgen ψ delta
+        hdelta_continuous hψ_continuous hbasis g)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.freeProCZCEulerFormula_of_topologicalGeneration">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.freeProCZCEulerFormula_of_topologicalGeneration">FoxDifferential.freeProCZCEulerFormula_of_topologicalGeneration</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L541">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeProCZCEulerFormula_of_topologicalGeneration
+    {ι : X → G}
+    (hgen : TopologicallyGenerates (G := G) (Set.range ι))
+    (ψ : G →* H)
+    (delta : ScalarCrossedHom (zcCompletedGroupAlgebraScalar C ψ)
+      (ZCFreeFoxCoordinates C (X := X) (H := H)))
+    (hdelta_continuous : Continuous delta) (hψ_continuous : Continuous ψ)
+    (hbasis :
+      ∀ x : X, delta (ι x) = Pi.single x (1 : ZCCompletedGroupAlgebra C H))
+    (g : G) :
+    zcGroupLike C H (ψ g) - 1 =
+      ∑ x : X, delta g x * (zcGroupLike C H (ψ (ι x)) - 1)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Explicit Euler-sum form from continuity and topological generation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  convert
+    freeProCZCFundamentalFormula_of_topologicalGeneration
+      (X := X) (G := G) (H := H) C hgen ψ delta
+        hdelta_continuous hψ_continuous hbasis g using 1
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-FoxDifferential.freeProCZCCompletedCrossedDifferential_ext_of_continuous">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-FoxDifferential.freeProCZCCompletedCrossedDifferential_ext_of_continuous">FoxDifferential.freeProCZCCompletedCrossedDifferential_ext_of_continuous</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/FoxDifferential/Completed/Continuous/TopologicalGeneration.lean#L574">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> freeProCZCCompletedCrossedDifferential_ext_of_continuous
+    {ι : X → F} (hι : <a class="decl-ref" href="../../../../../library/ProCGroups/FreeProC/Basic.html#decl-ProCGroups.FreeProC.IsFreeProCGroup">ProCGroups.FreeProC.IsFreeProCGroup</a> (C := C) ι)
+    (ψ : F →* H)
+    (delta epsilon :
+      ScalarCrossedHom
+        (zcCompletedGroupAlgebraScalar C ψ)
+        (ZCFreeFoxCoordinates C (X := X) (H := H)))
+    (hdelta_continuous : Continuous delta) (hepsilon_continuous : Continuous epsilon)
+    (hbasis : ∀ x : X, delta (ι x) = epsilon (ι x)) :
+    delta = epsilon</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Extensionality for continuous completed crossed differentials on a free pro-\(C\) source, using continuity of the coordinate-valued maps themselves.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> CrossedHom.eq_of_freeProC_of_continuous
+    (C := C) hι delta epsilon
+      hdelta_continuous hepsilon_continuous hbasis</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.FoxDifferential.Completed.Continuous.TopologicalGeneration"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../../assets/site.js" data-root="../../../../../"></script>
+</body>
+</html>

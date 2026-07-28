@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.ReidemeisterSchreier.Profinite.OpenSubgroups.SchreierTransversals | ProCGroups Documentation</title>
+<meta name="description" content="The source of truth is `SchreierCocycleData`: it stores a left/right orientation, a section map, the next-coset operation, and the proof that the resulting cocycle lands in the open subgroup. `ActualSchreierSection` a...">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/ProCGroups_pages/library/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../../../index.html">ProCGroups Documentation</a>
+  <nav class="header-nav"><a href="https://github.com/n-yamaguchi-0729/ProCGroups" target="_blank" rel="noopener">GitHub repository</a></nav>
+  <div class="header-current">ProCGroups.ReidemeisterSchreier.Profinite.OpenSubgroups.SchreierTransversals</div>
+  <form class="search-form" action="../../../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/ReidemeisterSchreier.html">ReidemeisterSchreier</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/ReidemeisterSchreier/Profinite.html">Profinite</a><span class="sep">/</span><a href="../../../../../library/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups.html">OpenSubgroups</a><span class="sep">/</span><span>SchreierTransversals</span></div>
+      <h1 class="module-title">ProCGroups.ReidemeisterSchreier.Profinite.OpenSubgroups.SchreierTransversals</h1>
+      <div class="module-meta">22 Theorems | 13 Definitions | 1 Abbreviation | 4 Structures | 1 Inductive | 2 Instances</div>
+      <div class="module-overview tex2jax_process"><p>The source of truth is <code>SchreierCocycleData</code>: it stores a left/right orientation, a section map, the next-coset operation, and the proof that the resulting cocycle lands in the open subgroup.  <code>ActualSchreierSection</code> and <code>ActualRightSchreierSection</code> add equivalences with the genuine quotient and the projection/next-coset coherence laws.  <code>FiniteSchreierCocycleData</code> carries the finiteness evidence used by <code>Nat.card</code>.</p>
+<p>The concrete left- and right-coset constructions below feed this common API. Continuity, closure, generation, and cardinality are proved once for the oriented data rather than repeated as chosen-left/chosen-right wrapper families.</p></div>
+      <div class="meta"><a href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean">Open this file on GitHub</a></div>
+    </div>
+  </div>
+  <details class="imports"><summary>imports</summary><ul><li><a href="../../../../../library/ProCGroups/FreeProC/Basic.html">ProCGroups.FreeProC.Basic</a></li><li><a href="../../../../../library/ProCGroups/WreathProducts.html">ProCGroups.WreathProducts</a></li><li><a href="../../../../../library/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/RightQuotient.html">ProCGroups.ReidemeisterSchreier.Profinite.OpenSubgroups.RightQuotient</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../../../library/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups.html">ProCGroups.ReidemeisterSchreier.Profinite.OpenSubgroups</a></li><li><a href="../../../../../library/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/ExactRightSchreierGeneration.html">ProCGroups.ReidemeisterSchreier.Profinite.OpenSubgroups.ExactRightSchreierGeneration</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl abbrev" id="decl-ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection">
+  <div class="decl-head">
+    <span class="kind abbrev">Abbreviation</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection">ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L39">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">abbrev</span> openSubgroupLeftSchreierSection (H : OpenSubgroup F) :
+    F ⧸ (H : Subgroup F) → F :=
+  <a class="decl-ref" href="../../../../../library/ProCGroups/ProC/Quotients/OpenSubgroupSections.html#decl-ProCGroups.ProC.quotientOpenSubgroupSection">ProCGroups.ProC.quotientOpenSubgroupSection</a> (H : Subgroup F)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The normalized continuous section of the left quotient by an open subgroup.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection_rightInverse">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection_rightInverse">ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection_rightInverse</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L47">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> openSubgroupLeftSchreierSection_rightInverse (H : OpenSubgroup F) :
+    Function.RightInverse (openSubgroupLeftSchreierSection (F := F) H)
+      (QuotientGroup.mk (s := (H : Subgroup F)))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The normalized section of the left quotient is a right inverse to the quotient projection.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa [openSubgroupLeftSchreierSection] using
+    (<a class="decl-ref" href="../../../../../library/ProCGroups/ProC/Quotients/OpenSubgroupSections.html#decl-ProCGroups.ProC.quotientOpenSubgroupSection_rightInverse">ProCGroups.ProC.quotientOpenSubgroupSection_rightInverse</a>
+      (G := F) (U := (H : Subgroup F)))</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.continuous_openSubgroupLeftSchreierSection">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.continuous_openSubgroupLeftSchreierSection">ReidemeisterSchreier.Profinite.continuous_openSubgroupLeftSchreierSection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L55">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_openSubgroupLeftSchreierSection (H : OpenSubgroup F) :
+    Continuous (openSubgroupLeftSchreierSection (F := F) H)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The corresponding Schreier section is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa [openSubgroupLeftSchreierSection] using
+    (<a class="decl-ref" href="../../../../../library/ProCGroups/ProC/Quotients/OpenSubgroupSections.html#decl-ProCGroups.ProC.continuous_quotientOpenSubgroupSection">ProCGroups.ProC.continuous_quotientOpenSubgroupSection</a>
+      (G := F) (U := (H : Subgroup F)) H.isOpen&#x27;)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection_mk">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection_mk">ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection_mk</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L63">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+@[<span class="kw">simp</span>] <span class="kw">theorem</span> openSubgroupLeftSchreierSection_mk
+    (H : OpenSubgroup F) (q : F ⧸ (H : Subgroup F)) :
+    QuotientGroup.mk (s := (H : Subgroup F))
+        (openSubgroupLeftSchreierSection (F := F) H q) = q</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The Schreier generator component of the corresponding rewriting map.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>openSubgroupLeftSchreierSection_rightInverse (F := F) H q</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection_one">ReidemeisterSchreier.Profinite.openSubgroupLeftSchreierSection_one</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L71">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+@[<span class="kw">simp</span>] <span class="kw">theorem</span> openSubgroupLeftSchreierSection_one
+    (H : OpenSubgroup F) :
+    openSubgroupLeftSchreierSection (F := F) H
+        (QuotientGroup.mk (s := (H : Subgroup F)) (1 : F)) = 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The normalized left-quotient section sends the identity coset to the identity.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">simp</span> only [openSubgroupLeftSchreierSection, quotientOpenSubgroupSection_one]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl inductive" id="decl-ReidemeisterSchreier.Profinite.SchreierOrientation">
+  <div class="decl-head">
+    <span class="kind inductive">Inductive</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierOrientation">ReidemeisterSchreier.Profinite.SchreierOrientation</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L86">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">inductive</span> SchreierOrientation <span class="kw">where</span>
+  <span class="comment">/-- The left-oriented cocycle places the inverse of the next representative first. -/</span>
+  | left
+  <span class="comment">/-- The right-oriented cocycle places the inverse of the next representative last. -/</span>
+  | right
+<span class="kw">deriving</span> DecidableEq</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The two cocycle orientations used by left- and right-coset Schreier generators.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.SchreierOrientation.cocycle">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierOrientation.cocycle">ReidemeisterSchreier.Profinite.SchreierOrientation.cocycle</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L96">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> cocycle {Q : <span class="kw">Type</span> u} (o : SchreierOrientation)
+    (sec : Q → F) (next : Q → X → Q) (ι : X → F) (q : Q) (x : X) : F :=
+  <span class="kw">match</span> o <span class="kw">with</span>
+  | left =&gt; (sec (next q x))⁻¹ * sec q * ι x
+  | right =&gt; sec q * ι x * (sec (next q x))⁻¹</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The oriented Schreier cocycle associated to a section and a next-coset operation.</p></div></section>
+  </div>
+</section>
+<section class="decl structure" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData">ReidemeisterSchreier.Profinite.SchreierCocycleData</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L109">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> SchreierCocycleData <span class="kw">where</span>
+  <span class="comment">/-- The abstract type indexing the chosen coset representatives. -/</span>
+  Q : <span class="kw">Type</span> u
+  <span class="comment">/-- Whether the associated Schreier cocycle uses the left- or right-coset formula. -/</span>
+  orientation : SchreierOrientation
+  <span class="comment">/-- The representative in \(F\) assigned to each abstract quotient index. -/</span>
+  sectionMap : Q → F
+  <span class="comment">/-- The quotient index reached after multiplying a representative by a chosen generator. -/</span>
+  next : (X → F) → Q → X → Q
+  <span class="comment">/-- Every oriented cocycle value belongs to the open subgroup \(H\). -/</span>
+  cocycle_mem :
+    ∀ (ι : X → F) (q : Q) (x : X),
+      orientation.cocycle sectionMap (next ι) ι q x ∈ (H : Subgroup F)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A section-level Schreier generator package. It abstracts over the quotient type, the left/right cocycle orientation, and the next-coset operation, so the common generator-set, continuity, closure, and cardinality formulation can be formulated once.</p></div></section>
+  </div>
+</section>
+<section class="decl structure" id="decl-ReidemeisterSchreier.Profinite.ActualSchreierSection">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.ActualSchreierSection">ReidemeisterSchreier.Profinite.ActualSchreierSection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L129">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> ActualSchreierSection <span class="kw">where</span>
+  <span class="comment">/-- The abstract cocycle and section data. -/</span>
+  cocycleData : SchreierCocycleData (F := F) (X := X) H
+  <span class="comment">/-- Identification of the abstract index type with the left quotient \(F/H\). -/</span>
+  quotientEquiv : cocycleData.Q ≃ F ⧸ (H : Subgroup F)
+  <span class="comment">/-- Each chosen representative projects to its corresponding quotient index. -/</span>
+  section_projects :
+    ∀ q : cocycleData.Q,
+      QuotientGroup.mk (s := (H : Subgroup F)) (cocycleData.sectionMap q) =
+        quotientEquiv q
+  <span class="comment">/-- The next-index operation projects the representative multiplied by the chosen generator. -/</span>
+  next_projects :
+    ∀ (ι : X → F) (q : cocycleData.Q) (x : X),
+      quotientEquiv (cocycleData.next ι q x) =
+        QuotientGroup.mk (s := (H : Subgroup F))
+          (cocycleData.sectionMap q * ι x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Genuine left-quotient Schreier section data.</p>
+<p>The equivalence identifies the abstract cocycle index with the actual quotient <code>F ⧸ H</code>; the remaining fields state that both the representative and the next-coset operation project to that quotient.  Thus no arbitrary raw map can masquerade as a quotient projection.</p></div></section>
+  </div>
+</section>
+<section class="decl structure" id="decl-ReidemeisterSchreier.Profinite.ActualRightSchreierSection">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.ActualRightSchreierSection">ReidemeisterSchreier.Profinite.ActualRightSchreierSection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L150">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> ActualRightSchreierSection <span class="kw">where</span>
+  <span class="comment">/-- The abstract cocycle and section data. -/</span>
+  cocycleData : SchreierCocycleData (F := F) (X := X) H
+  <span class="comment">/-- Identification of the abstract index type with the right quotient by \(H\). -/</span>
+  quotientEquiv : cocycleData.Q ≃ OpenSubgroupRightQuotient H
+  <span class="comment">/-- Each chosen representative maps to its corresponding right-quotient index. -/</span>
+  section_projects :
+    ∀ q : cocycleData.Q,
+      (Quotient.mk&#x27;&#x27; (cocycleData.sectionMap q) :
+        OpenSubgroupRightQuotient H) = quotientEquiv q
+  <span class="comment">/-- The next-index operation maps the representative multiplied by the chosen generator. -/</span>
+  next_projects :
+    ∀ (ι : X → F) (q : cocycleData.Q) (x : X),
+      quotientEquiv (cocycleData.next ι q x) =
+        (Quotient.mk&#x27;&#x27; (cocycleData.sectionMap q * ι x) :
+          OpenSubgroupRightQuotient H)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Genuine right-quotient Schreier section data.</p>
+<p>This is the right-coset counterpart of <code>ActualSchreierSection</code>; its index type is explicitly identified with <code>OpenSubgroupRightQuotient H</code>.</p></div></section>
+  </div>
+</section>
+<section class="decl structure" id="decl-ReidemeisterSchreier.Profinite.FiniteSchreierCocycleData">
+  <div class="decl-head">
+    <span class="kind structure">Structure</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.FiniteSchreierCocycleData">ReidemeisterSchreier.Profinite.FiniteSchreierCocycleData</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L170">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">structure</span> FiniteSchreierCocycleData <span class="kw">where</span>
+  <span class="comment">/-- The underlying abstract Schreier cocycle package. -/</span>
+  cocycleData : SchreierCocycleData (F := F) (X := X) H
+  <span class="comment">/-- Finiteness of the generator-index type. -/</span>
+  finiteGeneratorIndex : Finite X
+  <span class="comment">/-- Finiteness of the abstract quotient-index type. -/</span>
+  finiteQuotient : Finite cocycleData.Q</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>A cocycle package together with the finiteness data required by its <code>Nat.card</code> estimates.  This prevents a finite-index formula from silently using <code>Nat.card = 0</code> on an infinite quotient.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generator">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generator">ReidemeisterSchreier.Profinite.SchreierCocycleData.generator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L183">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> generator (S : SchreierCocycleData (F := F) (X := X) H)
+    (ι : X → F) (q : S.Q) (x : X) : ↥(H : Subgroup F) :=
+  ⟨S.orientation.cocycle S.sectionMap (S.next ι) ι q x, S.cocycle_mem ι q x⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The subgroup-valued generator attached to an abstract Schreier section.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_coe">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_coe">ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_coe</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L190">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+@[<span class="kw">simp</span>] <span class="kw">theorem</span> generator_coe (S : SchreierCocycleData (F := F) (X := X) H)
+    (ι : X → F) (q : S.Q) (x : X) :
+    ((S.generator ι q x : ↥(H : Subgroup F)) : F) =
+      S.orientation.cocycle S.sectionMap (S.next ι) ι q x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Forgetting the subgroup proof from a Schreier generator yields its defining cocycle value.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generatorSet">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generatorSet">ReidemeisterSchreier.Profinite.SchreierCocycleData.generatorSet</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L197">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> generatorSet (S : SchreierCocycleData (F := F) (X := X) H)
+    (ι : X → F) : Set ↥(H : Subgroup F) :=
+  {z | ∃ q : S.Q, ∃ x : X, z = S.generator ι q x ∧ z ≠ 1}</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Nontrivial generator values of an abstract Schreier section.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.NontrivialPairs">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.NontrivialPairs">ReidemeisterSchreier.Profinite.SchreierCocycleData.NontrivialPairs</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L205">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> NontrivialPairs (S : SchreierCocycleData (F := F) (X := X) H)
+    (ι : X → F) : <span class="kw">Type</span> (max u v) :=
+  {p : S.Q × X // S.generator ι p.1 p.2 ≠ 1}</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>This type records the nontrivial Schreier pairs whose cocycle values form the abstract Schreier generator set.</p></div></section>
+  </div>
+</section>
+<section class="decl instance" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.finite_nontrivialPairs">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.finite_nontrivialPairs">ReidemeisterSchreier.Profinite.SchreierCocycleData.finite_nontrivialPairs</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L214">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">instance</span> finite_nontrivialPairs
+    (S : SchreierCocycleData (F := F) (X := X) H) (ι : X → F)
+    [Finite X] [Finite S.Q] :
+    Finite (S.NontrivialPairs ι) :=
+  Finite.of_injective (<span class="kw">fun</span> p : S.NontrivialPairs ι =&gt; p.1) (<span class="kw">by</span>
+    <span class="kw">intro</span> a b h
+    <span class="kw">exact</span> Subtype.ext h)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The abstract Schreier generator or next-coset formula is obtained by evaluating the chosen section cocycle.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.nontrivialPairsToGeneratorSet">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.nontrivialPairsToGeneratorSet">ReidemeisterSchreier.Profinite.SchreierCocycleData.nontrivialPairsToGeneratorSet</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L224">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">noncomputable</span> <span class="kw">def</span> nontrivialPairsToGeneratorSet
+    (S : SchreierCocycleData (F := F) (X := X) H) (ι : X → F) :
+    S.NontrivialPairs ι → ↥(S.generatorSet ι) := <span class="kw">fun</span> p =&gt;
+  ⟨S.generator ι p.1.1 p.1.2, ⟨p.1.1, p.1.2, <span class="kw">rfl</span>, p.2⟩⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The tautological map from nontrivial abstract Schreier pairs to the generator value set.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.surjective_nontrivialPairsToGeneratorSet">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.surjective_nontrivialPairsToGeneratorSet">ReidemeisterSchreier.Profinite.SchreierCocycleData.surjective_nontrivialPairsToGeneratorSet</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L234">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> surjective_nontrivialPairsToGeneratorSet
+    (S : SchreierCocycleData (F := F) (X := X) H) (ι : X → F) :
+    Function.Surjective (S.nontrivialPairsToGeneratorSet ι)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The map from nontrivial abstract Schreier pairs onto the abstract Schreier generator set is surjective.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> z
+  rcases z.2 <span class="kw">with</span> ⟨q, x, hz, hz_ne⟩
+  refine ⟨⟨(q, x), ?_⟩, ?_⟩
+  · simpa [hz] using hz_ne
+  · <span class="kw">apply</span> Subtype.ext
+    <span class="kw">exact</span> hz.symm</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.natCard_generatorSet_le_nontrivialPairs">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.natCard_generatorSet_le_nontrivialPairs">ReidemeisterSchreier.Profinite.SchreierCocycleData.natCard_generatorSet_le_nontrivialPairs</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L249">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> natCard_generatorSet_le_nontrivialPairs
+    (S : SchreierCocycleData (F := F) (X := X) H) (ι : X → F)
+    [Finite X] [Finite S.Q] :
+    Nat.card (S.generatorSet ι) ≤ Nat.card (S.NontrivialPairs ι)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Surjectivity of the map from nontrivial Schreier pairs bounds the cardinality of the abstract Schreier generator set by the number of nontrivial pairs.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>Nat.card_le_card_of_surjective (S.nontrivialPairsToGeneratorSet ι)
+    (S.surjective_nontrivialPairsToGeneratorSet ι)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.natCard_nontrivialPairs_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.natCard_nontrivialPairs_le">ReidemeisterSchreier.Profinite.SchreierCocycleData.natCard_nontrivialPairs_le</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L261">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> natCard_nontrivialPairs_le
+    (S : SchreierCocycleData (F := F) (X := X) H) (ι : X → F)
+    [Finite X] [Finite S.Q] :
+    Nat.card (S.NontrivialPairs ι) ≤ Nat.card S.Q * Nat.card X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The number of nontrivial abstract Schreier pairs is bounded by the corresponding finite coset-generator product.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">have</span> hle : Nat.card (S.NontrivialPairs ι) ≤ Nat.card (S.Q × X) :=
+    Nat.card_le_card_of_injective (<span class="kw">fun</span> p : S.NontrivialPairs ι =&gt; p.1) (<span class="kw">by</span>
+      <span class="kw">intro</span> a b h
+      <span class="kw">exact</span> Subtype.ext h)
+  simpa [Nat.card_prod] using hle</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.natCard_generatorSet_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.natCard_generatorSet_le">ReidemeisterSchreier.Profinite.SchreierCocycleData.natCard_generatorSet_le</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L274">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> natCard_generatorSet_le
+    (S : SchreierCocycleData (F := F) (X := X) H) (ι : X → F)
+    [Finite X] [Finite S.Q] :
+    Nat.card (S.generatorSet ι) ≤ Nat.card S.Q * Nat.card X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The Schreier generator set has cardinality at most the number of quotient cosets times the number of original generators.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code>(S.natCard_generatorSet_le_nontrivialPairs ι).trans (S.natCard_nontrivialPairs_le ι)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.subgroupClosure_generatorSet_eq_closure_range">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.subgroupClosure_generatorSet_eq_closure_range">ReidemeisterSchreier.Profinite.SchreierCocycleData.subgroupClosure_generatorSet_eq_closure_range</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L285">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> subgroupClosure_generatorSet_eq_closure_range
+    (S : SchreierCocycleData (F := F) (X := X) H) (ι : X → F) :
+    Subgroup.closure (S.generatorSet ι) =
+      Subgroup.closure (Set.range <span class="kw">fun</span> p : S.Q × X =&gt; S.generator ι p.1 p.2)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The subgroup closure of the abstract Schreier generator set is the closure of the corresponding generator-map range.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  simpa [generatorSet] using
+    (<a class="decl-ref" href="../../../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.closure_nontrivial_range_eq_closure_range">ProCGroups.Generation.closure_nontrivial_range_eq_closure_range</a>
+      (G := ↥(H : Subgroup F))
+      (<span class="kw">fun</span> p : S.Q × X =&gt; S.generator ι p.1 p.2))</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.topologicallyGenerates_generatorSet_iff">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.topologicallyGenerates_generatorSet_iff">ReidemeisterSchreier.Profinite.SchreierCocycleData.topologicallyGenerates_generatorSet_iff</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L298">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> topologicallyGenerates_generatorSet_iff
+    {S : SchreierCocycleData (F := F) (X := X) H} {ι : X → F} :
+    <a class="decl-ref" href="../../../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.TopologicallyGenerates">ProCGroups.Generation.TopologicallyGenerates</a> (G := ↥(H : Subgroup F))
+        (S.generatorSet ι) ↔
+      <a class="decl-ref" href="../../../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.TopologicallyGenerates">ProCGroups.Generation.TopologicallyGenerates</a> (G := ↥(H : Subgroup F))
+        (Set.range <span class="kw">fun</span> p : S.Q × X =&gt; S.generator ι p.1 p.2)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The Schreier generator family topologically generates precisely when the corresponding subgroup-generation condition holds.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">rw</span> [<a class="decl-ref" href="../../../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicallyGenerates_iff_dense">ProCGroups.Generation.topologicallyGenerates_iff_dense</a>,
+    <a class="decl-ref" href="../../../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicallyGenerates_iff_dense">ProCGroups.Generation.topologicallyGenerates_iff_dense</a>,
+    S.subgroupClosure_generatorSet_eq_closure_range ι]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_eq_one_iff_left">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_eq_one_iff_left">ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_eq_one_iff_left</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L313">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> generator_eq_one_iff_left
+    {S : SchreierCocycleData (F := F) (X := X) H}
+    (hleft : S.orientation = SchreierOrientation.left)
+    {ι : X → F} {q : S.Q} {x : X} :
+    S.generator ι q x = 1 ↔ S.sectionMap (S.next ι q x) = S.sectionMap q * ι x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>It characterizes exactly when generator identity with the unit equivalence left is equal to the unit for the chosen Schreier transversal and induced coset representatives.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> h
+    <span class="kw">have</span> hval := congrArg Subtype.val h
+    change S.orientation.cocycle S.sectionMap (S.next ι) ι q x = 1 at hval
+    <span class="kw">exact</span> inv_mul_eq_one.mp (<span class="kw">by</span>
+      simpa [SchreierOrientation.cocycle, hleft, mul_assoc] using hval)
+  · <span class="kw">intro</span> hrep
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">simp</span> only [generator, SchreierOrientation.cocycle, hleft, hrep, mul_inv_rev, mul_assoc,
+        inv_mul_cancel,
+  mul_one, OneMemClass.coe_one]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_eq_one_iff_right">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_eq_one_iff_right">ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_eq_one_iff_right</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L334">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> generator_eq_one_iff_right
+    {S : SchreierCocycleData (F := F) (X := X) H}
+    (hright : S.orientation = SchreierOrientation.right)
+    {ι : X → F} {q : S.Q} {x : X} :
+    S.generator ι q x = 1 ↔ S.sectionMap (S.next ι q x) = S.sectionMap q * ι x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The right Schreier generator is trivial exactly in the corresponding unit-representative case.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">constructor</span>
+  · <span class="kw">intro</span> h
+    <span class="kw">have</span> hval := congrArg Subtype.val h
+    change S.orientation.cocycle S.sectionMap (S.next ι) ι q x = 1 at hval
+    <span class="kw">exact</span> (mul_inv_eq_one.mp
+      (<span class="kw">by</span> simpa [SchreierOrientation.cocycle, hright, mul_assoc] using hval)).symm
+  · <span class="kw">intro</span> hrep
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">simp</span> only [generator, SchreierOrientation.cocycle, hright, hrep, mul_inv_rev, mul_assoc,
+        mul_inv_cancel_left,
+  mul_inv_cancel, OneMemClass.coe_one]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_eq_of_section_next_eq_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_eq_of_section_next_eq_one">ReidemeisterSchreier.Profinite.SchreierCocycleData.generator_eq_of_section_next_eq_one</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L356">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> generator_eq_of_section_next_eq_one
+    (S : SchreierCocycleData (F := F) (X := X) H)
+    (ι : X → F) (q : S.Q) (x : X)
+    (hnext : S.sectionMap (S.next ι q x) = 1)
+    (hmem : S.sectionMap q * ι x ∈ (H : Subgroup F)) :
+    S.generator ι q x = ⟨S.sectionMap q * ι x, hmem⟩</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The rewritten Reidemeister--Schreier generator evaluates to the identity when the next section value is the basepoint.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">cases</span> hside : S.orientation <span class="kw">with</span>
+  | left =&gt;
+      <span class="kw">simp</span> only [generator, SchreierOrientation.cocycle, hside, hnext, inv_one, one_mul]
+  | right =&gt;
+      <span class="kw">simp</span> only [generator, SchreierOrientation.cocycle, hside, hnext, inv_one, mul_one]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.continuous_generator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.SchreierCocycleData.continuous_generator">ReidemeisterSchreier.Profinite.SchreierCocycleData.continuous_generator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L373">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_generator
+    (S : SchreierCocycleData (F := F) (X := X) H)
+    [TopologicalSpace S.Q] [TopologicalSpace X]
+    (ι : X → F)
+    (hsection : Continuous S.sectionMap)
+    (hnext : Continuous (<span class="kw">fun</span> p : S.Q × X =&gt; S.next ι p.1 p.2))
+    (hι : Continuous ι) :
+    Continuous (<span class="kw">fun</span> p : S.Q × X =&gt; S.generator ι p.1 p.2)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The abstract Schreier section generator is the cocycle value determined by the chosen section and next coset.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  refine Continuous.subtype_mk ?_ ?_
+  <span class="kw">cases</span> hside : S.orientation <span class="kw">with</span>
+  | left =&gt;
+      <span class="kw">have</span> hcont :
+          Continuous (<span class="kw">fun</span> p : S.Q × X =&gt;
+            (S.sectionMap (S.next ι p.1 p.2))⁻¹ * (S.sectionMap p.1 * ι p.2)) :=
+        ((hsection.comp hnext).inv).mul
+          ((hsection.comp continuous_fst).mul (hι.comp continuous_snd))
+      simpa [generator, SchreierOrientation.cocycle, hside, mul_assoc] using hcont
+  | right =&gt;
+      <span class="kw">have</span> hcont :
+          Continuous (<span class="kw">fun</span> p : S.Q × X =&gt;
+            (S.sectionMap p.1 * ι p.2) * (S.sectionMap (S.next ι p.1 p.2))⁻¹) :=
+        ((hsection.comp continuous_fst).mul (hι.comp continuous_snd)).mul
+          ((hsection.comp hnext).inv)
+      simpa [generator, SchreierOrientation.cocycle, hside, mul_assoc] using hcont</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.FiniteSchreierCocycleData.natCard_generatorSet_le">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.FiniteSchreierCocycleData.natCard_generatorSet_le">ReidemeisterSchreier.Profinite.FiniteSchreierCocycleData.natCard_generatorSet_le</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L405">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> natCard_generatorSet_le
+    (S : FiniteSchreierCocycleData (F := F) (X := X) H) (ι : X → F) :
+    Nat.card (S.cocycleData.generatorSet ι) ≤
+      Nat.card S.cocycleData.Q * Nat.card X</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The generator-cardinality bound with all finiteness evidence carried by the data object rather than repeated as ambient typeclass assumptions.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  letI : Finite X := S.finiteGeneratorIndex
+  letI : Finite S.cocycleData.Q := S.finiteQuotient
+  <span class="kw">exact</span> S.cocycleData.natCard_generatorSet_le ι</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.leftSchreierNextCoset">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.leftSchreierNextCoset">ReidemeisterSchreier.Profinite.leftSchreierNextCoset</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L427">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> leftSchreierNextCoset (q : F ⧸ (H : Subgroup F)) (x : X) : F ⧸ (H : Subgroup F) :=
+  QuotientGroup.mk (s := (H : Subgroup F)) (σ q * ι x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The next left coset obtained from a chosen representative and a generator.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.leftSchreierGenerator">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.leftSchreierGenerator">ReidemeisterSchreier.Profinite.leftSchreierGenerator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L431">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> leftSchreierGenerator
+    (hσ : Function.RightInverse σ (QuotientGroup.mk (s := (H : Subgroup F))))
+    (q : F ⧸ (H : Subgroup F)) (x : X) :
+    ↥(H : Subgroup F) := <span class="kw">by</span>
+  <span class="kw">let</span> qx := leftSchreierNextCoset (F := F) H σ ι q x
+  refine ⟨SchreierOrientation.left.cocycle σ
+    (leftSchreierNextCoset (F := F) H σ ι) ι q x, ?_⟩
+  <span class="kw">have</span> hqx :
+      QuotientGroup.mk (s := (H : Subgroup F)) (σ qx) =
+        QuotientGroup.mk (s := (H : Subgroup F)) (σ q * ι x) := <span class="kw">by</span>
+    simpa [qx, leftSchreierNextCoset] using hσ qx
+  simpa [SchreierOrientation.cocycle, mul_assoc] using (QuotientGroup.eq.1 hqx)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Left-coset Schreier generator attached to a section of the quotient by an open subgroup.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.leftSchreierSection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.leftSchreierSection">ReidemeisterSchreier.Profinite.leftSchreierSection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L445">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> leftSchreierSection :
+    SchreierCocycleData (F := F) (X := X) H <span class="kw">where</span>
+  Q := F ⧸ (H : Subgroup F)
+  orientation := SchreierOrientation.left
+  sectionMap := σ
+  next := <span class="kw">fun</span> ι q x =&gt; leftSchreierNextCoset (F := F) H σ ι q x
+  cocycle_mem := <span class="kw">by</span>
+    <span class="kw">intro</span> ι q x
+    <span class="kw">exact</span> (leftSchreierGenerator (F := F) (H := H) (σ := σ) (hσ := hσ) (ι := ι) q x).property</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The left-coset Schreier data as an instance of the abstract section formulation.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.actualLeftSchreierSection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.actualLeftSchreierSection">ReidemeisterSchreier.Profinite.actualLeftSchreierSection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L457">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> actualLeftSchreierSection :
+    ActualSchreierSection (F := F) (X := X) H <span class="kw">where</span>
+  cocycleData := leftSchreierSection (F := F) (H := H) (σ := σ) (hσ := hσ)
+  quotientEquiv := Equiv.refl _
+  section_projects := hσ
+  next_projects := <span class="kw">by</span>
+    <span class="kw">intro</span> ι q x
+    <span class="kw">rfl</span></code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The left quotient construction with its projection, section law, and next-coset coherence retained in the type.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.leftSchreierSection_generator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.leftSchreierSection_generator">ReidemeisterSchreier.Profinite.leftSchreierSection_generator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L471">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+@[<span class="kw">simp</span>] <span class="kw">theorem</span> leftSchreierSection_generator
+    (q : F ⧸ (H : Subgroup F)) (x : X) :
+    (leftSchreierSection (F := F) (H := H) (σ := σ) (hσ := hσ) :
+        SchreierCocycleData (F := F) (X := X) H).generator ι q x =
+      leftSchreierGenerator (F := F) (H := H) (σ := σ) (hσ := hσ) (ι := ι) q x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The left Schreier section generator is the cocycle value determined by the chosen section and next coset.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl instance" id="decl-ReidemeisterSchreier.Profinite.instMulActionOpenSubgroupRightQuotient">
+  <div class="decl-head">
+    <span class="kind instance">Instance</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.instMulActionOpenSubgroupRightQuotient">ReidemeisterSchreier.Profinite.instMulActionOpenSubgroupRightQuotient</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L491">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">instance</span> instMulActionOpenSubgroupRightQuotient :
+    MulAction F (OpenSubgroupRightQuotient H) :=
+  rightCosetMulAction (H : Subgroup F)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The right quotient by an open subgroup carries the natural multiplication action.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.rightSchreierNextCoset">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.rightSchreierNextCoset">ReidemeisterSchreier.Profinite.rightSchreierNextCoset</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L499">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> rightSchreierNextCoset (q : OpenSubgroupRightQuotient H) (x : X) :
+    OpenSubgroupRightQuotient H :=
+  (ι x)⁻¹ • q</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The next right Schreier coset is obtained by acting on the current right coset by the inverse of the chosen generator image.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.rightSchreierGenerator">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.rightSchreierGenerator">ReidemeisterSchreier.Profinite.rightSchreierGenerator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L507">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> rightSchreierGenerator (q : OpenSubgroupRightQuotient H) (x : X) :
+    ↥(H : Subgroup F) :=
+  rightQuotientSectionCocycle (H := (H : Subgroup F)) τ hτ (ι x) q</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The Schreier generator formula records the element determined by the chosen representative associated to the chosen transversal and letter.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.rightSchreierSection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.rightSchreierSection">ReidemeisterSchreier.Profinite.rightSchreierSection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L512">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[reducible] <span class="kw">noncomputable</span> <span class="kw">def</span> rightSchreierSection :
+    SchreierCocycleData (F := F) (X := X) H <span class="kw">where</span>
+  Q := OpenSubgroupRightQuotient H
+  orientation := SchreierOrientation.right
+  sectionMap := τ
+  next := <span class="kw">fun</span> ι q x =&gt; rightSchreierNextCoset (F := F) H ι q x
+  cocycle_mem := <span class="kw">by</span>
+    <span class="kw">intro</span> ι q x
+    <span class="kw">exact</span> (rightSchreierGenerator (F := F) (H := H) (τ := τ) (hτ := hτ) (ι := ι) q x).property</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The right-coset Schreier data as an instance of the abstract section formulation.</p></div></section>
+  </div>
+</section>
+<section class="decl def" id="decl-ReidemeisterSchreier.Profinite.actualRightSchreierSection">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.actualRightSchreierSection">ReidemeisterSchreier.Profinite.actualRightSchreierSection</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L524">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">noncomputable</span> <span class="kw">def</span> actualRightSchreierSection :
+    ActualRightSchreierSection (F := F) (X := X) H <span class="kw">where</span>
+  cocycleData := rightSchreierSection (F := F) (H := H) (τ := τ) (hτ := hτ)
+  quotientEquiv := Equiv.refl _
+  section_projects := hτ
+  next_projects := <span class="kw">by</span>
+    change ∀ (ι : X → F) (q : OpenSubgroupRightQuotient H) (x : X),
+      rightSchreierNextCoset (F := F) H ι q x = Quotient.mk&#x27;&#x27; (τ q * ι x)
+    <span class="kw">intro</span> ι q x
+    <span class="kw">calc</span>
+      (ι x)⁻¹ • q =
+          (ι x)⁻¹ • (Quotient.mk&#x27;&#x27; (τ q) : OpenSubgroupRightQuotient H) := <span class="kw">by</span>
+            <span class="kw">rw</span> [hτ q]
+      _ = Quotient.mk&#x27;&#x27; (τ q * ι x) := <span class="kw">by</span>
+            <span class="kw">rw</span> [rightCosetMulAction_inv_mk_smul (H := (H : Subgroup F))]</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The right quotient construction with its projection, section law, and next-coset coherence retained in the type.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.rightSchreierSection_generator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.rightSchreierSection_generator">ReidemeisterSchreier.Profinite.rightSchreierSection_generator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L545">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+@[<span class="kw">simp</span>] <span class="kw">theorem</span> rightSchreierSection_generator
+    (q : OpenSubgroupRightQuotient H) (x : X) :
+    (rightSchreierSection (F := F) (H := H) (τ := τ) (hτ := hτ) :
+        SchreierCocycleData (F := F) (X := X) H).generator ι q x =
+      rightSchreierGenerator (F := F) (H := H) (τ := τ) (hτ := hτ) (ι := ι) q x</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The right Schreier section generator is the cocycle value determined by the chosen section and next coset.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.rightSchreierGenerator_eq_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.rightSchreierGenerator_eq_one">ReidemeisterSchreier.Profinite.rightSchreierGenerator_eq_one</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L555">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> rightSchreierGenerator_eq_one
+    {q : OpenSubgroupRightQuotient H} {x : X}
+    (hx : ι x = 1) :
+    rightSchreierGenerator (F := F) (H := H) (τ := τ) (hτ := hτ) (ι := ι) q x = 1</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The right Schreier generator evaluates to the identity in the target subgroup presentation.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">apply</span> Subtype.ext
+  <span class="kw">simp</span> only [rightSchreierGenerator, rightQuotientSectionCocycle, hx, mul_one, inv_one, one_smul,
+  mul_inv_cancel, OneMemClass.coe_one]</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.continuous_rightSchreierNextCoset">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.continuous_rightSchreierNextCoset">ReidemeisterSchreier.Profinite.continuous_rightSchreierNextCoset</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L570">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_rightSchreierNextCoset
+    (hιcont : Continuous ι) :
+    Continuous (<span class="kw">fun</span> p : OpenSubgroupRightQuotient H × X =&gt;
+      rightSchreierNextCoset (F := F) H ι p.1 p.2)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The corresponding Schreier next-coset map is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  letI : MulAction F (OpenSubgroupRightQuotient H) :=
+    rightCosetMulAction (H : Subgroup F)
+  refine (continuous_prod_of_discrete_left).2 ?_
+  <span class="kw">intro</span> q
+  <span class="kw">have</span> hqcont :
+      Continuous <span class="kw">fun</span> x : X =&gt; ((ι x)⁻¹ • q : OpenSubgroupRightQuotient H) := <span class="kw">by</span>
+    <span class="kw">rw</span> [continuous_discrete_rng]
+    <span class="kw">intro</span> q&#x27;
+    classical
+    <span class="kw">let</span> a : F := q.out
+    <span class="kw">let</span> b : F := q&#x27;.out
+    <span class="kw">have</span> hpre :
+        (<span class="kw">fun</span> x : X =&gt; ((ι x)⁻¹ • q : OpenSubgroupRightQuotient H)) ⁻¹&#x27; ({q&#x27;} :
+            Set (OpenSubgroupRightQuotient H)) =
+          (<span class="kw">fun</span> x : X =&gt; b * (ι x)⁻¹ * a⁻¹) ⁻¹&#x27; ((H : Subgroup F) : Set F) := <span class="kw">by</span>
+      ext x
+      <span class="kw">constructor</span>
+      · <span class="kw">intro</span> hx
+        <span class="kw">have</span> hEq :
+            (Quotient.mk&#x27;&#x27; (a * ι x) : OpenSubgroupRightQuotient H) = Quotient.mk&#x27;&#x27; b := <span class="kw">by</span>
+          <span class="kw">calc</span>
+            (Quotient.mk&#x27;&#x27; (a * ι x) : OpenSubgroupRightQuotient H)
+                = (ι x)⁻¹ • (Quotient.mk&#x27;&#x27; a : OpenSubgroupRightQuotient H) := <span class="kw">by</span>
+                    <span class="kw">rw</span> [rightCosetMulAction_inv_mk_smul (H := (H : Subgroup F)) (ι x) a]
+            _ = (ι x)⁻¹ • q := <span class="kw">by</span> <span class="kw">rw</span> [Quotient.out_eq&#x27; q]
+            _ = q&#x27; := hx
+            _ = Quotient.mk&#x27;&#x27; b := (Quotient.out_eq&#x27; q&#x27;).symm
+        <span class="kw">have</span> hrel :
+            QuotientGroup.rightRel (H : Subgroup F) (a * ι x) b := Quotient.eq&#x27;&#x27;.mp hEq
+        simpa [a, b, mul_inv_rev, mul_assoc] using (QuotientGroup.rightRel_apply.mp hrel)
+      · <span class="kw">intro</span> hx
+        change b * (ι x)⁻¹ * a⁻¹ ∈ (H : Subgroup F) at hx
+        <span class="kw">have</span> hrel :
+            QuotientGroup.rightRel (H : Subgroup F) (a * ι x) b := <span class="kw">by</span>
+          <span class="kw">rw</span> [QuotientGroup.rightRel_apply]
+          simpa only [a, b, mul_inv_rev, mul_assoc] using hx
+        <span class="kw">calc</span>
+          ((ι x)⁻¹ • q : OpenSubgroupRightQuotient H)
+              = (ι x)⁻¹ • (Quotient.mk&#x27;&#x27; a : OpenSubgroupRightQuotient H) := <span class="kw">by</span>
+                  <span class="kw">rw</span> [Quotient.out_eq&#x27; q]
+          _ = Quotient.mk&#x27;&#x27; (a * ι x) := <span class="kw">by</span>
+                <span class="kw">rw</span> [rightCosetMulAction_inv_mk_smul (H := (H : Subgroup F)) (ι x) a]
+          _ = Quotient.mk&#x27;&#x27; b := Quotient.eq&#x27;&#x27;.mpr hrel
+          _ = q&#x27; := Quotient.out_eq&#x27; q&#x27;
+    <span class="kw">rw</span> [<span class="kw">show</span>
+      (<span class="kw">fun</span> x : X =&gt; ((ι x)⁻¹ • q : OpenSubgroupRightQuotient H)) ⁻¹&#x27; ({q&#x27;} :
+          Set (OpenSubgroupRightQuotient H)) =
+        (<span class="kw">fun</span> x : X =&gt; b * (ι x)⁻¹ * a⁻¹) ⁻¹&#x27; ((H : Subgroup F) : Set F) <span class="kw">by</span>
+          simpa using hpre]
+    <span class="kw">exact</span> H.isOpen&#x27;.preimage ((continuous_const.mul (hιcont.inv)).mul continuous_const)
+  simpa [rightSchreierNextCoset] using hqcont</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.continuous_rightSchreierGenerator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.continuous_rightSchreierGenerator">ReidemeisterSchreier.Profinite.continuous_rightSchreierGenerator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L627">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> continuous_rightSchreierGenerator
+    (hτcont : Continuous τ) (hιcont : Continuous ι) :
+    Continuous (<span class="kw">fun</span> p : OpenSubgroupRightQuotient H × X =&gt;
+      rightSchreierGenerator (F := F) (H := H) (τ := τ) (hτ := hτ) (ι := ι) p.1 p.2)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The corresponding Schreier generator map is continuous.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  letI : TopologicalSpace
+      (rightSchreierSection (F := F) (H := H) (τ := τ) (hτ := hτ) :
+        SchreierCocycleData (F := F) (X := X) H).Q :=
+    inferInstanceAs (TopologicalSpace (OpenSubgroupRightQuotient H))
+  simpa using
+    ((rightSchreierSection (F := F) (H := H) (τ := τ) (hτ := hτ) :
+        SchreierCocycleData (F := F) (X := X) H).continuous_generator
+      ι hτcont
+      (continuous_rightSchreierNextCoset (F := F) (H := H) (ι := ι) hιcont)
+      hιcont)</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ReidemeisterSchreier.Profinite.rightQuotientBasepointProjectionHom_rightSchreierGenerator">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ReidemeisterSchreier.Profinite.rightQuotientBasepointProjectionHom_rightSchreierGenerator">ReidemeisterSchreier.Profinite.rightQuotientBasepointProjectionHom_rightSchreierGenerator</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/ReidemeisterSchreier/Profinite/OpenSubgroups/SchreierTransversals.lean#L650">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>omit [IsTopologicalGroup F] <span class="kw">in</span>
+<span class="kw">theorem</span> rightQuotientBasepointProjectionHom_rightSchreierGenerator
+    {A : <span class="kw">Type</span>*} [Group A]
+    (ψ : F →* PermutationalWreathProduct A (OpenSubgroupRightQuotient H) F)
+    (hψ :
+      (SemidirectProduct.rightHom :
+          PermutationalWreathProduct A (OpenSubgroupRightQuotient H) F →* F).comp ψ =
+        MonoidHom.id F)
+    (hτpure :
+      ∀ q : OpenSubgroupRightQuotient H,
+        wreathLeftCoordinate ψ
+            (openSubgroupRightCoset H (1 : F)) (τ q) = 1)
+    (q : OpenSubgroupRightQuotient H) (x : X) :
+    rightQuotientBasepointProjectionHom (H : Subgroup F) ψ hψ
+        (rightSchreierGenerator (F := F) (H := H) (τ := τ) (hτ := hτ) (ι := ι) q x) =
+      wreathLeftCoordinate ψ q (ι x)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The basepoint projection induced by a wreath-product homomorphism evaluates a right Schreier generator by the corresponding left coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">exact</span> rightQuotientBasepointProjectionHom_apply_cocycle
+    (H : Subgroup F) τ hτ ψ hψ hτpure (ι x) q</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.ReidemeisterSchreier.Profinite.OpenSubgroups.SchreierTransversals"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../../../assets/site.js" data-root="../../../../../"></script>
+</body>
+</html>

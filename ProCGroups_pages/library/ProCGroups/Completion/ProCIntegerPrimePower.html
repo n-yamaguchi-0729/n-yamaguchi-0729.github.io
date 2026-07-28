@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQXB29549"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NGQXB29549');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProCGroups.Completion.ProCIntegerPrimePower | ProCGroups Documentation</title>
+<meta name="description" content="This module specializes the pro-C integer construction to prime-power moduli and proves the pro-p density, generation, and procyclicity results.">
+<link rel="canonical" href="https://n-yamaguchi-0729.github.io/ProCGroups_pages/library/ProCGroups/Completion/ProCIntegerPrimePower.html">
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body class="tex2jax_ignore">
+<header class="site-header">
+  <a class="brand" href="../../../index.html">ProCGroups Documentation</a>
+  <nav class="header-nav"><a href="https://github.com/n-yamaguchi-0729/ProCGroups" target="_blank" rel="noopener">GitHub repository</a></nav>
+  <div class="header-current">ProCGroups.Completion.ProCIntegerPrimePower</div>
+  <form class="search-form" action="../../../find/index.html" method="get" autocomplete="off">
+    <input id="search_input" name="pattern" placeholder="Search names and statements" aria-label="Search">
+    <div id="autocomplete_results" class="autocomplete"></div>
+  </form>
+</header>
+<div class="layout">
+  <main class="main"><section class="module-head">
+  <div class="module-head-top">
+    <div>
+      <div class="eyebrow breadcrumb"><a href="../../../library/ProCGroups/root-module.html">ProCGroups</a><span class="sep">/</span><a href="../../../library/ProCGroups/Completion.html">Completion</a><span class="sep">/</span><span>ProCIntegerPrimePower</span></div>
+      <h1 class="module-title">ProCGroups.Completion.ProCIntegerPrimePower</h1>
+      <div class="module-meta">9 Theorems | 1 Definition</div>
+      <div class="module-overview tex2jax_process"><p>This module specializes the pro-C integer construction to prime-power moduli and proves the pro-p density, generation, and procyclicity results.</p></div>
+      <div class="meta"><a href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean">Open this file on GitHub</a></div>
+    </div>
+  </div>
+  <details class="imports"><summary>import</summary><ul><li><a href="../../../library/ProCGroups/Completion/ProCInteger.html">ProCGroups.Completion.ProCInteger</a></li></ul></details>
+<details class="imports"><summary>Imported by</summary><ul><li><a href="../../../library/ProCGroups/Completion.html">ProCGroups.Completion</a></li><li><a href="../../../library/ProCGroups/FoxDifferential/Completed/Comparison/DiscreteCompletion.html">ProCGroups.FoxDifferential.Completed.Comparison.DiscreteCompletion</a></li><li><a href="../../../library/ProCGroups/FreeProC/CanonicalData.html">ProCGroups.FreeProC.CanonicalData</a></li></ul></details>
+</section>
+<section class="decl-toolbar"><h2>Declarations</h2><button id="toggle_all_proofs" class="proof-toggle-all" type="button">Show all Lean proofs</button></section>
+<div class="decl-list"><section class="decl def" id="decl-ProCGroups.Completion.ProCIntegerIndex.pGroupPower">
+  <div class="decl-head">
+    <span class="kind def">Definition</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.ProCIntegerIndex.pGroupPower">ProCGroups.Completion.ProCIntegerIndex.pGroupPower</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean#L19">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">def</span> pGroupPower (p k : ℕ) [Fact (Nat.Prime p)] :
+    ProCIntegerIndex (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}) <span class="kw">where</span>
+  modulus := p ^ k
+  positive := <span class="kw">by</span>
+    <span class="kw">exact</span> Nat.pow_pos (<span class="kw">show</span> 0 &lt; p from (Fact.out : Nat.Prime p).pos)
+  cyclic_mem := <span class="kw">by</span>
+    refine (FiniteGroupClass.memAcrossUniverses_ulift_iff
+      (FiniteGroupClass.pGroup p : FiniteGroupClass.{u})
+      (Multiplicative (ZMod (p ^ k)))).1 ?_
+    <span class="kw">apply</span> FiniteGroupClass.memAcrossUniverses_of_mem
+    letI : NeZero (p ^ k) := ⟨Nat.ne_of_gt (Nat.pow_pos
+      (<span class="kw">show</span> 0 &lt; p from (Fact.out : Nat.Prime p).pos))⟩
+    letI : Fintype (ZMod (p ^ k)) := ZMod.fintype (p ^ k)
+    <span class="kw">constructor</span>
+    · <span class="kw">have</span> hfinZ : Finite (ZMod (p ^ k)) := Finite.of_fintype _
+      <span class="kw">have</span> hfinMul : Finite (Multiplicative (ZMod (p ^ k))) :=
+        @Finite.of_equiv _ _ hfinZ Multiplicative.toAdd
+      <span class="kw">exact</span> @Finite.of_equiv _ _ hfinMul Equiv.ulift.symm
+    · <span class="kw">intro</span> g
+      refine ⟨k, ?_⟩
+      <span class="kw">cases</span> g <span class="kw">with</span>
+      | up g&#x27; =&gt;
+        <span class="kw">apply</span> ULift.ext
+        change g&#x27; ^ p ^ k = 1
+        <span class="kw">cases</span> g&#x27; <span class="kw">with</span>
+        | ofAdd z =&gt;
+          change Multiplicative.ofAdd ((p ^ k) • z) = Multiplicative.ofAdd 0
+          <span class="kw">simp</span> only [nsmul_eq_mul, CharP.cast_eq_zero, zero_mul, ofAdd_zero]</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The \(p^k\)-modulus coefficient index for the pro-\(p\) integer limit.</p></div></section>
+  </div>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.ProCIntegerIndex.modulus_pGroupPower">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.ProCIntegerIndex.modulus_pGroupPower">ProCGroups.Completion.ProCIntegerIndex.modulus_pGroupPower</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean#L50">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> modulus_pGroupPower (p k : ℕ) [Fact (Nat.Prime p)] :
+    (pGroupPower p k :
+      ProCIntegerIndex (FiniteGroupClass.pGroup p : FiniteGroupClass.{u})).modulus = p ^ k</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The prime-power coefficient index has modulus \(p ^ n\).</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.ProCIntegerIndex.modulus_dvd_pow_of_mem_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.ProCIntegerIndex.modulus_dvd_pow_of_mem_pGroup">ProCGroups.Completion.ProCIntegerIndex.modulus_dvd_pow_of_mem_pGroup</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean#L56">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> modulus_dvd_pow_of_mem_pGroup (p : ℕ) [Fact (Nat.Prime p)]
+    (i : ProCIntegerIndex (FiniteGroupClass.pGroup p : FiniteGroupClass.{u})) :
+    ∃ k, i.modulus ∣ p ^ k</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>Any coefficient index for the finite \(p\)-group class is dominated by a prime-power modulus.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  rcases i.cyclic_mem <span class="kw">with</span> ⟨H, hH, ⟨e⟩⟩
+  rcases hH <span class="kw">with</span> ⟨_hfin, hp⟩
+  rcases hp (e.symm (Multiplicative.ofAdd (1 : ZMod i.modulus))) <span class="kw">with</span> ⟨k, hk⟩
+  refine ⟨k, ?_⟩
+  letI : NeZero i.modulus := ⟨Nat.ne_of_gt i.positive⟩
+  <span class="kw">have</span> hk&#x27; : ((p ^ k : ℕ) : ZMod i.modulus) = 0 := <span class="kw">by</span>
+    <span class="kw">have</span> hpow :
+        (Multiplicative.ofAdd (1 : ZMod i.modulus)) ^ (p ^ k) = 1 := <span class="kw">by</span>
+      simpa using congrArg e hk
+    <span class="kw">have</span> h := congrArg Multiplicative.toAdd hpow
+    simpa using h
+  <span class="kw">exact</span> (ZMod.natCast_eq_zero_iff (p ^ k) i.modulus).mp hk&#x27;</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.ProCIntegerIndex.directed_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.ProCIntegerIndex.directed_pGroup">ProCGroups.Completion.ProCIntegerIndex.directed_pGroup</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean#L73">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> directed_pGroup (p : ℕ) [Fact (Nat.Prime p)] :
+    Directed (· ≤ ·)
+      (id : ProCIntegerIndex (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}) →
+        ProCIntegerIndex (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The finite \(p\)-group coefficient indices for pro-\(C\) integers are directed.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">intro</span> i j
+  rcases modulus_dvd_pow_of_mem_pGroup (p := p) i <span class="kw">with</span> ⟨ki, hki⟩
+  rcases modulus_dvd_pow_of_mem_pGroup (p := p) j <span class="kw">with</span> ⟨kj, hkj⟩
+  refine ⟨pGroupPower p (ki + kj), ?_, ?_⟩
+  · <span class="kw">exact</span> dvd_trans hki (pow_dvd_pow p (Nat.le_add_right ki kj))
+  · <span class="kw">exact</span> dvd_trans hkj (pow_dvd_pow p (Nat.le_add_left kj ki))</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.proCIntegerProj_pGroupPower_one">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.proCIntegerProj_pGroupPower_one">ProCGroups.Completion.proCIntegerProj_pGroupPower_one</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean#L88">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code>@[<span class="kw">simp</span>]
+<span class="kw">theorem</span> proCIntegerProj_pGroupPower_one (p k : ℕ) [Fact (Nat.Prime p)] :
+    proCIntegerProj
+        (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}))
+        (ProCIntegerIndex.pGroupPower p k)
+        (proCIntegerOne
+          (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{u}))).toAdd =
+      (1 : ZMod (p ^ k))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The distinguished element \(1\) projects to \(1\) on every prime-power coordinate.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">rfl</span></code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.denseRange_intToProCInteger_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.denseRange_intToProCInteger_pGroup">ProCGroups.Completion.denseRange_intToProCInteger_pGroup</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean#L98">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> denseRange_intToProCInteger_pGroup (p : ℕ) [Fact (Nat.Prime p)] :
+    DenseRange (intToProCInteger
+      (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{u})))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The ordinary integers are dense in the pro-\(p\) integer coefficient ring.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> C : FiniteGroupClass.{u} := FiniteGroupClass.pGroup p
+  <span class="kw">let</span> S := proCIntegerSystem C
+  <span class="kw">let</span> φ : ∀ i : ProCIntegerIndex C, ℤ → S.X i := <span class="kw">fun</span> i n =&gt; (n : ZMod i.modulus)
+  <span class="kw">have</span> hφ : S.CompatibleMaps φ := <span class="kw">by</span>
+    <span class="kw">intro</span> i j hij
+    funext n
+    <span class="kw">exact</span> map_intCast (ZMod.castHom hij (ZMod i.modulus)) n
+  <span class="kw">have</span> hsurj : ∀ i, Function.Surjective (φ i) := <span class="kw">by</span>
+    <span class="kw">intro</span> i
+    <span class="kw">exact</span> ZMod.intCast_surjective
+  letI : Nonempty (ProCIntegerIndex C) := ⟨ProCIntegerIndex.pGroupPower p 0⟩
+  <span class="kw">have</span> hdense : DenseRange (S.inverseLimitLift φ hφ) :=
+    <a class="decl-ref" href="../../../library/ProCGroups/InverseSystems/CofinalityAndDensity.html#decl-ProCGroups.InverseSystems.InverseSystem.denseRange_lift">ProCGroups.InverseSystems.InverseSystem.denseRange_lift</a>
+      (S := S) φ hφ hsurj (ProCIntegerIndex.directed_pGroup (p := p))
+  <span class="kw">have</span> hfun :
+      (intToProCInteger (C := C) : ℤ → ProCIntegerLimitCarrier C) =
+        S.inverseLimitLift φ hφ := <span class="kw">by</span>
+    funext n
+    <span class="kw">apply</span> Subtype.ext
+    <span class="kw">rfl</span>
+  <span class="kw">rw</span> [hfun]
+  <span class="kw">exact</span> hdense</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.denseRange_multiplicativeIntToProCInteger_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.denseRange_multiplicativeIntToProCInteger_pGroup">ProCGroups.Completion.denseRange_multiplicativeIntToProCInteger_pGroup</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean#L125">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> denseRange_multiplicativeIntToProCInteger_pGroup (p : ℕ) [Fact (Nat.Prime p)] :
+    DenseRange
+      (multiplicativeIntToProCInteger
+        (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{u})))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The multiplicative infinite-cyclic map is dense in the pro-\(p\) integers.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> C : FiniteGroupClass.{u} := FiniteGroupClass.pGroup p
+  <span class="kw">have</span> hdense :
+      Dense (Set.range <span class="kw">fun</span> n : ℤ =&gt;
+        (n : ProCIntegerLimitCarrier C)) :=
+    denseRange_intToProCInteger_pGroup (p := p)
+  <span class="kw">have</span> hdense&#x27; :
+      Dense (Set.range <span class="kw">fun</span> n : ℤ =&gt;
+        Multiplicative.ofAdd (n : ProCIntegerLimitCarrier C)) := <span class="kw">by</span>
+    change Dense (Set.range <span class="kw">fun</span> n : ℤ =&gt; (n : ProCIntegerLimitCarrier C))
+    <span class="kw">exact</span> hdense
+  change Dense (Set.range <span class="kw">fun</span> z : Multiplicative ℤ =&gt;
+    Multiplicative.ofAdd (z.toAdd : ProCIntegerLimitCarrier C))
+  <span class="kw">have</span> hrange :
+      Set.range (<span class="kw">fun</span> z : Multiplicative ℤ =&gt;
+        Multiplicative.ofAdd (z.toAdd : ProCIntegerLimitCarrier C)) =
+        Set.range (<span class="kw">fun</span> n : ℤ =&gt;
+          Multiplicative.ofAdd (n : ProCIntegerLimitCarrier C)) := <span class="kw">by</span>
+    ext x
+    <span class="kw">constructor</span>
+    · rintro ⟨z, <span class="kw">rfl</span>⟩
+      <span class="kw">exact</span> ⟨z.toAdd, <span class="kw">rfl</span>⟩
+    · rintro ⟨n, <span class="kw">rfl</span>⟩
+      <span class="kw">exact</span> ⟨Multiplicative.ofAdd n, <span class="kw">rfl</span>⟩
+  <span class="kw">rw</span> [hrange]
+  <span class="kw">exact</span> hdense&#x27;</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.topologicallyGenerates_singleton_proCIntegerOne_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.topologicallyGenerates_singleton_proCIntegerOne_pGroup">ProCGroups.Completion.topologicallyGenerates_singleton_proCIntegerOne_pGroup</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean#L156">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> topologicallyGenerates_singleton_proCIntegerOne_pGroup
+    (p : ℕ) [Fact (Nat.Prime p)] :
+    <a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.TopologicallyGenerates">ProCGroups.Generation.TopologicallyGenerates</a>
+      (G := Multiplicative
+        (ProCIntegerLimitCarrier (FiniteGroupClass.pGroup p : FiniteGroupClass.{0})))
+      ({proCIntegerOne
+        (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{0}))} : Set _)</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The distinguished element 1 topologically generates the pro-\(p\) integers.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> C : FiniteGroupClass.{0} := FiniteGroupClass.pGroup p
+  simpa [C, proCIntegerOne] using
+    (<a class="decl-ref" href="../../../library/ProCGroups/Generation/Basic.html#decl-ProCGroups.Generation.topologicallyGenerates_singleton_of_denseRange_mint">ProCGroups.Generation.topologicallyGenerates_singleton_of_denseRange_mint</a>
+      (f := multiplicativeIntToProCInteger (C := C))
+      (denseRange_multiplicativeIntToProCInteger_pGroup (p := p)))</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.hasPGroupOpenNormalBasis_multiplicative_proCInteger_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.hasPGroupOpenNormalBasis_multiplicative_proCInteger_pGroup">ProCGroups.Completion.hasPGroupOpenNormalBasis_multiplicative_proCInteger_pGroup</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean#L170">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hasPGroupOpenNormalBasis_multiplicative_proCInteger_pGroup (p : ℕ) [Fact (Nat.Prime p)] :
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/InverseLimits/Predicates.html#decl-ProCGroups.ProC.HasPGroupOpenNormalBasis">ProCGroups.ProC.HasPGroupOpenNormalBasis</a> p
+      (Multiplicative
+        (ProCIntegerLimitCarrier (FiniteGroupClass.pGroup p : FiniteGroupClass.{0})))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The pro-\(p\) integers have an open-normal basis of finite \(p\)-group quotients.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  <span class="kw">let</span> C : FiniteGroupClass.{0} := FiniteGroupClass.pGroup p
+  letI : Nonempty (ProCIntegerIndex C) := ⟨ProCIntegerIndex.pGroupPower p 0⟩
+  simpa [<a class="decl-ref" href="../../../library/ProCGroups/ProC/InverseLimits/Predicates.html#decl-ProCGroups.ProC.HasPGroupOpenNormalBasis">ProCGroups.ProC.HasPGroupOpenNormalBasis</a>, C] using
+    hasOpenNormalBasisInClass_multiplicative_proCInteger
+      (C := C)
+      (FiniteGroupClass.pGroup_formation p).isomClosed
+      (FiniteGroupClass.pGroup_formation p).quotientClosed
+      (ProCIntegerIndex.directed_pGroup (p := p))</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section>
+<section class="decl theorem" id="decl-ProCGroups.Completion.hasCyclicOpenNormalBasis_multiplicative_proCInteger_pGroup">
+  <div class="decl-head">
+    <span class="kind theorem">Theorem</span>
+    <a class="decl-name" href="#decl-ProCGroups.Completion.hasCyclicOpenNormalBasis_multiplicative_proCInteger_pGroup">ProCGroups.Completion.hasCyclicOpenNormalBasis_multiplicative_proCInteger_pGroup</a>
+    <a class="source-link" href="https://github.com/n-yamaguchi-0729/ProCGroups/blob/3d652b4ff24950fc94c80c2eb8af96414e391a66/Lean4/ProCGroups/Completion/ProCIntegerPrimePower.lean#L184">GitHub</a>
+  </div>
+  <div class="pair statement-pair">
+    <section><pre class="code-box"><code><span class="kw">theorem</span> hasCyclicOpenNormalBasis_multiplicative_proCInteger_pGroup (p : ℕ) [Fact (Nat.Prime p)] :
+    <a class="decl-ref" href="../../../library/ProCGroups/ProC/InverseLimits/Predicates.html#decl-ProCGroups.ProC.HasCyclicOpenNormalBasis">ProCGroups.ProC.HasCyclicOpenNormalBasis</a>
+      (Multiplicative
+        (ProCIntegerLimitCarrier (FiniteGroupClass.pGroup p : FiniteGroupClass.{0})))</code></pre></section>
+    <section><div class="natural-text tex2jax_process"><p>The pro-\(p\) integers have a cyclic open-normal quotient basis.</p></div></section>
+  </div>
+  <details class="proof-details">
+    <summary><span class="summary-text">Show Lean proof</span></summary>
+    <template class="proof-template">
+      <pre class="code-box lean-proof-code"><code><span class="kw">by</span>
+  letI : T2Space
+      (Multiplicative
+        (ProCIntegerLimitCarrier (FiniteGroupClass.pGroup p : FiniteGroupClass.{0}))) := <span class="kw">by</span>
+    change T2Space
+      (ProCIntegerLimitCarrier (FiniteGroupClass.pGroup p : FiniteGroupClass.{0}))
+    <span class="kw">exact</span> instT2SpaceProCInteger
+      (C := (FiniteGroupClass.pGroup p : FiniteGroupClass.{0}))
+  letI : TotallyDisconnectedSpace
+      (Multiplicative
+        (ProCIntegerLimitCarrier (FiniteGroupClass.pGroup p : FiniteGroupClass.{0}))) := <span class="kw">by</span>
+    change TotallyDisconnectedSpace
+      (ProCIntegerLimitCarrier (FiniteGroupClass.pGroup p : FiniteGroupClass.{0}))
+    infer_instance
+  <span class="kw">exact</span> <a class="decl-ref" href="../../../library/ProCGroups/ProC/InverseLimits/Predicates.html#decl-ProCGroups.ProC.hasCyclicOpenNormalBasis_of_topologicallyGenerates_singleton">ProCGroups.ProC.hasCyclicOpenNormalBasis_of_topologicallyGenerates_singleton</a>
+    (G := Multiplicative
+      (ProCIntegerLimitCarrier (FiniteGroupClass.pGroup p : FiniteGroupClass.{0})))
+    (topologicallyGenerates_singleton_proCIntegerOne_pGroup (p := p))</code></pre>
+    </template>
+    <div class="proof-mount"></div>
+  </details>
+</section></div></main>
+  <aside class="file-tree" data-active="ProCGroups.Completion.ProCIntegerPrimePower"><div class="tree-pane">
+    <div class="tree-title">Files</div>
+    <div id="file_tree"><div class="tree-loading">Loading</div></div>
+  </div></aside>
+</div>
+<script defer src="../../../assets/site.js" data-root="../../../"></script>
+</body>
+</html>
