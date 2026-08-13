@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import argparse
-from html import unescape
+from html import escape, unescape
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -65,18 +65,14 @@ LIBRARY_CARD = re.compile(
     r'<section\b[^>]*\bdata-sort-item\b[^>]*>.*?</section>',
     re.DOTALL,
 )
+LIBRARY_ID = re.compile(r"^[A-Za-z][A-Za-z0-9_-]*$")
+GITHUB_REPOSITORY = re.compile(
+    r"^https://github\.com/n-yamaguchi-0729/[A-Za-z0-9_.-]+$"
+)
 HOME_LIBRARY_LINK = '<a href="./YamaLean4Lib_pages/">URL</a>'
 EXPECTED_SITE_DESCRIPTION = (
     "Lean 4 libraries by Naganori Yamaguchi, developed with AI assistance "
     "by a non-specialist. Please use them at your own risk."
-)
-EXPECTED_PCG_SUMMARY = (
-    "Formalizations of profinite and pro-C group theory in Lean 4."
-)
-EXPECTED_PCG_CONTENTS = (
-    "Foundations, inverse systems, and free pro-C groups",
-    "Reidemeister–Schreier theory and presentations",
-    "Completed group algebras, Fox calculus, and Crowell exact sequences",
 )
 FORBIDDEN_NOTICE_PHRASES = (
     "subject-matter expert",
@@ -183,6 +179,77 @@ def load_build_info(
     return value
 
 
+def load_public_libraries(
+    build_info: dict[str, object],
+    documentation_name: str,
+    errors: list[str],
+) -> list[dict[str, object]]:
+    """Read the public catalog embedded in generated build metadata."""
+    raw_libraries = build_info.get("libraries")
+    if not isinstance(raw_libraries, list) or not raw_libraries:
+        errors.append(
+            f"{documentation_name}/build-info.json: libraries must be a "
+            "non-empty array"
+        )
+        return []
+    libraries: list[dict[str, object]] = []
+    seen_ids: set[str] = set()
+    seen_names: set[str] = set()
+    seen_repositories: set[str] = set()
+    for index, item in enumerate(raw_libraries):
+        label = f"{documentation_name}/build-info.json: libraries[{index}]"
+        if not isinstance(item, dict):
+            errors.append(f"{label} must be an object")
+            continue
+        library_id = item.get("id")
+        display_name = item.get("display_name")
+        repository = item.get("repository")
+        summary = item.get("summary")
+        contents = item.get("contents")
+        if (
+            not isinstance(library_id, str)
+            or not LIBRARY_ID.fullmatch(library_id)
+            or library_id.casefold() in seen_ids
+        ):
+            errors.append(f"{label}: invalid or duplicate library id")
+            continue
+        if (
+            not isinstance(display_name, str)
+            or not display_name.strip()
+            or display_name.casefold() in seen_names
+        ):
+            errors.append(f"{label}: invalid or duplicate display name")
+            continue
+        if (
+            not isinstance(repository, str)
+            or not GITHUB_REPOSITORY.fullmatch(repository)
+            or repository.casefold() in seen_repositories
+        ):
+            errors.append(f"{label}: invalid or duplicate source repository")
+            continue
+        if (
+            not isinstance(summary, str)
+            or not summary.strip()
+            or not isinstance(contents, list)
+            or not contents
+            or any(
+                not isinstance(content, str) or not content.strip()
+                for content in contents
+            )
+        ):
+            errors.append(f"{label}: summary and contents must contain public text")
+            continue
+        seen_ids.add(library_id.casefold())
+        seen_names.add(display_name.casefold())
+        seen_repositories.add(repository.casefold())
+        libraries.append(item)
+    if len(libraries) != len(raw_libraries):
+        errors.append(
+            f"{documentation_name}/build-info.json: public library catalog is invalid"
+        )
+    return libraries
+
+
 def local_target(relative: str, href: str) -> str | None:
     parsed = urlsplit(unescape(href.strip()))
     if parsed.scheme or parsed.netloc or not parsed.path:
@@ -244,7 +311,11 @@ def check_sitemap(
         )
 
 
-def check_public_presentation(root: Path, errors: list[str]) -> None:
+def check_public_presentation(
+    root: Path,
+    libraries: list[dict[str, object]],
+    errors: list[str],
+) -> None:
     """Check the exact homepage/catalog contract requested for this release."""
     inspected: list[tuple[str, str]] = []
     for relative in ("homepage-en.html", "homepage-jp.html"):
@@ -274,32 +345,38 @@ def check_public_presentation(root: Path, errors: list[str]) -> None:
         portal = ""
     inspected.append((portal_relative, portal))
     cards = LIBRARY_CARD.findall(portal)
-    if len(cards) != 1:
+    if len(cards) != len(libraries):
         errors.append(
-            f"{portal_relative}: expected exactly one library card, "
-            f"found {len(cards)}"
+            f"{portal_relative}: library card count differs from build-info.json; "
+            f"expected {len(libraries)}, found {len(cards)}"
         )
-    else:
-        card = cards[0]
+    for index, (card, library) in enumerate(zip(cards, libraries, strict=False)):
+        library_id = str(library["id"])
+        display_name = escape(str(library["display_name"]))
+        repository = escape(str(library["repository"]), quote=True)
+        summary = escape(str(library["summary"]))
+        contents = library["contents"]
+        assert isinstance(contents, list)
         for marker in (
-            'id="library-ProCGroups"',
-            ">Pro-C Groups</a>",
-            'href="https://github.com/n-yamaguchi-0729/ProCGroups"',
-            f'<p class="library-summary">{EXPECTED_PCG_SUMMARY}</p>',
-            *(f"<li>{item}</li>" for item in EXPECTED_PCG_CONTENTS),
+            f'id="library-{library_id}"',
+            f">{display_name}</a>",
+            f'href="{repository}"',
+            f'<p class="library-summary">{summary}</p>',
+            *(f"<li>{escape(str(item))}</li>" for item in contents),
         ):
             if marker not in card:
                 errors.append(
-                    f"{portal_relative}: ProCGroups card is missing {marker!r}"
+                    f"{portal_relative}: library card {index} ({library_id}) "
+                    f"is missing {marker!r}"
                 )
         if "library-module-note" in card:
             errors.append(
                 f"{portal_relative}: aggregate module prose remains in the "
-                "curated ProCGroups card"
+                f"curated {library_id} card"
             )
         if "Open documentation" in card:
             errors.append(
-                f"{portal_relative}: ProCGroups card contains Open documentation"
+                f"{portal_relative}: {library_id} card contains Open documentation"
             )
     for marker in (
         f'<meta name="description" content="{EXPECTED_SITE_DESCRIPTION}">',
@@ -341,12 +418,15 @@ def check_public_presentation(root: Path, errors: list[str]) -> None:
                 f"{PORTAL_NAME}/assets/site.css: hidden sort controls can be "
                 "overridden by the visible sort-bar rule"
             )
-    if portal.count(
-        'href="https://github.com/n-yamaguchi-0729/ProCGroups"'
-    ) != 1:
-        errors.append(
-            f"{portal_relative}: ProCGroups GitHub link must occur exactly once"
+    for library in libraries:
+        repository_marker = (
+            f'href="{escape(str(library["repository"]), quote=True)}"'
         )
+        if portal.count(repository_marker) != 1:
+            errors.append(
+                f"{portal_relative}: {library['id']} GitHub link must occur "
+                "exactly once"
+            )
     github_links: list[tuple[str, str]] = []
     if (root / PORTAL_NAME).is_dir():
         for path in sorted((root / PORTAL_NAME).rglob("*.html")):
@@ -363,15 +443,14 @@ def check_public_presentation(root: Path, errors: list[str]) -> None:
                 == "github.com"
             )
     expected_github_links = [
-        (
-            portal_relative,
-            "https://github.com/n-yamaguchi-0729/ProCGroups",
-        )
+        (portal_relative, str(library["repository"]))
+        for library in libraries
     ]
     if github_links != expected_github_links:
         errors.append(
-            "GitHub links must consist only of the ProCGroups repository in "
-            f"its library card; found={github_links}"
+            "GitHub links must consist exactly of the catalog repositories in "
+            f"library-card order; expected={expected_github_links}, "
+            f"found={github_links}"
         )
     for marker in (
         '<title>Yamaguchi Lean 4 Library</title>',
@@ -382,16 +461,6 @@ def check_public_presentation(root: Path, errors: list[str]) -> None:
             errors.append(
                 f"{portal_relative}: shared site marker is missing: {marker!r}"
             )
-    for marker in (
-        "LocalClassFieldTheory",
-        "Local Class Field Theory",
-        "CrowellExactSequence",
-    ):
-        if marker in portal:
-            errors.append(
-                f"{portal_relative}: removed library marker remains: {marker!r}"
-            )
-
     for relative, text in inspected:
         folded = text.casefold()
         for phrase in FORBIDDEN_NOTICE_PHRASES:
@@ -467,16 +536,12 @@ def check_repository(root: Path, *, filesystem: bool) -> list[str]:
             f"found={sorted(portal_assets)}"
         )
 
-    library_names: set[str] = set()
     build_info = load_build_info(portal, PORTAL_NAME, errors)
-    raw_libraries = build_info.get("libraries")
-    if isinstance(raw_libraries, list):
-        library_names.update(
-            str(item.get("display_name"))
-            for item in raw_libraries
-            if isinstance(item, dict)
-            and isinstance(item.get("display_name"), str)
-        )
+    libraries = load_public_libraries(build_info, PORTAL_NAME, errors)
+    library_names = {
+        str(library["display_name"])
+        for library in libraries
+    }
 
     try:
         root_index = (root / "index.html").read_text(encoding="utf-8")
@@ -507,6 +572,16 @@ def check_repository(root: Path, *, filesystem: bool) -> list[str]:
             errors.append(
                 f"README.md: internal implementation detail is public: {internal_marker!r}"
             )
+    for library in libraries:
+        marker = (
+            f'- [{library["id"]} source repository]'
+            f'({library["repository"]})'
+        )
+        if readme.count(marker) != 1:
+            errors.append(
+                "README.md: source-repository entry is missing or duplicated: "
+                f"{marker!r}"
+            )
 
     for relative in ROOT_HTML_FILES:
         try:
@@ -521,7 +596,7 @@ def check_repository(root: Path, *, filesystem: bool) -> list[str]:
                     f"{relative}: broken local link {href!r} -> {target!r}"
                 )
 
-    check_public_presentation(root, errors)
+    check_public_presentation(root, libraries, errors)
     check_sitemap(root, files, errors)
     return errors
 

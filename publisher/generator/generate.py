@@ -233,6 +233,21 @@ def library_data_directory(library: dict[str, Any]) -> Path:
     return resolved
 
 
+def validate_source_directory(value: object, label: str) -> str:
+    """Return a normalized repository-relative POSIX source directory."""
+    if not isinstance(value, str) or not value or "\\" in value:
+        raise DatabaseError(f"{label}: invalid source_dir")
+    relative = PurePosixPath(value)
+    if (
+        relative.is_absolute()
+        or relative.as_posix() != value
+        or not relative.parts
+        or any(part in {"", ".", ".."} or ":" in part for part in relative.parts)
+    ):
+        raise DatabaseError(f"{label}: invalid source_dir")
+    return value
+
+
 def library_for_module(module: str, libraries: list[dict[str, Any]]) -> str:
     root = module.split(".", 1)[0]
     owners = [item["id"] for item in libraries if root in item["module_roots"]]
@@ -346,9 +361,12 @@ def load_export_databases(
             "libraries",
         } or data.get("schema") != 2:
             raise DatabaseError(f"{path}: invalid exporter schema")
+        source_dir = validate_source_directory(
+            data.get("source_dir"),
+            f"{path}",
+        )
         if (
             data.get("package") != library["id"]
-            or data.get("source_dir") != "Lean4"
             or data.get("website") != f"{SITE_URL}/{PORTAL}/"
             or not isinstance(data.get("version"), str)
             or not data["version"].strip()
@@ -383,11 +401,14 @@ def load_export_databases(
         for root in item["module_roots"]:
             if root in module_set:
                 expected_source_roots.append(
-                    {"path": f"Lean4/{root}.lean", "include_root": False}
+                    {
+                        "path": f"{source_dir}/{root}.lean",
+                        "include_root": False,
+                    }
                 )
             if any(module.startswith(root + ".") for module in library_modules):
                 expected_source_roots.append(
-                    {"path": f"Lean4/{root}", "include_root": True}
+                    {"path": f"{source_dir}/{root}", "include_root": True}
                 )
         if item["source_roots"] != expected_source_roots:
             raise DatabaseError(
@@ -419,6 +440,10 @@ def load_release_databases(
         data = read_json(path)
         source_commit = data.get("source_commit")
         generated_at = data.get("generated_at")
+        source_dir = validate_source_directory(
+            data.get("source_dir"),
+            f"{path}",
+        )
         expected_count = modules["by_library"][library["id"]]["module_count"]
         if (
             set(data) != fields
@@ -432,7 +457,6 @@ def load_release_databases(
             or not data["lean_toolchain"].strip()
             or not isinstance(data.get("mathlib_ref"), str)
             or not data["mathlib_ref"].strip()
-            or data.get("source_dir") != "Lean4"
             or data.get("module_count") != expected_count
             or not isinstance(generated_at, str)
             or not re.fullmatch(
@@ -636,7 +660,7 @@ def validate_lean_repository(
         "--porcelain",
         "--untracked-files=all",
         "--",
-        "Lean4",
+        release["source_dir"],
         "lean-toolchain",
         "lakefile.toml",
     )
@@ -661,8 +685,11 @@ def validate_lean_repository(
     lean_root = repository / release["source_dir"]
     if lean_root.is_symlink() or not lean_root.is_dir():
         raise DatabaseError(f"Lean source directory is missing or unsafe: {lean_root}")
+    source_prefix = PurePosixPath(release["source_dir"])
     expected = {
-        f"Lean4/{module.replace('.', '/')}.lean"
+        (source_prefix / PurePosixPath(*module.split("."))).with_suffix(
+            ".lean"
+        ).as_posix()
         for module in modules["modules"]
     }
     actual: set[str] = set()
@@ -781,14 +808,21 @@ def root_index() -> str:
 '''
 
 
-def repository_readme() -> str:
-    return """# n-yamaguchi-0729.github.io
+def repository_readme(
+    libraries: list[dict[str, Any]] | None = None,
+) -> str:
+    libraries = libraries or load_libraries_database()["libraries"]
+    source_links = "\n".join(
+        f'- [{library["id"]} source repository]({library["repository"]})'
+        for library in libraries
+    )
+    return f"""# n-yamaguchi-0729.github.io
 
 Public website for Naganori Yamaguchi:
 
 - [Homepage](https://n-yamaguchi-0729.github.io/)
 - [Yamaguchi Lean 4 Library](https://n-yamaguchi-0729.github.io/YamaLean4Lib_pages/)
-- [ProCGroups source repository](https://github.com/n-yamaguchi-0729/ProCGroups)
+{source_links}
 
 Each Lean library has its own source repository. The shared documentation site
 and its reproducible publisher are maintained here under `publisher/`.
@@ -812,12 +846,15 @@ def repository_support_generated() -> dict[Path, str]:
     }
 
 
-def static_generated() -> dict[Path, str]:
+def static_generated(
+    libraries: list[dict[str, Any]] | None = None,
+) -> dict[Path, str]:
+    libraries = libraries or load_libraries_database()["libraries"]
     home = load_home_database()
     output: dict[Path, str] = {
         **repository_support_generated(),
         Path("index.html"): root_index(),
-        Path("README.md"): repository_readme(),
+        Path("README.md"): repository_readme(libraries),
     }
     stylesheet = HOME_STYLESHEET.read_text(encoding="utf-8")
     output.update({Path(HOME_OUTPUT[language]): home_page(home, language, stylesheet) for language in LANGUAGES})
@@ -969,6 +1006,10 @@ def build_public_tree(
             raise DatabaseError(
                 f"{library_id}: release version differs from export.json"
             )
+        if release["source_dir"] != exports[library_id]["source_dir"]:
+            raise DatabaseError(
+                f"{library_id}: release source_dir differs from export.json"
+            )
         if not release["lean_toolchain"].endswith(":" + site["lean_version"]):
             raise DatabaseError(
                 f"{library_id}: release toolchain differs from libraries.json"
@@ -1042,7 +1083,7 @@ def build_public_tree(
         download_mode=build_site.DOWNLOAD_MODE_NONE,
         reporter=build_site.BuildReporter(enabled=verbose),
     )
-    write_text_files(output, static_generated())
+    write_text_files(output, static_generated(library_records))
     license_source = SITE_REPOSITORY / "LICENSE"
     if license_source.is_symlink() or not license_source.is_file():
         raise DatabaseError(f"website license is missing or unsafe: {license_source}")

@@ -10,7 +10,8 @@ Github/
 │   │   ├── data/                 publishing data and static assets
 │   │   └── generator/            generator, checkers, templates, and tests
 │   └── YamaLean4Lib_pages/       generated shared documentation
-└── ProCGroups/                    independent Lean source repository
+├── ProCGroups/                    independent Lean source repository
+└── <LibraryId>/                   another registered source repository
 ```
 
 Every Lean library has its own source repository and its own publishing record
@@ -24,16 +25,19 @@ each library project.
 
 ## Release metadata
 
-Preview, update, or check the ProCGroups release record against a clean checkout:
+Preview, update, or check a release record against a clean checkout. The
+library id selects both its catalog metadata and its default sibling checkout:
 
 ```sh
-python3 stamp_release.py
-python3 stamp_release.py --write
-python3 stamp_release.py --check
+python3 stamp_release.py ProCGroups
+python3 stamp_release.py ProCGroups --write
+python3 stamp_release.py ProCGroups --check
 ```
 
-The release records an exact source commit and derives its module inventory
-from `Lean4/**/*.lean`.
+Omitting the id retains `ProCGroups` as the compatibility default. Each release
+records an exact source commit and derives the inventory owned by that
+library's `module_roots` from its configured source directory; unrelated test
+or support modules may coexist in the checkout.
 
 ## Website
 

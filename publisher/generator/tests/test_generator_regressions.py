@@ -11,6 +11,7 @@ from unittest import mock
 
 import build_site
 import generate
+import stamp_release
 
 
 REPOSITORY_ROOT = Path(build_site.__file__).resolve().parent
@@ -1467,13 +1468,53 @@ class HomepageNamingRegressionTests(unittest.TestCase):
         readme = generate.repository_readme()
 
         self.assertIn("Yamaguchi Lean 4 Library", readme)
+        self.assertEqual(readme.count("ProCGroups source repository"), 1)
         self.assertNotIn("1,088", readme)
         self.assertNotIn("three", readme.lower())
         self.assertNotIn("YamaLean4Lib_Database", readme)
         self.assertNotIn("YamaLean4Lib_Generator", readme)
 
+    def test_public_repository_readme_lists_every_catalog_repository(self) -> None:
+        libraries = generate.load_libraries_database()["libraries"]
+        example = {
+            **libraries[0],
+            "id": "ExampleLibrary",
+            "repository":
+                "https://github.com/n-yamaguchi-0729/ExampleLibrary",
+        }
+
+        readme = generate.repository_readme([*libraries, example])
+
+        self.assertEqual(readme.count("ProCGroups source repository"), 1)
+        self.assertEqual(readme.count("ExampleLibrary source repository"), 1)
+        self.assertIn(example["repository"], readme)
+
 
 class DatabaseContractRegressionTests(unittest.TestCase):
+    def test_nested_source_directory_is_safe_and_normalized(self) -> None:
+        self.assertEqual(
+            generate.validate_source_directory(
+                "Lean4/ClassFieldTheory",
+                "nested source",
+            ),
+            "Lean4/ClassFieldTheory",
+        )
+        for unsafe in (
+            "",
+            ".",
+            "../Lean4",
+            "/Lean4",
+            "Lean4//ClassFieldTheory",
+            "C:/Lean4",
+            "Lean4\\ClassFieldTheory",
+        ):
+            with self.subTest(source_dir=unsafe):
+                with self.assertRaisesRegex(
+                    generate.DatabaseError,
+                    "invalid source_dir",
+                ):
+                    generate.validate_source_directory(unsafe, "test source")
+
     def test_export_and_website_databases_agree(self) -> None:
         libraries = generate.load_libraries_database()
         modules = generate.load_modules_database(libraries["libraries"])
@@ -1559,13 +1600,16 @@ class DatabaseContractRegressionTests(unittest.TestCase):
                     "website":
                         "https://n-yamaguchi-0729.github.io/"
                         "YamaLean4Lib_pages/",
-                    "source_dir": "Lean4",
+                    "source_dir": "Lean4/ExampleLibrarySource",
                     "libraries": [{
                         "id": "ExampleLibrary",
                         "display_name": "Example Library",
                         "module_roots": ["ExampleLibrary"],
                         "source_roots": [{
-                            "path": "Lean4/ExampleLibrary.lean",
+                            "path": (
+                                "Lean4/ExampleLibrarySource/"
+                                "ExampleLibrary.lean"
+                            ),
                             "include_root": False,
                         }],
                         "import_target": "ExampleLibrary",
@@ -1632,6 +1676,69 @@ class DatabaseContractRegressionTests(unittest.TestCase):
         ):
             generate.public_page_paths(modules, libraries)
 
+    def test_repository_validation_supports_nested_source_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            repository = Path(directory).resolve()
+            (repository / ".git").mkdir()
+            lean_root = repository / "Lean4" / "ClassFieldTheory"
+            lean_root.mkdir(parents=True)
+            (lean_root / "ClassFieldTheory.lean").write_text(
+                "def release : Nat := 1\n",
+                encoding="utf-8",
+            )
+            (repository / "lean-toolchain").write_text(
+                "leanprover/lean4:v4.32.1\n",
+                encoding="utf-8",
+            )
+            (repository / "lakefile.toml").write_text(
+                'rev = "v4.32.1"\n',
+                encoding="utf-8",
+            )
+            commit = "1" * 40
+            release = {
+                "source_commit": commit,
+                "source_dir": "Lean4/ClassFieldTheory",
+                "module_count": 1,
+                "lean_toolchain": "leanprover/lean4:v4.32.1",
+                "mathlib_ref": "v4.32.1",
+            }
+            modules = {
+                "module_count": 1,
+                "modules": ["ClassFieldTheory"],
+            }
+            library = {
+                "id": "ClassFieldTheory",
+                "repository": (
+                    "https://github.com/n-yamaguchi-0729/"
+                    "ClassFieldTheory"
+                ),
+            }
+
+            def fake_git_output(_repository: Path, *args: str) -> str:
+                if args == ("rev-parse", "--show-toplevel"):
+                    return str(repository)
+                if args == ("remote", "get-url", "origin"):
+                    return str(library["repository"])
+                if args == ("rev-parse", "HEAD"):
+                    return commit
+                if args[:2] == ("status", "--porcelain"):
+                    return ""
+                self.fail(f"unexpected Git command: {args}")
+
+            with mock.patch.object(
+                generate,
+                "git_output",
+                side_effect=fake_git_output,
+            ):
+                validated = generate.validate_lean_repository(
+                    repository,
+                    modules,
+                    release,
+                    library,
+                )
+
+            self.assertEqual(validated, lean_root)
+
 
 class OutputSafetyRegressionTests(unittest.TestCase):
     def test_generated_output_path_can_never_resolve_to_root_or_parent(self) -> None:
@@ -1683,6 +1790,200 @@ class AxiomScannerRegressionTests(unittest.TestCase):
 
             self.assertEqual([row["name"] for row in rows], ["actual"])
             self.assertEqual(rows[0]["line"], 5)
+
+
+class ReleaseStampRegressionTests(unittest.TestCase):
+    def test_repository_inventory_supports_nested_source_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            repository = Path(directory)
+            lean_root = repository / "Lean4" / "ClassFieldTheory"
+            (lean_root / "LocalClassFieldTheory").mkdir(parents=True)
+            (lean_root / "ClassFieldTheory.lean").write_text(
+                "import LocalClassFieldTheory\n",
+                encoding="utf-8",
+            )
+            (lean_root / "LocalClassFieldTheory.lean").write_text(
+                "import LocalClassFieldTheory.Basic\n",
+                encoding="utf-8",
+            )
+            (lean_root / "LocalClassFieldTheory" / "Basic.lean").write_text(
+                "def basic : Nat := 1\n",
+                encoding="utf-8",
+            )
+
+            modules = stamp_release.repository_modules(
+                repository,
+                "Lean4/ClassFieldTheory",
+                ["ClassFieldTheory", "LocalClassFieldTheory"],
+            )
+
+            self.assertEqual(
+                modules,
+                [
+                    "ClassFieldTheory",
+                    "LocalClassFieldTheory",
+                    "LocalClassFieldTheory.Basic",
+                ],
+            )
+
+    def test_repository_inventory_uses_catalog_module_roots(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            repository = Path(directory)
+            lean_root = repository / "Lean4"
+            (lean_root / "ExampleLibrary").mkdir(parents=True)
+            (lean_root / "ExampleLibrary.lean").write_text(
+                "import ExampleLibrary.Child\n",
+                encoding="utf-8",
+            )
+            (lean_root / "ExampleLibrary" / "Child.lean").write_text(
+                "def child : Nat := 1\n",
+                encoding="utf-8",
+            )
+            (lean_root / "ExampleLibraryTests.lean").write_text(
+                "import ExampleLibrary\n",
+                encoding="utf-8",
+            )
+
+            modules = stamp_release.repository_modules(
+                repository,
+                "Lean4",
+                ["ExampleLibrary"],
+            )
+
+            self.assertEqual(
+                modules,
+                ["ExampleLibrary", "ExampleLibrary.Child"],
+            )
+
+    def test_manifest_package_is_selected_by_library_id(self) -> None:
+        manifest = {
+            "schema": 3,
+            "package": "ExampleLibrary",
+            "module_count": 1,
+            "modules": ["ExampleLibrary"],
+        }
+
+        modules = stamp_release.validate_manifest(
+            manifest,
+            "example manifest",
+            "ExampleLibrary",
+            ["ExampleLibrary"],
+        )
+
+        self.assertEqual(modules, ["ExampleLibrary"])
+
+
+class PublicRepositoryCheckerRegressionTests(unittest.TestCase):
+    def make_public_presentation(
+        self,
+        root: Path,
+    ) -> tuple[object, list[dict[str, object]]]:
+        checker = load_tool("check_public_repository")
+        libraries: list[dict[str, object]] = [
+            {
+                "id": "ProCGroups",
+                "display_name": "Pro-C Groups",
+                "repository":
+                    "https://github.com/n-yamaguchi-0729/ProCGroups",
+                "summary": "Profinite group theory.",
+                "contents": ["Foundations", "Applications"],
+            },
+            {
+                "id": "ExampleLibrary",
+                "display_name": "Example Library",
+                "repository":
+                    "https://github.com/n-yamaguchi-0729/ExampleLibrary",
+                "summary": "A second formalization.",
+                "contents": ["Examples"],
+            },
+        ]
+        for filename in ("homepage-en.html", "homepage-jp.html"):
+            (root / filename).write_text(
+                "Yamaguchi Lean 4 Library: "
+                '<a href="./YamaLean4Lib_pages/">URL</a>',
+                encoding="utf-8",
+            )
+        portal = root / checker.PORTAL_NAME
+        assets = portal / "assets"
+        assets.mkdir(parents=True)
+        (assets / "site.css").write_text(
+            ".sort-bar[hidden] { display: none; }",
+            encoding="utf-8",
+        )
+        cards = []
+        for library in libraries:
+            contents = "".join(
+                f"<li>{html.escape(str(item))}</li>"
+                for item in library["contents"]
+            )
+            cards.append(
+                f'<section id="library-{library["id"]}" data-sort-item>'
+                f'<a>{html.escape(str(library["display_name"]))}</a>'
+                '<p class="library-summary">'
+                f'{html.escape(str(library["summary"]))}</p>'
+                f'<ul>{contents}</ul>'
+                f'<a href="{library["repository"]}">GitHub repository</a>'
+                "</section>"
+            )
+        description = checker.EXPECTED_SITE_DESCRIPTION
+        (portal / "index.html").write_text(
+            f'<meta name="description" content="{description}">'
+            '<title>Yamaguchi Lean 4 Library</title>'
+            '<a class="brand" href="./index.html">'
+            "Yamaguchi Lean 4 Library</a>"
+            '<h1 class="page-title">Yamaguchi Lean 4 Library</h1>'
+            f"<p>{description}</p>"
+            '<section class="sort-bar" aria-label="Sort libraries" hidden>'
+            '<select data-sort-target="library_list"></select>'
+            '<select data-sort-direction-target="library_list"></select>'
+            "</section>"
+            + "".join(cards),
+            encoding="utf-8",
+        )
+        return checker, libraries
+
+    def test_presentation_contract_accepts_every_catalog_library(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            checker, libraries = self.make_public_presentation(root)
+            errors: list[str] = []
+
+            checker.check_public_presentation(root, libraries, errors)
+
+            self.assertEqual(errors, [])
+
+    def test_catalog_loader_rejects_duplicate_library_ids(self) -> None:
+        checker = load_tool("check_public_repository")
+        duplicate = {
+            "id": "ProCGroups",
+            "display_name": "Duplicate",
+            "repository": "https://github.com/n-yamaguchi-0729/Duplicate",
+            "summary": "Duplicate entry.",
+            "contents": ["Duplicate"],
+        }
+        build_info = {
+            "libraries": [
+                {
+                    "id": "ProCGroups",
+                    "display_name": "Pro-C Groups",
+                    "repository":
+                        "https://github.com/n-yamaguchi-0729/ProCGroups",
+                    "summary": "Profinite group theory.",
+                    "contents": ["Foundations"],
+                },
+                duplicate,
+            ]
+        }
+        errors: list[str] = []
+
+        libraries = checker.load_public_libraries(
+            build_info,
+            checker.PORTAL_NAME,
+            errors,
+        )
+
+        self.assertEqual(len(libraries), 1)
+        self.assertTrue(any("duplicate library id" in error for error in errors))
 
 
 class GeneratedSiteCheckerRegressionTests(unittest.TestCase):

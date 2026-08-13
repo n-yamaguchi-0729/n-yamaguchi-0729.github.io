@@ -16,7 +16,7 @@ shared `YamaLean4Lib_pages/` documentation site:
 
 The sibling `generator/` reads these files and generates one shared
 documentation tree. Lean source remains in independent sibling Git projects,
-such as `ProCGroups/` and, later, `ClassFieldTheory/`.
+one per registered library id (for example, `ProCGroups/`).
 
 Publishing data and generator sources are versioned with the website but are
 not copied into the GitHub Pages artifact.

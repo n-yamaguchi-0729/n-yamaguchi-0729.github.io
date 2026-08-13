@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
-"""Record a clean ProCGroups commit as the documentation source release."""
+"""Record a clean library commit as its documentation source release."""
 
 from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
 from typing import Any
 
+import generate
+
 
 ROOT = Path(__file__).resolve().parent
 PUBLISHER = ROOT.parent
 PROJECTS_ROOT = PUBLISHER.parent.parent
-DEFAULT_DATABASE = PUBLISHER / "data" / "libraries" / "ProCGroups"
-DEFAULT_REPOSITORY = PROJECTS_ROOT / "ProCGroups"
-PUBLIC_REPOSITORY = "https://github.com/n-yamaguchi-0729/ProCGroups"
+DEFAULT_LIBRARY = "ProCGroups"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 LEAN_MODULE = re.compile(r"^[A-Za-z0-9_']+(?:\.[A-Za-z0-9_']+)*$")
 MATHLIB_REV = re.compile(r'^\s*rev\s*=\s*"([^"]+)"\s*$', re.MULTILINE)
@@ -57,13 +57,33 @@ def read_object(path: Path) -> dict[str, Any]:
     return value
 
 
-def validate_manifest(manifest: dict[str, Any], label: str) -> list[str]:
+def library_record(library_id: str) -> dict[str, Any]:
+    """Return one library from the canonical public catalog."""
+    try:
+        libraries = generate.load_libraries_database()["libraries"]
+    except (OSError, generate.DatabaseError) as error:
+        raise StampError(f"cannot load the public library catalog: {error}") from error
+    matches = [library for library in libraries if library["id"] == library_id]
+    if len(matches) != 1:
+        known = ", ".join(library["id"] for library in libraries)
+        raise StampError(
+            f"unknown public library {library_id!r}; registered libraries: {known}"
+        )
+    return matches[0]
+
+
+def validate_manifest(
+    manifest: dict[str, Any],
+    label: str,
+    package: str,
+    module_roots: list[str],
+) -> list[str]:
     if set(manifest) != {"schema", "package", "module_count", "modules"}:
         raise StampError(f"{label} must use the exact schema-3 public manifest")
     modules = manifest.get("modules")
     if (
         manifest.get("schema") != 3
-        or manifest.get("package") != "ProCGroups"
+        or manifest.get("package") != package
         or not isinstance(modules, list)
         or not modules
         or any(
@@ -73,14 +93,32 @@ def validate_manifest(manifest: dict[str, Any], label: str) -> list[str]:
         or modules != sorted(modules)
         or len(modules) != len(set(modules))
         or manifest.get("module_count") != len(modules)
+        or any(module.split(".", 1)[0] not in module_roots for module in modules)
     ):
         raise StampError(f"{label} contains an invalid module inventory")
     return modules
 
 
-def repository_modules(repository: Path) -> list[str]:
-    """Return the exact Lean module inventory without requiring MANIFEST.json."""
-    lean_root = repository / "Lean4"
+def repository_modules(
+    repository: Path,
+    source_dir: str,
+    module_roots: list[str],
+) -> list[str]:
+    """Return the catalog-owned Lean modules from a source checkout."""
+    relative_source = PurePosixPath(source_dir)
+    if (
+        not source_dir
+        or "\\" in source_dir
+        or relative_source.is_absolute()
+        or relative_source.as_posix() != source_dir
+        or not relative_source.parts
+        or any(
+            part in {"", ".", ".."} or ":" in part
+            for part in relative_source.parts
+        )
+    ):
+        raise StampError(f"invalid release source directory: {source_dir!r}")
+    lean_root = repository.joinpath(*relative_source.parts)
     if lean_root.is_symlink() or not lean_root.is_dir():
         raise StampError(f"Lean source directory was not found: {lean_root}")
     modules: list[str] = []
@@ -90,7 +128,8 @@ def repository_modules(repository: Path) -> list[str]:
         module = ".".join(path.relative_to(lean_root).with_suffix("").parts)
         if not LEAN_MODULE.fullmatch(module):
             raise StampError(f"invalid Lean module path: {path}")
-        modules.append(module)
+        if module.split(".", 1)[0] in module_roots:
+            modules.append(module)
     modules.sort()
     if not modules or len(modules) != len(set(modules)):
         raise StampError("Lean source inventory is empty or contains duplicates")
@@ -98,43 +137,28 @@ def repository_modules(repository: Path) -> list[str]:
 
 
 def expected_docs(
+    library: dict[str, Any],
     repository: Path,
     modules_database: Path,
     docs_database: Path,
 ) -> str:
+    library_id = library["id"]
+    module_roots = library["module_roots"]
     repository = repository.resolve()
-    if not repository.is_dir() or not (repository / ".git").is_dir():
-        raise StampError(f"ProCGroups repository was not found: {repository}")
+    if not repository.is_dir():
+        raise StampError(f"{library_id} repository was not found: {repository}")
+    if git(repository, "rev-parse", "--is-inside-work-tree") != "true":
+        raise StampError(f"not a Git worktree: {repository}")
     dirty = git(repository, "status", "--porcelain", "--untracked-files=all")
     if dirty:
-        raise StampError("ProCGroups must be clean before stamping:\n" + dirty)
+        raise StampError(f"{library_id} must be clean before stamping:\n" + dirty)
 
     commit = git(repository, "rev-parse", "HEAD")
     if not FULL_SHA.fullmatch(commit):
-        raise StampError(f"invalid ProCGroups commit: {commit!r}")
+        raise StampError(f"invalid {library_id} commit: {commit!r}")
     committed_at = datetime.fromisoformat(
         git(repository, "show", "-s", "--format=%cI", "HEAD")
     ).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-    database_manifest = read_object(modules_database)
-    database_modules = validate_manifest(database_manifest, "database modules.json")
-    source_modules = repository_modules(repository)
-    if source_modules != database_modules:
-        raise StampError(
-            "ProCGroups Lean inventory differs from the publishing database; "
-            "refresh modules.json first"
-        )
-
-    toolchain = (repository / "lean-toolchain").read_text(encoding="utf-8").strip()
-    if not toolchain:
-        raise StampError("lean-toolchain is empty")
-    lakefile = (repository / "lakefile.toml").read_text(encoding="utf-8")
-    revision = MATHLIB_REV.search(lakefile)
-    if revision is None:
-        raise StampError("cannot find the mathlib revision in lakefile.toml")
-    version = PACKAGE_VERSION.search(lakefile)
-    if version is None:
-        raise StampError("cannot find the package version in lakefile.toml")
 
     current = read_object(docs_database)
     expected_fields = {
@@ -150,15 +174,43 @@ def expected_docs(
     }
     if set(current) != expected_fields or current.get("schema_version") != 3:
         raise StampError("release.json must use schema version 3")
+    source_dir = current.get("source_dir")
+    if not isinstance(source_dir, str):
+        raise StampError("release.json source_dir must be a string")
+
+    database_manifest = read_object(modules_database)
+    database_modules = validate_manifest(
+        database_manifest,
+        "database modules.json",
+        library_id,
+        module_roots,
+    )
+    source_modules = repository_modules(repository, source_dir, module_roots)
+    if source_modules != database_modules:
+        raise StampError(
+            f"{library_id} Lean inventory differs from the publishing database; "
+            "refresh modules.json first"
+        )
+
+    toolchain = (repository / "lean-toolchain").read_text(encoding="utf-8").strip()
+    if not toolchain:
+        raise StampError("lean-toolchain is empty")
+    lakefile = (repository / "lakefile.toml").read_text(encoding="utf-8")
+    revision = MATHLIB_REV.search(lakefile)
+    if revision is None:
+        raise StampError("cannot find the mathlib revision in lakefile.toml")
+    version = PACKAGE_VERSION.search(lakefile)
+    if version is None:
+        raise StampError("cannot find the package version in lakefile.toml")
+
     current.update(
         {
-            "repository": PUBLIC_REPOSITORY,
+            "repository": library["repository"],
             "source_commit": commit,
             "version": version.group(1),
             "generated_at": committed_at,
             "lean_toolchain": toolchain,
             "mathlib_ref": revision.group(1),
-            "source_dir": "Lean4",
             "module_count": len(source_modules),
         }
     )
@@ -167,22 +219,37 @@ def expected_docs(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repository", type=Path, default=DEFAULT_REPOSITORY)
+    parser.add_argument(
+        "library",
+        nargs="?",
+        default=DEFAULT_LIBRARY,
+        help=f"Catalog library id (default: {DEFAULT_LIBRARY}).",
+    )
+    parser.add_argument(
+        "--repository",
+        type=Path,
+        help="Source checkout (default: sibling directory named after the id).",
+    )
     parser.add_argument(
         "--database",
         type=Path,
-        default=DEFAULT_DATABASE,
-        help="Publishing database directory.",
+        help="Publishing database directory (default: the catalog data path).",
     )
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--write", action="store_true")
     mode.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    modules_database = args.database / "modules.json"
-    docs_database = args.database / "release.json"
     try:
+        library = library_record(args.library)
+        repository = args.repository or PROJECTS_ROOT / library["id"]
+        database = args.database or generate.DATABASE.joinpath(
+            *PurePosixPath(library["data"]).parts
+        )
+        modules_database = database / "modules.json"
+        docs_database = database / "release.json"
         content = expected_docs(
-            args.repository,
+            library,
+            repository,
             modules_database,
             docs_database,
         )
@@ -194,11 +261,13 @@ def main() -> int:
             if stale:
                 print(f"stale release database: {docs_database}", file=sys.stderr)
                 return 1
-            print("release database matches the clean ProCGroups HEAD")
+            print(
+                f"release database matches the clean {library['id']} HEAD"
+            )
             return 0
         if args.write:
             docs_database.write_text(content, encoding="utf-8", newline="\n")
-            print("recorded the clean ProCGroups HEAD in release.json")
+            print(f"recorded the clean {library['id']} HEAD in release.json")
             return 0
         print(
             "dry run: release.json "
