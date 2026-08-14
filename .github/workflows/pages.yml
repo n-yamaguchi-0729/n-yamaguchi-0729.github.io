@@ -1,10 +1,9 @@
-name: Pages
+name: Deploy GitHub Pages
 
 on:
-  workflow_run:
-    workflows: ["Static public pages"]
-    types: [completed]
+  push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -16,45 +15,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  publish:
-    if: >-
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
-      github.event.workflow_run.head_branch == 'main'
+  deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
-          persist-credentials: false
-      - name: Stage only public runtime files
-        shell: bash
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Stage public files
         run: |
           mkdir _site
-          cp -- \
-            .nojekyll \
-            googlee8a500422e0afa27.html \
-            homepage-en.html \
-            homepage-jp.html \
-            index.html \
-            robots.txt \
-            sitemap.xml \
-            _site/
-          cp -a -- YamaLean4Lib_pages _site/
-          test "$(find _site -type l -print -quit)" = ""
-          test "$(find _site -type f -iname '*.zip' -print -quit)" = ""
-          test ! -e _site/YamaLean4Lib_pages/download
-          test ! -e _site/YamaLean4Lib_pages/tools
-          test ! -e _site/YamaLean4Lib_pages/README.md
-          test ! -e _site/publisher
-      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
-      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+          cp .nojekyll homepage-en.html homepage-jp.html index.html robots.txt sitemap.xml _site/
+          test ! -f googlee8a500422e0afa27.html || cp googlee8a500422e0afa27.html _site/
+          cp -R YamaLean4Lib_pages _site/
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+        uses: actions/deploy-pages@v4

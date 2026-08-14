@@ -1,349 +1,392 @@
+(() => {
+  "use strict";
 
-(function () {
-  'use strict';
+  const body = document.body;
+  const app = document.getElementById("app");
+  const base = body.dataset.base || ".";
+  const page = body.dataset.page || "index";
+  const catalog = window.YL_CATALOG || { libraries: [] };
+  const libraries = new Map(catalog.libraries.map((item) => [item.id, item]));
+  const query = new URLSearchParams(location.search);
+  const headerCurrent = document.getElementById("header_current");
+  const headerSearch = document.getElementById("search_input");
+  const autocomplete = document.getElementById("autocomplete_results");
 
-  const doc = document;
-  const $ = (sel, root = doc) => root.querySelector(sel);
-  const $$ = (sel, root = doc) => Array.from(root.querySelectorAll(sel));
-  const rootPrefix = () => {
-    const el = doc.querySelector('script[data-root]');
-    return el ? el.getAttribute('data-root') || './' : './';
+  const h = (value) => String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+  const q = (value) => encodeURIComponent(value);
+  const libraryHref = (id) => `${base}/library.html?library=${q(id)}`;
+  const moduleHref = (id, module) => `${base}/module.html?library=${q(id)}&module=${q(module)}`;
+  const declarationHref = (id, module, name) => `${moduleHref(id, module)}#decl-${q(name)}`;
+  const localImports = (library, module) => {
+    const names = new Set(library.modules.map((item) => item.name));
+    return module ? module.imports.filter((name) => names.has(name)) : [];
   };
-  const linkHref = url => /^https?:\/\//i.test(url) ? url : rootPrefix() + url;
-  const escapeHtml = s => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  function loadAsset(globalName, fileName) {
-    if (window[globalName]) return Promise.resolve(window[globalName]);
-    const key = '__loading_' + globalName;
-    if (window[key]) return window[key];
-    window[key] = new Promise((resolve, reject) => {
-      const script = doc.createElement('script');
-      script.src = rootPrefix() + fileName;
-      script.defer = true;
-      script.onload = () => resolve(window[globalName] || []);
-      script.onerror = () => reject(new Error(fileName + ' could not be loaded'));
-      doc.head.appendChild(script);
+  function setCurrent(value) {
+    headerCurrent.textContent = value;
+  }
+
+  function loadLibrary(id) {
+    window.YL_LIBRARIES = window.YL_LIBRARIES || {};
+    if (window.YL_LIBRARIES[id]) return Promise.resolve(window.YL_LIBRARIES[id]);
+    if (!libraries.has(id)) return Promise.reject(new Error(`Unknown library: ${id}`));
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = `${base}/data/${q(id)}.js`;
+      script.onload = () => resolve(window.YL_LIBRARIES[id]);
+      script.onerror = () => reject(new Error(`Could not load ${id}`));
+      document.head.appendChild(script);
     });
-    return window[key];
   }
 
-  let searchData = null;
-  function normalizeSearch(raw) {
-    if (searchData) return searchData;
-    searchData = (raw || []).map(item => {
-      const name = item.n || '';
-      const shortName = item.s || name.split('.').pop() || name;
-      const moduleName = item.m || '';
-      const kind = item.k || '';
-      const statement = item.t || '';
-      const url = item.u || '#';
-      const haystack = [name, shortName, moduleName, kind, statement].join(' ').toLowerCase();
-      return {name, shortName, moduleName, kind, statement, url, haystack,
-        n: name.toLowerCase(), s: shortName.toLowerCase(), m: moduleName.toLowerCase()};
-    });
-    return searchData;
-  }
-  async function ensureSearchData() {
-    return normalizeSearch(await loadAsset('LEAN_DOCS_INDEX', 'assets/search-index.js'));
-  }
-  function score(q, item) {
-    if (item.n === q || item.s === q) return 140;
-    if (item.s.startsWith(q)) return 115;
-    if (item.n.endsWith('.' + q)) return 108;
-    if (item.n.includes(q)) return 90;
-    if (item.m.includes(q)) return 52;
-    if (item.haystack.includes(q)) return 30;
-    return 0;
-  }
-  async function search(query, limit) {
-    const q = String(query || '').trim().toLowerCase();
-    if (!q) return [];
-    const data = await ensureSearchData();
-    const scored = [];
-    for (let i = 0; i < data.length; i++) {
-      const s = score(q, data[i]);
-      if (s) scored.push([s, data[i]]);
-    }
-    scored.sort((a, b) => b[0] - a[0] || a[1].name.localeCompare(b[1].name));
-    return scored.slice(0, limit || 50).map(x => x[1]);
-  }
-  function resultHtml(item) {
-    return '<span class="result-name">' + escapeHtml(item.name) + '</span>' +
-      '<span class="result-meta">' + escapeHtml((item.kind || '') + (item.moduleName ? ' · ' + item.moduleName : '')) + '</span>';
+  function kindCounts(modules) {
+    const counts = new Map();
+    modules.forEach((module) => module.declarations.forEach((item) => {
+      counts.set(item.kind, (counts.get(item.kind) || 0) + 1);
+    }));
+    return counts;
   }
 
-  function initAutocomplete() {
-    const form = $('.search-form');
-    const input = $('#search_input');
-    const box = $('#autocomplete_results');
-    if (!form || !input || !box) return;
-    const params = new URLSearchParams(location.search);
-    if (params.get('pattern')) input.value = params.get('pattern');
-    let timer = 0;
-    let seq = 0;
-    async function render() {
-      const current = ++seq;
-      const q = input.value.trim();
-      box.textContent = '';
-      if (!q) return;
-      const results = await search(q, 10).catch(() => []);
-      if (current !== seq) return;
-      const frag = doc.createDocumentFragment();
-      for (const item of results) {
-        const a = doc.createElement('a');
-        a.href = linkHref(item.url);
-        a.innerHTML = resultHtml(item);
-        frag.appendChild(a);
-      }
-      box.appendChild(frag);
-    }
-    input.addEventListener('input', () => {
-      clearTimeout(timer);
-      timer = setTimeout(render, 90);
-    });
-    input.addEventListener('focus', () => { if (input.value.trim()) render(); });
-    form.addEventListener('submit', ev => { if (!input.value.trim()) ev.preventDefault(); });
-    doc.addEventListener('keydown', ev => {
-      const tag = doc.activeElement ? doc.activeElement.tagName : '';
-      if (ev.key === '/' && doc.activeElement !== input && !/input|textarea|select/i.test(tag)) {
-        ev.preventDefault();
-        input.focus();
-      }
-    });
-    doc.addEventListener('click', ev => { if (!form.contains(ev.target)) box.textContent = ''; });
+  function plural(value, singular, pluralName = `${singular}s`) {
+    return `${value.toLocaleString()} ${value === 1 ? singular : pluralName}`;
   }
 
-  async function initFindPage() {
-    const mount = $('#search_results');
-    if (!mount) return;
-    const q = (new URLSearchParams(location.search).get('pattern') || '').trim();
-    mount.textContent = '';
-    if (!q) {
-      mount.innerHTML = '<div class="empty">Use the search box above to find libraries, modules, declarations, and statements.</div>';
-      return;
-    }
-    const results = await search(q, 200).catch(() => []);
-    const frag = doc.createDocumentFragment();
-    const head = doc.createElement('div');
-    head.className = 'meta';
-    head.textContent = results.length + ' results';
-    frag.appendChild(head);
-    if (!results.length) {
-      const empty = doc.createElement('div');
-      empty.className = 'empty';
-      empty.textContent = 'No matches.';
-      frag.appendChild(empty);
-    }
-    for (const item of results) {
-      const div = doc.createElement('div');
-      div.className = 'search-result';
-      div.innerHTML = '<a class="search-result-name" href="' + linkHref(item.url) + '">' + escapeHtml(item.name) + '</a>' +
-        '<div class="result-meta">' + escapeHtml((item.kind || '') + (item.moduleName ? ' · ' + item.moduleName : '')) + '</div>' +
-        (item.statement ? '<div class="search-result-doc">' + escapeHtml(item.statement) + '</div>' : '');
-      frag.appendChild(div);
-    }
-    mount.appendChild(frag);
-    if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
-      await window.MathJax.startup.promise;
-    }
-    if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
-      await window.MathJax.typesetPromise([mount]).catch(() => {});
-    }
-  }
-
-  function initProofControls() {
-    const details = $$('.proof-details');
-    if (!details.length) return;
-    doc.body.classList.add('has-proofs');
-    const toggle = $('#toggle_all_proofs');
-    const saved = localStorage.getItem('lean-docs-proof-open');
-    const forceOpen = saved === 'all' || new URLSearchParams(location.search).get('proofs') === '1';
-    const updateSummary = d => {
-      const span = $('.summary-text', d);
-      if (span) span.textContent = d.open ? 'Hide Lean proof' : 'Show Lean proof';
+  function declarationSummary(modules) {
+    const labels = {
+      theorem: "Theorems",
+      lemma: "Lemmas",
+      def: "Definitions",
+      abbrev: "Abbreviations",
+      instance: "Instances",
+      structure: "Structures",
+      class: "Classes",
+      inductive: "Inductive types",
+      axiom: "Axioms",
+      opaque: "Opaque definitions",
+      constant: "Constants",
     };
-    const allOpen = () => details.every(d => d.open);
-    const updateButton = () => {
-      if (!toggle) return;
-      const open = allOpen();
-      toggle.textContent = open ? 'Hide all Lean proofs' : 'Show all Lean proofs';
-      toggle.setAttribute('aria-pressed', open ? 'true' : 'false');
-    };
-    const mountProof = d => {
-      const mount = $('.proof-mount', d);
-      const template = $('.proof-template', d);
-      if (mount && template && !mount.hasChildNodes()) mount.appendChild(template.content.cloneNode(true));
-    };
-    if (forceOpen) details.forEach(d => { d.open = true; });
-    const openHashProof = () => {
-      const hash = location.hash.slice(1);
-      const target = hash ? doc.getElementById(hash) : null;
-      const d = target ? $('.proof-details', target) : null;
-      if (!d) return;
-      d.open = true;
-      mountProof(d);
-      updateSummary(d);
-      updateButton();
-    };
-    openHashProof();
-    window.addEventListener('hashchange', openHashProof);
-    details.forEach(d => {
-      if (d.open) mountProof(d);
-      updateSummary(d);
-      d.addEventListener('toggle', () => {
-        if (d.open) mountProof(d);
-        updateSummary(d);
-        updateButton();
-      });
+    const counts = kindCounts(modules);
+    return [...counts.entries()]
+      .filter(([, count]) => count)
+      .map(([kind, count]) => `${count.toLocaleString()} ${labels[kind] || kind}`)
+      .join(" | ");
+  }
+
+  function groupModules(library, prefix, libraryRoot = false) {
+    const names = library.modules.map((item) => item.name);
+    let effectivePrefix = prefix;
+    if (libraryRoot) {
+      const allUnderId = names.length > 0 && names.every(
+        (name) => name === library.id || name.startsWith(`${library.id}.`),
+      );
+      effectivePrefix = allUnderId ? library.id : "";
+    }
+    const groups = new Map();
+    library.modules.forEach((module) => {
+      if (effectivePrefix && module.name === effectivePrefix) return;
+      if (effectivePrefix && !module.name.startsWith(`${effectivePrefix}.`)) return;
+      const rest = effectivePrefix
+        ? module.name.slice(effectivePrefix.length + 1)
+        : module.name;
+      const segment = rest.split(".")[0];
+      if (!segment) return;
+      const fullName = effectivePrefix ? `${effectivePrefix}.${segment}` : segment;
+      if (!groups.has(fullName)) groups.set(fullName, []);
+      groups.get(fullName).push(module);
     });
-    if (toggle) {
-      updateButton();
-      toggle.addEventListener('click', () => {
-        const next = !allOpen();
-        details.forEach(d => {
-          d.open = next;
-          if (next) mountProof(d);
-          updateSummary(d);
+    return [...groups.entries()].sort(([left], [right]) => left.localeCompare(right));
+  }
+
+  function moduleRows(library, prefix, libraryRoot = false) {
+    return groupModules(library, prefix, libraryRoot).map(([fullName, modules]) => {
+      const exact = modules.find((item) => item.name === fullName);
+      const declarations = modules.reduce((sum, item) => sum + item.declarations.length, 0);
+      const label = fullName.split(".").at(-1);
+      const description = exact?.documentation
+        || modules.find((item) => item.documentation)?.documentation
+        || "";
+      return `<section class="module-row library-row">
+        <h2><a href="${moduleHref(library.id, fullName)}">${h(label)}</a></h2>
+        <div class="meta">${plural(modules.length, "file")} | ${plural(declarations, "declaration")}${declarations ? ` | ${h(declarationSummary(modules))}` : ""}</div>
+        ${description ? `<div class="sample tex2jax_process">${h(description)}</div>` : ""}
+      </section>`;
+    }).join("");
+  }
+
+  function importDetails(title, names, library) {
+    const localNames = new Set(library.modules.map((item) => item.name));
+    const content = names.length
+      ? `<ul>${names.map((name) => `<li>${localNames.has(name) ? `<a href="${moduleHref(library.id, name)}">${h(name)}</a>` : h(name)}</li>`).join("")}</ul>`
+      : '<div class="imports-empty">None</div>';
+    return `<details class="imports"><summary>${h(title)}</summary>${content}</details>`;
+  }
+
+  function renderIndex() {
+    const moduleCount = catalog.libraries.reduce((sum, item) => sum + item.module_count, 0);
+    const declarationCount = catalog.libraries.reduce((sum, item) => sum + item.declaration_count, 0);
+    setCurrent("");
+    document.title = "Yamaguchi Lean 4 Library";
+    app.innerHTML = `<section>
+      <h1 class="page-title">Yamaguchi Lean 4 Library</h1>
+      <p>Lean 4 libraries by Naganori Yamaguchi, developed with AI assistance by a non-specialist. Please use them at your own risk.</p>
+      <div class="stats"><span>${plural(catalog.libraries.length, "library", "libraries")}</span><span>${plural(moduleCount, "file")}</span><span>${plural(declarationCount, "declaration")}</span></div>
+    </section>
+    <div id="library_list">${catalog.libraries.map((library) => `<section class="module-head">
+      <div class="module-head-top"><div>
+        <div class="eyebrow">Library</div>
+        <h2 class="module-title"><a href="${libraryHref(library.id)}">${h(library.display_name)}</a></h2>
+        <div class="module-meta">${plural(library.module_count, "file")} | ${plural(library.declaration_count, "declaration")}</div>
+        <div class="sample"><p class="library-summary">${h(library.summary)}</p>
+          ${library.repository ? `<p class="library-repository"><a href="${h(library.repository)}" target="_blank" rel="noopener">GitHub repository</a></p>` : ""}
+        </div>
+      </div></div>
+    </section>`).join("")}</div>`;
+  }
+
+  async function renderLibrary() {
+    const id = query.get("library") || "";
+    try {
+      const library = await loadLibrary(id);
+      const root = library.modules.find((item) => item.name === id);
+      const groups = groupModules(library, "", true);
+      setCurrent(library.id);
+      document.title = `${library.id} | Yamaguchi Lean 4 Library`;
+      app.innerHTML = `<section class="module-head">
+        <div class="module-head-top"><div>
+          <div class="eyebrow breadcrumb"><span>${h(library.id)}</span></div>
+          <h1 class="module-title">${h(library.id)}</h1>
+          <div class="module-meta">${plural(groups.length, "section")} | ${plural(library.modules.length, "file")} | ${plural(library.declaration_count, "declaration")}</div>
+          <div class="module-overview tex2jax_process"><p>${h(library.summary)}</p></div>
+        </div></div>
+        ${root ? importDetails("imports", root.imports, library) : ""}
+        ${root ? importDetails("Imported by", library.modules.filter((item) => item.imports.includes(root.name)).map((item) => item.name), library) : ""}
+      </section>
+      <section><div id="topic_list" class="module-list">${moduleRows(library, "", true) || '<div class="empty">No modules</div>'}</div></section>`;
+    } catch (error) {
+      app.innerHTML = `<p class="empty">${h(error.message)}</p>`;
+    }
+  }
+
+  function breadcrumb(library, moduleName) {
+    const parts = moduleName.split(".");
+    if (parts[0] === library.id) parts.shift();
+    const crumbs = [`<a href="${libraryHref(library.id)}">${h(library.id)}</a>`];
+    let current = moduleName.startsWith(`${library.id}.`) ? library.id : "";
+    parts.forEach((part, index) => {
+      current = current ? `${current}.${part}` : part;
+      if (index === parts.length - 1) crumbs.push(`<span>${h(part)}</span>`);
+      else crumbs.push(`<a href="${moduleHref(library.id, current)}">${h(part)}</a>`);
+    });
+    return crumbs.join('<span class="sep">/</span>');
+  }
+
+  function declarationList(library, module) {
+    if (!module || !module.declarations.length) return "";
+    return `<section class="decl-toolbar"><h2>Declarations</h2></section>
+      <div class="decl-list">${module.declarations.map((item) => {
+        const identifier = `decl-${item.name}`;
+        const label = item.kind === "def" ? "Definition" : item.kind.charAt(0).toUpperCase() + item.kind.slice(1);
+        return `<section class="decl ${h(item.kind)}" id="${h(identifier)}">
+          <div class="decl-head"><span class="kind ${h(item.kind)}">${h(label)}</span><a class="decl-name" href="#${q(identifier)}">${h(item.name)}</a></div>
+          <div class="pair statement-pair statement-only"><section><pre class="code-box"><code>${h(item.signature || `${item.kind} ${item.name}`)}</code></pre></section></div>
+        </section>`;
+      }).join("")}</div>`;
+  }
+
+  async function renderModule() {
+    const id = query.get("library") || "";
+    const moduleName = query.get("module") || "";
+    try {
+      const library = await loadLibrary(id);
+      const module = library.modules.find((item) => item.name === moduleName);
+      const descendants = library.modules.filter((item) => item.name === moduleName || item.name.startsWith(`${moduleName}.`));
+      if (!module && !descendants.length) throw new Error(`Unknown module: ${moduleName}`);
+      const children = groupModules(library, moduleName);
+      const importedBy = module
+        ? library.modules.filter((item) => item.imports.includes(module.name)).map((item) => item.name)
+        : [];
+      const declarationCount = descendants.reduce((sum, item) => sum + item.declarations.length, 0);
+      setCurrent(moduleName);
+      document.title = `${moduleName} | Yamaguchi Lean 4 Library`;
+      app.innerHTML = `<section class="module-head">
+        <div class="module-head-top"><div>
+          <div class="eyebrow breadcrumb">${breadcrumb(library, moduleName)}</div>
+          <h1 class="module-title">${h(moduleName)}</h1>
+          <div class="module-meta">${children.length ? `${plural(children.length, "section")} | ${plural(descendants.length, "file")} | ` : ""}${plural(children.length ? declarationCount : (module?.declarations.length || 0), "declaration")}</div>
+          ${module?.documentation ? `<div class="module-overview tex2jax_process"><p>${h(module.documentation)}</p></div>` : ""}
+        </div></div>
+        ${module ? importDetails("imports", module.imports, library) : ""}
+        ${module ? importDetails("Imported by", importedBy, library) : ""}
+      </section>
+      ${children.length ? `<section><div id="topic_list" class="module-list">${moduleRows(library, moduleName)}</div></section>` : ""}
+      ${declarationList(library, module)}`;
+    } catch (error) {
+      app.innerHTML = `<p class="empty">${h(error.message)}</p>`;
+    }
+  }
+
+  let searchEntriesPromise;
+  function searchEntries() {
+    if (searchEntriesPromise) return searchEntriesPromise;
+    searchEntriesPromise = Promise.all(catalog.libraries.map((library) => loadLibrary(library.id))).then((loaded) => {
+      const entries = [];
+      loaded.forEach((library) => {
+        entries.push({ type: "library", library: library.id, module: "", kind: "", name: library.display_name, signature: library.summary });
+        library.modules.forEach((module) => {
+          entries.push({ type: "module", library: library.id, module: module.name, kind: "module", name: module.name, signature: module.documentation });
+          module.declarations.forEach((item) => entries.push({ type: "declaration", library: library.id, module: module.name, kind: item.kind, name: item.name, signature: item.signature }));
         });
-        localStorage.setItem('lean-docs-proof-open', next ? 'all' : 'none');
-        updateButton();
       });
+      return entries;
+    });
+    return searchEntriesPromise;
+  }
+
+  function entryHref(item) {
+    if (item.type === "library") return libraryHref(item.library);
+    if (item.type === "declaration") return declarationHref(item.library, item.module, item.name);
+    return moduleHref(item.library, item.module);
+  }
+
+  function searchMatches(entries, pattern, limit) {
+    const terms = pattern.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+    if (!terms.length) return [];
+    return entries.map((item) => {
+      const name = item.name.toLocaleLowerCase();
+      const shortName = name.split(".").at(-1);
+      const module = item.module.toLocaleLowerCase();
+      const text = `${name} ${module} ${item.kind} ${item.signature}`.toLocaleLowerCase();
+      if (!terms.every((term) => text.includes(term))) return null;
+      const needle = terms.join(" ");
+      let score = text.includes(needle) ? 30 : 1;
+      if (module.includes(needle)) score = 52;
+      if (name.includes(needle)) score = 90;
+      if (name.endsWith(needle)) score = 108;
+      if (shortName.startsWith(needle)) score = 115;
+      if (name === needle || shortName === needle) score = 140;
+      return { item, score };
+    }).filter(Boolean).sort((left, right) => right.score - left.score || left.item.name.localeCompare(right.item.name)).slice(0, limit).map((entry) => entry.item);
+  }
+
+  function drawSearchResults(entries, pattern) {
+    const results = document.getElementById("search_results");
+    const matches = searchMatches(entries, pattern, 200);
+    results.innerHTML = pattern.trim()
+      ? matches.map((item) => `<article class="search-result">
+          <a class="search-result-name" href="${entryHref(item)}">${h(item.name)}</a>
+          <div class="result-meta">${h(item.type)}${item.kind ? ` | ${h(item.kind)}` : ""} | ${h(item.library)}${item.module ? ` | ${h(item.module)}` : ""}</div>
+          ${item.signature ? `<div class="search-result-doc">${h(item.signature)}</div>` : ""}
+        </article>`).join("") || '<div class="empty">No results</div>'
+      : '<div class="empty">Enter a search term above.</div>';
+  }
+
+  async function renderSearch() {
+    const pattern = query.get("pattern") || "";
+    setCurrent("Search Results");
+    document.title = "Search | Yamaguchi Lean 4 Library";
+    headerSearch.value = pattern;
+    app.innerHTML = '<section><h1 class="page-title">Search Results</h1></section><section id="search_results" class="search-results tex2jax_process"><div class="tree-loading">Loading</div></section>';
+    try {
+      const entries = await searchEntries();
+      drawSearchResults(entries, pattern);
+      headerSearch.addEventListener("input", () => drawSearchResults(entries, headerSearch.value));
+    } catch (error) {
+      document.getElementById("search_results").innerHTML = `<div class="empty">${h(error.message)}</div>`;
     }
   }
 
-  function initSortControls() {
-    const numericKeys = new Set(['order', 'updated', 'decls', 'files', 'bundledModules', 'libraryModules', 'imports', 'importedBy', 'theorems', 'line']);
-    const valueFor = (el, key) => {
-      const value = el.dataset[key] || '';
-      return numericKeys.has(key) ? Number(value || 0) : value.toLowerCase();
-    };
-    function compareItems(spec) {
-      const parts = String(spec || 'order:asc').split(':');
-      const key = parts[0] || 'order';
-      const dir = parts[1] === 'desc' ? -1 : 1;
-      return (a, b) => {
-        const av = valueFor(a, key);
-        const bv = valueFor(b, key);
-        let result = 0;
-        if (numericKeys.has(key)) {
-          result = av === bv ? 0 : av < bv ? -1 : 1;
-        } else {
-          result = String(av).localeCompare(String(bv), 'en');
-        }
-        result *= dir;
-        if (!result && key !== 'name') {
-          result = String(valueFor(a, 'name')).localeCompare(String(valueFor(b, 'name')), 'en');
-        }
-        if (!result) {
-          result = Number(a.dataset.order || 0) - Number(b.dataset.order || 0);
-        }
-        return result;
-      };
-    }
-    function sortContainer(container, spec) {
-      const items = Array.from(container.children).filter(el => el.hasAttribute('data-sort-item'));
-      if (items.length < 2) return;
-      items.sort(compareItems(spec));
-      for (const item of items) container.appendChild(item);
-    }
-    const matchingSelect = (attr, value) => $$('select[' + attr + ']').find(el => el.getAttribute(attr) === value);
-    const specForTarget = targetId => {
-      const key = matchingSelect('data-sort-target', targetId);
-      const dir = matchingSelect('data-sort-direction-target', targetId);
-      return (key ? key.value : 'order') + ':' + (dir ? dir.value : 'asc');
-    };
-    const specForGroups = groups => {
-      const key = matchingSelect('data-sort-groups', groups);
-      const dir = matchingSelect('data-sort-direction-groups', groups);
-      return (key ? key.value : 'order') + ':' + (dir ? dir.value : 'asc');
-    };
-    const applyTarget = targetId => {
-      const target = doc.getElementById(targetId);
-      if (target) sortContainer(target, specForTarget(targetId));
-    };
-    const applyGroups = groups => {
-      for (const group of $$(groups)) sortContainer(group, specForGroups(groups));
-    };
-    for (const select of $$('select[data-sort-target], select[data-sort-direction-target]')) {
-      const targetId = select.getAttribute('data-sort-target') || select.getAttribute('data-sort-direction-target');
-      select.addEventListener('change', () => applyTarget(targetId));
-    }
-    for (const select of $$('select[data-sort-groups], select[data-sort-direction-groups]')) {
-      const groups = select.getAttribute('data-sort-groups') || select.getAttribute('data-sort-direction-groups');
-      select.addEventListener('change', () => applyGroups(groups));
-    }
+  function treeNode(segment, fullName) {
+    return { segment, fullName, module: "", children: new Map() };
   }
 
-  async function initTree() {
-    const mount = $('#file_tree');
-    if (!mount) return;
-    const aside = $('.file-tree');
-    const active = aside ? aside.getAttribute('data-active') || '' : '';
-    const root = rootPrefix();
-    const data = await loadAsset('LEAN_DOCS_TREE', 'assets/tree-data.js').catch(() => []);
-    mount.textContent = '';
-    if (!data.length) {
-      mount.innerHTML = '<div class="tree-empty">No files.</div>';
-      return;
-    }
-    function containsActive(node) {
-      if (!active) return false;
-      if (!node.c) return node.m === active;
-      return node.c.some(containsActive);
-    }
-    function renderList(nodes) {
-      const ul = doc.createElement('ul');
-      ul.className = 'tree';
-      for (const node of nodes) ul.appendChild(renderNode(node));
-      return ul;
-    }
-    function renderNode(node) {
-      const li = doc.createElement('li');
-      if (node.c) {
-        const activeBranch = containsActive(node);
-        li.className = 'tree-dir' + (activeBranch ? ' contains-active' : '');
-        const details = doc.createElement('details');
-        const summary = doc.createElement('summary');
-        summary.textContent = node.n;
-        const children = doc.createElement('div');
-        details.append(summary, children);
-        if (activeBranch) {
-          details.open = true;
-          children.appendChild(renderList(node.c));
-          details.dataset.loaded = '1';
-        }
-        details.addEventListener('toggle', () => {
-          if (details.open && !details.dataset.loaded) {
-            children.appendChild(renderList(node.c));
-            details.dataset.loaded = '1';
-          }
-        }, {passive: true});
-        li.appendChild(details);
-      } else {
-        li.className = 'tree-file' + (node.m === active ? ' active' : '');
-        const a = doc.createElement('a');
-        a.href = /^https?:\/\//i.test(node.u) ? node.u : root + node.u;
-        a.textContent = node.n;
-        if (node.m === active) a.setAttribute('aria-current', 'page');
-        li.appendChild(a);
+  function treeForLibrary(library, activeId, activeModule) {
+    const root = treeNode(library.display_name, "");
+    const names = library.module_names || [];
+    const stripRoot = names.length > 0 && names.every((name) => name === library.id || name.startsWith(`${library.id}.`));
+    names.forEach((moduleName) => {
+      if (moduleName === library.id) {
+        root.module = moduleName;
+        return;
       }
-      return li;
-    }
-    mount.appendChild(renderList(data));
-    const current = $('.tree-file.active > a', mount);
-    const pane = $('.tree-pane');
-    if (current && pane) {
-      const paneBox = pane.getBoundingClientRect();
-      const itemBox = current.getBoundingClientRect();
-      pane.scrollTop += itemBox.top - paneBox.top - (pane.clientHeight - itemBox.height) / 2;
-    }
+      let parts = moduleName.split(".");
+      if (stripRoot && parts[0] === library.id) parts = parts.slice(1);
+      if (!parts.length) {
+        root.module = moduleName;
+        return;
+      }
+      let node = root;
+      parts.forEach((part, index) => {
+        if (!node.children.has(part)) {
+          const prefixParts = stripRoot ? [library.id, ...parts.slice(0, index + 1)] : parts.slice(0, index + 1);
+          node.children.set(part, treeNode(part, prefixParts.join(".")));
+        }
+        node = node.children.get(part);
+      });
+      node.module = moduleName;
+    });
+    const libraryActive = activeId === library.id;
+    const renderNode = (node) => {
+      const children = [...node.children.values()].sort((left, right) => left.segment.localeCompare(right.segment));
+      const active = libraryActive && (activeModule === node.module || activeModule.startsWith(`${node.fullName}.`));
+      if (!children.length) {
+        return `<li class="tree-file${activeModule === node.module ? " active" : ""}"><a href="${moduleHref(library.id, node.module)}">${h(node.segment)}.lean</a></li>`;
+      }
+      return `<li class="tree-dir${active ? " contains-active" : ""}"><details${active ? " open" : ""}><summary>${h(node.segment)}</summary><ul>
+        ${node.module ? `<li class="tree-file${activeModule === node.module ? " active" : ""}"><a href="${moduleHref(library.id, node.module)}">${h(node.segment)}.lean</a></li>` : ""}
+        ${children.map(renderNode).join("")}
+      </ul></details></li>`;
+    };
+    return `<li class="tree-dir${libraryActive ? " contains-active" : ""}"><details${libraryActive ? " open" : ""}><summary>${h(library.display_name)}</summary><ul>
+      ${root.module ? `<li class="tree-file${activeModule === root.module ? " active" : ""}"><a href="${libraryHref(library.id)}">${h(library.id)}.lean</a></li>` : ""}
+      ${[...root.children.values()].sort((left, right) => left.segment.localeCompare(right.segment)).map(renderNode).join("")}
+    </ul></details></li>`;
   }
 
-  doc.addEventListener('DOMContentLoaded', () => {
-    initAutocomplete();
-    initFindPage();
-    initProofControls();
-    initSortControls();
-    initTree();
-  });
+  function renderFileTree() {
+    const activeId = query.get("library") || "";
+    const activeModule = query.get("module") || (page === "library" ? activeId : "");
+    document.querySelector(".file-tree").dataset.active = activeModule;
+    document.getElementById("file_tree").innerHTML = `<ul class="tree">${catalog.libraries.map((library) => treeForLibrary(library, activeId, activeModule)).join("")}</ul>`;
+    requestAnimationFrame(() => document.querySelector(".tree-file.active")?.scrollIntoView({ block: "center" }));
+  }
+
+  function initializeHeaderSearch() {
+    let timer;
+    headerSearch.addEventListener("input", () => {
+      clearTimeout(timer);
+      const pattern = headerSearch.value;
+      if (!pattern.trim()) {
+        autocomplete.innerHTML = "";
+        return;
+      }
+      timer = setTimeout(async () => {
+        const entries = await searchEntries();
+        autocomplete.innerHTML = searchMatches(entries, pattern, 10).map((item) => `<a href="${entryHref(item)}"><span class="result-name">${h(item.name)}</span><span class="result-meta">${h(item.type)} | ${h(item.library)}</span></a>`).join("");
+      }, 90);
+    });
+    document.querySelector(".search-form").addEventListener("submit", (event) => {
+      if (!headerSearch.value.trim()) event.preventDefault();
+    });
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".search-form")) autocomplete.innerHTML = "";
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "/" && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.matches("input,textarea")) {
+        event.preventDefault();
+        headerSearch.focus();
+      }
+    });
+  }
+
+  renderFileTree();
+  initializeHeaderSearch();
+  if (page === "index") renderIndex();
+  else if (page === "library") renderLibrary();
+  else if (page === "module") renderModule();
+  else if (page === "search") renderSearch();
 })();
