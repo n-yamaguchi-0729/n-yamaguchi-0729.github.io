@@ -8,6 +8,7 @@
   const catalog = window.YL_CATALOG || { libraries: [] };
   const libraries = new Map(catalog.libraries.map((item) => [item.id, item]));
   const query = new URLSearchParams(location.search);
+  const hasCanonical = Boolean(document.querySelector('link[rel="canonical"]'));
   const headerCurrent = document.getElementById("header_current");
   const headerSearch = document.getElementById("search_input");
   const autocomplete = document.getElementById("autocomplete_results");
@@ -19,7 +20,7 @@
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
   const q = (value) => encodeURIComponent(value);
-  const libraryHref = (id) => `${base}/library.html?library=${q(id)}`;
+  const libraryHref = (id) => `${base}/libraries/${q(id)}/`;
   const moduleHref = (id, module) => `${base}/module.html?library=${q(id)}&module=${q(module)}`;
   const declarationHref = (id, module, name) => `${moduleHref(id, module)}#decl-${q(name)}`;
   const localImports = (library, module) => {
@@ -130,7 +131,7 @@
     const moduleCount = catalog.libraries.reduce((sum, item) => sum + item.module_count, 0);
     const declarationCount = catalog.libraries.reduce((sum, item) => sum + item.declaration_count, 0);
     setCurrent("");
-    document.title = "Yamaguchi Lean 4 Library";
+    if (!hasCanonical) document.title = "Yamaguchi Lean 4 Library";
     app.innerHTML = `<section>
       <h1 class="page-title">Yamaguchi Lean 4 Library</h1>
       <p>Lean 4 libraries by Naganori Yamaguchi, developed with AI assistance by a non-specialist. Please use them at your own risk.</p>
@@ -149,13 +150,13 @@
   }
 
   async function renderLibrary() {
-    const id = query.get("library") || "";
+    const id = body.dataset.library || query.get("library") || "";
     try {
       const library = await loadLibrary(id);
       const root = library.modules.find((item) => item.name === id);
       const groups = groupModules(library, "", true);
       setCurrent(library.id);
-      document.title = `${library.id} | Yamaguchi Lean 4 Library`;
+      if (!hasCanonical) document.title = `${library.id} | Yamaguchi Lean 4 Library`;
       app.innerHTML = `<section class="module-head">
         <div class="module-head-top"><div>
           <div class="eyebrow breadcrumb"><span>${h(library.id)}</span></div>
@@ -348,7 +349,7 @@
   }
 
   function renderFileTree() {
-    const activeId = query.get("library") || "";
+    const activeId = body.dataset.library || query.get("library") || "";
     const activeModule = query.get("module") || (page === "library" ? activeId : "");
     document.querySelector(".file-tree").dataset.active = activeModule;
     document.getElementById("file_tree").innerHTML = `<ul class="tree">${catalog.libraries.map((library) => treeForLibrary(library, activeId, activeModule)).join("")}</ul>`;
