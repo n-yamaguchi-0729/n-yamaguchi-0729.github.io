@@ -141,8 +141,7 @@
     if (!hasCanonical) document.title = "Yamaguchi Lean 4 Library";
     app.innerHTML = `<section>
       <h1 class="page-title">Yamaguchi Lean 4 Library</h1>
-      <p>${h(catalog.description || "Lean 4 libraries by Naganori Yamaguchi.")}</p>
-      <p>Developed with AI assistance by a non-specialist. Please use the libraries at your own risk.</p>
+      <p>Lean 4 libraries by Naganori Yamaguchi, developed with AI assistance by a non-specialist. Please use them at your own risk.</p>
       <div class="stats"><span>${plural(catalog.libraries.length, "library", "libraries")}</span><span>${plural(moduleCount, "file")}</span><span>${plural(declarationCount, "declaration")}</span></div>
     </section>
     <div id="library_list">${catalog.libraries.map((library) => `<section class="module-head">
