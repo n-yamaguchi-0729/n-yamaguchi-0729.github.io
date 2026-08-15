@@ -127,6 +127,13 @@
     return `<details class="imports"><summary>${h(title)}</summary>${content}</details>`;
   }
 
+  function libraryHighlights(library) {
+    const highlights = Array.isArray(library.highlights) ? library.highlights : [];
+    if (!highlights.length) return "";
+    const heading = library.highlights_heading || "Library areas";
+    return `<section class="library-highlights"><h2>${h(heading)}</h2><ul>${highlights.map((item) => `<li>${h(item)}</li>`).join("")}</ul></section>`;
+  }
+
   function renderIndex() {
     const moduleCount = catalog.libraries.reduce((sum, item) => sum + item.module_count, 0);
     const declarationCount = catalog.libraries.reduce((sum, item) => sum + item.declaration_count, 0);
@@ -134,7 +141,8 @@
     if (!hasCanonical) document.title = "Yamaguchi Lean 4 Library";
     app.innerHTML = `<section>
       <h1 class="page-title">Yamaguchi Lean 4 Library</h1>
-      <p>Lean 4 libraries by Naganori Yamaguchi, developed with AI assistance by a non-specialist. Please use them at your own risk.</p>
+      <p>${h(catalog.description || "Lean 4 libraries by Naganori Yamaguchi.")}</p>
+      <p>Developed with AI assistance by a non-specialist. Please use the libraries at your own risk.</p>
       <div class="stats"><span>${plural(catalog.libraries.length, "library", "libraries")}</span><span>${plural(moduleCount, "file")}</span><span>${plural(declarationCount, "declaration")}</span></div>
     </section>
     <div id="library_list">${catalog.libraries.map((library) => `<section class="module-head">
@@ -155,18 +163,19 @@
       const library = await loadLibrary(id);
       const root = library.modules.find((item) => item.name === id);
       const groups = groupModules(library, "", true);
-      setCurrent(library.id);
-      if (!hasCanonical) document.title = `${library.id} | Yamaguchi Lean 4 Library`;
+      setCurrent(library.display_name);
+      if (!hasCanonical) document.title = `${library.display_name} | Yamaguchi Lean 4 Library`;
       app.innerHTML = `<section class="module-head">
         <div class="module-head-top"><div>
-          <div class="eyebrow breadcrumb"><span>${h(library.id)}</span></div>
-          <h1 class="module-title">${h(library.id)}</h1>
+          <div class="eyebrow breadcrumb"><span>${h(library.display_name)}</span></div>
+          <h1 class="module-title">${h(library.display_name)}</h1>
           <div class="module-meta">${plural(groups.length, "section")} | ${plural(library.modules.length, "file")} | ${plural(library.declaration_count, "declaration")}</div>
           <div class="module-overview tex2jax_process"><p>${h(library.summary)}</p></div>
         </div></div>
         ${root ? importDetails("imports", root.imports, library) : ""}
         ${root ? importDetails("Imported by", library.modules.filter((item) => item.imports.includes(root.name)).map((item) => item.name), library) : ""}
       </section>
+      ${libraryHighlights(library)}
       <section><div id="topic_list" class="module-list">${moduleRows(library, "", true) || '<div class="empty">No modules</div>'}</div></section>`;
     } catch (error) {
       app.innerHTML = `<p class="empty">${h(error.message)}</p>`;
