@@ -19,10 +19,24 @@
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+  const documentationHtml = (value) => String(value || "").trim()
+    .split(/\n\s*\n/)
+    .filter(Boolean)
+    .map((paragraph) => `<p>${h(paragraph.replace(/\s*\n\s*/g, " "))}</p>`)
+    .join("");
   const q = (value) => encodeURIComponent(value);
+  const declarationId = (name) => {
+    let output = "";
+    for (const character of String(name || "").replaceAll("'", "_prime")) {
+      output += /^[A-Za-z0-9_.:-]$/.test(character)
+        ? character
+        : `_u${character.codePointAt(0).toString(16).padStart(4, "0")}`;
+    }
+    return `decl-${output || "anonymous"}`;
+  };
   const libraryHref = (id) => `${base}/libraries/${q(id)}/`;
   const moduleHref = (id, module) => `${base}/module.html?library=${q(id)}&module=${q(module)}`;
-  const declarationHref = (id, module, name) => `${moduleHref(id, module)}#decl-${q(name)}`;
+  const declarationHref = (id, module, name) => `${moduleHref(id, module)}#${q(declarationId(name))}`;
   const localImports = (library, module) => {
     const names = new Set(library.modules.map((item) => item.name));
     return module ? module.imports.filter((name) => names.has(name)) : [];
@@ -30,6 +44,11 @@
 
   function setCurrent(value) {
     headerCurrent.textContent = value;
+  }
+
+  async function typesetMath(element) {
+    if (!window.MathJax || typeof window.MathJax.typesetPromise !== "function") return;
+    try { await window.MathJax.typesetPromise([element]); } catch (_) {}
   }
 
   function loadLibrary(id) {
@@ -134,6 +153,21 @@
     return `<section class="library-highlights"><h2>${h(heading)}</h2><ul>${highlights.map((item) => `<li>${h(item)}</li>`).join("")}</ul></section>`;
   }
 
+  function libraryRepositoryLink(library) {
+    if (!library.repository) return "";
+    const label = `${library.display_name || library.id} GitHub repository (opens in a new tab)`;
+    return `<p class="library-repository">Repository: <a href="${h(library.repository)}" target="_blank" rel="noopener noreferrer" aria-label="${h(label)}">${h(library.repository)}</a></p>`;
+  }
+
+  function moduleSourceLink(library, module) {
+    if (!library.repository || !module?.source) return "";
+    const reference = library.commit || "main";
+    const sourcePath = module.source.split("/").map(q).join("/");
+    const url = `${library.repository}/blob/${q(reference)}/${sourcePath}`;
+    const label = `${module.name} GitHub source (opens in a new tab)`;
+    return `<p class="module-source">GitHub source: <a href="${h(url)}" target="_blank" rel="noopener noreferrer" aria-label="${h(label)}">${h(url)}</a></p>`;
+  }
+
   function renderIndex() {
     const moduleCount = catalog.libraries.reduce((sum, item) => sum + item.module_count, 0);
     const declarationCount = catalog.libraries.reduce((sum, item) => sum + item.declaration_count, 0);
@@ -150,7 +184,7 @@
         <h2 class="module-title"><a href="${libraryHref(library.id)}">${h(library.display_name)}</a></h2>
         <div class="module-meta">${plural(library.module_count, "file")} | ${plural(library.declaration_count, "declaration")}</div>
         <div class="sample"><p class="library-summary">${h(library.summary)}</p>
-          ${library.repository ? `<p class="library-repository"><a href="${h(library.repository)}" target="_blank" rel="noopener">GitHub repository</a></p>` : ""}
+          ${libraryRepositoryLink(library)}
         </div>
       </div></div>
     </section>`).join("")}</div>`;
@@ -169,15 +203,23 @@
           <div class="eyebrow breadcrumb"><span>${h(library.display_name)}</span></div>
           <h1 class="module-title">${h(library.display_name)}</h1>
           <div class="module-meta">${plural(groups.length, "section")} | ${plural(library.modules.length, "file")} | ${plural(library.declaration_count, "declaration")}</div>
-          <div class="module-overview tex2jax_process"><p>${h(library.summary)}</p></div>
+          <div class="module-overview tex2jax_process"><p>${h(library.summary)}</p>${libraryRepositoryLink(library)}</div>
         </div></div>
         ${root ? importDetails("imports", root.imports, library) : ""}
         ${root ? importDetails("Imported by", library.modules.filter((item) => item.imports.includes(root.name)).map((item) => item.name), library) : ""}
       </section>
       ${libraryHighlights(library)}
       <section><div id="topic_list" class="module-list">${moduleRows(library, "", true) || '<div class="empty">No modules</div>'}</div></section>`;
+      await typesetMath(app);
     } catch (error) {
-      app.innerHTML = `<p class="empty">${h(error.message)}</p>`;
+      if (hasCanonical && body.dataset.library) {
+        app.insertAdjacentHTML(
+          "beforeend",
+          `<p class="empty interactive-error">Interactive module listing unavailable: ${h(error.message)}</p>`,
+        );
+      } else {
+        app.innerHTML = `<p class="empty">${h(error.message)}</p>`;
+      }
     }
   }
 
@@ -196,15 +238,98 @@
 
   function declarationList(library, module) {
     if (!module || !module.declarations.length) return "";
-    return `<section class="decl-toolbar"><h2>Declarations</h2></section>
+    const hasProofs = module.declarations.some((item) => Boolean(item.proof));
+    return `<section class="decl-toolbar"><h2>Declarations</h2>${hasProofs ? '<button id="toggle_all_proofs" class="proof-toggle-all" type="button" aria-pressed="false">Show all Lean proofs</button>' : ""}</section>
       <div class="decl-list">${module.declarations.map((item) => {
-        const identifier = `decl-${item.name}`;
-        const label = item.kind === "def" ? "Definition" : item.kind.charAt(0).toUpperCase() + item.kind.slice(1);
+        const identifier = declarationId(item.name);
+        const currentIdentifier = `decl-${item.name}`;
+        const currentAnchorAlias = currentIdentifier === identifier
+          ? ""
+          : `<span id="${h(currentIdentifier)}" class="declaration-anchor-alias" hidden aria-hidden="true"></span>`;
+        const labels = { def: "Definition", abbrev: "Abbreviation", instance: "Instance", structure: "Structure", class: "Class", inductive: "Inductive", axiom: "Axiom", constant: "Constant", example: "Example", lemma: "Lemma", theorem: "Theorem" };
+        const label = labels[item.kind] || item.kind.charAt(0).toUpperCase() + item.kind.slice(1);
+        const statement = item.statement || item.signature || `${item.kind} ${item.name}`;
+        const documentation = item.documentation || "";
+        const proof = item.proof || "";
         return `<section class="decl ${h(item.kind)}" id="${h(identifier)}">
+          ${currentAnchorAlias}
           <div class="decl-head"><span class="kind ${h(item.kind)}">${h(label)}</span><a class="decl-name" href="#${q(identifier)}">${h(item.name)}</a></div>
-          <div class="pair statement-pair statement-only"><section><pre class="code-box"><code>${h(item.signature || `${item.kind} ${item.name}`)}</code></pre></section></div>
+          <div class="pair statement-pair${documentation ? "" : " statement-only"}"><section><pre class="code-box"><code>${h(statement)}</code></pre></section>${documentation ? `<section><div class="natural-text tex2jax_process">${documentationHtml(documentation)}</div></section>` : ""}</div>
+          ${proof ? `<details class="proof-details" data-proof-declaration="${h(identifier)}"><summary><span class="summary-text">Show Lean proof</span></summary><template class="proof-template"><pre class="code-box lean-proof-code"><code>${h(proof)}</code></pre></template><div class="proof-mount"></div></details>` : ""}
         </section>`;
       }).join("")}</div>`;
+  }
+
+  function initProofControls() {
+    body.classList.remove("has-proofs");
+    const details = [...app.querySelectorAll(".proof-details")];
+    const toggle = app.querySelector("#toggle_all_proofs");
+    let saved = "";
+    try { saved = localStorage.getItem("lean-docs-proof-open") || ""; } catch (_) {}
+    const forceOpen = saved === "all" || query.get("proofs") === "1";
+    const mountProof = (detail) => {
+      const mount = detail.querySelector(".proof-mount");
+      const template = detail.querySelector(".proof-template");
+      if (mount && template && !mount.hasChildNodes()) {
+        mount.appendChild(template.content.cloneNode(true));
+      }
+    };
+    const updateSummary = (detail) => {
+      const summary = detail.querySelector(".summary-text");
+      if (summary) summary.textContent = detail.open ? "Hide Lean proof" : "Show Lean proof";
+    };
+    const allOpen = () => details.every((detail) => detail.open);
+    const updateButton = () => {
+      if (!toggle) return;
+      const open = allOpen();
+      toggle.textContent = open ? "Hide all Lean proofs" : "Show all Lean proofs";
+      toggle.setAttribute("aria-pressed", open ? "true" : "false");
+    };
+    if (forceOpen) details.forEach((detail) => { detail.open = true; });
+    details.forEach((detail) => {
+      if (detail.open) mountProof(detail);
+      updateSummary(detail);
+      detail.addEventListener("toggle", () => {
+        if (detail.open) mountProof(detail);
+        updateSummary(detail);
+        updateButton();
+      });
+    });
+    const openHashProof = () => {
+      let identifier = location.hash.slice(1);
+      try { identifier = decodeURIComponent(identifier); } catch (_) {}
+      const anchor = identifier ? document.getElementById(identifier) : null;
+      const target = anchor?.closest(".decl") || anchor;
+      const detail = target?.querySelector(".proof-details");
+      if (!target) return;
+      if (detail) {
+        detail.open = true;
+        mountProof(detail);
+        updateSummary(detail);
+        updateButton();
+      }
+      requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+    };
+    window.addEventListener("hashchange", openHashProof);
+    if (!details.length) {
+      openHashProof();
+      return;
+    }
+    body.classList.add("has-proofs");
+    if (toggle) {
+      updateButton();
+      toggle.addEventListener("click", () => {
+        const next = !allOpen();
+        details.forEach((detail) => {
+          detail.open = next;
+          if (next) mountProof(detail);
+          updateSummary(detail);
+        });
+        try { localStorage.setItem("lean-docs-proof-open", next ? "all" : "none"); } catch (_) {}
+        updateButton();
+      });
+    }
+    openHashProof();
   }
 
   async function renderModule() {
@@ -227,13 +352,15 @@
           <div class="eyebrow breadcrumb">${breadcrumb(library, moduleName)}</div>
           <h1 class="module-title">${h(moduleName)}</h1>
           <div class="module-meta">${children.length ? `${plural(children.length, "section")} | ${plural(descendants.length, "file")} | ` : ""}${plural(children.length ? declarationCount : (module?.declarations.length || 0), "declaration")}</div>
-          ${module?.documentation ? `<div class="module-overview tex2jax_process"><p>${h(module.documentation)}</p></div>` : ""}
+          <div class="module-overview tex2jax_process">${module?.documentation ? `<p>${h(module.documentation)}</p>` : ""}${libraryRepositoryLink(library)}${moduleSourceLink(library, module)}</div>
         </div></div>
         ${module ? importDetails("imports", module.imports, library) : ""}
         ${module ? importDetails("Imported by", importedBy, library) : ""}
       </section>
       ${children.length ? `<section><div id="topic_list" class="module-list">${moduleRows(library, moduleName)}</div></section>` : ""}
       ${declarationList(library, module)}`;
+      await typesetMath(app);
+      initProofControls();
     } catch (error) {
       app.innerHTML = `<p class="empty">${h(error.message)}</p>`;
     }
