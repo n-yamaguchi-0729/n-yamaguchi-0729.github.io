@@ -161,6 +161,12 @@
     return `<p class="library-repository">Repository: <a href="${h(library.repository)}" target="_blank" rel="noopener noreferrer" aria-label="${h(label)}">${h(library.repository)}</a></p>`;
   }
 
+  function libraryRegistrationLink(library) {
+    const registration = library.palomar_registration;
+    if (!registration) return "";
+    return `<p class="library-registration">Palomar registration: <a href="${h(registration.url)}" target="_blank" rel="noopener noreferrer">${h(registration.title)}</a></p>`;
+  }
+
   function moduleSourceLink(library, module) {
     if (!library.repository || !module?.source) return "";
     const reference = library.commit || "main";
@@ -205,7 +211,7 @@
           <div class="eyebrow breadcrumb"><span>${h(library.display_name)}</span></div>
           <h1 class="module-title">${h(library.display_name)}</h1>
           <div class="module-meta">${plural(groups.length, "section")} | ${plural(library.modules.length, "file")} | ${plural(library.declaration_count, "declaration")}</div>
-          <div class="module-overview tex2jax_process"><p>${h(library.summary)}</p>${libraryRepositoryLink(library)}</div>
+          <div class="module-overview tex2jax_process"><p>${h(library.summary)}</p>${libraryRepositoryLink(library)}${libraryRegistrationLink(library)}</div>
         </div></div>
         ${root ? importDetails("imports", root.imports, library) : ""}
         ${root ? importDetails("Imported by", library.modules.filter((item) => item.imports.includes(root.name)).map((item) => item.name), library) : ""}
