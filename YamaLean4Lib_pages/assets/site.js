@@ -6,7 +6,7 @@
   const base = body.dataset.base || ".";
   const page = body.dataset.page || "index";
   const catalog = window.YL_CATALOG || { libraries: [] };
-  const portalTitle = catalog.title || document.querySelector(".brand")?.textContent || "Lean 4 Libraries";
+  const portalTitle = catalog.title || document.querySelector(".brand")?.textContent || "Yamaguchi Lean 4 Library";
   const libraries = new Map(catalog.libraries.map((item) => [item.id, item]));
   const query = new URLSearchParams(location.search);
   const hasCanonical = Boolean(document.querySelector('link[rel="canonical"]'));
