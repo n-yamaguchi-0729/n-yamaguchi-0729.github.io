@@ -6,6 +6,7 @@
   const base = body.dataset.base || ".";
   const page = body.dataset.page || "index";
   const catalog = window.YL_CATALOG || { libraries: [] };
+  const portalTitle = catalog.title || document.querySelector(".brand")?.textContent || "Lean 4 Libraries";
   const libraries = new Map(catalog.libraries.map((item) => [item.id, item]));
   const query = new URLSearchParams(location.search);
   const hasCanonical = Boolean(document.querySelector('link[rel="canonical"]'));
@@ -57,7 +58,8 @@
     if (!libraries.has(id)) return Promise.reject(new Error(`Unknown library: ${id}`));
     return new Promise((resolve, reject) => {
       const script = document.createElement("script");
-      script.src = `${base}/data/${q(id)}.js`;
+      const version = libraries.get(id).data_version;
+      script.src = `${base}/data/${q(id)}.js${version ? `?v=${q(version)}` : ""}`;
       script.onload = () => resolve(window.YL_LIBRARIES[id]);
       script.onerror = () => reject(new Error(`Could not load ${id}`));
       document.head.appendChild(script);
@@ -172,9 +174,9 @@
     const moduleCount = catalog.libraries.reduce((sum, item) => sum + item.module_count, 0);
     const declarationCount = catalog.libraries.reduce((sum, item) => sum + item.declaration_count, 0);
     setCurrent("");
-    if (!hasCanonical) document.title = "Yamaguchi Lean 4 Library";
+    if (!hasCanonical) document.title = catalog.page_title || portalTitle;
     app.innerHTML = `<section>
-      <h1 class="page-title">Yamaguchi Lean 4 Library</h1>
+      <h1 class="page-title">${h(portalTitle)}</h1>
       <p>Lean 4 libraries by Naganori Yamaguchi, developed with AI assistance by a non-specialist. Please use them at your own risk.</p>
       <div class="stats"><span>${plural(catalog.libraries.length, "library", "libraries")}</span><span>${plural(moduleCount, "file")}</span><span>${plural(declarationCount, "declaration")}</span></div>
     </section>
@@ -197,7 +199,7 @@
       const root = library.modules.find((item) => item.name === id);
       const groups = groupModules(library, "", true);
       setCurrent(library.display_name);
-      if (!hasCanonical) document.title = `${library.display_name} | Yamaguchi Lean 4 Library`;
+      if (!hasCanonical) document.title = `${library.display_name} | ${portalTitle}`;
       app.innerHTML = `<section class="module-head">
         <div class="module-head-top"><div>
           <div class="eyebrow breadcrumb"><span>${h(library.display_name)}</span></div>
@@ -346,7 +348,7 @@
         : [];
       const declarationCount = descendants.reduce((sum, item) => sum + item.declarations.length, 0);
       setCurrent(moduleName);
-      document.title = `${moduleName} | Yamaguchi Lean 4 Library`;
+      document.title = `${moduleName} | ${portalTitle}`;
       app.innerHTML = `<section class="module-head">
         <div class="module-head-top"><div>
           <div class="eyebrow breadcrumb">${breadcrumb(library, moduleName)}</div>
@@ -424,7 +426,7 @@
   async function renderSearch() {
     const pattern = query.get("pattern") || "";
     setCurrent("Search Results");
-    document.title = "Search | Yamaguchi Lean 4 Library";
+    document.title = `Search | ${portalTitle}`;
     headerSearch.value = pattern;
     app.innerHTML = '<section><h1 class="page-title">Search Results</h1></section><section id="search_results" class="search-results tex2jax_process"><div class="tree-loading">Loading</div></section>';
     try {
